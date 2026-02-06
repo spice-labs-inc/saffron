@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/cirros-0.3.6-x86_64.qcow2",
+  "imageBasename": "cirros-0.3.6-x86_64.qcow2",
+  "filesystemType": "ext3",
+  "totalFiles": 248,
+  "totalDirectories": 94,
+  "sampleFiles": [
+    {"path": "/etc/passwd", "sha256": "5b16d47f43b9258de3eb1b4beba104c0bcccd768a09d44b422b01a73e799eda0", "size": 586},
+    {"path": "/etc/init.d/S20urandom", "sha256": "4cca0e403bf60cdb86e138a2e955a69832917cda4fa994903ad11a5e41129a36", "size": 1365},
+    {"path": "/lib/modules/3.2.0-80-virtual/modules.seriomap", "sha256": "d1ae8ccb4eac8b7a59fd6053272c491483094c9f43edb8546a402eccac599be5", "size": 43},
+    {"path": "/sbin/wipefs", "sha256": "40d1853d0d4c591dc7d7210946dbec2f11af07cf3164d17754256fec204abb67", "size": 15304},
+    {"path": "/usr/bin/hexdump", "sha256": "94a08f1c7b74885aab9afd817a43888d6832068ae1ad5135f1e1845735e90b36", "size": 19504},
+    {"path": "/sbin/mkswap", "sha256": "1a6f594ad7ee5b4232a8c7866b1b36526de680cbb703ce9abda1b2fcc9223931", "size": 19576},
+    {"path": "/usr/share/screen/utf8encodings/04", "sha256": "fa0c1f1cc09614b88740b7796ccdbd457b3b76f052e7aedff4a4d4847adea2cb", "size": 24302},
+    {"path": "/lib/libgcc_s.so.1", "sha256": "87355ee124b26f9059aa5e4fef7019e265adcbf8d092d00c4170109acc835b89", "size": 72224},
+    {"path": "/usr/bin/flock", "sha256": "63c0e520374ce9c6d14328d2b483e397d934e97ae84f5df0029c529c24907aa0", "size": 9552},
+    {"path": "/lib/modules/3.2.0-80-virtual/kernel/drivers/pci/hotplug/acpiphp.ko", "sha256": "80a11a4627371730f97e4ad818f751de2ccbb5e487ee524747f153b000a2f345", "size": 46904},
+    {"path": "/usr/share/screen/utf8encodings/01", "sha256": "cda27362d0253dcd618812b20f52f7905e6f80fbcedf17b6a8290974592030a3", "size": 29808},
+    {"path": "/lib/modules/3.2.0-80-virtual/modules.devname", "sha256": "dc68824aae6638d62566b49cb75ae21a5f5a96bb92996336a0f80dcaf49fb4b6", "size": 52},
+    {"path": "/usr/bin/setarch", "sha256": "94f2b235f92e06c569b2680a7dff9585b5f4c1c24c02cb5ae9ba3d3f4854c23a", "size": 8776},
+    {"path": "/bin/lsblk", "sha256": "384d55a7aaf46293ec3c787b7ef1f698882f823793effb8b8c0abc51c3ba6e17", "size": 37408},
+    {"path": "/lib/libresolv-0.9.32.1.so", "sha256": "c02e4f8f86f528581fc672e3bdf52b90e72cc813b2b16773351935919dc33469", "size": 4960},
+    {"path": "/usr/lib/cloud-init/uncloud-init", "sha256": "bc5ecbccab54c31d3758ab1f25c346f06eec5b3e3417f56338b894ddebdcce14", "size": 31},
+    {"path": "/lib/modules/3.2.0-80-virtual/modules.pcimap", "sha256": "6dfc44685ca0e885a75b22868098c2e7ccf5afcd495e30220e2833ff197c21ba", "size": 4922},
+    {"path": "/usr/bin/tailf", "sha256": "108fd1de06adbc88a13f9bd220f540c8d0664c64d39f39d89660689a2cf7143e", "size": 12320},
+    {"path": "/usr/share/screen/utf8encodings/c7", "sha256": "eba7a967ed51282c25178965b01e0476a9c02ab4f7a5d15533d1a5a0fdbb3f43", "size": 52},
+    {"path": "/bin/lxc-is-container", "sha256": "f887c52e7dfb534602ed25650c52ae35bc625d9145c9f6b42767fdc0518826bc", "size": 179}
+  ]
+}

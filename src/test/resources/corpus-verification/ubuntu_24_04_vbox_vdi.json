@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vdi/modern/ubuntu-24.04-vbox.vdi",
+  "imageBasename": "ubuntu-24.04-vbox.vdi",
+  "filesystemType": "unknown",
+  "totalFiles": 123428,
+  "totalDirectories": 14977,
+  "sampleFiles": [
+    {"path": "/usr/include/x86_64-linux-gnu/sys/epoll.h", "sha256": "02152dc3b0fe7a1c71ead5e13186ddd8b5184cd4dfe6a9463c6b161f555c2d1d", "size": 5300},
+    {"path": "/usr/lib/modules/6.8.0-31-generic/kernel/sound/pci/emu10k1/snd-emu10k1x.ko.zst", "sha256": "a8da07359efa5f7e725d409a9aed90daeb03ddcc3adc7ec60bffbe77618f7d42", "size": 19042},
+    {"path": "/usr/lib/x86_64-linux-gnu/espeak-ng-data/voices/mb/mb-de5-en", "sha256": "fcbf3863ac3b6bf117145a50699138de5a3426487eb2f69535300136aa6ff6f1", "size": 90},
+    {"path": "/var/snap/firefox/common/fontconfig/3f7329c5293ffd510edef78f73874cfd-le64.cache-7", "sha256": "e82e04bea9514b6e5126e907e7c85f3baeb638d60bcd0a007df1a182b1ac4ed6", "size": 3368},
+    {"path": "/usr/share/libwacom/isdv4-5218.tablet", "sha256": "483c7c3d86b114f44dbcdd436574f4730c513a6ad97f23ff19489da8725370dd", "size": 434},
+    {"path": "/usr/src/linux-headers-6.8.0-31/arch/m68k/include/asm/mcfslt.h", "sha256": "d79502b8b711a627a62256b7958f30e1b2ad6682548d49e3293c708b43573f33", "size": 1240},
+    {"path": "/usr/lib/python3/dist-packages/pygments/lexers/whiley.py", "sha256": "49b6dfb5a22d4a021d733cd3f2a395f261f59ba743dda33612f464e2295ae82a", "size": 4018},
+    {"path": "/usr/share/alsa/cards/Echo_Echo3G.conf", "sha256": "b6df2b1986dbc8cc543130f6fe07c58e8c0f96f360891081096df1d3b4bd865f", "size": 4399},
+    {"path": "/usr/share/icons/ubuntu-mono-dark/status/22/indicator-keyboard-Fa.svg", "sha256": "3fa840c3aa0b3a3600589e25f30c4fd1f7820ad24d73326a1df47c2f2ae620be", "size": 407},
+    {"path": "/usr/lib/python3/dist-packages/pygments/formatters/__pycache__/groff.cpython-312.pyc", "sha256": "f2a6f1f075aecb256978f22e977ab63d585a713d49a44bc74e869f2947ebeb4a", "size": 7197},
+    {"path": "/usr/lib/python3/dist-packages/chardet-5.2.0.dist-info/entry_points.txt", "sha256": "fdc76f61ce23c98ebc1987ec40002d84d3313beca875c1a4bcd0b5c4e12c2e62", "size": 59},
+    {"path": "/usr/share/zoneinfo/Asia/Yekaterinburg", "sha256": "37355cd8388f7b2c3415d307c123d0245f64dedbd676dac44d988de7ca72c4b9", "size": 1243},
+    {"path": "/usr/share/apport/symptoms/security.py", "sha256": "6e2b0f23208464bf61dde6156dd65a4904942cbda9aaa632e0c5ec8234674a2d", "size": 3170},
+    {"path": "/usr/share/bash-completion/completions/_svnadmin", "sha256": "22a6e6cba2779ab59765e91042cc968480b24f7e968cabb12a0ca201914695df", "size": 2308},
+    {"path": "/usr/share/lintian/overrides/python3.12", "sha256": "2b71837cf8137468d89efb25d496849ffba75d03ba8a96f5fa5fe910f9f6a62e", "size": 461},
+    {"path": "/var/lib/swcatalog/icons/ubuntu-noble-universe/48x48/berusky2_berusky2.png", "sha256": "2d000ee28052098ceedc42a1add65cdf2c74304a5276c6052140238cef98a33d", "size": 3626},
+    {"path": "/usr/share/icons/ubuntu-mono-light/status/22/indicator-keyboard-Ml-1.svg", "sha256": "bbaa4eadb7d9ac0af2b9fc3a236ebd2ee64d045add945cf94a8a349077d60f56", "size": 507},
+    {"path": "/usr/lib/modules/6.8.0-31-generic/kernel/drivers/regulator/mc13xxx-regulator-core.ko.zst", "sha256": "013bebda0e407e161e9ac49c8a57946ba801b669a0427a7db7ebf9f4e00b0055", "size": 4322},
+    {"path": "/usr/lib/aspell/en_AU-w_accents.multi", "sha256": "53747be66601a6f7f4346ed0909f33787f7674ae9c1d7dfeb9b19ea4cfd6395c", "size": 106},
+    {"path": "/usr/src/linux-headers-6.8.0-31-generic/include/config/SND_SOC_TPA6130A2", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0}
+  ]
+}

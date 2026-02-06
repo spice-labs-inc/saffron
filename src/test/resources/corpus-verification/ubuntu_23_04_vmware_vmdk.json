@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vmdk/modern/ubuntu-23.04-vmware.vmdk",
+  "imageBasename": "ubuntu-23.04-vmware.vmdk",
+  "filesystemType": "unknown",
+  "totalFiles": 116365,
+  "totalDirectories": 14343,
+  "sampleFiles": [
+    {"path": "/usr/lib/modules/6.2.0-20-generic/kernel/drivers/rpmsg/rpmsg_core.ko", "sha256": "cfb4571b2dc92d19e753e8dfeac6e4a0de35c459a600f85845fb0e2bf2ba6cb4", "size": 44777},
+    {"path": "/usr/lib/python3/dist-packages/lazr/restfulclient/tests/test_oauth.py", "sha256": "8c78b32d99772b916c5b49d107d31b8fce4d0a5235e9293ab74c8cc261079490", "size": 5490},
+    {"path": "/usr/share/locale/it/LC_MESSAGES/libapt-pkg6.0.mo", "sha256": "52788ffe8159f088b35a4cdbe9c63ef4a66eda36823f3a6df5f6d99ccbe6823f", "size": 34064},
+    {"path": "/var/lib/swcatalog/icons/ubuntu-lunar-universe/64x64/openmotor_oMIconCycles.png", "sha256": "23a46ae2a58cd986d89450d803f7eb10543e5d595e06ad2e074adce59dee5776", "size": 4563},
+    {"path": "/usr/src/linux-headers-6.2.0-20-generic/include/config/BMI160_SPI", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/src/linux-headers-6.2.0-20/include/uapi/linux/kcm.h", "sha256": "8a16ec6a2c5fb80e4f52d7362e30efc5c45e7c6c6d67e20d2da2e614d9a947e2", "size": 822},
+    {"path": "/usr/share/hplip/data/images/32x32/wireless.png", "sha256": "cad2d81d5fa60da47456a992f5fcfa1fa1bdca49bf52fa0f6e7f6b6f9d13f20b", "size": 1030},
+    {"path": "/usr/src/linux-headers-6.2.0-20/include/crypto/algapi.h", "sha256": "474014c5499856bfd038048ccc58c472b796595a546fb95b89ac9aacf3d8ffc9", "size": 8399},
+    {"path": "/usr/lib/modules/6.2.0-20-generic/kernel/drivers/comedi/drivers/ii_pci20kc.ko", "sha256": "37f475ebb05d190dfcbb8889fd45db6cfe6696aa531a303847a447d01788f55b", "size": 18217},
+    {"path": "/usr/share/groff/1.22.4/tmac/composite.tmac", "sha256": "ad2c4e55e23e32fc17986af5a95805084be9cadcda64f178d571a1c4bfe9ea29", "size": 805},
+    {"path": "/var/cache/fontconfig/d52a8644073d54c13679302ca1180695-le64.cache-6", "sha256": "8a82678dd4167f09164b9011c1968451f7ce47e1ea4da40619951ca7af797cab", "size": 87648},
+    {"path": "/usr/src/linux-headers-6.2.0-20/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh", "sha256": "672cdc8ae07912a31d1d5601e0795cc13cc8c0c8c126c659989247ed16178a55", "size": 1941},
+    {"path": "/usr/share/doc/linux-generic-hwe-22.04/copyright", "sha256": "852c222fc0a341d0001214719f0293bd693ecbf27a564e2256e4d65565229f3a", "size": 1598},
+    {"path": "/usr/src/linux-headers-6.2.0-20-generic/include/config/SND_SOC_SOF_ICELAKE", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/lib/firmware/cirrus/cs35l41-dsp1-spk-cali-103c8981-l0.bin", "sha256": "52407d3133ececb9df0aa7e727f108ac26b59cc6bafd42b004b4c2fce7bcdce5", "size": 2012},
+    {"path": "/var/lib/dpkg/info/dmsetup.triggers", "sha256": "4e8ef9748954495865930583ef77061fb0a8dc74fc7176ddb5dcf3d3287a03fe", "size": 86},
+    {"path": "/usr/src/linux-headers-6.2.0-20/drivers/dma/fsl-dpaa2-qdma/Makefile", "sha256": "ada5668e3e4350c94d590b560a7b92dfebddfe427640f3236e6f5730c50a3e5b", "size": 135},
+    {"path": "/usr/share/doc/libnet-ssleay-perl/examples/cb-testi.pl", "sha256": "84a1eb28c0e0431f4b881a145c21ba7a72b835863a75861915fa5d0d0bab0702", "size": 548},
+    {"path": "/usr/share/icons/Adwaita/48x48/legacy/format-indent-more.png", "sha256": "1d4703255224614a76b2ce8b7edfa91b9ef5669851ce26dc625267a7d031c38d", "size": 1247},
+    {"path": "/usr/share/man/man1/ldappasswd.1.gz", "sha256": "894360915ef3403665a8e8c8b5ac2ac8dad4a1d434d607f5d216192cdfeb3aae", "size": 2308}
+  ]
+}

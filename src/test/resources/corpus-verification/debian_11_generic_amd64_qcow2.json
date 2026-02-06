@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/debian-11-generic-amd64.qcow2",
+  "imageBasename": "debian-11-generic-amd64.qcow2",
+  "filesystemType": "ext4",
+  "totalFiles": 23059,
+  "totalDirectories": 2868,
+  "sampleFiles": [
+    {"path": "/usr/share/i18n/locales/ur_IN", "sha256": "e8200f3c9d0e0748b9e58e534b9adcf5eedf182a1514e239ca570b64b6defdde", "size": 4909},
+    {"path": "/usr/share/zoneinfo/America/Monterrey", "sha256": "622c5311226e6dfe990545f2ea0df6840336811e065d73ea394e2dbf42f7906d", "size": 1114},
+    {"path": "/usr/share/vim/vim82/syntax/systemd.vim", "sha256": "67cd3110b24029d4956c513a290fff3c883a6356bf83ddd25f98ddb5c5635aee", "size": 184},
+    {"path": "/var/lib/dpkg/info/init.md5sums", "sha256": "9d39febd8d4883e5315c8680edc3e64b0ec2eeae272d3f7e3bdfb65febf88413", "size": 129},
+    {"path": "/usr/share/vim/vim82/ftplugin/javascript.vim", "sha256": "60ee5cae5d46a7fb71ba1c1b41180b8ed74b3f1db7a34344417d5677ba1e2f67", "size": 2605},
+    {"path": "/etc/systemd/sleep.conf", "sha256": "7e31316213bfdfa28038188507a53a94696da7699828e85369ec343f9fad17e9", "size": 790},
+    {"path": "/usr/lib/python3/dist-packages/PyJWT-1.7.1.egg-info/PKG-INFO", "sha256": "b37e1d78d8dd4a34035269f5db524be8764a319289ae512c33728ce8cc881c86", "size": 4157},
+    {"path": "/usr/share/vim/vim82/compiler/zsh.vim", "sha256": "e3e9367f09657d5fe427f914deada094d47acef97f37438b90182e6500defc0a", "size": 481},
+    {"path": "/usr/lib/x86_64-linux-gnu/gconv/IBM1047.so", "sha256": "4a72a7fbc6db5959effd4684afb57a45fd45f2d389b278078843f7d5de7d029f", "size": 18544},
+    {"path": "/usr/share/man/zh_CN/man1/man.1.gz", "sha256": "84fa6143ee94c9e1a6888a3e08105249cca00cb8b65e7b940082535a7c5070c0", "size": 12981},
+    {"path": "/usr/lib/modules/5.10.0-37-amd64/kernel/drivers/mfd/axp20x-i2c.ko", "sha256": "ed53ec467abb58fcb177f4088770a87d41f38b38e7efc5ba0c4f3ffb513f534b", "size": 12849},
+    {"path": "/usr/lib/python3/dist-packages/setuptools/__pycache__/errors.cpython-39.pyc", "sha256": "f421120c280bcb832b3ea2f94fd2a9b2ba305599e9ccbdc734b6f64ee52b677c", "size": 814},
+    {"path": "/usr/share/perl5/Debconf/DbDriver/Cache.pm", "sha256": "7075a4f322db7e12d96e2391267073cf11a01277ed972b8fd5285c8b3b89e272", "size": 4825},
+    {"path": "/usr/share/zoneinfo/America/Argentina/Jujuy", "sha256": "fdac90138bd00135c6ffd8ac7be9d7b3d90362a64af0f4a6c9281ab6a00ea2e9", "size": 1072},
+    {"path": "/usr/share/doc/less/changelog.Debian.gz", "sha256": "ec4352218606f3ebdcbd5ffe7d52b2db329689fee906f4e27bb5aef578ed89f1", "size": 12708},
+    {"path": "/usr/share/locale/sk/LC_MESSAGES/man-db-gnulib.mo", "sha256": "03ed50c99fc11cc91feba6e0c0df8128512319a8e50c73ed378c57dae3df60d0", "size": 577},
+    {"path": "/usr/lib/python3/dist-packages/jwt/contrib/algorithms/__init__.py", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/lib/modules/5.10.0-37-amd64/kernel/net/vmw_vsock/vmw_vsock_virtio_transport.ko", "sha256": "d4f5f66198ecd78d131c356154ba777b654396591295e3a7dd72f2bd096a06c0", "size": 33097},
+    {"path": "/usr/share/vim/vim82/autoload/context.vim", "sha256": "6fa994d6db3ad2bb92d2c0287aa0ee72ba4eee4807097dc81e11f106fe882e71", "size": 5462},
+    {"path": "/var/lib/dpkg/info/tar.prerm", "sha256": "de3fa1115a52ea8e0017f65b767176146e35585e050581adcef95aab495d648c", "size": 231}
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vmdk/legacy/windows-me.vmdk",
+  "imageBasename": "windows-me.vmdk",
+  "filesystemType": "vfat",
+  "totalFiles": 4980,
+  "totalDirectories": 302,
+  "sampleFiles": [
+    {"path": "/WINDOWS/HELP/TOUR/WH_SUCON.HTM", "sha256": "21d2511adda1909d0409bf1e953934571201f4fbbc43ef6d7e038852befcb2be", "size": 4464},
+    {"path": "/WINDOWS/SYSTEM/DirectX/Dinput/ms56_2.png", "sha256": "d21f87d0ceca2ec2a93fb92215c93c4ae11076f206068cf4baa7202d7179db6e", "size": 862},
+    {"path": "/WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Music tracks I have not rated.wpl", "sha256": "0e879046c3a2c74b37c7e43906134a9dbacdd89f847074d4a4b85dab6b8d8ecf", "size": 783},
+    {"path": "/WINDOWS/MSAGENT/AGENTPSH.DLL", "sha256": "75e06ef7f4bb46d761921c61b3022540c5661eed29c9fad8fcac6aca84c421e5", "size": 36864},
+    {"path": "/WINDOWS/HELP/CPANEL.CHM", "sha256": "7105fa8b63e51ad6c1ebeac4cee5f5ae18f3fb5e3486cafdafddc551352f6f7d", "size": 32458},
+    {"path": "/WINDOWS/SYSTEM/OOBE/SETUP/MIGPAGE.HTM", "sha256": "78c3b673158ab4caf63f4b10284f6046ca619a2cda8b5f7574bc80cbe64a253f", "size": 2972},
+    {"path": "/WINDOWS/MEDIA/Robotz Menu Command.wav", "sha256": "4256890a27d25b2deb1fa9a9fd4afc9c579ff89f10ad17559f33b194c23d9630", "size": 13882},
+    {"path": "/WINDOWS/SYSTEM/DirectX/Dinput/ms34_01.png", "sha256": "3afea7013ed838c9db2716d24fef8ab48224f496cc994b16f87d8b991f3d8cee", "size": 5085},
+    {"path": "/WINDOWS/HELP/TOUR/WH_SYFRA.HTM", "sha256": "eee688432e34c83d4ebb32902ca964585557cb28f4acfe78b591bca6a7c6d3a1", "size": 786},
+    {"path": "/Program Files/Windows Media Player/Installer/migrate.dll", "sha256": "7c98d06b8e5546e0c478c23c3e11d1f6c8a81137f51ebe854e2226278ee95344", "size": 24576},
+    {"path": "/WINDOWS/MEDIA/Jungle Open.wav", "sha256": "d07671be45b3c2d7b7634a41ec8101b0ec65519d9ca50a16e1fb1fea4b6972a0", "size": 129540},
+    {"path": "/Program Files/Common Files/Adaptec Shared/CreatorAPI/Translator.dll", "sha256": "678fa3e96a0b611dfd555573b8f945d4fd8ff777d91629b07f6e386432a52ac1", "size": 90112},
+    {"path": "/WINDOWS/FONTS/SYMBOLF.FON", "sha256": "1c56632f2d286b86ac4294be7d36d6a73ae28bcbec5ee078b69f7f1f3f32ccad", "size": 80928},
+    {"path": "/WINDOWS/SYSTEM/OOBE/IMAGES/MSNIALOG.GIF", "sha256": "b3c4754e5f519f1f1ad8dd2b5363daf7a7037914613f0fc4b9d0a03eea89695c", "size": 1823},
+    {"path": "/WINDOWS/SYSTEM/LOGAGENT.EXE", "sha256": "d88f306671f0fffaa20d5d74a9dc8e368772d57d2aab1a136cf0564fc7e19258", "size": 81408},
+    {"path": "/Program Files/Plus!/PINBALL/SOUND20.WAV", "sha256": "d9967a5ec4104c9e470e02163e07e0f34b313578d302c9a849972f81f328ecfe", "size": 8650},
+    {"path": "/WINDOWS/HELP/MSNAUTH.CNT", "sha256": "ef55a8dd5484b1b341aa7d3358b2a03bcb7bfafcaeeb18356b8a327ebde725e7", "size": 173},
+    {"path": "/Program Files/Plus!/Themes/Nature Size NS.cur", "sha256": "022b9d84c0b777b8edb16be1587f8e629714a203d4e69cf0fa73b9d5571d0101", "size": 2238},
+    {"path": "/WINDOWS/WEB/wiastream.htt", "sha256": "57c2a9382bc12c668cd20a726b04d8dc281cefef53327ff5fd698a7eafd69ad2", "size": 20150},
+    {"path": "/WINDOWS/SYSTEM/LAPRXY.DLL", "sha256": "63139f2378f406094d8248f5b24a0cc1d79c3fa738db4549b0414c67a422f425", "size": 6656}
+  ]
+}

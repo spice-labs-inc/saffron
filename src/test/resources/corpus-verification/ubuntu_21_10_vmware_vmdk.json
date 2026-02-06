@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vmdk/modern/ubuntu-21.10-vmware.vmdk",
+  "imageBasename": "ubuntu-21.10-vmware.vmdk",
+  "filesystemType": "unknown",
+  "totalFiles": 123511,
+  "totalDirectories": 14425,
+  "sampleFiles": [
+    {"path": "/usr/lib/libreoffice/program/libucpgio1lo.so", "sha256": "127ae4012a3b309d08b8db4e10404e312fe383f9adce428ab02307abba04f529", "size": 176160},
+    {"path": "/usr/src/linux-headers-5.13.0-16/include/sound/soc-acpi.h", "sha256": "d8f8703b3fcfa02a3915ee5788e262d71bdc03ad718c45f9df15d84c3f7a0a21", "size": 5637},
+    {"path": "/usr/share/help/C/gnome-logs/introduction.page", "sha256": "3b1c778318745bc30d3d3621973041478454c87eec4d46ea9e006b74fe98470c", "size": 1243},
+    {"path": "/usr/lib/python3/dist-packages/future/moves/urllib/__pycache__/error.cpython-39.pyc", "sha256": "aa3135dadcfcfb2671e57cbbae8e3cd905b560114cf3b294dc55b35e02b2ec51", "size": 515},
+    {"path": "/usr/lib/python3.9/__pycache__/textwrap.cpython-39.pyc", "sha256": "1a78bb7cc619f4d71c94f8e64c1bbe980ee640ab610ee2d317d9f2efc8971672", "size": 13519},
+    {"path": "/usr/src/linux-headers-5.13.0-16/drivers/media/Kconfig", "sha256": "840c9ce2a62d8883bf1dcaa7a3660887b01f0930805d821ea820fe680b8e9cbf", "size": 7197},
+    {"path": "/etc/init/whoopsie.conf", "sha256": "e7c9819f96531925daadde07d08dae97581e506d5d0004f95e243c7b7f41f13e", "size": 453},
+    {"path": "/usr/share/icons/Yaru/24x24/legacy/process-stop.png", "sha256": "d1ab0633468bf95aee464de04b2702aeac83efbf020f32534761e91d3f7b65d3", "size": 1205},
+    {"path": "/usr/share/libreoffice/help/media/icon-themes/cmd/lc_insertcolumnbreak.svg", "sha256": "38cdf2b50bc804147b8490ffa4e009bff7a8775ddff1921736912e741f55f461", "size": 1138},
+    {"path": "/usr/lib/python3/dist-packages/future/backports/test/__pycache__/__init__.cpython-39.pyc", "sha256": "3917fe8111fe528a142130811d5c42cb190d0235fdb0206bda40fffa9105c63c", "size": 427},
+    {"path": "/var/lib/app-info/icons/ubuntu-impish-universe/48x48/qelectrotech_qelectrotech.png", "sha256": "cb354ccdf96cbd67fe0f68d7625644827aa43ba7a9325d7df05b662ed40a2eb6", "size": 1849},
+    {"path": "/usr/share/icons/Yaru/256x256@2x/categories/unity-color-panel.png", "sha256": "9d4e884f9b60e9a481d237d50920957c3a95fcf02a033440baf6ff13d132d808", "size": 35446},
+    {"path": "/usr/lib/x86_64-linux-gnu/ModemManager/libmm-plugin-mtk.so", "sha256": "de27320707c8cc8097b536b5ffb8714d69b90372c487505960fa6ef1113958f4", "size": 31384},
+    {"path": "/usr/share/icons/Yaru/24x24@2x/places/folder-templates.png", "sha256": "376b4cdb3ed85ddeb41d5996d46c3ae8e8697b99198bcfa9f9712f3b33ef0058", "size": 1952},
+    {"path": "/usr/share/icons/whiteglass/cursors/left_ptr", "sha256": "6c020e7f85d484999732ec627fdff64647cddf0c77d364b7674561fd191a4ba7", "size": 33280},
+    {"path": "/boot/grub/x86_64-efi/pcidump.mod", "sha256": "e772b8d36ec1b9ab29a420a7ac3778053d14a6093776e69df6dba3c80f21ebbd", "size": 3576},
+    {"path": "/usr/share/ibus/dicts/emoji-es_US.dict", "sha256": "67df8022ace1b2f7e0bbfc08f2ba60434bd0f741bf68808ca7f166ba3dd0a8de", "size": 336057},
+    {"path": "/usr/lib/firmware/amd-ucode/microcode_amd_fam17h.bin", "sha256": "5288d1ac032abe61441c5626091458803f925304ee45ca18de38a4edd66cddd2", "size": 6476},
+    {"path": "/usr/share/doc/libgweather-3-16/changelog.Debian.gz", "sha256": "ea66bffe152b4e923b932488755172c28d0b6eb008732f0ebf7e949fb6edfaa5", "size": 2606},
+    {"path": "/usr/src/linux-headers-5.13.0-16-generic/include/config/GENERIC_MSI_IRQ_DOMAIN", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0}
+  ]
+}

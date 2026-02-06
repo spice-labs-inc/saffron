@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vmdk/modern/ubuntu-23.10-vmware.vmdk",
+  "imageBasename": "ubuntu-23.10-vmware.vmdk",
+  "filesystemType": "unknown",
+  "totalFiles": 117034,
+  "totalDirectories": 14476,
+  "sampleFiles": [
+    {"path": "/usr/share/system-config-printer/ppdippstr.py", "sha256": "f7300830624822a6261a9c3347503432813aed5d26d169b950828466857ee87f", "size": 16583},
+    {"path": "/usr/lib/modules/6.5.0-9-generic/kernel/samples/ftrace/ftrace-direct-modify.ko.zst", "sha256": "fb5515258547712a4c2fba8e2a854ba80cc7a955bbf8a70eab55bad308639a1b", "size": 3480},
+    {"path": "/usr/share/i18n/charmaps/GBK.gz", "sha256": "e488c365c30fa038cc8b0b9000000da3d4f9be17a4784526ee6e740754e8d51b", "size": 119347},
+    {"path": "/usr/share/i18n/locales/nl_AW", "sha256": "2d17a4db1f172ca13fe77bbf0f33bead45abbe6e8fb93bdad06da5309044166b", "size": 2771},
+    {"path": "/usr/share/man/man1/ucf.1.gz", "sha256": "7841bde9b6b62ec92779752772d2e44f967a3fcda36bd6707fc8f296a4143bfd", "size": 5559},
+    {"path": "/usr/share/doc/util-linux/releases/v2.39.1-ReleaseNotes.gz", "sha256": "0a092b5344402c1e897e9c9e96a0477332b5538d911da0fcd4168bfa8d916829", "size": 1909},
+    {"path": "/usr/share/cups/templates/fr/job-cancel.tmpl", "sha256": "63b8d12aa45677fd39c62f0462e0c996c87b135c3869be660ae480c69579e3f9", "size": 151},
+    {"path": "/usr/lib/modules/6.5.0-9-generic/kernel/drivers/gpu/drm/radeon/radeon.ko.zst", "sha256": "36f9626f80d1fa618f838871aadfe2305483c98f635f05f0a343244c428f5262", "size": 845878},
+    {"path": "/usr/share/terminfo/w/wy60-w", "sha256": "da0328d143f3dab9a3c096d93bf77f1a9f732780653f50b8a63a060fec95eca5", "size": 1579},
+    {"path": "/usr/lib/modules/6.5.0-9-generic/kernel/drivers/gpu/drm/solomon/ssd130x.ko.zst", "sha256": "00ce350b8eb95f7e56e0d381beec46997abe18b35a08d5b540762276b9795963", "size": 22041},
+    {"path": "/etc/brltty/Text/nl_BE.ttb", "sha256": "e3cc83d61e02b04e8a718d67c2526923475be471416dd1e5afad5f7d19265368", "size": 9856},
+    {"path": "/usr/share/icons/HighContrast/16x16/devices/media-tape.png", "sha256": "180548dde8f4c448bda539300a10b70662106fb1d7aa33bb15f80a37c04cd21e", "size": 285},
+    {"path": "/usr/src/linux-headers-6.5.0-9-generic/include/config/HMEM_REPORTING", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/share/themes/Yaru/gtk-2.0/assets/progressbar-vert.png", "sha256": "407e122319190f57f123debd4ac5bfcddb4ed62a5054bf2ad23eb347a9f01305", "size": 111},
+    {"path": "/usr/share/doc/python3-blinker/changelog.Debian.gz", "sha256": "433c8417242b1ec979c6393373abb752d85ddb668170f0590d8ad6d5ba8cd1d3", "size": 1373},
+    {"path": "/usr/src/linux-headers-6.5.0-9/include/linux/page_ext.h", "sha256": "969e4b625e4f9d613ac17f252e020a6f7eaad859c21cf93799e7d66af603619e", "size": 2837},
+    {"path": "/usr/share/doc/gnome-settings-daemon-common/copyright", "sha256": "3e13b65ba516492fcb843d5b5ba0a5aa3c04a117835eadc6b4685a01775483fb", "size": 7625},
+    {"path": "/usr/src/linux-headers-6.5.0-9/include/linux/dma/pxa-dma.h", "sha256": "784baf61668f7294c3b0c8db8e886bfa66dff91423a2aa0e0fb6c2a76ec4ea00", "size": 637},
+    {"path": "/usr/share/alsa/ucm2/USB-Audio/Steinberg/UR24C.conf", "sha256": "989954ca290eb8d321717bd5e426e251a7314633afb74b3af4de11a5bcb6be1c", "size": 228},
+    {"path": "/usr/share/icons/Yaru/24x24@2x/apps/address-book-app.png", "sha256": "d85593cebd535379602560144a93021faf952f37e0384233f6278627482f3e0b", "size": 2413}
+  ]
+}

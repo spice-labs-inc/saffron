@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/centos-stream-9-cloud.qcow2",
+  "imageBasename": "centos-stream-9-cloud.qcow2",
+  "filesystemType": "xfs",
+  "totalFiles": 27984,
+  "totalDirectories": 5067,
+  "sampleFiles": [
+    {"path": "/usr/lib64/python3.9/__pycache__/getpass.cpython-39.opt-1.pyc", "sha256": "29675c8ea60a0204e333bb8c925567b61f243435be3e0ef928994b77da40a408", "size": 4200},
+    {"path": "/usr/lib/python3.9/site-packages/setuptools/_distutils/__pycache__/sysconfig.cpython-39.pyc", "sha256": "d1f2e8b5c594a217889bb539559755dfc7be7204d59f44f533fd7a31e5f73685", "size": 12373},
+    {"path": "/usr/lib/modules/5.14.0-665.el9.x86_64/kernel/net/ipv6/ip6_udp_tunnel.ko.xz", "sha256": "5d5621d7983de407268f9dce413872374557f3e9ac6a0a5e62285153812f9ed9", "size": 4608},
+    {"path": "/usr/share/bash-completion/completions/systemd-cryptenroll", "sha256": "4d7696cd3fcdf03c3d5609ae400e6f02aadb36ca50b0041d5351d8400c1535b7", "size": 3305},
+    {"path": "/usr/share/man/man8/auditctl.8.gz", "sha256": "d00c46b5c45ca39272bbfceeb9b5510631073045823d8c42b1d16cc9338438e1", "size": 7692},
+    {"path": "/usr/lib/python3.9/site-packages/cloudinit/sources/helpers/vmware/imc/__pycache__/guestcust_state.cpython-39.opt-1.pyc", "sha256": "b380f575101a62146054ec8a2f0ed466f9290df2685a0a1180ce92602191db13", "size": 479},
+    {"path": "/usr/share/locale/ja/LC_MESSAGES/libidn2.mo", "sha256": "4d7617e2e39cfad70857fc5207e2e738c2bc3fd2c6379cfab9c5ddf414eb3daf", "size": 669},
+    {"path": "/usr/sbin/cgdisk", "sha256": "0f8e6fbc654d161108bf2a6c7e0d46961c60f7f3e1e71ac0b8f792c5ca8b52a9", "size": 154552},
+    {"path": "/usr/share/locale/as/LC_MESSAGES/NetworkManager.mo", "sha256": "40e6990f55061ad9043993800f800538ac23b6554ee02d76f739975b9eeef5f9", "size": 112901},
+    {"path": "/usr/lib/python3.9/site-packages/cockpit/channels/__pycache__/filesystem.cpython-39.pyc", "sha256": "402e5cb19ebfe23df62c49147713e0b94252ef803aaef76a908f82cccbe82513", "size": 20436},
+    {"path": "/usr/share/locale/nl/LC_MESSAGES/cryptsetup.mo", "sha256": "98fd8e426ee25f1914f367aab62e7a154b4524005573218b36413b55d3e475f6", "size": 32957},
+    {"path": "/usr/lib64/python3.9/site-packages/setools/__pycache__/descriptors.cpython-39.opt-1.pyc", "sha256": "6e093525b2508ef76d866124d435f4f4878b264ce8718a017eee4e31ba63e830", "size": 10120},
+    {"path": "/usr/share/cockpit/kdump/po.zh_TW.js.gz", "sha256": "7dd128e6fd3f3275f786190ef64770c06a43a82d0bbb46cf1484a550b6c33675", "size": 8418},
+    {"path": "/usr/lib64/libionic.so.1.0.61.0", "sha256": "2a41b7bed8a4ed6e824dcdff5dd7a432c8f3dcd3d417980cbebb2af0d5f1738d", "size": 56920},
+    {"path": "/usr/share/man/pt_BR/man5/shadow.5.gz", "sha256": "e44fc3c218b791d14b882b4cd0e9daf0b3c70f14cda84b6bc06852ee0615a05a", "size": 1846},
+    {"path": "/var/log/anaconda/syslog", "sha256": "e238a9f293aa4ecd15ef107a763b04478d6844372e61c9f40d8c7a540034702c", "size": 615005},
+    {"path": "/usr/lib64/python3.9/asyncio/__pycache__/selector_events.cpython-39.pyc", "sha256": "abd2c264960e441e02785f2f9eb72f35bb1b068d1ee694d3262ec3232d0fb2ca", "size": 29718},
+    {"path": "/var/lib/selinux/targeted/active/modules/100/livecd/lang_ext", "sha256": "d53315bea08cec50d2591fcaf3b32dc5d289cdc6c16b7e8bed8c8e3f7ceaa34e", "size": 2},
+    {"path": "/usr/share/cockpit/selinux/po.manifest.pl.js.gz", "sha256": "e15c2295c36599cb754462eb689f999e559090e2d6b01e7b1fa462446b69038b", "size": 309},
+    {"path": "/usr/lib/python3.9/site-packages/jsonschema/__pycache__/__main__.cpython-39.opt-1.pyc", "sha256": "2aada4671ddfc76c8273ec284c49991e40d28781d289b2cd71d151de3a2c41b3", "size": 197}
+  ]
+}

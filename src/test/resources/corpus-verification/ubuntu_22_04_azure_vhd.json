@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vhd/modern/ubuntu-22.04-azure.vhd",
+  "imageBasename": "ubuntu-22.04-azure.vhd",
+  "filesystemType": "ext4",
+  "totalFiles": 59461,
+  "totalDirectories": 8092,
+  "sampleFiles": [
+    {"path": "/usr/src/linux-azure-6.8-headers-6.8.0-1044/arch/riscv/include/asm/signal.h", "sha256": "049d889828b8378f8a752b95d9da31b1d2ec6940afb02485251c6f8e52b83c52", "size": 257},
+    {"path": "/usr/src/linux-headers-6.8.0-1044-azure/include/config/MLX5_EN_IPSEC", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/src/linux-azure-6.8-headers-6.8.0-1044/scripts/coccinelle/misc/swap.cocci", "sha256": "482478a7b08fc93ce008658d818a1222017f30b14c563d8551655726d3f7b710", "size": 1517},
+    {"path": "/usr/lib/python3.10/lib2to3/fixes/__pycache__/fix_basestring.cpython-310.pyc", "sha256": "e2aeba0ddc72ae15f32598bef14df8a4c1d6952f0966e7a0780960a6b90a0d25", "size": 661},
+    {"path": "/usr/src/linux-azure-6.8-headers-6.8.0-1044/arch/m68k/include/asm/m52xxacr.h", "sha256": "7a85ba65b5d6b7a14708ac0f810a9be00416aa33005a6479d96f2933afd62927", "size": 3660},
+    {"path": "/usr/src/linux-azure-6.8-headers-6.8.0-1044/include/net/bond_3ad.h", "sha256": "c04a02d1249dfb8173ceb6a1fc4faad856c1e3a13f563ec97f08b30b67e80eae", "size": 9573},
+    {"path": "/usr/src/linux-azure-6.8-headers-6.8.0-1044/include/uapi/linux/snmp.h", "sha256": "81c0bf23165530ca99a8ee9a53a5c8f6fe4b1ca41fd99de215313df005aae0c1", "size": 14533},
+    {"path": "/usr/share/locale/mi/LC_MESSAGES/iso_3166-1.mo", "sha256": "1724b0d53de5d1303f6fa92d18400989d420585f2644f949c8fb2d40bd1115e2", "size": 10547},
+    {"path": "/usr/share/vim/vim82/keymap/serbian-latin.vim", "sha256": "2e90fbd100b33b60fe33f8fddc6395b9c9710494bde818e0bf302e472c214d3d", "size": 43},
+    {"path": "/usr/share/mime/application/x-gnuplot.xml", "sha256": "e3b189004988b6502745b3c36bbaaab14933caef17871e255fa20fd69f8af81c", "size": 3131},
+    {"path": "/usr/lib/x86_64-linux-gnu/perl/5.34.0/bits/types/stack_t.ph", "sha256": "e10aeab2d0ee919dfa22bdf195efc67d4d960701aba4a83311b2b4cf4fe76cbd", "size": 271},
+    {"path": "/usr/share/lintian/overrides/gpg-wks-client", "sha256": "d1625913fc6b95e94605822ee5b2445c06a10a5323bfeeff8eb13afc06045d8f", "size": 148},
+    {"path": "/usr/share/vim/vim82/ftplugin/m4.vim", "sha256": "bbfe7e32ee4b8a6fbd35dfff37cf3ab552203ade624a0ed3c0404d324d9e73f2", "size": 426},
+    {"path": "/usr/share/vim/vim82/compiler/se.vim", "sha256": "24d91b379918ed601b8344fede934dbf3ff8d8ff3e274815ec91b73a237f38d8", "size": 742},
+    {"path": "/usr/src/linux-azure-6.8-headers-6.8.0-1044/arch/alpha/include/asm/vmalloc.h", "sha256": "c8e158eb5a2afc119b1fcbead9d1ee94da76b6b77cab73e4e5b89ff731fdf654", "size": 93},
+    {"path": "/etc/console-setup/cached_Uni2-Fixed16.psf.gz", "sha256": "31b879bdce9e4843ffeb1a9b236bce1d3489ec4ed59cb32f7e41069d592b8ca3", "size": 4247},
+    {"path": "/usr/share/doc/os-prober/changelog.gz", "sha256": "d6e3d5a3bed89221e2db9350d1627fd3c0dd9588eccfed2caa2d1cdb6032dde7", "size": 1424},
+    {"path": "/usr/lib/python3/dist-packages/configobj-5.0.6.egg-info/requires.txt", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/share/vim/vim82/syntax/readline.vim", "sha256": "c5ac3fcf0819a9eb0f6176322ea5981cd32f7ce52ec0d67b21d85b38410dfccd", "size": 17487},
+    {"path": "/usr/lib/python3.10/lib-dynload/_lsprof.cpython-310-x86_64-linux-gnu.so", "sha256": "45aeb25c6a2bedbd29a787496a76dbc42528459a827c9c2855dd21f36b8d72e1", "size": 31784}
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/ubuntu-18.04-cloudimg-amd64.qcow2",
+  "imageBasename": "ubuntu-18.04-cloudimg-amd64.qcow2",
+  "filesystemType": "ext4",
+  "totalFiles": 53457,
+  "totalDirectories": 10142,
+  "sampleFiles": [
+    {"path": "/usr/share/zoneinfo/right/America/Jujuy", "sha256": "f9b3f77caa862cee71a893e64fe1e4dbb24eda9ceff5875ae5b744638810aa14", "size": 1616},
+    {"path": "/usr/src/linux-headers-4.15.0-212/sound/hda/Kconfig", "sha256": "0bc3e0be417dd4ef888aaaa31b2c05b2f68fad21c5b474c808f8026d0f4210a7", "size": 697},
+    {"path": "/usr/share/doc/libdebconfclient0/copyright", "sha256": "1f48252e8bd71085c67fe1f5468c67da1d2d7cc34cd8a7e9d90b9ad2df080e8e", "size": 1978},
+    {"path": "/lib/modules/4.15.0-212-generic/kernel/net/sunrpc/sunrpc.ko", "sha256": "5f72c3a6f4937303a7beb0e99b621585955acbeac017bbcee12d0e4702329ef7", "size": 592305},
+    {"path": "/lib/systemd/system/dm-event.service", "sha256": "22420e24c9cf0d6e65fff3d0d35540cb7c3aee31451678a52553aded829a3f8d", "size": 341},
+    {"path": "/var/lib/dpkg/info/libirs160:amd64.triggers", "sha256": "b61478d3caf10aab72c147c59c33b8dfd68cea250408f809789de6f6250de506", "size": 74},
+    {"path": "/usr/share/man/it/man1/su.1.gz", "sha256": "5501341266c26ffa3ecfe604a7163f84a19791d3dc0f19a8ee2c16bf3c5cbef3", "size": 3305},
+    {"path": "/usr/src/linux-headers-4.15.0-212-generic/include/config/tcp/cong/veno.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/src/linux-headers-4.15.0-212-generic/include/config/sxgbe/eth.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/share/doc/apport/NEWS.gz", "sha256": "46475390011e6e216fa2bf7fa25149d1b0723317d02e866986f854c36e40b17e", "size": 45227},
+    {"path": "/usr/share/terminfo/z/z39-a", "sha256": "03773f1ab93379c10f167f03686255ee8a199b740778c45a0f6d26a0922fc13c", "size": 1124},
+    {"path": "/usr/share/terminfo/t/tab132", "sha256": "05a1b1beeff9ab17893e4df95c9aec2168cd5d7220effeaeed01c761cd0ce5cc", "size": 1104},
+    {"path": "/usr/share/bash-completion/completions/hostnamectl", "sha256": "24b410b21445404cc53f3edab5031de60ce9c28958d173342c1b91f48e954031", "size": 2278},
+    {"path": "/usr/share/X11/locale/el_GR.UTF-8/XLC_LOCALE", "sha256": "9fae053b229a02427a3eb0e854b29f1b4f47b6f9141099a8064de25f3ebde42a", "size": 48},
+    {"path": "/var/lib/dpkg/info/libnghttp2-14:amd64.shlibs", "sha256": "79f5b8b23f0a5bfb09f4cce8ab16a755f342bcccddc0371d101450d545a4cf27", "size": 28},
+    {"path": "/usr/src/linux-headers-4.15.0-212-generic/include/config/input/pcf50633/pmu.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/src/linux-headers-4.15.0-212-generic/include/config/snd/soc/intel/bdw/rt5677/mach.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/share/doc/git/RelNotes/2.4.9.txt", "sha256": "d2a6e72f00c73b5d343ff226b82b2c9afb5b64a4f9cd03aab04836ff1cc4ab84", "size": 284},
+    {"path": "/usr/src/linux-headers-4.15.0-212-generic/include/config/rtc/drv/s5m.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/src/linux-headers-4.15.0-212/drivers/crypto/stm32/Kconfig", "sha256": "76b0dfcb6d9b8a34c1fcf28b6eb777d065f143327d400e8218b71655ff2a391d", "size": 569}
+  ]
+}

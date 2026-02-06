@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vmdk/modern/devuan-3.1-vmware.vmdk",
+  "imageBasename": "devuan-3.1-vmware.vmdk",
+  "filesystemType": "ext2",
+  "totalFiles": 108389,
+  "totalDirectories": 14046,
+  "sampleFiles": [
+    {"path": "/usr/share/ghostscript/9.27/lib/bj8ts06n.upp", "sha256": "cdafd54e1f176564709d428d1f1adc519ff9d40d08eb69600d68c06111a4368e", "size": 1530},
+    {"path": "/usr/share/icons/hicolor/scalable/apps/xfce4-battery-missing.svg", "sha256": "e38070ba9508d466a6f735869cfb1e7d65d93382d5076c9ab53c491c73c2397f", "size": 16137},
+    {"path": "/usr/share/icons/Adwaita/scalable/mimetypes/font-x-generic-symbolic.svg", "sha256": "aab48d60a24a5c3320cc38ca07d4d0952431f26f4e27f005b9d7c9848bad0b59", "size": 1167},
+    {"path": "/usr/share/desktop-base/grub-themes/cinnabar-grub/icons/archlinux.png", "sha256": "a4defe45691fa90b7bbd21d0d9e1e0e7389dfcbccac89bf07fb1769a83da886b", "size": 567},
+    {"path": "/usr/share/system-config-printer/scp-dbus-service.py", "sha256": "78166c9ddb5e0f485e677899c85ef75b67cd9e5eafcf1ce1555d21e10a664145", "size": 22647},
+    {"path": "/usr/lib/libreoffice/share/extensions/nlpsolver/help/bs/help.jar", "sha256": "2070cfb69220d21c2f6c43070352966673d8a734b5dce59a97ecd7c77f0afc17", "size": 4730},
+    {"path": "/usr/include/linux/scif_ioctl.h", "sha256": "a674fc71a2cf6b25626efc1cce865b215c3b03ee44e395b9c163ad5a4aac5e21", "size": 6382},
+    {"path": "/usr/src/linux-headers-4.19.0-14-amd64/include/config/probe/events.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/share/man/man1/gvfsd-metadata.1.gz", "sha256": "e3f8eb4d961d43751924fbff0b4be290d64cdc1654f4a9c7ad4047e2f8520ea4", "size": 977},
+    {"path": "/usr/share/help/eo/atril/index.docbook", "sha256": "32388161eea153137180c377cfa900c985ef8d937c6b4c2a644ffda44561f2d0", "size": 38131},
+    {"path": "/usr/share/javascript/mathjax/unpacked/jax/output/HTML-CSS/blank.gif", "sha256": "4c9e52498dc6c0afe8657a9b95ef6417d33e15bd17fd4b4b6301ef908ffe7ea1", "size": 43},
+    {"path": "/usr/share/icons/Adwaita/24x24/status/audio-volume-high-symbolic.symbolic.png", "sha256": "b641b5e6902d6f94893c37485289c6a9c1999251f31ccbb0322669e400962abd", "size": 516},
+    {"path": "/usr/lib/aspell/en_GB-ize-wo_accents.multi", "sha256": "7d2cc7537e335f11f1531efa9917080741500e7b2cc1fcf0438740331fe48989", "size": 111},
+    {"path": "/usr/share/icons/Adwaita/48x48/actions/view-more-symbolic.symbolic.png", "sha256": "2ed4a46ed412386f8ba02702b05db4e44f2e15c2dd9e06ea482f854d500a4fa8", "size": 203},
+    {"path": "/usr/src/linux-headers-4.19.0-14-common/include/net/inet_common.h", "sha256": "12a1954b1cd54b15cc51e3a9de2092bac24ca9ebff2db55226b7fd2033eda1bb", "size": 2040},
+    {"path": "/usr/lib/libreoffice/share/extensions/nlpsolver/help/bs.done", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/share/icons/Adwaita/64x64/status/network-wired-no-route-symbolic.symbolic.png", "sha256": "dcc4d8a7d26673d72a5541ba4d19e6cdf1914890d9de2ee201e268edf964be28", "size": 876},
+    {"path": "/usr/share/locale/he/LC_MESSAGES/quodlibet.mo", "sha256": "aede18c5c0eeb854f6bc3fdcbff9250bdc982dcfd4491457becd9e7b05ae89b3", "size": 126401},
+    {"path": "/lib/udev/hwdb.d/20-bluetooth-vendor-product.hwdb", "sha256": "c6011a9fc5e6890214b3241d9e50493f1e85b9de67bf86004c210af07fd9b8e1", "size": 64856},
+    {"path": "/usr/share/perl/5.28.1/unicore/lib/CWU/Y.pl", "sha256": "439979cb58c2529070dc30bc2173207cf0be67af4582b92d0cef3f5bb58bf92d", "size": 6553}
+  ]
+}

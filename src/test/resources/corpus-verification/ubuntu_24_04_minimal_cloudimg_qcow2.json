@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/ubuntu-24.04-minimal-cloudimg.qcow2",
+  "imageBasename": "ubuntu-24.04-minimal-cloudimg.qcow2",
+  "filesystemType": "ext4",
+  "totalFiles": 13231,
+  "totalDirectories": 2127,
+  "sampleFiles": [
+    {"path": "/usr/share/consolefonts/Lat15-Fixed14.psf.gz", "sha256": "3a657a504eea58942dfa0e8cedf40273f04314089c1222aede40a74cced048fa", "size": 2573},
+    {"path": "/usr/lib/python3/dist-packages/pyrsistent/__pycache__/_pvector.cpython-312.pyc", "sha256": "9b0a12f4716ad1a1d4ebbd5fe385c0d4fdd8c05f024c2d8092d475bc45b72e20", "size": 32290},
+    {"path": "/usr/share/doc/systemd-resolved/copyright", "sha256": "a7d06854714a1ca99f6dbd1a1641dde5bcf28635be149f6554449618f8f427f3", "size": 12776},
+    {"path": "/usr/lib/python3/dist-packages/cloudinit/config/cc_scripts_per_boot.py", "sha256": "043fe978cc8f740b0ec7d8c562d938b4199551a880e327dbb1c78bc57ffa23ee", "size": 1298},
+    {"path": "/var/lib/dpkg/info/libpng16-16t64:amd64.list", "sha256": "50746822fa14f580c5439ac41887af647fc7cf6f6508cac6fd3a93d48982d582", "size": 597},
+    {"path": "/usr/share/ca-certificates/mozilla/Trustwave_Global_ECC_P384_Certification_Authority.crt", "sha256": "a83c5b6097b03509711c9cd8de59def7ecf99ed72b4076dc33f5b2e35545b3b3", "size": 969},
+    {"path": "/usr/share/ca-certificates/mozilla/GTS_Root_R3.crt", "sha256": "39238e09bb7d30e39fbf87746ceac206f7ec206cff3d73c743e3f818ca2ec54f", "size": 765},
+    {"path": "/usr/share/ca-certificates/mozilla/GlobalSign_ECC_Root_CA_-_R4.crt", "sha256": "d1b69887f73444c0fc0a6f22a2fe961c2423275f9c38ba7d50da2a4ba75394f1", "size": 704},
+    {"path": "/usr/lib/python3/dist-packages/cloudinit/distros/__pycache__/opensuse-tumbleweed.cpython-312.pyc", "sha256": "81ccf88fc2e74deb0f4f0f3dfe298466362c1eda02fd9fad33b2e3e3c4489634", "size": 422},
+    {"path": "/var/lib/dpkg/info/ucf.md5sums", "sha256": "5444d4c4bbbf32b4fa92b40d2a85a6b21529e321947faf2bc0381a601b0f2ad1", "size": 3393},
+    {"path": "/var/lib/dpkg/info/libsmartcols1:amd64.list", "sha256": "da73759e17a9fd597fc65d840c600fa815aece4e83dda10da3bcf65bb9de8236", "size": 369},
+    {"path": "/etc/console-setup/compose.CP1251.inc", "sha256": "42ab31b8338919796bf0b2a938bc581fafd64015e5c5e324f8d3c5c38a107b7d", "size": 31},
+    {"path": "/usr/lib/systemd/systemd-user-sessions", "sha256": "9eef549ef9f23f7217c3bd5d8f5f42c4b7c06c1b36fb6b875300af9e4816f3b8", "size": 14712},
+    {"path": "/boot/grub/i386-pc/usb.mod", "sha256": "8515a2f622554be89f978b5db53bd4753ce501764ca300643676d01160064a2c", "size": 10392},
+    {"path": "/usr/lib/dpkg/methods/apt/desc.apt", "sha256": "4035a2ca99d6d473f6e9a0af7b39d395bfe47e48b3a9993488fc2fae139145f8", "size": 567},
+    {"path": "/var/lib/dpkg/info/libproc2-0:amd64.list", "sha256": "6f4d5b80048a44ad0ffb044f6af38d705108b4f8a8f92179809680858010ddd2", "size": 302},
+    {"path": "/usr/lib/python3/dist-packages/Quirks/quirkapplier.py", "sha256": "d821fb969e29f5cbc63a4255f5967126b4ae3a82c0a86e916586c6e438dbaf03", "size": 6113},
+    {"path": "/usr/lib/modules/6.8.0-90-generic/kernel/drivers/scsi/raid_class.ko.zst", "sha256": "5dd5ad122f511bec11e7a7d1d8a94817752de4c0cc48d6e11d5c4cb0ae2df53e", "size": 4993},
+    {"path": "/usr/bin/split", "sha256": "a59226f72c4fb9beac41c2ebecc952c35d8fec002ba05edcb526feae83132fcc", "size": 56256},
+    {"path": "/usr/lib/python3.12/unittest/__pycache__/util.cpython-312.pyc", "sha256": "2c9eddaa6c68aacd5e47bb07dcd48de0bb28a10602003c03e874265427e08b6c", "size": 7291}
+  ]
+}

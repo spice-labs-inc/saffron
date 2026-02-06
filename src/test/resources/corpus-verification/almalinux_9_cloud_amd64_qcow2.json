@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/almalinux-9-cloud-amd64.qcow2",
+  "imageBasename": "almalinux-9-cloud-amd64.qcow2",
+  "filesystemType": "unknown",
+  "totalFiles": 23692,
+  "totalDirectories": 3703,
+  "sampleFiles": [
+    {"path": "/usr/lib/python3.9/site-packages/oauthlib/oauth2/rfc6749/clients/__pycache__/service_application.cpython-39.pyc", "sha256": "ffc5b206cf01cdce0c035e4a757593f2ecaa858b7061762a481bd55ff5e6f374", "size": 7202},
+    {"path": "/usr/share/locale/it/LC_MESSAGES/selinux-python.mo", "sha256": "f3edbbf126154e6ecc2bda7a670aafb090b951690be5425e5d6edef423da5030", "size": 74776},
+    {"path": "/usr/lib/python3.9/site-packages/dnf/__pycache__/query.cpython-39.pyc", "sha256": "558b3dd1b8c554adea0b4d1ac80740f920870f708d4ced5326571feb23b44583", "size": 868},
+    {"path": "/var/lib/selinux/targeted/active/modules/100/tor/cil", "sha256": "36a3d9f74ba7ac53b5f1aff9a57db29ecdab537dead41523e97239850407453f", "size": 1944},
+    {"path": "/usr/lib/kbd/consolefonts/iso09.14.gz", "sha256": "d99970ecf551a965aba16d298471ee776a6ad9a15f6d497babb276fa46483461", "size": 85},
+    {"path": "/usr/lib/modules/5.14.0-611.5.1.el9_7.x86_64/kernel/drivers/mmc/host/tifm_sd.ko.xz", "sha256": "b24a37eb943eae108c6f85f7080ba614b95bab3747fbe81b3d9e8f7fd4a7d726", "size": 13692},
+    {"path": "/usr/sbin/losetup", "sha256": "b225614c9a044c6d5dc3ef55e4433961b7133793c7421d28089cd8ecad4a49aa", "size": 74008},
+    {"path": "/var/lib/selinux/targeted/active/modules/100/rasdaemon/lang_ext", "sha256": "d53315bea08cec50d2591fcaf3b32dc5d289cdc6c16b7e8bed8c8e3f7ceaa34e", "size": 2},
+    {"path": "/usr/lib/kbd/consolefonts/iso09.08.gz", "sha256": "650157d8c2bd15b46eda66d23f2b138f987834bb3a0e2dc50ccc2bd8b506766e", "size": 85},
+    {"path": "/usr/share/mime/application/x-jbuilder-project.xml", "sha256": "f45ff4d9cca673f6912b652ffac8bc5bb1547fb867b9aa5b1cf7ec28bb41d604", "size": 3091},
+    {"path": "/usr/share/mime/image/x-olympus-orf.xml", "sha256": "fe67ea8f4b6afef0f59088f7b3081f98d21b85a30ac0c52d85f186b370e6d488", "size": 3608},
+    {"path": "/usr/share/man/man1/egrep.1.gz", "sha256": "b6e6596ba913fca3089d056ab0a56ee161b24b1eb248abdd11a5bea28727d31e", "size": 36},
+    {"path": "/usr/lib/modules/5.14.0-611.5.1.el9_7.x86_64/kernel/drivers/i2c/busses/i2c-piix4.ko.xz", "sha256": "e7f7ec612b6db9a6fc9a090d2111c49bc26db0fff786677a48fd27257fd589e5", "size": 12896},
+    {"path": "/usr/share/mime/application/vnd.oasis.opendocument.spreadsheet-template.xml", "sha256": "e9b5441da655f4d70da4efd2473728acb51b9b588bf479fe4627aa8dc862ac72", "size": 2930},
+    {"path": "/usr/share/groff/1.22.4/font/devps/generate/symbolsl.afm", "sha256": "2e3d0c0e35bc3384c8f62675238d54d699bf144d84ed49bdffd795dbfe6d1c4f", "size": 9787},
+    {"path": "/usr/share/man/man8/systemd-hibernate-resume.8.gz", "sha256": "300b4aedd2ddebde19e269055fb7017d10d62ff10b108270ce6f0bc00e7691c1", "size": 65},
+    {"path": "/usr/lib/dracut/modules.d/98dracut-systemd/dracut-tmpfiles.conf", "sha256": "7a5a36daadea6cac469e69ba8005e7e153d49e46a6d53b0b33539d8eaaaaa717", "size": 135},
+    {"path": "/usr/lib64/python3.9/__pycache__/hmac.cpython-39.opt-1.pyc", "sha256": "04782361589b4d5e86db481414a9e622cab2c68c32bf4cc24a9c64e53486e7a3", "size": 7123},
+    {"path": "/usr/lib/python3.9/site-packages/cloudinit/sources/DataSourceIBMCloud.py", "sha256": "dbfd36025bd8f00c4a92af454664a69cb3755cb60e5adba6da783c111da2f3c4", "size": 14999},
+    {"path": "/usr/lib/modules/5.14.0-611.5.1.el9_7.x86_64/kernel/drivers/media/cec/usb/rainshadow/rainshadow-cec.ko.xz", "sha256": "ed9fdb9b80365e7d240ee3f8d71132ca76bb09a396c026a3db74108b8cfdd525", "size": 8836}
+  ]
+}

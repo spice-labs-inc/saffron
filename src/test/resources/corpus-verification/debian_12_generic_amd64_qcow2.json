@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/debian-12-generic-amd64.qcow2",
+  "imageBasename": "debian-12-generic-amd64.qcow2",
+  "filesystemType": "ext4",
+  "totalFiles": 24248,
+  "totalDirectories": 3000,
+  "sampleFiles": [
+    {"path": "/usr/lib/python3/dist-packages/pkg_resources/_vendor/more_itertools/more.py", "sha256": "353519d0fd27d200f2dea7b39a5479c46b6a0352d6300a1c916bf21d82cbb984", "size": 133344},
+    {"path": "/usr/bin/wdctl", "sha256": "1e95b3ebed7891aa8d5c562627d48bc70fce317ac64a6dd91d859c6b3fb2a3e8", "size": 72024},
+    {"path": "/usr/share/man/man8/apt-mark.8.gz", "sha256": "c0b62b82110f2d15409277555a1a496184bdc5e6d4dadfe7c04303e9d3f9c92e", "size": 2384},
+    {"path": "/boot/grub/i386-pc/gettext.mod", "sha256": "4d824fba9556ec1fae0ca148ba3e0381f2083a6436596da3f492cc27edf711ba", "size": 4860},
+    {"path": "/usr/share/locale/es/LC_MESSAGES/Linux-PAM.mo", "sha256": "8a68c8b0f906c3d35216dc3721b2314230e8390e4716f7e49f8474f4e1837568", "size": 7937},
+    {"path": "/usr/lib/modules/6.1.0-42-amd64/kernel/drivers/media/rc/keymaps/rc-xbox-dvd.ko", "sha256": "d538c1dd4b7f4ffac3474b86edf494842aa6c6de74f9d06974a3bbf6508735e0", "size": 7609},
+    {"path": "/usr/lib/x86_64-linux-gnu/perl-base/unicore/lib/Jg/Ain.pl", "sha256": "1217b76117bb401c296c5d5690e090ca72d51003b55442176237c0417c73ae3e", "size": 551},
+    {"path": "/usr/lib/modules/6.1.0-42-amd64/kernel/drivers/net/slip/slhc.ko", "sha256": "f8e33e69d06882b7bbd40316686210bf68768c2ecd6d216e49a298dac3180a3a", "size": 17633},
+    {"path": "/usr/lib/x86_64-linux-gnu/xtables/libxt_CHECKSUM.so", "sha256": "b0439902c3efa200cf8e098338112615eaff1a0de9b7d2941d3d1c30130c2bc4", "size": 14632},
+    {"path": "/usr/share/bash-completion/completions/lslocks", "sha256": "57b7d517dee24e93362bafa490b7904f37286f954a2bed21b256b3ca1fd8f4d9", "size": 1084},
+    {"path": "/var/lib/dpkg/info/less.postinst", "sha256": "a33a1e6ef5a22e63a66e42853fc0bcff3107b4653d7b5cea891354a5f28db6c4", "size": 374},
+    {"path": "/usr/lib/x86_64-linux-gnu/perl-base/unicore/lib/Hyphen/T.pl", "sha256": "302aa98fb73c38792afe5d955ab86c818452f4d1de0a9ec07cbccadf6e1b08c2", "size": 595},
+    {"path": "/usr/share/man/tr/man8/useradd.8.gz", "sha256": "e366a8b4d1bdb4e8ed73b410aa6513cfbf6e27f4648c0dfa4d837998125b2830", "size": 2638},
+    {"path": "/var/lib/dpkg/info/systemd-resolved.prerm", "sha256": "04597efe289c1fc11491f43915b51871be6fe487b9b40fd05bc9c9328742bfe8", "size": 261},
+    {"path": "/usr/share/doc/traceroute/copyright", "sha256": "ed62b8662d68d192410f988e16c437f4cf2134c09f9d78d0beb61d398bb587df", "size": 2133},
+    {"path": "/usr/share/vim/vim90/indent/scss.vim", "sha256": "57b33bb7e01ac254b6cc2fc25418f207159d5df23e595735167ca50dc83ef546", "size": 191},
+    {"path": "/boot/grub/x86_64-efi/video_colors.mod", "sha256": "8e52bef01b1f490c84209f9895e1773f8a2019cfff4ce5fbc97eea6bae8cc826", "size": 9920},
+    {"path": "/usr/share/bug/linux-image-6.1.0-42-amd64/include-1cmdline", "sha256": "355195b8a5f492d0c0016b844de2ea0e8c2ebd5f7f161f8c1aea6cefc4f61336", "size": 111},
+    {"path": "/usr/lib/x86_64-linux-gnu/gconv/IBM12712.so", "sha256": "63243b55c55639afcd12bd889d39fb235694491fc7f22ce7a30d7ec1cd15ebe8", "size": 18680},
+    {"path": "/usr/share/zoneinfo/right/Europe/Vienna", "sha256": "1978e5d57f4ae3db762ad0cc8d9b1825467ddb6e7b37add40589ad88d67dcf12", "size": 2406}
+  ]
+}

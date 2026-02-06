@@ -1,0 +1,16 @@
+{
+  "imagePath": "/corpus/qcow2/modern/cirros-0.6.1-x86_64.qcow2",
+  "imageBasename": "cirros-0.6.1-x86_64.qcow2",
+  "filesystemType": "ext3",
+  "totalFiles": 7,
+  "totalDirectories": 4,
+  "sampleFiles": [
+    {"path": "/boot/grub/stage2", "sha256": "1f33a75649407d7c7847aa2bed5f4aca9ec682f7cc5f1236ff009bb31bf33914", "size": 121188},
+    {"path": "/boot/config-5.15.0-48-generic", "sha256": "2f34445a26cff83483914f06c185e67e5d7a1aa570be48803a7341ea3216e681", "size": 261861},
+    {"path": "/boot/grub/e2fs_stage1_5", "sha256": "1d317c1e94328cdbe00dc05d50b02f0cb9ec673159145b7f4448cec28a33dc14", "size": 8344},
+    {"path": "/boot/grub/menu.lst", "sha256": "bd4b7aa84740262bca78bd8e737693cdf5f90773f7aa2ece36572abb73fa2182", "size": 308},
+    {"path": "/boot/vmlinuz-5.15.0-48-generic", "sha256": "2c73184fa1076a0c4ca97a75b671294efa27b5cc4a05eb492cdd564e6a54d1ca", "size": 11524384},
+    {"path": "/boot/initrd.img-5.15.0-48-generic", "sha256": "81b9d4ed5c3d63e88e5c401eb969257ecb823946ef564fe959649292c0d4eb17", "size": 8830762},
+    {"path": "/boot/grub/stage1", "sha256": "77c1024a494c2170d0236dabdb795131d8a0f1809792735b3dd7f563ef5d951e", "size": 512}
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/ubuntu-22.04-cloudimg-amd64.qcow2",
+  "imageBasename": "ubuntu-22.04-cloudimg-amd64.qcow2",
+  "filesystemType": "ext4",
+  "totalFiles": 61368,
+  "totalDirectories": 7771,
+  "sampleFiles": [
+    {"path": "/usr/share/perl5/Locale/RecodeData/KOI8_U.pm", "sha256": "5fef593cf0e059cfbedc19ea175bf1aa3735f1ec19a7b1bb66fb2bb498f99227", "size": 27555},
+    {"path": "/usr/src/linux-headers-5.15.0-164-generic/include/config/VIDEO_SAA711X", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/src/linux-headers-5.15.0-164-generic/include/config/IRQ_BYPASS_MANAGER", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/src/linux-headers-5.15.0-164/include/sound/pcm.h", "sha256": "a10e9236618421a669dbd456cbde26051b9fffef671578c77a64c5eb70cc2282", "size": 53685},
+    {"path": "/usr/lib/python3/dist-packages/lazr/uri/tests/__init__.py", "sha256": "9272b69a938aa094ba7fb8d4e50c0e1d850e1e850aca339747a7194ac3c9bdbe", "size": 706},
+    {"path": "/usr/share/man/man1/w.1.gz", "sha256": "27f07805fa2f05baa13c6294086b43e1473520f2e95acf0a31dfc0627fecda8a", "size": 1284},
+    {"path": "/usr/src/linux-headers-5.15.0-164/drivers/net/ethernet/freescale/enetc/Kconfig", "sha256": "7caca8496c6b18b406ff641efa5afb1f83bab5f25fb66817d68809ed22c7f7d8", "size": 2158},
+    {"path": "/usr/share/consolefonts/Uni1-Fixed16.psf.gz", "sha256": "2aabf7c083415497f9f31094e255a87e15c05e9d6725afbffa24e96c633c6e79", "size": 4486},
+    {"path": "/usr/lib/python3/dist-packages/pyasn1/__pycache__/error.cpython-310.pyc", "sha256": "93b8e046d55c130ab5f2c4618609cc44d25c0bd15119ef9c345714bea38a5344", "size": 2795},
+    {"path": "/usr/share/perl/5.34.0/unicore/lib/In/6_0.pl", "sha256": "69c0d71e23b32863f2cf618e24cc624633fa103dc6614f0dc64b60a83bf4156d", "size": 6262},
+    {"path": "/usr/lib/python3.10/encodings/cp850.py", "sha256": "257e29f235e2a8790dd68cee45668776648bab809ce8584f893cdd8fd007993c", "size": 34105},
+    {"path": "/usr/lib/python3.10/lib-dynload/_contextvars.cpython-310-x86_64-linux-gnu.so", "sha256": "ec52991750891c37ba5d1dbff5a5584928fc5a703c814eef7c7af7a229117a8c", "size": 14536},
+    {"path": "/usr/src/linux-headers-5.15.0-164/include/trace/events/gpu_mem.h", "sha256": "a8827cdee49ff00528f43ce1c4babc41be33eaba38f366b5fabc832392baf338", "size": 1240},
+    {"path": "/usr/lib/x86_64-linux-gnu/gconv/IBM871.so", "sha256": "f9a050427715270bf6c3f5bf0cd9e1eef02ea90019c08e5081770a6430ded332", "size": 18704},
+    {"path": "/usr/src/linux-headers-5.15.0-164-generic/include/config/SCSI_VIRTIO", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/src/linux-headers-5.15.0-164/arch/mips/include/asm/errno.h", "sha256": "aa3690375422fd1d2677952c2e1f6339d8d4d04bf90e86fa4a77ff3c9e1caf05", "size": 429},
+    {"path": "/usr/lib/modules/5.15.0-164-generic/kernel/drivers/video/fbdev/cyber2000fb.ko", "sha256": "555ab83aebb8b8a3819a8e0ce6021a5a75dd6b55aca240196ccdebc9cb9f9774", "size": 43281},
+    {"path": "/usr/src/linux-headers-5.15.0-164/include/linux/spi/ads7846.h", "sha256": "16cef2f82e9f4cbbbe8b2147284b70dc640f3026eefae2a002290608b2005528", "size": 2065},
+    {"path": "/usr/share/python-babel-localedata/locale-data/nds_NL.dat", "sha256": "54fa1d56b162be64e23dfe2fe4e677168734fc5690c20441b8aed0883f319a15", "size": 627},
+    {"path": "/usr/src/linux-headers-5.15.0-164-generic/include/config/USB_GADGETFS", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0}
+  ]
+}

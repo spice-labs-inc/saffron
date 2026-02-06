@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vmdk/modern/kali-2024.3-vmware.vmdk",
+  "imageBasename": "kali-2024.3-vmware.vmdk",
+  "filesystemType": "ext2",
+  "totalFiles": 363606,
+  "totalDirectories": 37718,
+  "sampleFiles": [
+    {"path": "/usr/share/help/af/mate-calc/absolute.page", "sha256": "279e79b03e1e01fe316c923f110eb8eefd5256cff5e4d766ea005fd88aaa8582", "size": 453},
+    {"path": "/usr/share/icons/gnome/22x22/devices/media-tape.png", "sha256": "0fac587b09a7ab85eecb81f207ce9a0acca931dd2e065c5436066092de1aef07", "size": 915},
+    {"path": "/usr/share/creddump7/framework/win32/__init__.py", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/lib/x86_64-linux-gnu/perl5/5.38/Tk/Camel.xpm", "sha256": "cdf7ab9e5442e4065947cc25b3781719abeb1fcbcdc20dfa5ef2789a2e3e5aac", "size": 1329},
+    {"path": "/usr/lib/python3/dist-packages/phonenumbers/shortdata/__pycache__/__init__.cpython-311.pyc", "sha256": "eb9da44e502d5182179e470fa90e6f30d643f1cddff51888955d1393682457f7", "size": 1827},
+    {"path": "/usr/share/dbus-1/interfaces/org.fedoraproject.Config.Printing.xml", "sha256": "d717b5ed234fa2edc841028a810f8db729d6b0c5dee49af166d17cabde28d66d", "size": 9743},
+    {"path": "/usr/share/autopsy/pict/tl_t_tl_cur.jpg", "sha256": "2bd7aab5f7f573287410cebb937a2a5a0a029bad09affd1cb9cf00340a7b8d85", "size": 2844},
+    {"path": "/usr/lib/python3/dist-packages/google-stubs/cloud/ndb/msgprop.pyi", "sha256": "1ac2d83e10df5bf26c7b6013ac8f0d915e839f3426e51b874df0e227d94d5c34", "size": 150},
+    {"path": "/usr/share/themes/Kokodi/xfwm4/menu-inactive.png", "sha256": "fecede5571ff5b1b292ca9dab473f4c71794ff839f7d6ab3f21e4667ac9ec343", "size": 224},
+    {"path": "/usr/share/man/fr/man1/gpasswd.1.gz", "sha256": "ac8fd079a63b3144f52ee996d28290ffecca46ccbdbd87c12a685afc7111b86e", "size": 1593},
+    {"path": "/usr/share/icons/gnome/32x32/emblems/emblem-favorite.png", "sha256": "72245da63bd53c453e9cc5800ed03352a88cf837495101b43d3fff68ccc4637b", "size": 1660},
+    {"path": "/usr/lib/modules/6.8.11-amd64/kernel/drivers/media/tuners/mt2266.ko.xz", "sha256": "f85e09b0bd971982dce56a375d2dca3f3dbd662d1fce10cad0a51799455a312d", "size": 9648},
+    {"path": "/usr/share/texlive/texmf-dist/tex4ht/ht-fonts/alias/Open_Sans_Condensed/OpenSansCondensed-Bold-TS1-TOsF.htf", "sha256": "fb6d44ed03357ec6a8ff532050c149c3f8e91e1f18eeafbedeec4f1abb98833b", "size": 166},
+    {"path": "/usr/lib/python3/dist-packages/docx/parts/__pycache__/hdrftr.cpython-311.pyc", "sha256": "7cf826b2c43f4682e64118bcdb0259c1a5dea7a12b6482f24cc5a113f969f9dc", "size": 3172},
+    {"path": "/usr/share/ri/3.1.0/system/Numeric/quo-i.ri", "sha256": "c99ac472013382fde6b5dcd400ee22c6204fb09c99a1885aafaa06a1a4ffd12b", "size": 399},
+    {"path": "/usr/lib/python3/dist-packages/scapy/contrib/__pycache__/knx.cpython-311.pyc", "sha256": "40440884f1c71dab72b0a18f171fdb7abfa9d4841db2d424081a2542025f3edb", "size": 26309},
+    {"path": "/usr/lib/python3/dist-packages/aesedb/structures/__pycache__/rootheader.cpython-311.pyc", "sha256": "ac41b5e89415698976fbbdd7d7b37599863b896ed007f5f971a081716c4ee743", "size": 1925},
+    {"path": "/usr/lib/python3/dist-packages/faraday_agent_dispatcher/static/executors/official/shodan2.py", "sha256": "5a8199c690110f4f525c922109ff710bc46f16b285f95ccac866aebf96b69c33", "size": 2010},
+    {"path": "/usr/share/exploitdb/exploits/hardware/remote/46961.py", "sha256": "1f1fc3995708cf3726f5c9cb3e349e916fe76ebb8d9a59be59318264ddf545db", "size": 3228},
+    {"path": "/usr/lib/python3/dist-packages/pandas/tests/interchange/__pycache__/test_utils.cpython-311.pyc", "sha256": "2fddad9457521f5360130f3e6263205006453cfc5c1e80599477b0426bba3a84", "size": 4038}
+  ]
+}

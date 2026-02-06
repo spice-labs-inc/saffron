@@ -1,0 +1,54 @@
+{
+  "imagePath": "/corpus/qcow2/modern/opensuse-leap-15.6.qcow2",
+  "imageBasename": "opensuse-leap-15.6.qcow2",
+  "filesystemType": "xfs",
+  "totalFiles": 18,
+  "totalDirectories": 114,
+  "sampleFiles": [
+    {
+      "path": "/config.partids",
+      "sha256": "b51d352c010f316752172444609747e699925ea8aa30e8ac4fcca4d3201b7542",
+      "size": 4653056
+    },
+    {
+      "path": "/lib/depmod.d/00-system.conf",
+      "sha256": "47fd7541fa6ffa3ae2f325a6b5f7edfb7fffbd49c2d4d7d7f28f31db2dabf5ac",
+      "size": 31784960
+    },
+    {
+      "path": "/var/cache/fontconfig/3830d5c3ddfd5cd38a049b759396e72e-x86_64.cache-8",
+      "sha256": "d85ef2a08aeac2812a648deb875485a6e3848fc3d43ce4aa380937f08199f86b",
+      "size": 6815744
+    },
+    {
+      "path": "/var/cache/fontconfig/CACHEDIR.TAG",
+      "sha256": "06572c6b057163ea79097fdf528827c507b67b4a7bac799e7c5e5a92220b6f40",
+      "size": 13107200
+    },
+    {
+      "path": "/var/cache/gio-2.0/gnome-mimeapps.list",
+      "sha256": "733cf513448ce6b20ad1bc5e50eb27c06aefae0c320713a5dd99f4e51bc1ca60",
+      "size": 5767168
+    },
+    {
+      "path": "/var/cache/gio-2.0/lxde-mimeapps.list",
+      "sha256": "733cf513448ce6b20ad1bc5e50eb27c06aefae0c320713a5dd99f4e51bc1ca60",
+      "size": 5767168
+    },
+    {
+      "path": "/var/cache/gio-2.0/mate-mimeapps.list",
+      "sha256": "733cf513448ce6b20ad1bc5e50eb27c06aefae0c320713a5dd99f4e51bc1ca60",
+      "size": 5767168
+    },
+    {
+      "path": "/var/cache/gio-2.0/pantheon-mimeapps.list",
+      "sha256": "733cf513448ce6b20ad1bc5e50eb27c06aefae0c320713a5dd99f4e51bc1ca60",
+      "size": 5767168
+    },
+    {
+      "path": "/var/cache/gio-2.0/xfce-mimeapps.list",
+      "sha256": "733cf513448ce6b20ad1bc5e50eb27c06aefae0c320713a5dd99f4e51bc1ca60",
+      "size": 5767168
+    }
+  ]
+}

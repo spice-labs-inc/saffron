@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/debian-10-generic-amd64.qcow2",
+  "imageBasename": "debian-10-generic-amd64.qcow2",
+  "filesystemType": "ext4",
+  "totalFiles": 21486,
+  "totalDirectories": 2679,
+  "sampleFiles": [
+    {"path": "/var/lib/dpkg/info/libaudit-common.md5sums", "sha256": "788cd710dd6872c3eddaa95f9799d241a2fe97dd2c60e9a4851d4bc2b74d94be", "size": 307},
+    {"path": "/usr/share/zoneinfo/right/America/Mazatlan", "sha256": "534bb8a85faa07868b84e7c2d8a937dd17fcfe5a4670005ca27b09528a3a4ffa", "size": 1682},
+    {"path": "/usr/lib/modprobe.d/fbdev-blacklist.conf", "sha256": "e99b6166cf309aa1cbbd296d9fbf93af567148c7316c8d5d7a057cf3e85113ea", "size": 390},
+    {"path": "/usr/lib/x86_64-linux-gnu/libldap_r-2.4.so.2.10.10", "sha256": "2913e25d31fe351398cf4ea59163fa1ee32a394357b4c38685f23850adb4f1da", "size": 331088},
+    {"path": "/usr/lib/python3.7/encodings/__pycache__/iso8859_4.cpython-37.pyc", "sha256": "834a1627a659e08980350677f17b494636613fdc97a44806996f689cb9131f58", "size": 2410},
+    {"path": "/usr/lib/modules/4.19.0-27-amd64/kernel/drivers/scsi/device_handler/scsi_dh_hp_sw.ko", "sha256": "dfcf9abecdfc5ffa1c2d88f5b8cfa3875bc7596ece7d16f7cd8502ab6eb6c121", "size": 11547},
+    {"path": "/usr/share/vim/vim81/autoload/ada.vim", "sha256": "2803bad6b8ec6086a5bc209af4abb7a12667f6d8d5474b718fd1dcbcb81cd3bc", "size": 22567},
+    {"path": "/usr/share/ca-certificates/mozilla/Comodo_AAA_Services_root.crt", "sha256": "a5ddabd1602ae1c66ce11ad078e734cc473dcb8e9f573037832d8536ae3de90b", "size": 1517},
+    {"path": "/usr/share/locale/es/LC_MESSAGES/adduser.mo", "sha256": "637de1a9c0d5a62e5567fea43046668a94f04daa1f2a55299b716f2903c4f313", "size": 20848},
+    {"path": "/usr/lib/tc/pareto.dist", "sha256": "2f19eaa62f9076f0a7754df9fc5110cb73ccfc6a0ad82aa5355643a9f3a92e86", "size": 23729},
+    {"path": "/var/lib/dpkg/info/sudo.prerm", "sha256": "0867df44de542efd03970b04a4256f6aa3c6f333d3e86163a5e2d3a54c31da7b", "size": 1407},
+    {"path": "/usr/lib/grub/i386-pc/pbkdf2.mod", "sha256": "f8790f531a52b18f2ce6f64cda81eda28cdf9611e7b5f988280f17419cb9b522", "size": 1484},
+    {"path": "/usr/share/locale/ia/LC_MESSAGES/libc.mo", "sha256": "9a9e7ae8e11b7c86d0f51726e8cc49c5a9a0890be65f59a0ebee2611fac958e5", "size": 59106},
+    {"path": "/usr/share/doc-base/nano-faq", "sha256": "aa44326018b320d3d7197dfca9fe6aa9b6881a1c2d78ff231be7cc4ec9793e3a", "size": 335},
+    {"path": "/usr/share/doc/libgssapi-krb5-2/copyright", "sha256": "4a2d321ab57260e8de4b67bde8cff76c07d28be69c2d8b22dfc2bfa42f5c41b9", "size": 61825},
+    {"path": "/usr/share/zoneinfo/posix/Pacific/Noumea", "sha256": "13e18b4bb426c3739b34e37d6cdc00d488721a05865cdeca94af76246f55a4de", "size": 328},
+    {"path": "/usr/share/doc/util-linux/releases/v2.31-ReleaseNotes.gz", "sha256": "8c6d8d7e25abfe937eb19c16e1f4de24fc3018e25b99f550b9262c982267dde5", "size": 9777},
+    {"path": "/usr/lib/python3.7/encodings/__pycache__/cp1250.cpython-37.pyc", "sha256": "547770d396adf3822efa2b2cbd3a3c3a8df0a9381d6d06800c45526239f8dfee", "size": 2438},
+    {"path": "/usr/share/i18n/charmaps/IBM860.gz", "sha256": "da7fba7e218048897b8ed9368e24fc15b76521f95adb0a9f1146ef5010b5ed00", "size": 2976},
+    {"path": "/etc/init.d/chrony", "sha256": "1fa455af25963ab5a30094e049c766b5c003b24086837c894141bb046acdc556", "size": 2054}
+  ]
+}

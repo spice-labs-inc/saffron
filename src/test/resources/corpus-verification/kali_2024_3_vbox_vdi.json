@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vdi/modern/kali-2024.3-vbox.vdi",
+  "imageBasename": "kali-2024.3-vbox.vdi",
+  "filesystemType": "ext2",
+  "totalFiles": 363900,
+  "totalDirectories": 37746,
+  "sampleFiles": [
+    {"path": "/usr/share/doc/python3-pysmi/examples/download-and-compile-smistar-mibs-into-json.py", "sha256": "66f50bc385da375ae64af38bf415080916384e7f27c67a7fa3e72fcdfcb9a215", "size": 1452},
+    {"path": "/usr/share/locale/uk/LC_MESSAGES/lightdm.mo", "sha256": "89dc092856bee9721800269c45f9593c6721ffac42cf32263d93afd761891393", "size": 2643},
+    {"path": "/usr/lib/python3/dist-packages/types_Deprecated-1.2.dist-info/METADATA", "sha256": "36d86c7ebb9e04c46e310c947fd5b0220ae62c051ca6172c4cee0bce20c371e5", "size": 1541},
+    {"path": "/usr/share/exploitdb/exploits/php/webapps/32760.txt", "sha256": "87d4b5d4c048beaab1d63cb304c235808143736eeef46ab2bcdd2d6e22f43953", "size": 403},
+    {"path": "/usr/lib/python3/dist-packages/neotime/arithmetic.py", "sha256": "dd3a2098f3b987702831c15f2fd7c5c9e51b3ffe8ea69e110192aa77e0d2b773", "size": 4071},
+    {"path": "/usr/lib/x86_64-linux-gnu/rubygems-integration/3.1.0/gems/ffi-1.17.0/lib/ffi/platform/x86_64-haiku/types.conf", "sha256": "076e70af05b65eab646a2e7ef70fb6f28a0ca8b5f09e6e2ccf57eb0eb0f96667", "size": 4572},
+    {"path": "/usr/lib/python3/dist-packages/pyqtgraph/parametertree/parameterTypes/__pycache__/slider.cpython-311.pyc", "sha256": "e7b52f919eab4e87e40e8b2af5f4feb7ce6a32f808f76de3fa9eb6cc933c9bfe", "size": 8813},
+    {"path": "/usr/share/texlive/texmf-dist/tex/latex/utfsym/usym1F0DD.tikz", "sha256": "68c14f35326e77ec3a34d07fb429720e4dce2cc5c627f44bae3bf78b1765c1e7", "size": 27849},
+    {"path": "/usr/lib/python3/dist-packages/ufoLib2/_version.py", "sha256": "c4a4ce442833bd55cfe84503c255a3ae289a018811bd91f7836887d5d8ff1542", "size": 162},
+    {"path": "/usr/lib/ruby/gems/3.1.0/specifications/net-smtp-0.3.1.gemspec", "sha256": "2eadd4ccb6a780bb285a71166a87843a25aee0ec3e06efdb8f4d9816320db66b", "size": 1498},
+    {"path": "/usr/lib/python3/dist-packages/jedi/third_party/typeshed/stdlib/3/multiprocessing/__init__.pyi", "sha256": "277a43cdfbfdddbd404b885febd8e1ca89ef8569ab8f57986c27270290969542", "size": 3802},
+    {"path": "/usr/share/texlive/texmf-dist/tex4ht/ht-fonts/alias/Sf-Kp/jkpssosnbsl8t.htf", "sha256": "7d572bcc601473d9b9e2352d3357b35f76e1a3f60c61dca92793ac4fd04a51cb", "size": 64},
+    {"path": "/opt/microsoft/powershell/7/System.Management.Automation.xml", "sha256": "84f4a4a854c2d517beaa2ba3db3d5cd03b97feb3da8b4af817f9c35b91bf7122", "size": 7658226},
+    {"path": "/var/lib/dpkg/info/mariadb-server.postinst", "sha256": "e8e51c2a40bdb22c597c866525babcd5c6f11f33174c1febd8913b3e2b73c24e", "size": 14359},
+    {"path": "/usr/share/man/man3/readdir.3am.gz", "sha256": "84383aaafb67f73b423ae0b508b2ccdd53564684bd51e7c4e5f161e51731c6d3", "size": 1355},
+    {"path": "/usr/share/perl5/Net/DNS/Mailbox.pm", "sha256": "b5a5c0d81881a53e590b1a6c3211547997d5d02d4a8f330e038e560d7997752f", "size": 4089},
+    {"path": "/usr/share/exploitdb/exploits/windows/dos/17896.txt", "sha256": "953b36231911ea9ed701c78bf78c9fa3f969e8294cfd10cfd764cf428d23f806", "size": 3659},
+    {"path": "/usr/lib/firmware/iwlwifi-so-a0-hr-b0-72.ucode", "sha256": "9cbe5de12153790e4c3ad2fc54ceaecec6821b229d75ebbca9f37ecf31d5a9db", "size": 1470384},
+    {"path": "/usr/share/themes/Daloa/xfwm4/bottom-right-active.png", "sha256": "ebf2911f05efe69e4fc68da6a11b68927ac081ab8485d97c281526f7a51fcf92", "size": 138},
+    {"path": "/usr/share/icons/Flat-Remix-Blue-Light/actions/16/edit-select-text.svg", "sha256": "c418091cf40f30ccd725703d72b461151b7b37706c58a77a4719f7fc40bd6a60", "size": 616}
+  ]
+}

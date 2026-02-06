@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/rocky-8-cloud-amd64.qcow2",
+  "imageBasename": "rocky-8-cloud-amd64.qcow2",
+  "filesystemType": "vfat",
+  "totalFiles": 31596,
+  "totalDirectories": 5683,
+  "sampleFiles": [
+    {"path": "/usr/lib/modules/4.18.0-553.el8_10.x86_64/kernel/fs/nls/nls_cp855.ko.xz", "sha256": "be7c510dd611e04be50997d76a224440746037e739afece805cf4f37e48f9e5e", "size": 2808},
+    {"path": "/etc/security/limits.conf", "sha256": "185b151a665848d8ee518342b9a88a2d64898b0b1a2d01b12be731f75d48943b", "size": 2422},
+    {"path": "/usr/share/microcode_ctl/ucode_with_caveats/intel/intel-ucode/06-4e-03", "sha256": "0e4d61493592bcd6acb9f2b5047cd1eede17dad5e3a2bfe8e2774c4099ab53df", "size": 101376},
+    {"path": "/usr/lib/grub/i386-pc/serial.mod", "sha256": "5e40751569e100b0465df56ff3fe05db1b68b6e453fad1db2502e2af65c78ed2", "size": 10216},
+    {"path": "/usr/lib/python3.6/site-packages/sos/cleaner/archives/__pycache__/insights.cpython-36.opt-1.pyc", "sha256": "83401541d072a56042e6bbf52519050b3a0769a0017cf80f5d4d9abb2a38d006", "size": 1058},
+    {"path": "/usr/lib/kbd/keymaps/xkb/gb-mac.map.gz", "sha256": "640f8168dbab6eeefa817517a552b05a9cc9accd195a9e205405fd3d7bd212e4", "size": 3984},
+    {"path": "/usr/lib/kbd/unimaps/tcvn.uni", "sha256": "96127e743af626ca51c1b2867bdabdabae2c003204ca43296221e1fc38c7013b", "size": 1009},
+    {"path": "/usr/lib/modules/4.18.0-553.el8_10.x86_64/kernel/drivers/firewire/firewire-net.ko.xz", "sha256": "f899b9ab8159800991711b8f5b62debab51226bfed140b7c5035843971cb41e4", "size": 11004},
+    {"path": "/usr/share/doc/pigz/README", "sha256": "dc8f78258cdb4478b5922f4c00eb63d3cbac06c171dc829648fd414bb0cf4493", "size": 2186},
+    {"path": "/usr/lib/python3.6/site-packages/sos/report/plugins/__pycache__/libreswan.cpython-36.pyc", "sha256": "62c9e16d28e5bad0d23ff1fa33f590dbbfeff7e7b5d37a49b3360c276874dd56", "size": 1666},
+    {"path": "/etc/yum.repos.d/Rocky-Debuginfo.repo", "sha256": "ccd52a2033a538bbe575321aa0dcf00072834d1287f6a3ca7e9dd9d9e2b5645d", "size": 1773},
+    {"path": "/usr/share/man/man1/dd.1.gz", "sha256": "72e2f8371f428cbf1d51d21c96827cbab3a4d3ed0fdbf98820a1c6c378ae6c70", "size": 1834},
+    {"path": "/usr/share/locale/ca/LC_MESSAGES/gawk.mo", "sha256": "51de8ec2bb90c483aa3efc132cb91c4aec9b3970a98d273e6b17e898f4f9ea43", "size": 77799},
+    {"path": "/usr/share/bash-completion/completions/lscpu", "sha256": "2e33c9fd36591d62f19ff4ff4ce1bf4c839dbe6e9445dcd19d7ff16945dadcfe", "size": 1018},
+    {"path": "/usr/share/cockpit/shell/shell.css.gz", "sha256": "4aeb7afffc8b0f0d694381adfd4a6cf9569a77583c099d7a6750f90d1cdf8da3", "size": 139612},
+    {"path": "/usr/lib/kbd/keymaps/xkb/pl-dvorak.map.gz", "sha256": "73700cef1ba60a9eae26cedaeede4bd249524b87663a1a3afb0b7df0cd213122", "size": 3736},
+    {"path": "/usr/share/zoneinfo/America/Metlakatla", "sha256": "9d091e1f411ccec6f2274317c53cc3ca45d6895f2c7497583e71ffca496716f3", "size": 1432},
+    {"path": "/usr/lib/dracut/modules.d/99base/parse-root-opts.sh", "sha256": "4e07ef0a39226066a62a2ac32be79c242f90cb64641261b5f3d618f58f633c67", "size": 246},
+    {"path": "/usr/share/locale/lv/LC_MESSAGES/selinux-python.mo", "sha256": "f36baf12a8b011879855289edb39e82bc114f400e2c2d4ebd76a82066dab18d7", "size": 1248},
+    {"path": "/usr/lib64/python3.6/site-packages/cffi/__pycache__/cparser.cpython-36.pyc", "sha256": "248dea28be03a7bfcc47bbd72ffbda34e768763c302f935a5959728c9ca11914", "size": 20526}
+  ]
+}

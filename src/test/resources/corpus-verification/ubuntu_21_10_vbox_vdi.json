@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vdi/modern/ubuntu-21.10-vbox.vdi",
+  "imageBasename": "ubuntu-21.10-vbox.vdi",
+  "filesystemType": "ext4",
+  "totalFiles": 107232,
+  "totalDirectories": 16855,
+  "sampleFiles": [
+    {"path": "/usr/share/icons/HighContrast/48x48/actions/edit-cut.png", "sha256": "5a0f2cb673ee47c6081a5a6c08fbd6c120b1fa8b3c1c52491168503d32309672", "size": 1381},
+    {"path": "/usr/share/perl/5.26.1/Unicode/Collate/Locale/kok.pl", "sha256": "3b7868e5ca4516e1a0955da792a52bdef07892a6701e430bfc372a351e1b2bae", "size": 722},
+    {"path": "/usr/src/linux-hwe-5.4-headers-5.4.0-84/arch/alpha/include/uapi/asm/ioctl.h", "sha256": "ee371f36c49ffd8465e3340890e9dbf1e140502b9d6502a9b644c92a1a394932", "size": 2355},
+    {"path": "/usr/share/icons/Humanity/categories/22/applications-office.svg", "sha256": "f20c97b9bde4c62aa56ce99af53ffca87c238da9fbd1295c2de9e64ec9afdf4c", "size": 6039},
+    {"path": "/usr/src/linux-hwe-5.4-headers-5.4.0-84/tools/testing/selftests/powerpc/syscalls/Makefile", "sha256": "ddd467bd4c567effac3ffeb9c4f6847a3f2d38714adc5036251a85e4328509eb", "size": 193},
+    {"path": "/usr/share/icons/HighContrast/32x32/apps/goa-panel.png", "sha256": "a9a2f5ef0c0931935a87c5ade6d3c8e33d59c31945380b18a53521fde34948d5", "size": 897},
+    {"path": "/usr/share/doc/python3-debian/examples/debfile/extract_cron", "sha256": "6f0d6fff3287c47d05ec9c6dc383e6b4f9f7e38d65440c74a2687ca9810fd6d8", "size": 1270},
+    {"path": "/usr/share/terminfo/w/wy520-36w", "sha256": "ff0cbf9d7d078ef99bbf413445db8c66f1a41971f6e5d68716c140ce82c0efff", "size": 1696},
+    {"path": "/lib/modules/5.4.0-84-generic/kernel/net/ipv4/tcp_scalable.ko", "sha256": "944821b5c5b0c434d3814df8a2febbf8072a443c44d453283605b6789ddd84fb", "size": 6641},
+    {"path": "/usr/share/nano/css.nanorc", "sha256": "8ad9d32f1f445643a9420ef0a63b3598e9990725ac0861bfda2c1c82d7ab981e", "size": 346},
+    {"path": "/usr/share/themes/Ambiance/gtk-3.0/assets/radiance-windowbutton-active@2.png", "sha256": "5d9483b0f5a516a19ddefb75695325d724161c89c92bb1c1c04bd21be7b5ead0", "size": 1213},
+    {"path": "/usr/share/icons/Adwaita/22x22/status/battery-good-charging.png", "sha256": "0202382d1b8ac61537582c1d69d19b97bd6c5dd2387451ec1a1bd233fb032e33", "size": 1093},
+    {"path": "/usr/src/linux-hwe-5.4-headers-5.4.0-84/include/media/davinci/vpss.h", "sha256": "609b7ac4691843f92ae100c6ed2a65dd506bb52c7e631526511001e0b8647a15", "size": 2905},
+    {"path": "/usr/lib/cups/filter/imagetops", "sha256": "4f5f32df344f8ef0bf48cc92f128f581d081d551f54e49e1e0d448e2f75cd1c7", "size": 988},
+    {"path": "/usr/src/linux-headers-5.4.0-84-generic/include/config/cdrom.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/lib/x86_64-linux-gnu/libfftw3f.so.3.5.7", "sha256": "8777832a06b39417bc4ff4dd112addf86e7f0eecd1d9348e23a7723d69b8d9d0", "size": 2148520},
+    {"path": "/usr/share/man/man2/accept.2.gz", "sha256": "4c3cfe4595f2eff53d2bfddecc6ac18ed81afe900d9b4553377c6256bd8e23f5", "size": 4691},
+    {"path": "/var/lib/dpkg/info/libxcb-xv0:amd64.md5sums", "sha256": "7aaeb1b4384ff8ae00c0fa71e72e3ecb80d1821614f4b5633d776bb0ee6fb009", "size": 147},
+    {"path": "/usr/src/linux-headers-5.4.0-84-generic/include/config/netfilter/xt/match/l2tp.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/lib/python3/dist-packages/cryptography/hazmat/primitives/__init__.py", "sha256": "d301b0d8e17d47b7c75fb35610d0a6aec62281b5c7536a23827f8de11923b3d5", "size": 246}
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "imagePath": "/corpus/qcow2/modern/almalinux-9-minimal.qcow2",
+  "imageBasename": "almalinux-9-minimal.qcow2",
+  "filesystemType": "xfs",
+  "totalFiles": 6,
+  "totalDirectories": 49,
+  "sampleFiles": []
+}

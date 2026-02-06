@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vmdk/modern/ubuntu-21.04-vmware.vmdk",
+  "imageBasename": "ubuntu-21.04-vmware.vmdk",
+  "filesystemType": "unknown",
+  "totalFiles": 127080,
+  "totalDirectories": 18091,
+  "sampleFiles": [
+    {"path": "/usr/lib/systemd/system/systemd-ask-password-console.service", "sha256": "af38a46a5e3b1fd939432ee7c22936983227fc90697460b863f142373fce42c6", "size": 745},
+    {"path": "/usr/share/speech-dispatcher/locale/sw_KE/emojis.dic", "sha256": "c06d8afabbcf0b7ff00cf5bda7b3036e10805ae91bf1b53102529ed69234addc", "size": 4321},
+    {"path": "/usr/lib/firmware/radeon/BONAIRE_sdma.bin", "sha256": "3f6ea4e39585968a4549b145e41d3fb1f73b70e2527c335a4ed411f5d4d4c9d1", "size": 4200},
+    {"path": "/usr/share/libreoffice/help/media/icon-themes/sd/cmd/transition-dissolve.svg", "sha256": "4a68bf29e0a789b89e079708d12c736f6d8c7e5f1c0923cf66f0dcb00bb56b2b", "size": 1216},
+    {"path": "/usr/share/icons/Adwaita/64x64/actions/format-justify-fill-symbolic.symbolic.png", "sha256": "cba7ea8339763017f14107bfe3a730fe4f36add2e84ec15e805bb0338111bef7", "size": 128},
+    {"path": "/usr/lib/modules/5.11.0-13-generic/kernel/drivers/media/usb/tm6000/tm6000.ko", "sha256": "ceead12247aa81a486ad7c56f000a8ce9191229cc63ffc28c77c46c1c5198158", "size": 200185},
+    {"path": "/usr/share/icons/Yaru/16x16/legacy/draw-polygon.svg", "sha256": "148c687767f2f3fe19ad7b65232ede26baefc6193f0234ed80ee434e24469ccd", "size": 2693},
+    {"path": "/usr/include/x86_64-linux-gnu/fpu_control.h", "sha256": "f6582d8e1604c105012e08067e7e3cc4a47f02e423a6902ecc05f32480e7b201", "size": 3584},
+    {"path": "/usr/share/icons/Yaru/256x256@2x/devices/media-optical-cd-audio.png", "sha256": "350287549b9defcea29f72467792005f2dea4cf5c0739d473d599e9d6e72eeb3", "size": 28673},
+    {"path": "/usr/src/linux-headers-5.11.0-13-generic/include/config/snd/soc/max9759.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/src/linux-headers-5.11.0-13/include/linux/asn1_ber_bytecode.h", "sha256": "305d3aee2bdf02ef691e31eb4cf2b5bbd30ddc09107a26ee7158403792dc171b", "size": 2576},
+    {"path": "/usr/src/linux-headers-5.11.0-13-generic/include/config/cros/ec/ishtp.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/var/lib/app-info/icons/ubuntu-hirsute-main/64x64/vim-common_gvim.png", "sha256": "78e2e26e25f109e5fc099f20e13ae3742b123d271ca2e6fc0eed3ad13c772228", "size": 3524},
+    {"path": "/usr/lib/python3/dist-packages/AptUrl/__pycache__/__init__.cpython-39.pyc", "sha256": "cdede2cdf75c0d5d2073340cfbd38e1d1c87381bad6182dac512a1fee712c18c", "size": 140},
+    {"path": "/usr/share/icons/ubuntu-mono-dark/status/22/indicator-keyboard-Sw.svg", "sha256": "a5061ff75689f95e3aac7c0d698356ef2cca6156738a8eb003f7c559a418ef91", "size": 409},
+    {"path": "/usr/lib/modules/5.11.0-13-generic/kernel/drivers/iio/adc/da9150-gpadc.ko", "sha256": "d4a4b0f35bf895bddfe81b8a5edc09fc6c810b2051df861362f5b06e922efc03", "size": 22929},
+    {"path": "/usr/lib/modules/5.11.0-13-generic/kernel/sound/usb/line6/snd-usb-variax.ko", "sha256": "e33a06671be273899f596821362739e0a8d5bffe9b0ae2713ac6a80993d0e8f9", "size": 15393},
+    {"path": "/usr/lib/python3/dist-packages/softwareproperties/__pycache__/extendedsourceslist.cpython-39.pyc", "sha256": "e60738c2c20476ec9527919db74d6432e262e3d77ba8dcfb41e359c687d28103", "size": 19966},
+    {"path": "/usr/lib/x86_64-linux-gnu/libqmi-glib.so.5.7.0", "sha256": "fef76d492617fb6689fbed9cef803c40bf42dbe0cbd169ea76ece0d39022a618", "size": 2961392},
+    {"path": "/usr/src/linux-headers-5.11.0-13-generic/include/config/phy/qcom/usb/hs.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0}
+  ]
+}

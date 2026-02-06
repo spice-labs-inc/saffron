@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/gentoo-openstack-amd64.qcow2",
+  "imageBasename": "gentoo-openstack-amd64.qcow2",
+  "filesystemType": "vfat",
+  "totalFiles": 73503,
+  "totalDirectories": 4769,
+  "sampleFiles": [
+    {"path": "/usr/share/sgml/docbook/xsl-stylesheets/roundtrip/template.xml", "sha256": "77c167c4de9d8737a326f77dfbff0a2be1bdfbd137312d64c299d43cc4975cd4", "size": 86584},
+    {"path": "/usr/share/doc/openssl-1.1.1t-r3/html/man3/EC_POINT_add.html", "sha256": "5b4b6ed34b959e659904177b44bd29d245ab6b7bfb2f6231e551e7adcbe044cf", "size": 6246},
+    {"path": "/usr/share/locale/fi/LC_MESSAGES/gdbm.mo", "sha256": "1f876d74a4ff4beecec49c760fcfb1ef9a81e330339d65cf5c89303b445f7793", "size": 10139},
+    {"path": "/usr/lib/python3.10/site-packages/mesonbuild/backend/__pycache__/vs2013backend.cpython-310.pyc", "sha256": "53d764db8aab0761a5c7a5ceed07f418f522051c1ad4dc598e8c30cd09414414", "size": 1506},
+    {"path": "/usr/share/cmake/Help/module/TestForANSIForScope.rst", "sha256": "9e2d6e38a77e1a0e41ac09a3d78b8fd80b9fde6c796d985128fbec8e63a68e20", "size": 58},
+    {"path": "/var/db/pkg/dev-python/hatchling-1.14.0/USE", "sha256": "1aea4063ef90f9ca1a9f6d506870368d520e561cd453a5794d0e6702b5512976", "size": 81},
+    {"path": "/lib/modules/6.2.12-gentoo-dist/kernel/drivers/media/i2c/ov5693.ko", "sha256": "02129590921b7f1b1632900cb453bbd9aa1c049db101560f78afd7866506bc90", "size": 45968},
+    {"path": "/usr/share/terminfo/d/dvtm", "sha256": "ed874addc9569872d0c367750d0503b519f7606dee3108afa46d3ece6b54cb5f", "size": 1715},
+    {"path": "/usr/share/cmake/Help/variable/CMAKE_LANG_COMPILER_LOADED.rst", "sha256": "49c66f8db2e7a08895efb4ca1f6a2019d4cef8747a91bf4b3ebbd5d78d124b22", "size": 227},
+    {"path": "/usr/share/man/man3/setspent.3", "sha256": "baa6de6e082f1ff6ec14f0434a035364cfc8a64cd3ece16b82504dcbde00a177", "size": 20},
+    {"path": "/usr/lib/python3.10/test/reperf.py", "sha256": "5dc42597f8398476b33e3d8bc4987659e356d67ddbef94f5847c73f8277e110b", "size": 538},
+    {"path": "/usr/share/locale/he/LC_MESSAGES/grep.mo", "sha256": "d2acfd9c0b1245a987ff70d1bc84573c86ae6d3f0601565d2f4b74329b5ca261", "size": 1138},
+    {"path": "/usr/share/locale/eu/LC_MESSAGES/sudo.mo", "sha256": "c04fc5fe5f811de2fc7a9f87a6b40c359893b875e71560b03042cca10a937719", "size": 6771},
+    {"path": "/usr/lib/python3.11/ensurepip/__main__.py", "sha256": "ee735f518d0fc4dfec81f7aa3da1e052372ed4202c0da4eddd2587840beaecd7", "size": 88},
+    {"path": "/usr/sbin/groupmod", "sha256": "9c43410c3665d28639e9bfe612765beb6185c30b851c43bfbf4d25906ddcdbb9", "size": 93688},
+    {"path": "/usr/share/man/man3/re_comp.3.bz2", "sha256": "cbb02329d8ec513d17036a7d7610f62cdf3b769bacf5d3480ba3f8b3831a277c", "size": 1019},
+    {"path": "/usr/share/locale/be/LC_MESSAGES/libc.mo", "sha256": "bcd21121547cc4c42aa71aaa62878986ab3223abcf486a5d7bf4d8090a1fb393", "size": 78172},
+    {"path": "/usr/lib/dracut/modules.d/99base/init.sh", "sha256": "29da52f53ee594c8102275bdaa8d227bb0b5eb7277576f9fa42fa8d4dd1613b0", "size": 11930},
+    {"path": "/usr/share/terminfo/d/d211-dg", "sha256": "8ff891d92fd173c9248d64610ae56649d713d347e8e243e038ee1844e010abdf", "size": 1005},
+    {"path": "/usr/lib/python3.10/lib2to3/pgen2/literals.py", "sha256": "84bc9d5387a2e20fab844e530358571afa39fa3fc0e8024270b5f7d8ac5a595a", "size": 1635}
+  ]
+}

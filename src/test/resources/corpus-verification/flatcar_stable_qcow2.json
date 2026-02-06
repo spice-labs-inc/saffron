@@ -1,0 +1,8 @@
+{
+  "imagePath": "/corpus/qcow2/modern/flatcar-stable.qcow2",
+  "imageBasename": "flatcar-stable.qcow2",
+  "filesystemType": "ext4",
+  "totalFiles": 0,
+  "totalDirectories": 5,
+  "sampleFiles": []
+}

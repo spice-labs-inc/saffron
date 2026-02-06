@@ -1,0 +1,109 @@
+{
+  "imagePath": "/corpus/qcow2/modern/debian-11-nocloud.qcow2",
+  "imageBasename": "debian-11-nocloud.qcow2",
+  "filesystemType": "ext4",
+  "totalFiles": 19943,
+  "totalDirectories": 2610,
+  "sampleFiles": [
+    {
+      "path": "/boot/System.map-5.10.0-37-amd64",
+      "sha256": "f47b4c00d87f4b5378487972ded9d447074d4771bea98af3f852220ee34392e5",
+      "size": 83
+    },
+    {
+      "path": "/usr/bin/addpart",
+      "sha256": "895d42fcdedd017ed40bfcf7261381a3b9e4dbe0c3cdba9e74d96572fadd9c37",
+      "size": 26856
+    },
+    {
+      "path": "/usr/lib/grub/x86_64-efi/strtoull_test.mod",
+      "sha256": "31ff608b97703e89b26fa761a964b0b8232f33dd2a88adb1213a2d4cd7daa738",
+      "size": 3280
+    },
+    {
+      "path": "/usr/lib/modules/5.10.0-37-amd64/kernel/drivers/iio/light/cm32181.ko",
+      "sha256": "19c25844f445256c42999b8f227db77bb562e6e3ffdcc66c61832cb026118ff6",
+      "size": 20273
+    },
+    {
+      "path": "/usr/lib/modules/5.10.0-37-amd64/kernel/drivers/mtd/mtdblock_ro.ko",
+      "sha256": "5e56333c8424c02bf1d6be1095f6e72a8496920d36ee49828dd0d4c898ff4ecf",
+      "size": 9313
+    },
+    {
+      "path": "/usr/lib/modules/5.10.0-37-amd64/kernel/drivers/vfio/vfio_virqfd.ko",
+      "sha256": "31d80b68e0759d6e2eb0475dea20bd727f8f2b3ea10c6b0278735d76d78d4cf7",
+      "size": 15993
+    },
+    {
+      "path": "/usr/lib/modules/5.10.0-37-amd64/kernel/sound/soc/intel/boards/snd-soc-sst-cht-bsw-rt5645.ko",
+      "sha256": "aeb21969d65ece77429353f404fbdde075ca867267eac8110c21ba50e5f3b810",
+      "size": 39673
+    },
+    {
+      "path": "/usr/lib/python3.9/token.py",
+      "sha256": "ab560a77c64094e898048757f3c62a72de40413a78f6c42f4988338a24afa6d8",
+      "size": 2368
+    },
+    {
+      "path": "/usr/lib/tmpfiles.d/x11.conf",
+      "sha256": "fbd4bbec65eafdd27eea4725c1254cd2955285f2d441238f18451e9c285b72ab",
+      "size": 655
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/perl-base/unicore/lib/Sc/Glag.pl",
+      "sha256": "56fe75b48d25f93dd590e2776b2c95e6608958c001559991abc8dac60847c63d",
+      "size": 585
+    },
+    {
+      "path": "/usr/share/bash-completion/completions/smbclient",
+      "sha256": "5c5bf33176adc5d24bc3e4b3311172285bbf75ac4206c83c395733b77c1ba36f",
+      "size": 7225
+    },
+    {
+      "path": "/usr/share/doc/libpopt0/changelog.Debian.gz",
+      "sha256": "5b6e64b2d0dde99a411bf9c6aacfe2c0cc3bf566746fb4d7a8ec10d5383321c7",
+      "size": 6496
+    },
+    {
+      "path": "/usr/share/locale/bg/LC_MESSAGES/sed.mo",
+      "sha256": "68cc77710b8f5c22ac2cf5473ebe5c04370a847d7516bab3d0580b0bbfa97986",
+      "size": 20143
+    },
+    {
+      "path": "/usr/share/locale/sv/LC_MESSAGES/sudo.mo",
+      "sha256": "8654914d9ff934a39bc711fdcea2fad638999dfe13c88d0aadcf7451382f883a",
+      "size": 20604
+    },
+    {
+      "path": "/usr/share/man/man1/taskset.1.gz",
+      "sha256": "e80ee680991b5996e3afe0b5a88984916193f4bff9c0cae32b518c693106247b",
+      "size": 2071
+    },
+    {
+      "path": "/usr/share/man/pt/man8/start-stop-daemon.8.gz",
+      "sha256": "1672d42458d341378f90b681886a89246449a39e203af3261e395140986da25f",
+      "size": 6530
+    },
+    {
+      "path": "/usr/share/vim/vim82/ftplugin/services.vim",
+      "sha256": "cf692642e503217206d6660b72638ef4849081ad054aea38089e65a78703b07d",
+      "size": 452
+    },
+    {
+      "path": "/usr/share/vim/vim82/syntax/rrst.vim",
+      "sha256": "1afd127c3468bec6184606fe3d99b2804d73ff840073c1449053dc86dd558dcc",
+      "size": 1306
+    },
+    {
+      "path": "/usr/share/zoneinfo/posix/Atlantic/Cape_Verde",
+      "sha256": "11242f13775e308fa5c7d986d3224b12c157e4a465fbb73a803e4eda1d199bd4",
+      "size": 270
+    },
+    {
+      "path": "/var/lib/dpkg/info/libbrotli1:amd64.md5sums",
+      "sha256": "d3a315edc66178bf0e3b71c195d28904125dfce28877e864a3a1b3e5abb5ecae",
+      "size": 552
+    }
+  ]
+}

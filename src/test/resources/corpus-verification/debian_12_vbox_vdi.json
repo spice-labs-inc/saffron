@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vdi/modern/debian-12-vbox.vdi",
+  "imageBasename": "debian-12-vbox.vdi",
+  "filesystemType": "ext2",
+  "totalFiles": 27293,
+  "totalDirectories": 3597,
+  "sampleFiles": [
+    {"path": "/usr/lib/udev/hwdb.d/20-acpi-vendor.hwdb", "sha256": "8f1349549d03b1991c10614d994f6d74939bc02943a19ea50dc97c0bd19a1ba0", "size": 153543},
+    {"path": "/usr/share/doc/mawk/examples/nocomment.awk", "sha256": "4b9742fc8772be0d6b0b3e1dfeaebd40e733d242e16ed678b9c84be4014d59d2", "size": 590},
+    {"path": "/usr/lib/python3.11/xml/dom/domreg.py", "sha256": "826b02a803930834b96b1086cbee7db1d21c684f65dd3073706dc7bb5ba1a3e8", "size": 3451},
+    {"path": "/usr/share/man/man1/setterm.1.gz", "sha256": "a898bc62d1787bf5f2fc570663dc3576c66c70676713c83b9464bdd6b18c661f", "size": 3470},
+    {"path": "/usr/lib/mime/packages/man-db", "sha256": "fc959e5b9e9fd5f3d817e652498ae3651b2277928deedf941b007c6d7417c5c6", "size": 1863},
+    {"path": "/usr/share/man/man1/setterm.1.gz", "sha256": "a898bc62d1787bf5f2fc570663dc3576c66c70676713c83b9464bdd6b18c661f", "size": 3470},
+    {"path": "/usr/lib/mime/packages/man-db", "sha256": "fc959e5b9e9fd5f3d817e652498ae3651b2277928deedf941b007c6d7417c5c6", "size": 1863},
+    {"path": "/usr/share/mime/application/x-python-bytecode.xml", "sha256": "ec1dae1009cfe29ca7cd3e1e700172cd378f8974e295c117023a3f23a010b8bd", "size": 3181},
+    {"path": "/usr/share/X11/xkb/keycodes/hp", "sha256": "2410b73208fdb5addbf85c6f245207c07b1e4f0f0d3771c7a297413205f93161", "size": 4971},
+    {"path": "/usr/share/man/pt/man1/debconf-copydb.1.gz", "sha256": "5c6f40288921abcdfba5a66507742f0225f5447aac96832cad1bb5455e3e7f54", "size": 2386},
+    {"path": "/usr/share/man/man8/ip-tcp_metrics.8.gz", "sha256": "829cf41501e8fdb82d3968f9b0ddf40714a54d479c2ba5011b050756984b8638", "size": 1496},
+    {"path": "/var/lib/dpkg/info/libpam0g:amd64.postrm", "sha256": "8e622685856c346b0521806b2e151a2e91206b4f4f11d51759c05a8246370e93", "size": 214},
+    {"path": "/usr/share/man/pl/man1/manconv.1.gz", "sha256": "8540399964ecf5171813a9e6970ce4266906b78daf12d860653cf7bf9a231737", "size": 1444},
+    {"path": "/usr/share/doc/libfreetype6/changelog.gz", "sha256": "3dbd5f56676102d48516996b095a7a0ca39a662f099625d800cf550ff59d7892", "size": 32111},
+    {"path": "/var/lib/dpkg/info/libmagic-mgc.md5sums", "sha256": "868e54d76ddddc2c6d5f5c8d1ac4bd7d54bd0c1e78c66320892b7f796c296b8d", "size": 358},
+    {"path": "/usr/lib/python3.11/test/support/__pycache__/socket_helper.cpython-311.pyc", "sha256": "fe527a0a1bdde500fdf8d901e6a9547e32e25b7541e73c9edfa3da74a55c7148", "size": 14773},
+    {"path": "/var/lib/dpkg/info/python3.11-minimal.preinst", "sha256": "1386bf0fc62ec2c87fb0435bfb8d84856247f1623e1ef9a7c01c459a46017008", "size": 315},
+    {"path": "/var/lib/dpkg/info/linux-base.postinst", "sha256": "e62e67f6bf13c764476911729492cd8147b41864f91cf8d43626a807bc1fe13f", "size": 88},
+    {"path": "/usr/lib/python3/dist-packages/certifi/__pycache__/core.cpython-311.pyc", "sha256": "24d3196cc5f18dace0f358a7fd86e181e4a96f3f29c7aadf93eb872d9d606775", "size": 998},
+    {"path": "/var/lib/dpkg/info/apt.triggers", "sha256": "0a19ada1c65348b986992096777df4232177012e2f12b3612cce1c4f675365de", "size": 68}
+  ]
+}

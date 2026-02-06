@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/rocky-9-cloud-amd64.qcow2",
+  "imageBasename": "rocky-9-cloud-amd64.qcow2",
+  "filesystemType": "unknown",
+  "totalFiles": 29516,
+  "totalDirectories": 5088,
+  "sampleFiles": [
+    {"path": "/usr/lib64/python3.9/site-packages/setools/diff/__pycache__/context.cpython-39.opt-1.pyc", "sha256": "240b6a4a1cedf32bb1a484a9d249d9ac7749bef380f5f66783f00eb661d3b1d4", "size": 1590},
+    {"path": "/usr/lib/python3.9/site-packages/sos/report/plugins/pulseaudio.py", "sha256": "df4ce3e14bb2fe6400810c2d1c7e98feab235fedd84d8b5d44d495d89cbf9821", "size": 1597},
+    {"path": "/usr/lib/dracut/modules.d/95hwdb/module-setup.sh", "sha256": "651a90112070b83adc015ba46ec0c64e17ae09d7c7076ad2ff732ea77c913c88", "size": 591},
+    {"path": "/usr/share/zoneinfo/right/America/St_Kitts", "sha256": "cd1b4743077fc93db54825488796a092a1cc18bc11bcbfaefea6db74ef7c14e0", "size": 796},
+    {"path": "/usr/lib/grub/x86_64-efi/gfxterm_menu.mod", "sha256": "fd984000ec446f478dc1f1d2dadfb6e4f88828fa695ba72e999d9fdd3b5f4e67", "size": 8800},
+    {"path": "/usr/lib/python3.9/site-packages/sos/report/plugins/__pycache__/bootc.cpython-39.pyc", "sha256": "4b614a48dc6942579b459c47181a11471f9a411245114eeaa75b94656c58ec9c", "size": 792},
+    {"path": "/usr/lib/python3.9/site-packages/chardet/big5freq.py", "sha256": "0ffccae46cb3a15b117acd0790b2738a5b45417d1b2822ceac57bdff10ef3bff", "size": 31254},
+    {"path": "/usr/lib/dracut/modules.d/90lvm/64-lvm.rules", "sha256": "c3f5d19b9169781bbbd71fa96e30ed09d2f6a4ff83f6bac623a4df0f476e81f3", "size": 1308},
+    {"path": "/usr/share/licenses/keyutils/LICENCE.GPL", "sha256": "f46409d4822b2457b39bbd0e7881eecb396130eb8320b7748fa7e9488970aa6d", "size": 17997},
+    {"path": "/usr/share/groff/1.22.4/font/devps/CR", "sha256": "e0bfd353a7be753a25dd22a9bb3f5ed0dcb45de1a3e2cb260fd4aa87fe02989f", "size": 6447},
+    {"path": "/usr/lib/modules/5.14.0-611.5.1.el9_7.x86_64/kernel/drivers/hwmon/via-cputemp.ko.xz", "sha256": "a798f17dd8b98094ae4e3ad27cd55908389c39cef77ac60abb2c427832f9c4b3", "size": 5328},
+    {"path": "/usr/lib/python3.9/site-packages/pytz/lazy.py", "sha256": "b68791e6e0d62818fa7b3b146787a534fe8210cb4aec23b68d2f40df49ec15ba", "size": 5404},
+    {"path": "/etc/pki/ca-trust/extracted/pem/directory-hash/TrustAsia_TLS_RSA_Root_CA.pem", "sha256": "76ae2d0df1228b565cf3533a7c22d59fc3683f240ce7192201072260fc6f0e27", "size": 1968},
+    {"path": "/usr/share/cockpit/networkmanager/po.ka.js.gz", "sha256": "2bbf05741c887c77a565743fbd99c90dcf14b11f7d313528ef3c229b3cb565a4", "size": 12945},
+    {"path": "/usr/lib/python3.9/site-packages/cockpit/_version.py", "sha256": "cd31d6938beeb506030020b253c1d42c58bdcd31f33687d52a66c692edc2e6f2", "size": 20},
+    {"path": "/usr/lib/udev/rules.d/95-dm-notify.rules", "sha256": "d24e725fc78306ff2355eb91e4eebcc7dc9388d54dc27d20d6fe6f695054d536", "size": 483},
+    {"path": "/usr/lib/python3.9/site-packages/cockpit/_vendor/bei/data/__pycache__/__init__.cpython-39.opt-1.pyc", "sha256": "d9be583d18c466ccfb700f725e04e0e7eba397355ef9ab909fcdbcd7fd97883b", "size": 693},
+    {"path": "/usr/share/locale/gu/LC_MESSAGES/gdk-pixbuf.mo", "sha256": "36584312b97f085ab6e6ea4a547893c5d511038a77d188934479b44826d4e566", "size": 29033},
+    {"path": "/usr/lib/python3.9/site-packages/requests-2.25.1.dist-info/top_level.txt", "sha256": "7cc4959877dbe6b6c63a8eb1bfe3bfb545fa8fe5b28b1b2c13e4a7c1c0d1c4d4", "size": 9},
+    {"path": "/usr/lib64/python3.9/unittest/__pycache__/_log.cpython-39.pyc", "sha256": "e41ea89ea46c4eaab25cb9cfbc53a2c630d08ad74dd41b76a7336d21901d5d5f", "size": 2523}
+  ]
+}

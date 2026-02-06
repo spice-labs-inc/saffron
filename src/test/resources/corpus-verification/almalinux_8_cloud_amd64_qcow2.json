@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/almalinux-8-cloud-amd64.qcow2",
+  "imageBasename": "almalinux-8-cloud-amd64.qcow2",
+  "filesystemType": "unknown",
+  "totalFiles": 32023,
+  "totalDirectories": 5860,
+  "sampleFiles": [
+    {"path": "/usr/lib/python3.6/site-packages/urllib3/contrib/__pycache__/appengine.cpython-36.pyc", "sha256": "4df3b945c2967e88130e64d8d7ca0983e2efa9785654ac6892b2fb7d26b724b7", "size": 8204},
+    {"path": "/usr/share/X11/locale/fi_FI.UTF-8/XI18N_OBJS", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/boot/grub2/i386-pc/eval.mod", "sha256": "a0e38ae75d4d68a61c0a1cf4f375e73d8ca4f86db723feef505e75e421aad828", "size": 1632},
+    {"path": "/usr/lib64/python3.6/urllib/error.py", "sha256": "69c065aebb481100575336a563b04abe527de9af3e2e0fe25eb69d644dc0e174", "size": 2641},
+    {"path": "/usr/lib/modules/4.18.0-553.16.1.el8_10.x86_64/kernel/sound/pci/lola/snd-lola.ko.xz", "sha256": "7d17f03c280e8e96b946d15dc2793c5f4cf404b3073739473783e8e024138438", "size": 16984},
+    {"path": "/usr/lib/python3.6/site-packages/sos/cleaner/preppers/__pycache__/keywords.cpython-36.pyc", "sha256": "28247a56a6cb71ed72986494712944aab6ab49ebf214e356cbe8f81b288100a4", "size": 931},
+    {"path": "/usr/share/man/man1/cockpit-desktop.1.gz", "sha256": "f8dfb084ad85a360fc8d24d674ab47bb67b38a06313264eb374cdd6db6a6c529", "size": 1529},
+    {"path": "/usr/lib64/python3.6/sqlite3/__pycache__/__init__.cpython-36.opt-1.pyc", "sha256": "86612d5ce991fe3bc546d076257f1ca742e0b7192c2dd2c781cbab7794894cd5", "size": 154},
+    {"path": "/usr/share/man/man5/modules-load.d.5.gz", "sha256": "38b4c1e4a8894035dbca2ea615a910695fcde67ce35ec94373768e52e8242b9b", "size": 1398},
+    {"path": "/usr/share/locale/kk/LC_MESSAGES/fwupd.mo", "sha256": "0548ba42f6adf5fed0118a448647ac64d484591219ddcac905b199d461e46f9a", "size": 719},
+    {"path": "/usr/lib/python3.6/site-packages/sos/policies/package_managers/__pycache__/dpkg.cpython-36.opt-1.pyc", "sha256": "92fef648ff9fbe2ec0c4d4c34fb5943255c390648a3abbbaf62f659e8744b279", "size": 852},
+    {"path": "/usr/lib/python3.6/site-packages/babel/locale-data/ha_NG.dat", "sha256": "5ca06a68ecf0cce6a27df084a9434c1a2b32d0aa56b9be0a014cffdbd26cf265", "size": 547},
+    {"path": "/usr/share/locale/fr/LC_MESSAGES/parted.mo", "sha256": "2c2863593856494997fc27d2dac105adc8ae8ea7949db21ca063ce6bb7010834", "size": 69014},
+    {"path": "/usr/lib/python3.6/site-packages/babel/locale-data/en_DE.dat", "sha256": "3a9a80caa76ab7c55a71ced47d713ed559a51c116ad206fac589891d8dfda34f", "size": 867},
+    {"path": "/usr/share/zoneinfo/right/Etc/GMT-6", "sha256": "68d638daa5d47e0684ecb49c49fa0eba30e044df0b01655a366e4f2615bebe82", "size": 679},
+    {"path": "/usr/share/terminfo/t/teraterm", "sha256": "75be3c4134fb55cb4b90e82eb97a7cc1cf346015a1afd723f48171862250e748", "size": 1701},
+    {"path": "/usr/share/locale/ja/LC_MESSAGES/tar.mo", "sha256": "f73c3d54e5c62f9d34d887e5bc8d81b1492767531824ebe351ea42802d3ccd68", "size": 57493},
+    {"path": "/usr/share/zoneinfo/right/America/Shiprock", "sha256": "568d5bba40770b5fee72fa32e5a9f1da213703b36a4f575e5f6de5e822171b15", "size": 3009},
+    {"path": "/usr/share/doc/psmisc/AUTHORS", "sha256": "943804ddc6836cd6744c53a6d6605c49025727949abe696f183120c3d1305b44", "size": 200},
+    {"path": "/usr/lib64/gconv/IBM4971.so", "sha256": "22fc9f4ac4bfe1c5e6d0862f89e3dbab7737de5db88db6a99ed6c6590088427c", "size": 12064}
+  ]
+}

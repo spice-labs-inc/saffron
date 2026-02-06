@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/ubuntu-20.04-cloudimg-amd64.qcow2",
+  "imageBasename": "ubuntu-20.04-cloudimg-amd64.qcow2",
+  "filesystemType": "ext4",
+  "totalFiles": 57940,
+  "totalDirectories": 10913,
+  "sampleFiles": [
+    {"path": "/usr/src/linux-headers-5.4.0-216/drivers/pinctrl/stm32/Kconfig", "sha256": "fc79fea6e0aa364c3fc8d0cbcf24c9b6fe79baa1bb3ac4587b10f3a82ad7d5d5", "size": 1330},
+    {"path": "/usr/lib/python3/dist-packages/twisted/runner/test/test_procmon.py", "sha256": "8ee144d3f396ed82d322bf4e85edf910af384fb3550743571abcf852cbaa58d8", "size": 23346},
+    {"path": "/usr/src/linux-headers-5.4.0-216-generic/include/config/iommu/support.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/src/linux-headers-5.4.0-216-generic/include/config/rcu/perf/test.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/src/linux-headers-5.4.0-216-generic/include/config/lidar/lite/v2.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/share/zoneinfo/right/Antarctica/Troll", "sha256": "8ed5e602930ee85616fedbf13d4116c1f54a945988be9c96281a840956cbedc7", "size": 1702},
+    {"path": "/usr/share/man/man5/x509v3_config.5ssl.gz", "sha256": "27ca4a5e8b10e63bd7fcf8f61ecb199367990d0412703d3b1a3cb259b3f22693", "size": 8167},
+    {"path": "/usr/lib/python3/dist-packages/packaging/__pycache__/_structures.cpython-38.pyc", "sha256": "a3ec365da997eaf132afa00901ed3c90696064ebaff02761dbcdce2e782f79bd", "size": 2847},
+    {"path": "/var/lib/dpkg/info/gir1.2-packagekitglib-1.0.list", "sha256": "b9786683b11eb2ca9a3240371fbd8bf81e4ba085a382fef7daffe02af4ec8112", "size": 275},
+    {"path": "/usr/share/man/man3/dmmp_flush_mpath.3.gz", "sha256": "33e284a39019acc39f5286401642192514df64c144bae094f3401fd7447f9e21", "size": 476},
+    {"path": "/usr/lib/x86_64-linux-gnu/perl-base/unicore/lib/CWKCF/Y.pl", "sha256": "5a48ecc370b37fc5b2909c38fd312250e70304b8eb852b30bb9fdb802da0c897", "size": 9123},
+    {"path": "/usr/src/linux-headers-5.4.0-216-generic/include/config/drm/xen/frontend.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/src/linux-headers-5.4.0-216-generic/include/config/have/virt/cpu/accounting/gen.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/share/locale/cs/LC_MESSAGES/debconf.mo", "sha256": "fb83450c21406130f7fece33058e903f77dc35ab32d93a7ce9ee08eba883ae4c", "size": 10192},
+    {"path": "/usr/src/linux-headers-5.4.0-216-generic/include/config/have/arch/jump/label.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/lib/python3/dist-packages/DistUpgrade/__pycache__/__init__.cpython-38.pyc", "sha256": "b94d49780f5273bd5d0d9baa3cc0e785941219db080df4843f43a63a56ee9305", "size": 145},
+    {"path": "/var/lib/dpkg/info/libpackagekit-glib2-18:amd64.triggers", "sha256": "a50591f79294b6d13f200542b8a78ff2b04a49c246ce00b8a5588266e40446a3", "size": 73},
+    {"path": "/usr/src/linux-headers-5.4.0-216/arch/mips/include/asm/mach-ip27/war.h", "sha256": "25928bf157a4819ef51a15f310fc850b7bebdba48bd5cc987df2426fa661d7d4", "size": 737},
+    {"path": "/usr/lib/x86_64-linux-gnu/gconv/IBM1026.so", "sha256": "fac0ccf7a460e839a9478cbd87b6b02b60e21b18b2c78e08099cb166c5a86105", "size": 18696},
+    {"path": "/usr/share/locale/ln/LC_MESSAGES/language-selector.mo", "sha256": "140f31ad1b75ad2ce4658529b5a9cca90cb321cad52f030a5af6e5f8f306bc0e", "size": 7041}
+  ]
+}

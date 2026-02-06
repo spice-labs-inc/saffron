@@ -1,0 +1,8 @@
+{
+  "imagePath": "/corpus/qcow2/modern/rocky-9-minimal.qcow2",
+  "imageBasename": "rocky-9-minimal.qcow2",
+  "filesystemType": "xfs",
+  "totalFiles": 4,
+  "totalDirectories": 49,
+  "sampleFiles": []
+}

@@ -1,0 +1,109 @@
+{
+  "imagePath": "/corpus/qcow2/modern/debian-12-nocloud.qcow2",
+  "imageBasename": "debian-12-nocloud.qcow2",
+  "filesystemType": "ext4",
+  "totalFiles": 21558,
+  "totalDirectories": 2762,
+  "sampleFiles": [
+    {
+      "path": "/boot/System.map-6.1.0-42-amd64",
+      "sha256": "f47b4c00d87f4b5378487972ded9d447074d4771bea98af3f852220ee34392e5",
+      "size": 83
+    },
+    {
+      "path": "/usr/bin/expand",
+      "sha256": "18303d60bad5cdf52eaa0e6b3ff2d21db8c975a9011d62bdd493381c90a4062c",
+      "size": 43952
+    },
+    {
+      "path": "/usr/lib/modules/6.1.0-42-amd64/kernel/crypto/adiantum.ko",
+      "sha256": "64a9f3d94bd936c4c40c648668877e2157910fda22e33749ad11a1bc010ff90b",
+      "size": 23745
+    },
+    {
+      "path": "/usr/lib/modules/6.1.0-42-amd64/kernel/drivers/input/joystick/gf2k.ko",
+      "sha256": "7e0ec6ef0cd12e6c0b3d1abf77871b7c15faa5bb3dc22da260b396d3d6a7fd21",
+      "size": 21537
+    },
+    {
+      "path": "/usr/lib/modules/6.1.0-42-amd64/kernel/drivers/net/phy/et1011c.ko",
+      "sha256": "4a5d27a5582a9796d06e8314f80316566c75408c11ae98fc18a2bec4cf9801ec",
+      "size": 9209
+    },
+    {
+      "path": "/usr/lib/modules/6.1.0-42-amd64/kernel/net/6lowpan/nhc_ipv6.ko",
+      "sha256": "68ccc35c467bf89c4ceda729ced771819d5965dabe21bb1ab3cfecb9229259bb",
+      "size": 6617
+    },
+    {
+      "path": "/usr/lib/python3.11/concurrent/futures/thread.py",
+      "sha256": "b06f8899881193efc72cfc3ebf2836dce4e668b3856ad35f4016616d643a519e",
+      "size": 8771
+    },
+    {
+      "path": "/usr/lib/python3/dist-packages/debian/__pycache__/__init__.cpython-311.pyc",
+      "sha256": "1d1c0ec5d9e6e146afa95efebb4f4a3879f4a46ea101678fe26bfe72eab50aa3",
+      "size": 1531
+    },
+    {
+      "path": "/usr/lib/python3/dist-packages/rich-13.3.1.dist-info/RECORD",
+      "sha256": "a3cf7d5cf81412c8143cccc594dcbcb839b2635284da81a921594b8e0d23a6d6",
+      "size": 5929
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libgpg-error.so.0.33.1",
+      "sha256": "f93b4f9a2d482d553f743d1fe6ac6b219f88f20d59b528d46a61610c5d0ac10e",
+      "size": 157768
+    },
+    {
+      "path": "/usr/share/apt-listchanges/__pycache__/ALCConfig.cpython-311.pyc",
+      "sha256": "ad27bf69b5b8949524be57e8b5a457a7ea76e16bbb83df2c5000be52caaaee2a",
+      "size": 10848
+    },
+    {
+      "path": "/usr/share/doc/gettext-base/changelog.gz",
+      "sha256": "3d6b7a32dec45e222a65003eaea842e04309fcf52f5065357f203f3328710f2d",
+      "size": 72621
+    },
+    {
+      "path": "/usr/share/doc/udev/copyright",
+      "sha256": "a7d06854714a1ca99f6dbd1a1641dde5bcf28635be149f6554449618f8f427f3",
+      "size": 12776
+    },
+    {
+      "path": "/usr/share/locale/km/LC_MESSAGES/apt.mo",
+      "sha256": "757a4f61a8b6b7ecb6c665f5c47e02adf8f1f06950c4a670ef9ef08c4e933a6a",
+      "size": 36159
+    },
+    {
+      "path": "/usr/share/man/ja/man8/catman.8.gz",
+      "sha256": "f90301a153896bf8bca15f464b72a361c2748982800a2ffefc959e7cfe929548",
+      "size": 1974
+    },
+    {
+      "path": "/usr/share/man/man8/e4defrag.8.gz",
+      "sha256": "cf38dc7f5c66eac839c23de4d3da229aa020a612b5089277a06026b90be84577",
+      "size": 1145
+    },
+    {
+      "path": "/usr/share/screen/utf8encodings/c2",
+      "sha256": "0d7b3cdb9a0de80545254ffb82e78b33afe5ec4e438b11a2b6b454cefcc6a4e8",
+      "size": 256
+    },
+    {
+      "path": "/usr/share/vim/vim90/lang/no/LC_MESSAGES/vim.mo",
+      "sha256": "ddc122f2873d3fd7bd1715522990803c2d695e8d4f7db95e2f4ab773aa7cd55f",
+      "size": 140940
+    },
+    {
+      "path": "/usr/share/zoneinfo/Antarctica/DumontDUrville",
+      "sha256": "83c1d02d8f9a377a7a6b3fb4e0a74739d65816737fffef25b4746e63d7905fe2",
+      "size": 194
+    },
+    {
+      "path": "/var/lib/dpkg/info/libargon2-1:amd64.symbols",
+      "sha256": "261a8bf5fcc8489c4c8a77eb059b66cb35da5c62bebaf2c6cec5b6fc211cb6a2",
+      "size": 780
+    }
+  ]
+}

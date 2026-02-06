@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/alpine-3.19-cloud-amd64.qcow2",
+  "imageBasename": "alpine-3.19-cloud-amd64.qcow2",
+  "filesystemType": "ext4",
+  "totalFiles": 5342,
+  "totalDirectories": 681,
+  "sampleFiles": [
+    {"path": "/usr/lib/python3.11/site-packages/urllib3/util/timeout.py", "sha256": "730ab874c93cee624748192d2b59a2609fbce46fb74f74664f6d2fed2142a67a", "size": 10168},
+    {"path": "/usr/share/zoneinfo/right/America/Toronto", "sha256": "8db7b1463a8cc6793d60fade5b30da892673d9acda9c362933267def5b901b9c", "size": 4034},
+    {"path": "/lib/modules/6.6.4-1-virt/modules.order", "sha256": "9a6ac59cf65e4285367d96cedd6f2fb9fa0c7cde3716c29edcd1ef0fb8161351", "size": 31156},
+    {"path": "/lib/modules/6.6.4-1-virt/kernel/fs/nls/mac-centeuro.ko.gz", "sha256": "0e3b03a5c17adc8f2aaca9e48036773581a10bc948c7839ac213e967a43cd25d", "size": 3625},
+    {"path": "/lib/modules/6.6.4-1-virt/kernel/drivers/xen/xen-pciback/xen-pciback.ko.gz", "sha256": "f3065cfc0b6b61e5be0672d02c55a48764fd69a5873cd7451cf4b7b4c34d8110", "size": 50512},
+    {"path": "/usr/share/zoneinfo/Asia/Irkutsk", "sha256": "215ba85c2c1d788f8a2147c5904b7ac818ea60fdd5f464eb17efd62e77df1739", "size": 1229},
+    {"path": "/lib/modules/6.6.4-1-virt/kernel/drivers/video/fbdev/core/fb.ko.gz", "sha256": "fdbd83c632e881d195ed9d967f7684c52e7c0d095eb05cc1472494f1a4a0acee", "size": 67750},
+    {"path": "/lib/modules/6.6.4-1-virt/kernel/net/sched/sch_qfq.ko.gz", "sha256": "29d5ecf2ff503eb459efc580ec9d82a8fb06919ef21de34144dad68a965f946b", "size": 16273},
+    {"path": "/usr/lib/python3.11/unittest/__init__.py", "sha256": "2a24d1843801ba82eef666abecfa49768422a8058f442af8666bf71baf68d752", "size": 3934},
+    {"path": "/usr/lib/python3.11/site-packages/cloudinit/config/cc_resolv_conf.py", "sha256": "36bd46b5a7592d0b90d6080967ea37b86b3178f4f930cb2d93c48ee61aded3f0", "size": 5060},
+    {"path": "/etc/passwd", "sha256": "adbc70ff43ebb5cd08b1988fb6a0104cd2ff7760058987aed67ef3e03ee52b9b", "size": 1280},
+    {"path": "/usr/bin/findssl.sh", "sha256": "b10123b92ddac4ff3e5d003eed44e92c39693dd8c7d197c99b006aacf80fdaf3", "size": 4797},
+    {"path": "/lib/modules/6.6.4-1-virt/kernel/fs/ntfs3/ntfs3.ko.gz", "sha256": "4c2637b9dde6b4fdfdf143cc86fd0f1422ad30207f2833046c94d50bac497547", "size": 200997},
+    {"path": "/lib/modules/6.6.4-1-virt/kernel/net/netfilter/xt_NETMAP.ko.gz", "sha256": "7be8bb5713796a8849b4399237cf67f31b6325845c0c472830c04fa4f518d30a", "size": 4739},
+    {"path": "/usr/lib/python3.11/__pycache__/pickle.cpython-311.pyc", "sha256": "71da06774d52675f911e49cd3d10025b3e743631bfda8aa4e3e85135ae8028fd", "size": 86633},
+    {"path": "/usr/lib/python3.11/__pycache__/hashlib.cpython-311.pyc", "sha256": "f08f464273001b5430966f4412f4f79346f2e547c7519a1ac77da1b363ae859b", "size": 12336},
+    {"path": "/usr/lib/python3.11/site-packages/cloudinit/config/__pycache__/cc_keyboard.cpython-311.pyc", "sha256": "ec791919109ac5efed36606405510b45285aa6df7c333af7f9f78bff54c30b63", "size": 3069},
+    {"path": "/usr/lib/python3.11/encodings/__pycache__/iso8859_2.cpython-311.pyc", "sha256": "05b0419b6e4f33064e31f74a62db6b67a85de07fda01ff8fffdea3de9eb44d3a", "size": 3383},
+    {"path": "/lib/modules/6.6.4-1-virt/kernel/drivers/ptp/ptp_kvm.ko.gz", "sha256": "6e06fd06016cfd10a847eb69c4d229b81b9bd69b7346c1d30ce5f3e706f19689", "size": 5439},
+    {"path": "/usr/lib/python3.11/site-packages/attr/exceptions.pyi", "sha256": "cd9abc6c2527280cbd983b41130e366613e1014207a1329e7434089c90fcf373", "size": 539}
+  ]
+}

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <version>2024-01-01</version>
+  <bundler>
+    <name>saffron-test</name>
+    <version>1.0</version>
+    <release>1</release>
+  </bundler>
+  <machine_configuration>
+    <architecture>x86_64</architecture>
+    <block_device_mapping>
+      <mapping>
+        <virtual>ami</virtual>
+        <device>sda</device>
+      </mapping>
+    </block_device_mapping>
+  </machine_configuration>
+  <image>
+    <name>test-image</name>
+    <user>test</user>
+    <type>machine</type>
+    <digest algorithm="SHA1">0000000000000000000000000000000000000000</digest>
+    <size>1048576</size>
+    <bundled_size>1048576</bundled_size>
+    <ec2_encrypted_key>NOT_ENCRYPTED_TEST</ec2_encrypted_key>
+    <user_encrypted_key>NOT_ENCRYPTED_TEST</user_encrypted_key>
+    <ec2_encrypted_iv>NOT_ENCRYPTED_TEST</ec2_encrypted_iv>
+    <parts count="100">
+      <part index="0">
+        <filename>image.part.00</filename>
+      </part>
+      <part index="1">
+        <filename>image.part.01</filename>
+      </part>
+      <part index="2">
+        <filename>image.part.02</filename>
+      </part>
+      <part index="3">
+        <filename>image.part.03</filename>
+      </part>
+      <part index="4">
+        <filename>image.part.04</filename>
+      </part>
+      <part index="5">
+        <filename>image.part.05</filename>
+      </part>
+      <part index="6">
+        <filename>image.part.06</filename>
+      </part>
+      <part index="7">
+        <filename>image.part.07</filename>
+      </part>
+      <part index="8">
+        <filename>image.part.08</filename>
+      </part>
+      <part index="9">
+        <filename>image.part.09</filename>
+      </part>
+      <part index="10">
+        <filename>image.part.10</filename>
+      </part>
+      <part index="11">
+        <filename>image.part.11</filename>
+      </part>
+      <part index="12">
+        <filename>image.part.12</filename>
+      </part>
+      <part index="13">
+        <filename>image.part.13</filename>
+      </part>
+      <part index="14">
+        <filename>image.part.14</filename>
+      </part>
+      <part index="15">
+        <filename>image.part.15</filename>
+      </part>
+      <part index="16">
+        <filename>image.part.16</filename>
+      </part>
+      <part index="17">
+        <filename>image.part.17</filename>
+      </part>
+      <part index="18">
+        <filename>image.part.18</filename>
+      </part>
+      <part index="19">
+        <filename>image.part.19</filename>
+      </part>
+      <part index="20">
+        <filename>image.part.20</filename>
+      </part>
+      <part index="21">
+        <filename>image.part.21</filename>
+      </part>
+      <part index="22">
+        <filename>image.part.22</filename>
+      </part>
+      <part index="23">
+        <filename>image.part.23</filename>
+      </part>
+      <part index="24">
+        <filename>image.part.24</filename>
+      </part>
+      <part index="25">
+        <filename>image.part.25</filename>
+      </part>
+      <part index="26">
+        <filename>image.part.26</filename>
+      </part>
+      <part index="27">
+        <filename>image.part.27</filename>
+      </part>
+      <part index="28">
+        <filename>image.part.28</filename>
+      </part>
+      <part index="29">
+        <filename>image.part.29</filename>
+      </part>
+      <part index="30">
+        <filename>image.part.30</filename>
+      </part>
+      <part index="31">
+        <filename>image.part.31</filename>
+      </part>
+      <part index="32">
+        <filename>image.part.32</filename>
+      </part>
+      <part index="33">
+        <filename>image.part.33</filename>
+      </part>
+      <part index="34">
+        <filename>image.part.34</filename>
+      </part>
+      <part index="35">
+        <filename>image.part.35</filename>
+      </part>
+      <part index="36">
+        <filename>image.part.36</filename>
+      </part>
+      <part index="37">
+        <filename>image.part.37</filename>
+      </part>
+      <part index="38">
+        <filename>image.part.38</filename>
+      </part>
+      <part index="39">
+        <filename>image.part.39</filename>
+      </part>
+      <part index="40">
+        <filename>image.part.40</filename>
+      </part>
+      <part index="41">
+        <filename>image.part.41</filename>
+      </part>
+      <part index="42">
+        <filename>image.part.42</filename>
+      </part>
+      <part index="43">
+        <filename>image.part.43</filename>
+      </part>
+      <part index="44">
+        <filename>image.part.44</filename>
+      </part>
+      <part index="45">
+        <filename>image.part.45</filename>
+      </part>
+      <part index="46">
+        <filename>image.part.46</filename>
+      </part>
+      <part index="47">
+        <filename>image.part.47</filename>
+      </part>
+      <part index="48">
+        <filename>image.part.48</filename>
+      </part>
+      <part index="49">
+        <filename>image.part.49</filename>
+      </part>
+      <part index="50">
+        <filename>image.part.50</filename>
+      </part>
+      <part index="51">
+        <filename>image.part.51</filename>
+      </part>
+      <part index="52">
+        <filename>image.part.52</filename>
+      </part>
+      <part index="53">
+        <filename>image.part.53</filename>
+      </part>
+      <part index="54">
+        <filename>image.part.54</filename>
+      </part>
+      <part index="55">
+        <filename>image.part.55</filename>
+      </part>
+      <part index="56">
+        <filename>image.part.56</filename>
+      </part>
+      <part index="57">
+        <filename>image.part.57</filename>
+      </part>
+      <part index="58">
+        <filename>image.part.58</filename>
+      </part>
+      <part index="59">
+        <filename>image.part.59</filename>
+      </part>
+      <part index="60">
+        <filename>image.part.60</filename>
+      </part>
+      <part index="61">
+        <filename>image.part.61</filename>
+      </part>
+      <part index="62">
+        <filename>image.part.62</filename>
+      </part>
+      <part index="63">
+        <filename>image.part.63</filename>
+      </part>
+      <part index="64">
+        <filename>image.part.64</filename>
+      </part>
+      <part index="65">
+        <filename>image.part.65</filename>
+      </part>
+      <part index="66">
+        <filename>image.part.66</filename>
+      </part>
+      <part index="67">
+        <filename>image.part.67</filename>
+      </part>
+      <part index="68">
+        <filename>image.part.68</filename>
+      </part>
+      <part index="69">
+        <filename>image.part.69</filename>
+      </part>
+      <part index="70">
+        <filename>image.part.70</filename>
+      </part>
+      <part index="71">
+        <filename>image.part.71</filename>
+      </part>
+      <part index="72">
+        <filename>image.part.72</filename>
+      </part>
+      <part index="73">
+        <filename>image.part.73</filename>
+      </part>
+      <part index="74">
+        <filename>image.part.74</filename>
+      </part>
+      <part index="75">
+        <filename>image.part.75</filename>
+      </part>
+      <part index="76">
+        <filename>image.part.76</filename>
+      </part>
+      <part index="77">
+        <filename>image.part.77</filename>
+      </part>
+      <part index="78">
+        <filename>image.part.78</filename>
+      </part>
+      <part index="79">
+        <filename>image.part.79</filename>
+      </part>
+      <part index="80">
+        <filename>image.part.80</filename>
+      </part>
+      <part index="81">
+        <filename>image.part.81</filename>
+      </part>
+      <part index="82">
+        <filename>image.part.82</filename>
+      </part>
+      <part index="83">
+        <filename>image.part.83</filename>
+      </part>
+      <part index="84">
+        <filename>image.part.84</filename>
+      </part>
+      <part index="85">
+        <filename>image.part.85</filename>
+      </part>
+      <part index="86">
+        <filename>image.part.86</filename>
+      </part>
+      <part index="87">
+        <filename>image.part.87</filename>
+      </part>
+      <part index="88">
+        <filename>image.part.88</filename>
+      </part>
+      <part index="89">
+        <filename>image.part.89</filename>
+      </part>
+      <part index="90">
+        <filename>image.part.90</filename>
+      </part>
+      <part index="91">
+        <filename>image.part.91</filename>
+      </part>
+      <part index="92">
+        <filename>image.part.92</filename>
+      </part>
+      <part index="93">
+        <filename>image.part.93</filename>
+      </part>
+      <part index="94">
+        <filename>image.part.94</filename>
+      </part>
+      <part index="95">
+        <filename>image.part.95</filename>
+      </part>
+      <part index="96">
+        <filename>image.part.96</filename>
+      </part>
+      <part index="97">
+        <filename>image.part.97</filename>
+      </part>
+      <part index="98">
+        <filename>image.part.98</filename>
+      </part>
+      <part index="99">
+        <filename>image.part.99</filename>
+      </part>
+    </parts>
+  </image>
+</manifest>

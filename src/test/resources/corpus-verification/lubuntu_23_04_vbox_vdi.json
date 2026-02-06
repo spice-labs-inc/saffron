@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vdi/modern/lubuntu-23.04-vbox.vdi",
+  "imageBasename": "lubuntu-23.04-vbox.vdi",
+  "filesystemType": "ext4",
+  "totalFiles": 203768,
+  "totalDirectories": 14463,
+  "sampleFiles": [
+    {"path": "/usr/share/libreoffice/help/media/helpimg/calcnav.png", "sha256": "ace2447c7ef3f9bb3f230a12ae5a1d323e0f1580486ce57e3e0c4101c376a675", "size": 656},
+    {"path": "/usr/src/linux-headers-6.2.0-20/arch/parisc/include/asm/pdc.h", "sha256": "5ff099c9a9c60779dce6fe2a04f1952d48eed61757aeff03e0e4384dd9fdf8cb", "size": 4324},
+    {"path": "/usr/share/locale/hr/LC_MESSAGES/partitionmanager.mo", "sha256": "0eb81acb6599a93e2dcb83e36ae8897e9b2e74763909b1c9e7e55505d4f33db5", "size": 2790},
+    {"path": "/usr/bin/xvidtune", "sha256": "533ed457d7188eee4edbb89078da144165aa1319521d3e5dcb3edc85a97f82b0", "size": 44808},
+    {"path": "/usr/share/libreoffice/help/media/icon-themes/cmd/sc_selectdb.svg", "sha256": "7e6985b321bb4b9192901acecfc9b9e0db1182d28889f21502ab91f2dd2beaae", "size": 1542},
+    {"path": "/usr/share/icons/Papirus-Dark/16x16/actions/network-server-vmware.svg", "sha256": "ada1fab9240833eef30c3994b7016abe3c32f5aae8f6c95bbc1862514633b33d", "size": 833},
+    {"path": "/usr/lib/libreoffice/share/config/soffice.cfg/modules/sweb/popupmenu/text.xml", "sha256": "53ca9384a2d619e75e4bb076f0f4e43c0bc7ac62ed08254c903835be438b7218", "size": 4300},
+    {"path": "/usr/src/linux-headers-6.2.0-20/arch/powerpc/include/asm/kvm_booke_hv_asm.h", "sha256": "668609687a98dcaa9a6648cc0c964164496c95aa2f4d15bc4a92f32fe56a591b", "size": 1960},
+    {"path": "/usr/share/icons/Papirus/22x22/apps/chrome-okdgofnjkaimfebepijgaoimfphblkpd-Default.svg", "sha256": "7e1a5e7bd1363c9094f15156e124f3304fcfa592d7a2ab37ac91e4c2ee1c9bcf", "size": 7712},
+    {"path": "/etc/xdg/menus/lxqt-applications-simple.menu", "sha256": "7b923f7a0f32010cd2a1c3a86798d0f1ec6a8216a03a9e1c95b26963e8a473db", "size": 5231},
+    {"path": "/usr/share/icons/Adwaita/scalable/ui/checkbox-symbolic.svg", "sha256": "6edebeef83ed097cedaafc2e13fdba4c57b4f95c3788f31e12c822629f093f8e", "size": 785},
+    {"path": "/usr/share/icons/Papirus/48x48/places/folder-yaru-gitlab.svg", "sha256": "f4337ba29f8999fbe2abef324347016cebd29a80b0ec768d40156bf7921eee3c", "size": 1447},
+    {"path": "/usr/share/X11/xkb/symbols/af", "sha256": "2bd824a4db8130631145225d8547ffa929dd6104879b498ef1ced3ca12e1f4dc", "size": 22245},
+    {"path": "/usr/share/fonts/X11/Type1/C059-BdIta.pfb", "sha256": "84e46c470c20e491d0524c492e9475644c22c7fbd8d4051d2d0edd7378427f84", "size": 152605},
+    {"path": "/usr/share/doc/libio-socket-ssl-perl/examples/ssl_mitm.pl", "sha256": "b66e65faf04560d21648164507b93964301e0777b6e98b6cb08bf0e65f0d8d23", "size": 1806},
+    {"path": "/var/lib/swcatalog/icons/ubuntu-lunar-universe/64x64/cecilia_cecilia.png", "sha256": "b7227d4eadba76753c30ce6056ab0a5c479bd7c2910fe4c680c0e91832f5ae5f", "size": 2750},
+    {"path": "/usr/share/icons/Papirus/16x16/apps/bioshock-infinite.svg", "sha256": "28d8d6b12fe9764aad953be9f8782fe6f6d19ad50ff0b7a397dce0cf3de67da5", "size": 1608},
+    {"path": "/usr/share/icons/Papirus/24x24/apps/dev.boxi.Boxi.svg", "sha256": "cd893915f3bd9b2d3c6c3dcb5c88fb1a89876eb9ecd79b05fbf701089fc98333", "size": 1528},
+    {"path": "/usr/share/icons/Papirus/64x64/apps/evnc.svg", "sha256": "9a73413f60e23f902fe6e42881f687006a66fa40134cee79f42b07ca0af3c93c", "size": 2481},
+    {"path": "/usr/share/icons/Papirus/24x24/apps/kmenuedit.svg", "sha256": "40eb1351a4e2882a737d5f27fe69dceca861e44f4fe2fa2060cf8dfde37cf225", "size": 2956}
+  ]
+}

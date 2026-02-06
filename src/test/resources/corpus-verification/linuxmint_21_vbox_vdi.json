@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vdi/modern/linuxmint-21-vbox.vdi",
+  "imageBasename": "linuxmint-21-vbox.vdi",
+  "filesystemType": "unknown",
+  "totalFiles": 215229,
+  "totalDirectories": 20984,
+  "sampleFiles": [
+    {"path": "/usr/share/libreoffice/help/zh-CN/text/scalc/01/06080000.html", "sha256": "16fcebc536b2b3315c412ae7b797320f1768c3c445bd4528cddbfd1adf18a174", "size": 6042},
+    {"path": "/usr/share/themes/Mint-Y-Dark/xfwm4/stick-pressed.png", "sha256": "21b68a6fb9e9dd7108b27dba6f1d7b8c799e13625ef77bd727863f3cdfdf892c", "size": 361},
+    {"path": "/usr/share/icons/hicolor/128x128/apps/libreoffice-math.png", "sha256": "825d4ea5cc5f7657378f80eb95f30d830444f859afdd0080c92a09cdd52c9a16", "size": 4790},
+    {"path": "/usr/share/libreoffice/help/media/helpimg/starmath/mi21608.svg", "sha256": "6ce9a1af1a22acbb8767d2f078e14650270659470b1c51fb445be28e102971e4", "size": 1738},
+    {"path": "/usr/share/javascript/mathjax/jax/output/SVG/autoload/multiline.js", "sha256": "6af4a8967c1bda74e03bd01b7ddfc34c422ac6a6309efa8dc89479e0e99fe972", "size": 12203},
+    {"path": "/var/lib/dpkg/info/libnss3:amd64.md5sums", "sha256": "fbbc832797897dcb82df1ff00b300c3f9edd536fd66f3ba77cb0355aaaa979ba", "size": 1205},
+    {"path": "/usr/share/icons/Mint-Y/apps/48/mpv.png", "sha256": "6804de159e734f6d2a026d4d92e42cf8cf88525767b69d3944ad26fcaead49df", "size": 1770},
+    {"path": "/usr/lib/modules/5.15.0-41-generic/kernel/drivers/net/phy/dp83822.ko", "sha256": "31fec17e3d376355d8dfe6d02a3a2e1bd3e5e938f912d7541222986c53ac79d9", "size": 18969},
+    {"path": "/usr/lib/modules/5.15.0-41-generic/kernel/net/ipv4/netfilter/nf_socket_ipv4.ko", "sha256": "0e32275e17f5c93beef247c2e86c8849c897505e970bb622a9bbe587ec0591a9", "size": 7825},
+    {"path": "/usr/share/man/de/man1/tload.1.gz", "sha256": "dd83b7111e306934e404091aaebdb97dc16f81a889c22e901094bd1a1fb15282", "size": 1025},
+    {"path": "/usr/share/icons/Mint-X/emblems/24/emblem-symbolic-link.icon", "sha256": "39f4772870af24771cd15810c996f228608fb0ca58b1776896755cbe90534867", "size": 40},
+    {"path": "/usr/share/fontconfig/conf.avail/64-15-laksaman.conf", "sha256": "08db94eb2f12006670ebc85c3526f8e802dd30521854821db3f5dffcf881eef8", "size": 191},
+    {"path": "/usr/share/app-install/desktop/five-or-more:five-or-more.desktop", "sha256": "07cd61d7fc652e91d9f546885a71c610952e9a7b9ff983dc682bb12e5407c0f7", "size": 381},
+    {"path": "/usr/share/liblouis/tables/my-g2.ctb", "sha256": "ab76a449d639108157bcd816ffedeafbc18d2e81e50921f6ec3d60606ac030f9", "size": 130322},
+    {"path": "/usr/src/linux-headers-5.15.0-41/scripts/syscallhdr.sh", "sha256": "a0faed17e23781d10296eeebe89a7ed35cd80e70ce309c309b95fb916fee779f", "size": 1935},
+    {"path": "/usr/share/man/man5/org.freedesktop.resolve1.5.gz", "sha256": "8fa603d377b1022b7a333d17c472634baed512e6899da99b3b20bb5fdc73bbfb", "size": 10806},
+    {"path": "/usr/src/linux-headers-5.15.0-41-generic/include/config/NFP", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
+    {"path": "/usr/share/icons/Mint-X/apps/48/youtube.png", "sha256": "cd3620270c4235837aec5e7ddc140a11b852e70f643c352ab448eda42ccbcca0", "size": 2708},
+    {"path": "/var/lib/dpkg/info/libxtables12:amd64.triggers", "sha256": "5d84abb82775d01b9d3656b045595eb316da0f59d5b007e4612bca4ef0d057b3", "size": 72},
+    {"path": "/usr/share/app-install/icons/fcitx.svg", "sha256": "52965f102842d0d547a272ef30aa0548384bb1e8c6256da814cdf617ce53f198", "size": 98307}
+  ]
+}

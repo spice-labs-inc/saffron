@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/amazonlinux-2-kvm.qcow2",
+  "imageBasename": "amazonlinux-2-kvm.qcow2",
+  "filesystemType": "xfs",
+  "totalFiles": 38529,
+  "totalDirectories": 4823,
+  "sampleFiles": [
+    {"path": "/usr/bin/ssh-keyscan", "sha256": "5076c700eb27454be44c35ac2c3f020e9774593f54e69765b93a1dbc350fefcf", "size": 432720},
+    {"path": "/usr/lib64/python2.7/site-packages/cryptography/hazmat/backends/commoncrypto/backend.py", "sha256": "fddebbd4a168cf73d0de7f8f7a51e3739180dddf5a45988eccd4bbfa59f43858", "size": 8840},
+    {"path": "/usr/share/man/man3/globfree.3.gz", "sha256": "0a51822ca2106c4bc04ea6d69c0fdac87eefe35048ee4b8db5152d76b028abb9", "size": 36},
+    {"path": "/usr/lib64/python2.7/site-packages/PIL/FliImagePlugin.pyo", "sha256": "47a20c33e223f0732220711ca27554953e658925a22b8a403760f269299ff712", "size": 3586},
+    {"path": "/usr/lib/python2.7/site-packages/awscli/examples/wafv2/list-available-managed-rule-groups.rst", "sha256": "97971ec08afe3ffe6b9ec572ff0e883463b1c9fbd653139e90cec6f3f38ec549", "size": 4454},
+    {"path": "/boot/grub2/i386-pc/xnu_uuid_test.mod", "sha256": "e02b4c518843e06bf0806617fa2b4a15e03b37f2e8117c05716b2c72c6fb8d9b", "size": 2016},
+    {"path": "/etc/selinux/targeted/active/modules/100/geoclue/hll", "sha256": "5955fcb23916ce81ae75c62df8570edfbe8c806a76b53c7a158fe2d6cae621d7", "size": 9669},
+    {"path": "/usr/share/doc/gettext-0.19.8.1/COPYING", "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903", "size": 35147},
+    {"path": "/usr/share/man/overrides/man3/rintl.3.gz", "sha256": "b3eafa07a01cb537dc577b2b9b2c03e3dc900fe80b80b55b5daf32047d7e4155", "size": 36},
+    {"path": "/usr/share/doc/openssh-7.4p1/PROTOCOL.chacha20poly1305", "sha256": "d3d2451150bb9520fa1cf4d86bd9efa28da930483119ba7c510a90f828c90eb0", "size": 4625},
+    {"path": "/usr/lib/dracut/modules.d/90dmsquash-live-ntfs/module-setup.sh", "sha256": "05942696f140e23d85031b58b31dd2ed823185f2246de952d20793e8028c89ba", "size": 300},
+    {"path": "/usr/lib/python2.7/site-packages/babel/localedata/lv_LV.dat", "sha256": "7b7d795b1e70065dfa03c49fc4b3fa37e76fca56c8063ad9d7c0b49cc758ef7f", "size": 364},
+    {"path": "/usr/share/vim/vim90/syntax/d.vim", "sha256": "af0f75d8c17cbcb1586fd077dd9d6a974f29927b0f0d95dd9e6cb12d54cb4d10", "size": 28631},
+    {"path": "/usr/share/man/man1/lsmd.1.gz", "sha256": "3badca63251153e9268af27dc4b6c36629ab61242060e6ec5d77e8d531ea8e6a", "size": 441},
+    {"path": "/usr/lib/python2.7/site-packages/botocore/data/ec2/2014-10-01/service-2.json", "sha256": "48941953037c3e88b5a998e829e92450364ccf15608752447b35eef3902e3d7e", "size": 566499},
+    {"path": "/usr/lib/python2.7/site-packages/jsonpointer.py", "sha256": "6e1c8ea75a3fce9199fc2e818ce433355eb893ec1c4e07fe7d8fc4ff6c453f78", "size": 9367},
+    {"path": "/usr/lib/python2.7/site-packages/babel/localedata/gv.dat", "sha256": "c6998bea7f25d3ac7cc08f978951e458427d0698547f083042ca30c49d8716ae", "size": 2559},
+    {"path": "/usr/lib/python2.7/site-packages/awscli/examples/resource-groups/list-groups.rst", "sha256": "151bb30b638d6e0801df25f8379be1ca912952e10f5d94f803851293a446052b", "size": 955},
+    {"path": "/usr/share/perl5/unicore/lib/Sc/Geor.pl", "sha256": "8a1da4c1240aa7cb6aecef1ff6d95f554d0350af80fdd98bcd2534f388d05fbc", "size": 491},
+    {"path": "/usr/lib64/python2.7/unittest/test/support.py", "sha256": "bd63b2393a258921d02bc090dfac34715165f58d7000c6d213b86b34676a5937", "size": 3471}
+  ]
+}

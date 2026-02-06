@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/openwrt-23.05.2-x86-64.qcow2",
+  "imageBasename": "openwrt-23.05.2-x86-64.qcow2",
+  "filesystemType": "ext4",
+  "totalFiles": 1067,
+  "totalDirectories": 112,
+  "sampleFiles": [
+    {"path": "/usr/lib/opkg/info/procd.control", "sha256": "c21fd1896d7406fc412b51d18b1da41ece1d5491e367575e025b2bb43491c8b8", "size": 479},
+    {"path": "/usr/lib/opkg/info/kmod-amazon-ena.control", "sha256": "f91c92c7b19049887737c725e0dbbe4095b876642b265bed6f8483b3a55ecd78", "size": 385},
+    {"path": "/usr/lib/opkg/info/kmod-nls-iso8859-1.control", "sha256": "8458e4b48baf89e741db8df794b076acf5525ab9126305efaadcaabd46f699a3", "size": 346},
+    {"path": "/etc/modules.d/nft-core", "sha256": "c14684bbfe7b676d538843a871c61a8401df2bd672ad3d63a261ac5324dd1518", "size": 157},
+    {"path": "/www/index.html", "sha256": "6f66a0cc3ec51681e8f59707345ef508d237df8feedf96276e73083bce0ecf6f", "size": 780},
+    {"path": "/usr/lib/opkg/info/libc.list", "sha256": "f0d784878fb87465df5ad32fda22f90fda0d8c171fb42b14ff4d5e8a1dd257b9", "size": 51},
+    {"path": "/lib/modules/5.15.137/forcedeth.ko", "sha256": "30aa9a36883e46c3327d5ada8ab9b158c2521dd778aaf47d4b4b4660a6b32534", "size": 92120},
+    {"path": "/etc/rc.common", "sha256": "143c915143c351bd96c5e8007d56e191b78975fd75a32709acd42243d68d230d", "size": 3552},
+    {"path": "/usr/lib/opkg/info/ucode-mod-ubus.control", "sha256": "e5aff501852b65605508c1c7c329d2e23c9ca85f8c03523fe837d284218f325f", "size": 413},
+    {"path": "/sbin/sysupgrade", "sha256": "0aaff56c2130e12b24c8181e865f129c42bdee69571d5c7a307bdcfae73439e3", "size": 10532},
+    {"path": "/usr/lib/opkg/info/kmod-nf-flow.control", "sha256": "741b3a2b806e20e9d7efe25f16d08a4dd43b6aff7bb503ba8aa95c1973cd61a6", "size": 324},
+    {"path": "/usr/lib/opkg/info/uhttpd.prerm", "sha256": "41e62438f65308026184be1d4d931ae9100923e5ae97b146fb678e5b6cd0fc6c", "size": 117},
+    {"path": "/usr/share/acl.d/ntpd.json", "sha256": "647d0eba0d614e5be1631cfe7af98dce5453f7cdd57e3088dc2655249634bd1e", "size": 84},
+    {"path": "/usr/sbin/dnsmasq", "sha256": "356ef931adfbf5a583339b97e0b98ee07726af10beea05743b4f26835b3b87af", "size": 268977},
+    {"path": "/etc/passwd", "sha256": "341cd968137702a34a30768909e35489e48249ebd7ec0dd0841dd4323bf37ecc", "size": 374},
+    {"path": "/www/luci-static/resources/svg/channel_analysis.svg", "sha256": "e18ffa66c4f8805ef601074415c749cb1290f297870c396c5f71ab0ce795b16b", "size": 1305},
+    {"path": "/usr/lib/opkg/info/luci-light.control", "sha256": "4ee6f295dec4459882f8145515d9b4f9657f593fa43b5f08a74f4216e1ce38ff", "size": 491},
+    {"path": "/lib/modules/5.15.137/nft_reject.ko", "sha256": "62f13caf6092fb041c488a03f437ad2614942e39dc638104ef4c94ff0b56217c", "size": 4848},
+    {"path": "/usr/lib/opkg/info/fwtool.prerm", "sha256": "41e62438f65308026184be1d4d931ae9100923e5ae97b146fb678e5b6cd0fc6c", "size": 117},
+    {"path": "/usr/lib/opkg/info/kmod-igb.prerm", "sha256": "41e62438f65308026184be1d4d931ae9100923e5ae97b146fb678e5b6cd0fc6c", "size": 117}
+  ]
+}

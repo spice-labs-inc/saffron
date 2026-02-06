@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/MicrosoftOs-21.30HardDisk.vhd",
+  "imageBasename": "MicrosoftOs-21.30HardDisk.vhd",
+  "filesystemType": "vfat",
+  "totalFiles": 276,
+  "totalDirectories": 11,
+  "sampleFiles": [
+    {"path": "/OS2/OS2.INI", "sha256": "46eff58912646c1103901b2945cd79c604fc020da4868cad465dc2add4bbc10b", "size": 10333},
+    {"path": "/OS2/INSTALL/DDINST1.DLL", "sha256": "d3a70d9717b8ef30dc1917b8d7b82255f5e090e773b5f15bc6102128e9b6de5e", "size": 567},
+    {"path": "/OS2/DLL/PMEXEC.DLL", "sha256": "ce98756fc8cc5df2f61b7803b67dec3063bd16c5798332840fe5a1e3c0323e56", "size": 14064},
+    {"path": "/OS2/DLL/PMVIOP.DLL", "sha256": "1b91c0da78427b30a3d3281d6be6a04848666da7eb49fec10f61e32ed0eeaf9b", "size": 49360},
+    {"path": "/OS2/DLL/PMSPOOL.DLL", "sha256": "47658fad0bff770e81192283fb66d81f948bc0aae95bae69d7b15aa901cfa606", "size": 27136},
+    {"path": "/OS2/DLL/PMC60000.TFF", "sha256": "bcaf83f8e885a233d99addb4d54016216347b7177d7025ad35018a3855edf8cd", "size": 2872},
+    {"path": "/CONFIG.SYS", "sha256": "a86c923542e8f8efe399e605d8dba88e541d92f9acc51ffb02a790e5fe89c4bf", "size": 1024},
+    {"path": "/OS2/SUPPORT/CDAUDIO.EXE", "sha256": "a3fc2927660463f51a0a88e6bd87de89dcfe18c6c6541f5770e3dc794ec9b6e2", "size": 31520},
+    {"path": "/FT.VSD", "sha256": "d9720da2a77f949c38214b7f65f0acd371dd0ec80d78ecffa02dc38da3dddfd0", "size": 6806},
+    {"path": "/OS2/PICSHOW.EXE", "sha256": "6ec8a65805fae5c054e20ea2948c8fafd6f946da6ddbe58722e0457a76ae36cf", "size": 48736},
+    {"path": "/OS2/SYSTEM/REX.MSG", "sha256": "a977ad6560ffd46d315832bbbd2c06a63b8d5751f617ad738ce128a5e19ae283", "size": 2504},
+    {"path": "/OS2/SUPPORT/TAPETSD.MSG", "sha256": "6f9466da667f25d797030868acf7ac2071eba7af8d62aedad95e56042244e8fe", "size": 1089},
+    {"path": "/STDDISK.VSD", "sha256": "fd05b58ce68ac1db7f7ef841b48fce9411204d952aa722584d01fc31c038bbe4", "size": 4432},
+    {"path": "/OS2/DLL/PMSPL.DLL", "sha256": "d54b713370ce596417dac85ab4d09cfcefa901ff55f4620fbb692d5d604b77bc", "size": 105728},
+    {"path": "/OS2/SUPPORT/ESDI-506.TXB", "sha256": "d18ca9ef5ca67576d4c0c5d0c9c8d3a7821c3d05242213d546eb797b6824ea31", "size": 352},
+    {"path": "/OS2/SUPPORT/STDCDROM.VSD", "sha256": "f1644cd1856a8b7963798b994f9ccea5cb5c12d3c6e55c27f8834a87c480157e", "size": 4997},
+    {"path": "/OS2/SUPPORT/TAPETSD.TXB", "sha256": "a1626557eae5b9d999ec0f87d75a6e3b5f48070fb75e7829e0b7a3f510c0067c", "size": 268},
+    {"path": "/OS2/EXTDSKDD.SYS", "sha256": "75e6280a639b3f07d13d859d87239d875ebc7c89d41635f8a33ae4d111320ef2", "size": 1668},
+    {"path": "/OS2/SUPPORT/VIEWCFG.EXE", "sha256": "f529536af53ef63bb96e53987b1cb7e8258e7aa5aec84272c3b7c7bc609b510f", "size": 27122},
+    {"path": "/OS2/RXSUBCOM.EXE", "sha256": "28e43a02fd2c2af08a53b51d6d5b1a198b8b183dad7d512facf5e5858767521a", "size": 19634}
+  ]
+}

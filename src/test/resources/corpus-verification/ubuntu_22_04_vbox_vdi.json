@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vdi/modern/ubuntu-22.04-vbox.vdi",
+  "imageBasename": "ubuntu-22.04-vbox.vdi",
+  "filesystemType": "unknown",
+  "totalFiles": 128783,
+  "totalDirectories": 15622,
+  "sampleFiles": [
+    {"path": "/usr/share/bash-completion/completions/lsscsi", "sha256": "31ea9a4902fcbdc0a5cb213fa8f4a2cfbff5d912092d3329e38f836f393c0cfe", "size": 594},
+    {"path": "/var/lib/systemd/deb-systemd-helper-enabled/snapd.recovery-chooser-trigger.service.dsh-also", "sha256": "bc3e7bbbc09f22d20ffc45b98910b172614f251d257d7320dd8988ca5b041e0b", "size": 83},
+    {"path": "/usr/share/terminfo/r/regent60", "sha256": "cafa504c29337853740219ede94b4ce482f4dd9b0f0e25e8512017a2e8038c38", "size": 728},
+    {"path": "/usr/share/help/hr/gnome-help/report-ubuntu-bug.page", "sha256": "1db9cf13606848cb13cab3f4ec37b3e9e243edf69406b3718fe3bbded5f7edf4", "size": 3350},
+    {"path": "/usr/share/doc/alsa-base/driver/hda_codec.txt.gz", "sha256": "2eff928c2312b6d7ebdcad761050b966e0fdbf35954b8e4f1fc993eca8469e52", "size": 4022},
+    {"path": "/usr/share/poppler/cMap/Adobe-Korea1/KSCpc-EUC-UCS2", "sha256": "f53b5d1db587a20a2bf9786cf6fd41f6814a884009ae5362c7aa6897efb1b7ab", "size": 17200},
+    {"path": "/usr/share/mime/application/sdp.xml", "sha256": "3ffa3693add61d2ba8db96b425c9fb68a34ab54a1dafbec4970709fbb04e2bc3", "size": 3844},
+    {"path": "/usr/share/perl5/libwww/lwptut.pod", "sha256": "ffb5d5f3a6ce4086e382a0ad88a7cb704aad9e737d20982f3ac9f8876cc5c53a", "size": 24950},
+    {"path": "/usr/share/libreoffice/help/media/icon-themes/cmd/sc_badcellstyles.svg", "sha256": "c3dbaf5b7d74db699885c0fa54f50f0a79b2b905d5c387ad97fbadc99f2df070", "size": 1311},
+    {"path": "/usr/src/linux-headers-5.15.0-25/arch/arm/mach-pxa/include/mach/poodle.h", "sha256": "41c0f1dafc4fea6a86c2614341e0c597e77d9794461fe146689ecfd92dfb3d08", "size": 3273},
+    {"path": "/usr/sbin/mkhomedir_helper", "sha256": "9ee7be9dd384dbb5f5b17f222fcec2390cf8c4158eb6feae31c93d84b3b85f81", "size": 22704},
+    {"path": "/usr/share/icons/Yaru/scalable/devices/thunderbolt-symbolic.svg", "sha256": "ee824626a548eb4b20bd12f670420c45a8bb2f5eb38ce76f520ebfcea9e3c41c", "size": 359},
+    {"path": "/usr/share/man/man1/dbus-send.1.gz", "sha256": "f497f43de905f7be7c064089f76c608dbe70c466683cd85b7278d015702f0381", "size": 2205},
+    {"path": "/usr/share/icons/Yaru-sage/256x256/places/folder-templates.png", "sha256": "56e0c4b77a8c2124f864d9fbce29a4d96701c18d16f2189b9f29541b70204220", "size": 9142},
+    {"path": "/usr/share/media-player-info/samsung_yp-s5.mpi", "sha256": "c93525e3d6389eab21a868b93a7597339214a0491dfa65eaa05cf4c057932282", "size": 179},
+    {"path": "/usr/src/linux-headers-5.15.0-25/include/linux/fcdevice.h", "sha256": "c4c7f34bc5a0dea3a267fc680a724a003cab4a3f29ea6e934f6a1fdca9d1c1ca", "size": 774},
+    {"path": "/usr/share/icons/Yaru/32x32/emblems/emblem-default.png", "sha256": "ea54cbc3b231f36b813a80d81babfcc378e37111835613ced81eb4c29df4e6b1", "size": 859},
+    {"path": "/usr/src/linux-headers-5.15.0-25/arch/alpha/include/asm/user.h", "sha256": "ebdb29ce8537d9d5efe4fbf73831d48e0f3a6ca519b987a7abb6758d1ee2e0a1", "size": 2192},
+    {"path": "/var/lib/swcatalog/icons/ubuntu-jammy-universe/64x64/frozen-bubble_frozen-bubble.png", "sha256": "0588e3a6ff6cf230b7536a9c1f412d28f43d024481119ae8c184f009a7691741", "size": 4601},
+    {"path": "/usr/share/man/es/man1/dpkg-split.1.gz", "sha256": "81476a7c1453163e4cf59f8303203ce961f3250b672d844f104d2bfb3806245b", "size": 4358}
+  ]
+}

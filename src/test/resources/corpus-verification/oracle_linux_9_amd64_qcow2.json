@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/oracle-linux-9-amd64.qcow2",
+  "imageBasename": "oracle-linux-9-amd64.qcow2",
+  "filesystemType": "xfs",
+  "totalFiles": 22960,
+  "totalDirectories": 4818,
+  "sampleFiles": [
+    {"path": "/usr/share/locale/ja/LC_MESSAGES/bash.mo", "sha256": "a93557eb45c5a362304ec5ed1379425a519c000800cd6221e444b897fdfeffaf", "size": 100113},
+    {"path": "/usr/lib/kbd/keymaps/xkb/us-dvp.map.gz", "sha256": "6b7ac18d29e765383fa2cdabfb4f59598913b262d3eb28309fcce98cc24d8858", "size": 3781},
+    {"path": "/usr/share/zoneinfo/America/Menominee", "sha256": "02bbfd58b6df84d72946c5231c353be7b044770969d3c1addf4022c46de0674e", "size": 2274},
+    {"path": "/usr/bin/od", "sha256": "54aac8e2f076c601e5236d6ab025a4ee5ce416ae786ea5ad88a7b2096a5844bb", "size": 65408},
+    {"path": "/usr/lib64/python3.9/site-packages/setools/diff/__pycache__/properties.cpython-39.opt-1.pyc", "sha256": "df1b747e6771fa254e2e35f4060eb07899b6c32fc4b1c0e36b246c29ad0323d9", "size": 1704},
+    {"path": "/usr/lib/locale/en_ZA.utf8/LC_NAME", "sha256": "58672646ba335323eaf0c16503b1efccbabcf382f768d53fa8cad2292098bc64", "size": 73},
+    {"path": "/usr/share/zoneinfo/posix/Asia/Ulaanbaatar", "sha256": "bb2412cc8065d1fd935c7ae6526dd53ecd42f6ba34d77858980971eb25238776", "size": 891},
+    {"path": "/usr/lib64/python3.9/zoneinfo/_common.py", "sha256": "240965ebd66fac3d91dcbcaea6fab0f6bfec0e5f7239708e0a916c4e5a5976ce", "size": 5320},
+    {"path": "/usr/lib/python3.9/site-packages/cloudinit/config/__pycache__/cc_scripts_user.cpython-39.pyc", "sha256": "9e6f109ea1a7adc8382e37a5e3b80b82b4ef58a67c3188ea1c63afd2512a7532", "size": 1682},
+    {"path": "/var/lib/selinux/targeted/active/modules/100/cgroup/hll", "sha256": "53bc1903850d2df502480de1c0534ef17d563b1d3bbd985f02f1d7ab6b855b5e", "size": 9548},
+    {"path": "/usr/lib/python3.9/site-packages/cloudinit/dhclient_hook.py", "sha256": "9a20507c1b8759f0609324c4f9a040fcc3596dc92e49d5a40a0261316eb11a73", "size": 2549},
+    {"path": "/usr/share/zoneinfo/right/Zulu", "sha256": "c8d2a43e0cd8695bda98b5957284bd1c80983836c79994f4ae0ff46281c2f05f", "size": 664},
+    {"path": "/usr/bin/pwscore", "sha256": "42d94f3b0e1fc8832ad2a3bf4314faad930fda0b9395f6ec5d917430933d37ba", "size": 16064},
+    {"path": "/usr/lib64/python3.9/site-packages/setools/checker/__pycache__/__init__.cpython-39.opt-1.pyc", "sha256": "29b4addeb8c18a4f6ad1ac2b79d789eb2c21c07106801d8a006e62ee57d67559", "size": 325},
+    {"path": "/usr/lib64/python3.9/lib2to3/__pycache__/__main__.cpython-39.opt-2.pyc", "sha256": "f2f6fee62356d2ba5dcd8529fdd46988110275cdf9ee27d506a156a72cf9e557", "size": 215},
+    {"path": "/usr/lib/python3.9/site-packages/cloudinit/config/cc_refresh_rmc_and_interface.py", "sha256": "1232dbb9a96e2d7ada337206424318676acd3b7c2609730036921baf81828adf", "size": 5614},
+    {"path": "/boot/grub2/i386-pc/raid6rec.mod", "sha256": "ec80dbe720cc6cb4a4594230512a29e00a7406ea1255d36aa335977d9ba1d63c", "size": 2844},
+    {"path": "/usr/lib/kbd/unimaps/8859-14.a0-ff.uni", "sha256": "86067446abe7e9ab4885bba5be70f53f74321274407949eee7411a54aebb3d24", "size": 4816},
+    {"path": "/usr/lib/python3.9/site-packages/cloudinit/sources/helpers/vmware/imc/__pycache__/nic.cpython-39.pyc", "sha256": "2fe6ba54510cedf2af94e95d88a19bee0a746611af5824315c55960153a52587", "size": 4456},
+    {"path": "/usr/share/locale/ta/LC_MESSAGES/passwd.mo", "sha256": "a2c929afa23cfcd4c11ea63b2094fc6b61cb0be43a87c6cfec8af36a75e8e3f6", "size": 8437}
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "imagePath": "/corpus/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/Windows NT Workstation 4.0 Hard Disk.vhd",
+  "imageBasename": "Windows NT Workstation 4.0 Hard Disk.vhd",
+  "filesystemType": "ntfs",
+  "totalFiles": 2245,
+  "totalDirectories": 115,
+  "sampleFiles": [
+    {"path": "/WINNT/INF/mdmadc.PNF", "sha256": "0326e0b496356d2764f2b8eace4169f7d4612a928484b4f1e4f9130316a58a34", "size": 15964},
+    {"path": "/WINNT/system32/restore.exe", "sha256": "0ea61cc930d7d5ca70dd9be3e147342633cbf5f3c6d8bb76cc377ddb825423cb", "size": 64272},
+    {"path": "/WINNT/system32/posix.exe", "sha256": "a23cae22fd9237ab5dc3c6e4cfff81f5e35e0aeb81eab6891f2b1d51042db5b5", "size": 68368},
+    {"path": "/WINNT/ShellNew/amipro.sam", "sha256": "c4f73fe84bb916ac77b2cbc70964a26d5547c0a601e5e5c1eda57aee43cc759d", "size": 4570},
+    {"path": "/WINNT/system32/attrib.exe", "sha256": "4b6d603b178765ac3b59f0c44c5bbb0430689b2c2313fa27ea5419f7d697e034", "size": 27920},
+    {"path": "/WINNT/Help/int-mail.hlp", "sha256": "fbd5bb8673723f5989c0f325325a9dbb9c18c7da25c48b5e836a15e55ca8e725", "size": 36853},
+    {"path": "/WINNT/Cursors/barber.ani", "sha256": "d343070c13b5ed2e221cdf8e01e54d3860da06bb31b16c33b3e39ed2d4802a9e", "size": 8660},
+    {"path": "/WINNT/INF/mdmtexas.inf", "sha256": "a773b0bb68aee906730ea189cf676578c4a873e7ea646d8be5328b94ba0f08d2", "size": 23435},
+    {"path": "/WINNT/system32/wgpoadmn.dll", "sha256": "7f07ac0c5c4806fa3f3c9e775cf676a6a91ffff6e1eedfdf39a5a28c194b51c5", "size": 87312},
+    {"path": "/WINNT/system32/XCOPY.EXE", "sha256": "6f5c2f222aa88583b8e0432ad1d2a548364d2c2fc22441150a73537e71d81652", "size": 47376},
+    {"path": "/WINNT/Help/mspaint.hlp", "sha256": "733c4d0815a327415b08c22708bc7e088361d9acd14bc8635ce4ac9bfe0adb1d", "size": 39803},
+    {"path": "/WINNT/system32/MPR.DLL", "sha256": "67cc1b4abe1a6a7bf21ddf32921c51f6786070f3437a6369576fdb77e18bbf9f", "size": 59152},
+    {"path": "/Program Files/Windows NT/Pinball/SOUND12.WAV", "sha256": "9902227bb6cedede8636c99688391d1a0a77428193e3a12dd7fb12401a598d5a", "size": 4296},
+    {"path": "/WINNT/system32/notepad.exe", "sha256": "1e09c1b58d78f1a415eb90f480c020998297a918cf5e658a1f9b22f5d651d2e9", "size": 45328},
+    {"path": "/WINNT/system32/oitwa400.dll", "sha256": "f8749b92b0e3840f0344d06c21ac96fae9e9ddb346d9716262a87de83f424359", "size": 24336},
+    {"path": "/WINNT/system32/secsspi.dll", "sha256": "ae65408c7449c131727b9901650c8f254d0cca737709f1db987df48982243673", "size": 14608}
+  ]
+}

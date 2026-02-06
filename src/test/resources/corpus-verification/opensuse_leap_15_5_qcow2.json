@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/opensuse-leap-15.5.qcow2",
+  "imageBasename": "opensuse-leap-15.5.qcow2",
+  "filesystemType": "unknown",
+  "totalFiles": 21401,
+  "totalDirectories": 2768,
+  "sampleFiles": [
+    {"path": "/usr/lib64/gconv/ISO-2022-JP-3.so", "sha256": "dfaae87f31a2113f1eb8c8beda0cdfa756e11641eb266443a97fe438a81eedc0", "size": 28728},
+    {"path": "/usr/lib/python3.6/site-packages/salt/states/grafana_datasource.py", "sha256": "c3d0f6258a043cbfd4057762a8eedede7d40bbd12d7140877c0c5c0f5027683d", "size": 5436},
+    {"path": "/usr/lib/python3.6/site-packages/salt/cloud/clouds/proxmox.py", "sha256": "5c244809007cc91bc4d0adb2b5fc80f5f08c8a80eb13167c237c0266b6004111", "size": 40748},
+    {"path": "/usr/lib/python3.6/site-packages/pytz-2022.1-py3.6.egg-info/zip-safe", "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b", "size": 1},
+    {"path": "/usr/sbin/mkfs.ext4", "sha256": "be8711d421272ea147043a9ff41f6c8d42f51165e7e7f171c5f6c10dac366b84", "size": 135536},
+    {"path": "/usr/lib64/libsqlite3.so.0.8.6", "sha256": "3decdaaff54b84d72e4679c69c884bb80d54f51cff51dc390dc04a1872b7976a", "size": 1347272},
+    {"path": "/usr/share/licenses/sysconfig/COPYING", "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643", "size": 18092},
+    {"path": "/usr/lib64/python3.6/genericpath.py", "sha256": "fae1f627b5c8408c5f797f9f7170d90fee55faf178b6a65df934ae10e81deca9", "size": 4756},
+    {"path": "/usr/lib/dracut/modules.d/35network-legacy/parse-bridge.sh", "sha256": "c44eb6392d0146c9ee7526c34356e10fbf58b3896e5a24eb381d8789d83bf032", "size": 1178},
+    {"path": "/usr/lib/python3.6/site-packages/salt/modules/win_dacl.py", "sha256": "cd3c6468a27b07d6d10558a8c832f9c9746a5105541c8e7b9d2bb45b6d109079", "size": 33045},
+    {"path": "/usr/share/kbd/consolefonts/lat9w-08.psfu.gz", "sha256": "b91e1eea4e6e360b1e137c56166808162dc84a8021156395f6cb8964f0f49379", "size": 1787},
+    {"path": "/usr/lib/python3.6/site-packages/setuptools/command/__pycache__/egg_info.cpython-36.opt-1.pyc", "sha256": "00cc55ef51f3f979c371ea082e0575a0a870ef81a2fa687fc3fb3bd735989629", "size": 21500},
+    {"path": "/usr/lib64/libisccfg-9.16.50.so", "sha256": "4729722bd6bd5b98f4c01ffbee9e97c5883b622351be8553571fe9cd72543bf4", "size": 215272},
+    {"path": "/usr/lib/python3.6/site-packages/salt/engines/__pycache__/test.cpython-36.pyc", "sha256": "187c2eb7a0a86ccfa0297fc8c91a55bd6d6a0489eb5569f20539947446b61b91", "size": 982},
+    {"path": "/usr/lib/python3.6/site-packages/blinker-1.4-py3.6.egg-info/PKG-INFO", "sha256": "df876a158431b281f4aca0294bdbbf11da77c38ec9271aa2b0892e7a63da849f", "size": 3935},
+    {"path": "/usr/share/kbd/keymaps/i386/azerty/wangbe2.map.gz", "sha256": "eb6bd01d5d5bbd5799fdac13d8770639a338945254b4236e61b175a7998a2baa", "size": 1786},
+    {"path": "/usr/lib64/python3.6/ctypes/macholib/__pycache__/framework.cpython-36.pyc", "sha256": "b54bc816241e84599c8760ab8885a9ae4094d865a9f4746b8df10dcf55675284", "size": 2184},
+    {"path": "/usr/share/kbd/keymaps/i386/qwerty/pt-latin9.map.gz", "sha256": "92d7afb6cb9f5a5975bcb06ff25bb5cc77b3d658c30e0490274b5083c40aef0e", "size": 930},
+    {"path": "/usr/share/crypto-policies/back-ends/FUTURE/gnutls.config", "sha256": "df06876e4bf86a8f7571278f6d5e939c60e5f762027059546ca77986a2db159e", "size": 1710},
+    {"path": "/usr/lib64/python3.6/urllib/__pycache__/parse.cpython-36.opt-1.pyc", "sha256": "7f2ebc9b5fbfd7eee7f0e0ac5b72d3dce21522e10c50f06b03c72a2e664ff5ea", "size": 31329}
+  ]
+}

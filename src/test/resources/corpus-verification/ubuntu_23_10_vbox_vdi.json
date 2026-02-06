@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/vdi/modern/ubuntu-23.10-vbox.vdi",
+  "imageBasename": "ubuntu-23.10-vbox.vdi",
+  "filesystemType": "unknown",
+  "totalFiles": 122304,
+  "totalDirectories": 14920,
+  "sampleFiles": [
+    {"path": "/usr/lib/firmware/radeon/BONAIRE_mec.bin.zst", "sha256": "df40bbcd786d2c0660fcce6945c0b72cafbace668c401e5c3cb5d4e2b42418f0", "size": 8509},
+    {"path": "/usr/share/doc/libpcre2-8-0/changelog.Debian.gz", "sha256": "47098ff7919792451c1c0eef05b1dc1c8018c58c263d215240736983161bf71e", "size": 1409},
+    {"path": "/usr/src/linux-headers-6.5.0-14/arch/sh/kernel/Makefile", "sha256": "86557e72beaa695c239b8ee0653df2e958602d9e92b21a79a8b0b87f53817adc", "size": 1534},
+    {"path": "/boot/grub/i386-pc/lsapm.mod", "sha256": "2019a3536b63e9238497e7c1c5748fcc8e196a11d6205f1fff186397229e7e8c", "size": 2236},
+    {"path": "/var/lib/dpkg/info/gstreamer1.0-plugins-base:amd64.list", "sha256": "15764aab38710f3a79ca341183b54aab371f855e906350f2a13ed32d4b8038f1", "size": 1848},
+    {"path": "/usr/share/doc/libbrotli1/copyright", "sha256": "24a64e5bb83d0960d1835696a1e23c0896ad6055b0ca47c66ab0eb9a766324b1", "size": 1354},
+    {"path": "/opt/VBoxGuestAdditions-7.0.6/src/vboxguest-7.0.6/vboxsf/include/iprt/errcore.h", "sha256": "cfb476fb8b083dac6a2a79c3bae936ad2dcd9794e0530d729460d1c6cdc08f91", "size": 33693},
+    {"path": "/usr/lib/python3/dist-packages/pygments/lexers/__pycache__/math.cpython-311.pyc", "sha256": "330aeb292c73961e016974e921d1bf1da6276729f90916e0832469677311a3d1", "size": 1185},
+    {"path": "/usr/bin/zipgrep", "sha256": "d3da1cedec94b40ce31b1a9ffdb5f7b2d2d6ff0c2bd8bd72f044913181f3928d", "size": 2959},
+    {"path": "/usr/share/locale/ar/LC_MESSAGES/libapt-pkg6.0.mo", "sha256": "45862154308a8ecab92e76ba87a805716e9c92311e6fa1069ff860cf8e11e65b", "size": 5131},
+    {"path": "/usr/share/icons/Adwaita/16x16/actions/zoom-in-symbolic.symbolic.png", "sha256": "d21e630a25ef29e27ffe25cdcd0dc69ea0fb1625afd59327dd1652e21d3d35f0", "size": 143},
+    {"path": "/usr/include/linux/pr.h", "sha256": "164cc599528a82a8c937332e9de36c920d541e967415d5f37f0e03d6bfa1bdcf", "size": 1630},
+    {"path": "/usr/share/perl/5.36.0/ExtUtils/testlib.pm", "sha256": "db553d541d4c48739dfd87d928205c56299d9e738b1cd346da9630cec8ef3f1f", "size": 911},
+    {"path": "/var/lib/swcatalog/icons/ubuntu-mantic-universe/48x48/firewall-config_firewall-config.png", "sha256": "c801f052d34da74a1b06a57782edce11f1c073b000dcb291b311907b33554c87", "size": 3017},
+    {"path": "/var/lib/dpkg/info/libgl1:amd64.list", "sha256": "ccdc1d6d66757a93e8c069aed08c044ef1b52674d1f5515e41e22f643e8610e0", "size": 310},
+    {"path": "/usr/lib/python3/dist-packages/wadllib/__init__.py", "sha256": "3b386dba8d3f4d5ac8cd869c608aec2394089695ba3ead912e344d81492b2af5", "size": 1108},
+    {"path": "/usr/share/evince/icons/hicolor/scalable/actions/annotations-squiggly-symbolic.svg", "sha256": "23f4cc0c92e358775c851012c7d1751c0cd2731dc2a33123538b73c9bade2bb2", "size": 2025},
+    {"path": "/usr/share/man/man1/hex2hcd.1.gz", "sha256": "a9b170f43767d913129836f04a290500e77a4a5eacf1955f2e00c092e4f3b7c1", "size": 261},
+    {"path": "/usr/lib/modules/6.5.0-14-generic/kernel/fs/quota/quota_v1.ko.zst", "sha256": "7d88d34d9d6d31563e78716f678495370a6428213779eecb4a6d217438f47835", "size": 4851},
+    {"path": "/usr/share/icons/Yaru/24x24/legacy/draw-polygon.svg", "sha256": "1585b5ca36732cb69c30fb2208c53e8ab61f555befa6ebabfe1651d3ef0dc234", "size": 6192}
+  ]
+}

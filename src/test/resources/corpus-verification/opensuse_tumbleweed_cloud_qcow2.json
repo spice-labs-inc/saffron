@@ -1,0 +1,29 @@
+{
+  "imagePath": "/corpus/qcow2/modern/opensuse-tumbleweed-cloud.qcow2",
+  "imageBasename": "opensuse-tumbleweed-cloud.qcow2",
+  "filesystemType": "unknown",
+  "totalFiles": 16975,
+  "totalDirectories": 3051,
+  "sampleFiles": [
+    {"path": "/usr/lib64/python3.13/multiprocessing/__pycache__/popen_forkserver.cpython-313.opt-1.pyc", "sha256": "b6732db28527ad8d7447dca0b7ae1f65484b62ceb81d4868b87f375e9dd5c7f0", "size": 4113},
+    {"path": "/usr/share/crypto-policies/DEFAULT/gnutls.txt", "sha256": "85acd6c855017218311edeb0ba15eca5d0f425fe328060e21f5a003ecde2ca75", "size": 3373},
+    {"path": "/usr/lib/modules/6.18.7-1-default/kernel/fs/nls/nls_cp437.ko.zst", "sha256": "bf23967fe2b2d304ac36039272eddbfced4858532f890e45ef24d7b48f6bf1bb", "size": 3547},
+    {"path": "/usr/share/zoneinfo/Brazil/Acre", "sha256": "d20a49525e3a8506e9d0fe978f54b4340ac859e02bcaeb835e3b2576f0791871", "size": 614},
+    {"path": "/usr/lib64/python3.13/__pycache__/zipimport.cpython-313.pyc", "sha256": "0026ffb735855e5ac615475da5152a8e7593a4703ee843a74456c02a4de6a56f", "size": 26509},
+    {"path": "/usr/lib/rpm/tgpg", "sha256": "e04546592dc6358fa5eadc9e95df477974a2c90bce1d6afdf0424b2bcc57742b", "size": 933},
+    {"path": "/usr/share/mime/application/vnd.openxmlformats-officedocument.wordprocessingml.document.xml", "sha256": "247fdd38d5a008294d4479921f985326a68d2912fa4afec50911830513955014", "size": 3212},
+    {"path": "/usr/lib/modules/6.18.7-1-default/kernel/drivers/usb/host/xhci-pci.ko.zst", "sha256": "79e4d12b479f58cf4b4d60d71218b3e709a06bb31a308f32a734072686cb573a", "size": 13100},
+    {"path": "/usr/share/licenses/python313-cryptography/LICENSE", "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb", "size": 197},
+    {"path": "/usr/lib/python3.13/site-packages/urllib3/contrib/emscripten/__pycache__/request.cpython-313.opt-1.pyc", "sha256": "7efbfcadef18c86a2442f07ec080a46f6459a62d35ae69d3bae147d54c65936d", "size": 1434},
+    {"path": "/usr/lib/dracut/modules.d/10i18n/10-console.rules", "sha256": "98ccbc8f85a1dea5c3d371b86d7a7b781019d840fa06786e3765d31f9dd4bdca", "size": 168},
+    {"path": "/etc/selinux/targeted/contexts/default_type", "sha256": "8583ca57f622a7ef83c25b1234a40fe8ac5e89cba4e75b8f20da4f206c830a48", "size": 114},
+    {"path": "/usr/lib/modules/6.18.7-1-default/kernel/crypto/streebog_generic.ko.zst", "sha256": "4f6d73c5075841d37c32b5d924f3b49aa97ef05f2e93faddbdeb904bd8319602", "size": 22883},
+    {"path": "/usr/share/bash-completion/completions/pivot_root", "sha256": "e3fd2fed08fe53b1bdf0b344633375273ce54bdb75c65a4383f2bf29aa9868dd", "size": 387},
+    {"path": "/usr/lib/python3.13/site-packages/jsonschema-4.26.0.dist-info/METADATA", "sha256": "05b189866ca98a96da3934bf6b83687ced3ff85325273b77e16b705f6d8b26d2", "size": 7592},
+    {"path": "/usr/lib/systemd/system-preset/90-default-openSUSE.preset", "sha256": "76cf5586e8798db202a4c676a504a4d82407e7b68e9f090c9fde25040b3eb4b7", "size": 897},
+    {"path": "/usr/lib64/libnl-xfrm-3.so.200.26.0", "sha256": "8a6ac2f8742aa02ce5aca162f90df9da00f222465cd023f8554381a401393a38", "size": 98024},
+    {"path": "/var/lib/selinux/targeted/active/modules/100/raid/lang_ext", "sha256": "d53315bea08cec50d2591fcaf3b32dc5d289cdc6c16b7e8bed8c8e3f7ceaa34e", "size": 2},
+    {"path": "/usr/lib64/python3.13/_pyrepl/unix_eventqueue.py", "sha256": "5977a73d6364d17e7416f91adea640feea5cd4864de1275fe17ac7bb080add4f", "size": 2524},
+    {"path": "/var/lib/ca-certificates/openssl/Microsec_e-Szigno_Root_CA_2009.pem", "sha256": "f56137553ba31a30b1b175c91324841f75be2934c9cd7b84be5b967478366b8e", "size": 1553}
+  ]
+}
