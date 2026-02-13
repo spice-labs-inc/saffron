@@ -1,29 +1,117 @@
 {
   "imagePath": "/corpus/vdi/modern/lubuntu-23.04-vbox.vdi",
   "imageBasename": "lubuntu-23.04-vbox.vdi",
-  "filesystemType": "ext4",
+  "filesystemCount": 1,
   "totalFiles": 203768,
-  "totalDirectories": 14463,
-  "sampleFiles": [
-    {"path": "/usr/share/libreoffice/help/media/helpimg/calcnav.png", "sha256": "ace2447c7ef3f9bb3f230a12ae5a1d323e0f1580486ce57e3e0c4101c376a675", "size": 656},
-    {"path": "/usr/src/linux-headers-6.2.0-20/arch/parisc/include/asm/pdc.h", "sha256": "5ff099c9a9c60779dce6fe2a04f1952d48eed61757aeff03e0e4384dd9fdf8cb", "size": 4324},
-    {"path": "/usr/share/locale/hr/LC_MESSAGES/partitionmanager.mo", "sha256": "0eb81acb6599a93e2dcb83e36ae8897e9b2e74763909b1c9e7e55505d4f33db5", "size": 2790},
-    {"path": "/usr/bin/xvidtune", "sha256": "533ed457d7188eee4edbb89078da144165aa1319521d3e5dcb3edc85a97f82b0", "size": 44808},
-    {"path": "/usr/share/libreoffice/help/media/icon-themes/cmd/sc_selectdb.svg", "sha256": "7e6985b321bb4b9192901acecfc9b9e0db1182d28889f21502ab91f2dd2beaae", "size": 1542},
-    {"path": "/usr/share/icons/Papirus-Dark/16x16/actions/network-server-vmware.svg", "sha256": "ada1fab9240833eef30c3994b7016abe3c32f5aae8f6c95bbc1862514633b33d", "size": 833},
-    {"path": "/usr/lib/libreoffice/share/config/soffice.cfg/modules/sweb/popupmenu/text.xml", "sha256": "53ca9384a2d619e75e4bb076f0f4e43c0bc7ac62ed08254c903835be438b7218", "size": 4300},
-    {"path": "/usr/src/linux-headers-6.2.0-20/arch/powerpc/include/asm/kvm_booke_hv_asm.h", "sha256": "668609687a98dcaa9a6648cc0c964164496c95aa2f4d15bc4a92f32fe56a591b", "size": 1960},
-    {"path": "/usr/share/icons/Papirus/22x22/apps/chrome-okdgofnjkaimfebepijgaoimfphblkpd-Default.svg", "sha256": "7e1a5e7bd1363c9094f15156e124f3304fcfa592d7a2ab37ac91e4c2ee1c9bcf", "size": 7712},
-    {"path": "/etc/xdg/menus/lxqt-applications-simple.menu", "sha256": "7b923f7a0f32010cd2a1c3a86798d0f1ec6a8216a03a9e1c95b26963e8a473db", "size": 5231},
-    {"path": "/usr/share/icons/Adwaita/scalable/ui/checkbox-symbolic.svg", "sha256": "6edebeef83ed097cedaafc2e13fdba4c57b4f95c3788f31e12c822629f093f8e", "size": 785},
-    {"path": "/usr/share/icons/Papirus/48x48/places/folder-yaru-gitlab.svg", "sha256": "f4337ba29f8999fbe2abef324347016cebd29a80b0ec768d40156bf7921eee3c", "size": 1447},
-    {"path": "/usr/share/X11/xkb/symbols/af", "sha256": "2bd824a4db8130631145225d8547ffa929dd6104879b498ef1ced3ca12e1f4dc", "size": 22245},
-    {"path": "/usr/share/fonts/X11/Type1/C059-BdIta.pfb", "sha256": "84e46c470c20e491d0524c492e9475644c22c7fbd8d4051d2d0edd7378427f84", "size": 152605},
-    {"path": "/usr/share/doc/libio-socket-ssl-perl/examples/ssl_mitm.pl", "sha256": "b66e65faf04560d21648164507b93964301e0777b6e98b6cb08bf0e65f0d8d23", "size": 1806},
-    {"path": "/var/lib/swcatalog/icons/ubuntu-lunar-universe/64x64/cecilia_cecilia.png", "sha256": "b7227d4eadba76753c30ce6056ab0a5c479bd7c2910fe4c680c0e91832f5ae5f", "size": 2750},
-    {"path": "/usr/share/icons/Papirus/16x16/apps/bioshock-infinite.svg", "sha256": "28d8d6b12fe9764aad953be9f8782fe6f6d19ad50ff0b7a397dce0cf3de67da5", "size": 1608},
-    {"path": "/usr/share/icons/Papirus/24x24/apps/dev.boxi.Boxi.svg", "sha256": "cd893915f3bd9b2d3c6c3dcb5c88fb1a89876eb9ecd79b05fbf701089fc98333", "size": 1528},
-    {"path": "/usr/share/icons/Papirus/64x64/apps/evnc.svg", "sha256": "9a73413f60e23f902fe6e42881f687006a66fa40134cee79f42b07ca0af3c93c", "size": 2481},
-    {"path": "/usr/share/icons/Papirus/24x24/apps/kmenuedit.svg", "sha256": "40eb1351a4e2882a737d5f27fe69dceca861e44f4fe2fa2060cf8dfde37cf225", "size": 2956}
+  "totalDirectories": 14462,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext4",
+      "fileCount": 203768,
+      "directoryCount": 14462,
+      "sampleFiles": [
+        {
+          "path": "/var/lib/dpkg/info/qml-module-org-kde-prison:amd64.md5sums",
+          "size": 279,
+          "sha256": "0ccdf1fad12b43c7c059549d19ed4805510e844c6d96d90c4d5f697833f216b8"
+        },
+        {
+          "path": "/usr/share/icons/Papirus/22x22/apps/bauh.svg",
+          "size": 5303,
+          "sha256": "3ae3c64830212a6fede64150781e718051210cd844e9e04dfa4d56b4d869a26f"
+        },
+        {
+          "path": "/usr/share/locale/pl/LC_MESSAGES/purpose_saveas.mo",
+          "size": 755,
+          "sha256": "cb0e68baca1e53ba762296af620b4beae60208dcfaa84a70c7a6f58ac2cc2c9b"
+        },
+        {
+          "path": "/usr/share/libreoffice/help/media/icon-themes/cmd/lc_zoompanning.svg",
+          "size": 2545,
+          "sha256": "fd9ad5ea6e59db39aed6f57509e5f79a54837a00605994a8ec10237b75348d03"
+        },
+        {
+          "path": "/usr/share/icons/ePapirus/22x22/actions/code-variable.svg",
+          "size": 570,
+          "sha256": "25ebda245cf391604242f544a4e4d9ed3977e96ccd9140aeaab426d39a650aa9"
+        },
+        {
+          "path": "/usr/share/mime/application/x-planperfect.xml",
+          "size": 3383,
+          "sha256": "638a3ad5bc46dbcaa7d8519d1b90b6b6a879a2909a3166c72aeaf3ecf0338ad0"
+        },
+        {
+          "path": "/usr/share/perl/5.36.0/Pod/Simple/Search.pm",
+          "size": 35836,
+          "sha256": "e3c0c0a797477a9c7aaec751549fd31ce0f8ee02f6eab1817ea25b5b76f9f665"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/rich/__pycache__/_timer.cpython-311.pyc",
+          "size": 944,
+          "sha256": "b9e635753cf18ff84875d1325e48137ed6553d15b2b93145db8140ecb3d5f2b8"
+        },
+        {
+          "path": "/usr/share/icons/Papirus/22x22/actions/view-media-subtitles-hidden.svg",
+          "size": 719,
+          "sha256": "3dc87ae854890e1824c8482f97171a047dfcb391f36ce2c5476e8c125c6b69a9"
+        },
+        {
+          "path": "/boot/grub/i386-pc/zfsinfo.mod",
+          "size": 6508,
+          "sha256": "56430f47331d6c45053c718f94da90b5bf14d77daefee42de66ab1ca30c9bef7"
+        },
+        {
+          "path": "/usr/share/icons/Papirus-Light/22x22/panel/btsync-gui-1.svg",
+          "size": 1039,
+          "sha256": "17a380f44f646cca4ae7da300885563178dc4605a50e418cf1c66908e22f9919"
+        },
+        {
+          "path": "/usr/share/icons/oxygen/base/256x256/apps/kspread.png",
+          "size": 20828,
+          "sha256": "f9833e2c0278a64ed6ccedba4d9b83855ba42a43c1d9e3d11dba5ecc5e1810e8"
+        },
+        {
+          "path": "/usr/share/icons/Papirus/16x16/apps/f1-2015.svg",
+          "size": 340,
+          "sha256": "bed995a7f40da9ea9322bcf83c8e56971a3d2d7033dbac9c213e1bdf594a7956"
+        },
+        {
+          "path": "/usr/share/doc/python3-dbus.mainloop.pyqt5/changelog.Debian.gz",
+          "size": 1123,
+          "sha256": "1ac9f2a7233b7dfb936c3f72768f182de4c74699dea4a9d3060012935f9c41e9"
+        },
+        {
+          "path": "/usr/share/icons/Papirus/48x48/apps/maxima.svg",
+          "size": 6830,
+          "sha256": "364c6219417e93fc761963880925109b82285d33b61f168ff62d39b1b90fe47b"
+        },
+        {
+          "path": "/usr/share/icons/ePapirus-Dark/22x22/actions/labplot-shift-right-x.svg",
+          "size": 675,
+          "sha256": "cb0bfc5b7955e0dcbf8e03e702fbe0ca452889ec916c2ac58e8c472e73175227"
+        },
+        {
+          "path": "/usr/share/icons/Papirus/48x48/apps/com.github.diegoivanme.plano.svg",
+          "size": 2374,
+          "sha256": "bd6d5f25623c6ae3ffa47af515229356874843c1aee56ce8da40f42ce5adae63"
+        },
+        {
+          "path": "/usr/share/lxqt/translations/lxqt-sudo/lxqt-sudo_de.qm",
+          "size": 4090,
+          "sha256": "a87ec7d44be5b5e86cdd62e033f2133c13b3389d31a15234c0d12c084cd962fb"
+        },
+        {
+          "path": "/usr/share/icons/ePapirus-Dark/16x16/places/folder-teal.svg",
+          "size": 206,
+          "sha256": "1f00dae87888c71d5f55dd74be9d3419c94d23845341a5ed5ee9e89943ba86b7"
+        },
+        {
+          "path": "/usr/lib/python3.11/distutils/command/install.py",
+          "size": 30802,
+          "sha256": "d6b7abf0f77b3a1b04cab6afac3d6c11473f92a5f22bd6449bb0e684bd2b6aef"
+        }
+      ]
+    }
   ]
 }

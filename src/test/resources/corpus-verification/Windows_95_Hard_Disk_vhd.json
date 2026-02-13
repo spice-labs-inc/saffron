@@ -1,29 +1,117 @@
 {
   "imagePath": "/corpus/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/Windows 95 Hard Disk.vhd",
   "imageBasename": "Windows 95 Hard Disk.vhd",
-  "filesystemType": "vfat",
+  "filesystemCount": 1,
   "totalFiles": 855,
   "totalDirectories": 37,
-  "sampleFiles": [
-    {"path": "/WINDOWS/USER.DA0", "sha256": "f6a3420e4d2fac4d09e9034180feca4112915532e0b1218ed7dffdf926dfc2b3", "size": 40992},
-    {"path": "/WINDOWS/SYSTEM/FTMAPI.DLL", "sha256": "3a1eb3ad9fe2c37af49893f277e6776a790298d32909713671f4e0b94184cca9", "size": 66048},
-    {"path": "/WINDOWS/FORMS/FRMCACHE.DAT", "sha256": "a435baa71a6dd98755693a6f48ed508578334e6ecf5e34844ccf47e616ecd2f4", "size": 16600},
-    {"path": "/WINDOWS/WIN386.SWP", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/WINDOWS/IFSHLP.SYS", "sha256": "3272ceb4eb7f5e3fb6e87ad6f0130d3710ebc300890114cb592c770777e89476", "size": 3708},
-    {"path": "/SETUPLOG.TXT", "sha256": "f8654abc4b0cd20d4ecc533819bda5f554cd47978d06dc1d86053e5f7bc87758", "size": 42300},
-    {"path": "/WINDOWS/COMMAND/MODE.COM", "sha256": "96df4c01d86badd0844187cf1936f60fe01cafc9b9645005767090d58a51fdb7", "size": 29191},
-    {"path": "/WINDOWS/INF/MSDET.INF", "sha256": "9d4eeb1ff1536b3b2eb585c8e694901260bcf677489a932df3146a50fe5e0b6d", "size": 21472},
-    {"path": "/WINDOWS/SYSBCKUP/SB16SND.DRV", "sha256": "33e922827c647b43d333af1cb89124d14500f26fb5c6ff8c67e060ed6b3fe521", "size": 46000},
-    {"path": "/WINDOWS/SYSTEM/MAPISVC.INF", "sha256": "001fa3c28a2d012051f7d503cb1885c654d5ba0b9be06fa81eb7db27749738a8", "size": 4993},
-    {"path": "/WINDOWS/SYSTEM/COMDLG32.DLL", "sha256": "3fc2341d0aa51d9cfe2ed1241ab005f87bbdb416b4fc1169c734fdac9746ef9a", "size": 92672},
-    {"path": "/WINDOWS/INF/MDMINTEL.INF", "sha256": "ccac4fbfaee081bc454bbfb8c203ca0662ea218717992cde7c5cf762cbb1852f", "size": 17067},
-    {"path": "/WINDOWS/TIPS.TXT", "sha256": "a3dd4186bdf4e1c6c6d9b1df62a498c887076347e310116ed0ca39669f3f1043", "size": 28617},
-    {"path": "/WINDOWS/INF/MDMNOVA.INF", "sha256": "56c96e832022d9fa31173629560374852462f14a1be90bddac2b1b96d0fd2b1c", "size": 12342},
-    {"path": "/WINDOWS/WAVEMIX.INI", "sha256": "cb1a618d10ba90ec5c74a1a1ef8af27b2479a89a752dcce6544b0d5f61a743c5", "size": 54},
-    {"path": "/WINDOWS/HELP/CALC.CNT", "sha256": "182754f8fa2e3b01035979d9a843331169b06591bb553007e9ef88b12bcf57d3", "size": 508},
-    {"path": "/WINDOWS/SYSTEM/MOSMISC.DLL", "sha256": "fa929dea48d3a0d5d00fcc6bb6e8266210da5c1864d39fd52192b1fbb4b4c5f6", "size": 9216},
-    {"path": "/WINDOWS/COMMAND/EXTRACT.EXE", "sha256": "31f98c4ee68fa3193544c635ad9e698aa1402c367590d6b28746b624b8b2e05f", "size": 46656},
-    {"path": "/Program Files/Accessories/HyperTerminal/MCI Mail.ht", "sha256": "c7896fb9304d5885744d8ee7c5c1a7412b4e8b474442f5b1574ebf4e4d974a24", "size": 829},
-    {"path": "/CONFIG.SYS", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0}
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "vfat",
+      "fileCount": 855,
+      "directoryCount": 37,
+      "sampleFiles": [
+        {
+          "path": "/WINDOWS/SYSTEM/IOSUBSYS/DISKTSD.VXD",
+          "size": 16478,
+          "sha256": "536d88044d1573e7ee7d5ba15ea05f330772e6b191b4ecdb39813e5f02466286"
+        },
+        {
+          "path": "/Program Files/The Microsoft Network/MVTTL14C.DLL",
+          "size": 77312,
+          "sha256": "a72bd378f3c63c3a3cec688c7fd16d57d986c6fd141688a794239dae0e438872"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/WIN87EM.DLL",
+          "size": 11904,
+          "sha256": "7ca7a2a1f5735b12e6dd6e9e2d1c0f056b04a19f6556802f0e19fd111f8eaf7e"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/MSPRINT2.DLL",
+          "size": 48128,
+          "sha256": "72d11b424df04a44c2cdf31964efd7bcba992622cb98244feee2ad744ba416d6"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/MPR.DLL",
+          "size": 40448,
+          "sha256": "44afcee6e6fd64ab3296c284f7c11fa9c285da79e7d20c18d157d8f2e0e53f01"
+        },
+        {
+          "path": "/WINDOWS/HELP/NOTEPAD.CNT",
+          "size": 571,
+          "sha256": "c8b874a75f5fd253cb449c772355056e10cd12b00b911db13a4e7aab4e412fd5"
+        },
+        {
+          "path": "/WINDOWS/COMMAND/DISKCOPY.COM",
+          "size": 21959,
+          "sha256": "f98d2feed378f0c96bff84aa891ae1feb7a91efa58c9a4c202b214d6ef606105"
+        },
+        {
+          "path": "/WINDOWS/WINFILE.EXE",
+          "size": 155408,
+          "sha256": "87311885bcef500952a1e652d2b8c26a14c1a989ddaa4d3d33ecdcc646041c99"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/WFM0201A.CSP",
+          "size": 6776,
+          "sha256": "a917422449b168714a955afeabfb7ff825f5e12a79353f499530b0d410ea75b4"
+        },
+        {
+          "path": "/WINDOWS/HELP/MSFS.HLP",
+          "size": 34832,
+          "sha256": "d19ddf5575a07a3549b8e5621b5be54a3bcb1db9ee89aa29cfb4fa65623c6efe"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/MCIWAVE.DRV",
+          "size": 22016,
+          "sha256": "8622f16b56cc64dc1b2e2766403c7f711c73566763a02bf45e81564336d0c3d7"
+        },
+        {
+          "path": "/WINDOWS/WINSOCK.OLD",
+          "size": 42080,
+          "sha256": "e7dddad7df6c82b9b9f54311a55095a96a783768d7d29457bb5c5a93e21e0fc2"
+        },
+        {
+          "path": "/WINDOWS/CURSORS/APPSTART.ANI",
+          "size": 8274,
+          "sha256": "1e73504cf5fa1f9627026f60c54d19a1b42720f0177144303e684527ec7f266a"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/MSSP.VXD",
+          "size": 21657,
+          "sha256": "ffb482ce153a42daf1461847851a51da6194e110787c178f6c80a3f85c72f9ad"
+        },
+        {
+          "path": "/WINDOWS/SMARTDRV.EXE",
+          "size": 45145,
+          "sha256": "f891ae3598d04c39e01cdb0cf3591d902637fd45107ee20b50a2b2e1b3c7f046"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/COLOR/MNEBUG18.ICM",
+          "size": 59964,
+          "sha256": "b2befef7c404cc7465a4dfcb2ed28667497564c5141a225f4e0923be30e71076"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/VGA.DRV",
+          "size": 52064,
+          "sha256": "5297cce915bb019e080a87e6b3e858558d123376d954581b2a7e3ee3ff3711c3"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/LINKINFO.DLL",
+          "size": 13824,
+          "sha256": "d1cbc29dd059d79f05c5ee65bae886e940ed558f935aeb7bf07c109cce52f79c"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM.CB",
+          "size": 98,
+          "sha256": "a62470dca6aab553a2a1fa62e392b3ae6e42a593c1f044a744c771d840c7c926"
+        },
+        {
+          "path": "/WINDOWS/HELP/DIALER.HLP",
+          "size": 19193,
+          "sha256": "cc60e00ae88a9cd71ad354b6353075892404253ed1db47ec741a36d068adda5f"
+        }
+      ]
+    }
   ]
 }

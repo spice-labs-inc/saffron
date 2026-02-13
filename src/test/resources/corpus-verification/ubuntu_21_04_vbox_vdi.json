@@ -1,29 +1,165 @@
 {
   "imagePath": "/corpus/vdi/modern/ubuntu-21.04-vbox.vdi",
   "imageBasename": "ubuntu-21.04-vbox.vdi",
-  "filesystemType": "unknown",
+  "filesystemCount": 2,
   "totalFiles": 126988,
-  "totalDirectories": 18086,
-  "sampleFiles": [
-    {"path": "/usr/lib/modules/5.11.0-13-generic/kernel/drivers/net/team/team_mode_loadbalance.ko", "sha256": "49942844c14f1a7c4d1f4f2dc843e416e1b8371a0abb33382498936ae11bde74", "size": 24105},
-    {"path": "/usr/lib/python3.10/lib2to3/fixes/fix_nonzero.py", "sha256": "c2cd7e3ba44508643a20eec4ea4c19f2f1adfd36f6b974d7c143e449571ae736", "size": 591},
-    {"path": "/usr/lib/python3.10/lib2to3/Grammar.txt", "sha256": "508e62e787dd756eb0a4eb1b8d128320ca02cd246ab14cc8ce0a476dc88cc5b6", "size": 8696},
-    {"path": "/usr/lib/modules/5.11.0-13-generic/kernel/sound/soc/codecs/snd-soc-wm8731.ko", "sha256": "697ce8d9979e7edd3c2b12e7f4c1ff444050ce2ecc1f82b567b99b8d3bf339fa", "size": 71505},
-    {"path": "/var/lib/dpkg/info/xauth.list", "sha256": "561314e4fb101c3244756a1480ddd111b6faa5ac86e9eafaad721a44b3273b73", "size": 217},
-    {"path": "/usr/share/doc/libpam-gnome-keyring/copyright", "sha256": "2f1f9b3779cb5f85a33539ac22bfbad31fa95299ad7c39bf2a329eb3a1a92954", "size": 11779},
-    {"path": "/usr/share/man/man8/pam_userdb.8.gz", "sha256": "c51efbd01de16e6c192e009bb4cf32a6b811cdfa0be981a0afb107b2c4be6a4f", "size": 1805},
-    {"path": "/usr/src/linux-headers-5.11.0-13/include/net/netfilter/nf_conntrack_acct.h", "sha256": "a04e43a03ddd2dcc5f893a6c76a0a5f3de8e77e55a6007daa13be8f18623b3fb", "size": 1889},
-    {"path": "/usr/lib/modules/5.11.0-13-generic/kernel/drivers/power/supply/mp2629_charger.ko", "sha256": "d2dbc64656b66590556fc8d81738dfc06e38e91455f7e62acce7154f1a5db683", "size": 20257},
-    {"path": "/usr/share/man/man8/lspci.8.gz", "sha256": "4c3817e990aa3a42bff2dd7f70a969eb627a9a03e3d7f5373a9252e1f26efff2", "size": 4449},
-    {"path": "/usr/lib/x86_64-linux-gnu/guile/2.2/ccache/sxml/ssax/input-parse.go", "sha256": "c27c49809909c2521f04cb3dbda4615eb4c98aac3e14fb70d3fa11af93d0a403", "size": 77837},
-    {"path": "/var/lib/dpkg/info/libgdk-pixbuf-2.0-0:amd64.md5sums", "sha256": "6f8ca3d89ddb5f474b61035f7ea7064ea1c724f1d83d8f270f3db8959ae83a99", "size": 1968},
-    {"path": "/usr/src/linux-headers-5.11.0-13/drivers/gpu/drm/v3d/Kconfig", "sha256": "9ac79909c5b8aa9a87033b7f2cc8dda3caae4407c93bc449a0ddda3e81feec81", "size": 359},
-    {"path": "/usr/include/sound/compress_params.h", "sha256": "245182d27a3441fb4175b4afadd5a3458dcfbd7ebd6c9a3d6ea5bb75a9658f26", "size": 18187},
-    {"path": "/usr/share/terminfo/w/wy325-42w", "sha256": "c00a8f7069af140b69d080ca81ad10d98bf793bb62144814b7b0e640b9e39adf", "size": 1209},
-    {"path": "/usr/share/doc/libxml2/README", "sha256": "e704979889dc6ab8aa3be4203bddf293840f8ac8ed2573b078a324cbd3d52943", "size": 1258},
-    {"path": "/usr/lib/x86_64-linux-gnu/perl5/5.32/auto/Net/SSLeay/post_http3.al", "sha256": "d5c1182fdc20a3c8de21b0f53a6d91faabf83f519487bdad8eb868efd2d07442", "size": 321},
-    {"path": "/usr/share/icons/HighContrast/48x48/apps/miro.png", "sha256": "028b68ca4fa568d6ffe140fc6a636d89b6ba8be188b464dc344cdf0986c5129f", "size": 1000},
-    {"path": "/usr/share/doc/libyajl2/README", "sha256": "99c8c61688bdcc47fbe8a36d21153556438a6f164650b229195093ae58f3c03e", "size": 2801},
-    {"path": "/usr/share/poppler/cMap/Adobe-Japan1/UniJIS2004-UTF16-V", "sha256": "28e5f223d2b0a0159d3b8a4f7c6fd8848503d2dcced5fc2e586f9d78a909682a", "size": 5795}
+  "totalDirectories": 18085,
+  "filesystems": [
+    {
+      "device": "/dev/sda2",
+      "fstype": "vfat",
+      "fileCount": 8,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/fbx64.efi",
+          "size": 1222800,
+          "sha256": "3a55f93fbc7eaa95f78ced07ef2a12e16925b31742af8339bdf6ab18010c79f1"
+        },
+        {
+          "path": "/EFI/ubuntu/BOOTX64.CSV",
+          "size": 108,
+          "sha256": "6add06de471015ad4460964f30fb115e7fdc286da6a527d0643fc7815b728fbf"
+        },
+        {
+          "path": "/EFI/ubuntu/grubx64.efi",
+          "size": 1718144,
+          "sha256": "adf854246581b08ccae2f83fad685eacfa9b1b768acdb1bd4d6c401f6aea9847"
+        },
+        {
+          "path": "/EFI/BOOT/mmx64.efi",
+          "size": 1277024,
+          "sha256": "452c80fca7863dcf37b5def86998a51681ee89487ae6832931b977bfcc7fe1bd"
+        },
+        {
+          "path": "/EFI/ubuntu/grub.cfg",
+          "size": 201,
+          "sha256": "5df8fab5c1483e48cebe4807c689313b8f71f43a1d5b6dc170a54e9dcdefe99a"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 1341560,
+          "sha256": "8eac17a0bd8d218dfd6a379289ebdedb96a7987ebe01754944a8324f8ba04c27"
+        },
+        {
+          "path": "/EFI/ubuntu/mmx64.efi",
+          "size": 1277024,
+          "sha256": "452c80fca7863dcf37b5def86998a51681ee89487ae6832931b977bfcc7fe1bd"
+        },
+        {
+          "path": "/EFI/ubuntu/shimx64.efi",
+          "size": 1341560,
+          "sha256": "8eac17a0bd8d218dfd6a379289ebdedb96a7987ebe01754944a8324f8ba04c27"
+        }
+      ]
+    },
+    {
+      "device": "/dev/vgubuntu/root",
+      "fstype": "ext4",
+      "fileCount": 126980,
+      "directoryCount": 18082,
+      "sampleFiles": [
+        {
+          "path": "/var/lib/app-info/icons/ubuntu-hirsute-universe/64x64/gmrun_gmrun.png",
+          "size": 1080,
+          "sha256": "3e216dd500479cc17b6e59b2a4694ad02510fe12e49ce48a9b3475b8bcc0c13b"
+        },
+        {
+          "path": "/var/lib/app-info/icons/ubuntu-hirsute-universe/48x48/supertux_supertux2.png",
+          "size": 2757,
+          "sha256": "4896199bf8fd365045295be44d2514adca57e275fbcf860ff5916a2a8c28dcc4"
+        },
+        {
+          "path": "/usr/share/themes/Adwaita/gtk-2.0/assets/tab-vert-gap.png",
+          "size": 71,
+          "sha256": "a5fba5e5d128f88573ee2da935da7a17f74d7ed915c4930bc3d4bf7bbcfd5d38"
+        },
+        {
+          "path": "/usr/share/doc/sgml-data/examples/svg-1.1.xml.gz",
+          "size": 1008,
+          "sha256": "262b1416235aabc6ecd2bd6b7a5f5c6b3e5218bccf1d010a4934b2b609e0ef75"
+        },
+        {
+          "path": "/etc/brltty/Input/ht/mc88.ktb",
+          "size": 851,
+          "sha256": "bc9fef163d8129ae45a214029eca8aca61f65fa8eb17ae1cff62eb9f3a0fc2a8"
+        },
+        {
+          "path": "/usr/share/icons/ubuntu-mono-dark/status/22/indicator-keyboard-Kn-2.svg",
+          "size": 507,
+          "sha256": "2a0843ad70490c5f6aba95c28c2d97a25bb99f5ca0fc23994bef2ad0307e6ef4"
+        },
+        {
+          "path": "/usr/share/ghostscript/9.53.3/lib/bjc6000b1.upp",
+          "size": 1660,
+          "sha256": "190ac4eb1be70c2ef6e9058c8fe31cd55e497d423def8a4c300a9b89d6e1a3f0"
+        },
+        {
+          "path": "/usr/share/man/man3/pthread_detach.3.gz",
+          "size": 1712,
+          "sha256": "c48ac55d5bc06e36a1cc11cd75917fdb21e90856ace1fd6a75ed87e911c4bb12"
+        },
+        {
+          "path": "/usr/lib/firmware/nvidia/gv100/acr/bl.bin",
+          "size": 1280,
+          "sha256": "01326cc997716bebb0eab9fe1f463fffa0ee586079e4ca0e5bb096ab6fcfedab"
+        },
+        {
+          "path": "/usr/src/linux-headers-5.11.0-13/net/dns_resolver/Makefile",
+          "size": 171,
+          "sha256": "074dc573448eb03f82a906b63efa7f69adb1de25388b18a2cd3f064742c584a8"
+        },
+        {
+          "path": "/var/lib/dpkg/info/bsdextrautils.md5sums",
+          "size": 1667,
+          "sha256": "c94a46da97c7f33d3484d8606002d3e542bba44aa61fa563164fa62268f9f253"
+        },
+        {
+          "path": "/usr/share/icons/Adwaita/scalable/status/network-wireless-hardware-disabled-symbolic.svg",
+          "size": 732,
+          "sha256": "4087afc0b30c53fa5ed6e45d4b3566f7a1f4dbe01a29bd5e4aa84e2bd007aa74"
+        },
+        {
+          "path": "/usr/share/man/man3/Dpkg::Control::FieldsCore.3perl.gz",
+          "size": 2731,
+          "sha256": "b4f4e525a42d1461a7d8dd13820c51c090d9772f05b13668d4297e8b71d66b76"
+        },
+        {
+          "path": "/usr/src/linux-headers-5.11.0-13/fs/notify/dnotify/Makefile",
+          "size": 76,
+          "sha256": "f0ab13990b07ed69f76be9eaa9d9c2535bae050792142e7108ba05a52b500550"
+        },
+        {
+          "path": "/usr/share/bash-completion/completions/blkdiscard",
+          "size": 686,
+          "sha256": "6a5dc6113e482c70f3f7a7c7958f4ff0b36f0bbd297558fa3c65a91b7357cc2b"
+        },
+        {
+          "path": "/usr/share/consolefonts/Uni3-Fixed16.psf.gz",
+          "size": 4222,
+          "sha256": "e55eec8e240b94f4233dba65c15f839e5a234b08f734c0576ab874895a1e6c77"
+        },
+        {
+          "path": "/usr/share/zoneinfo/America/Porto_Velho",
+          "size": 576,
+          "sha256": "6517f380612edba86797724fb6264b3921468ff58149b38a7622c2d712327397"
+        },
+        {
+          "path": "/usr/share/bash-completion/completions/munindoc",
+          "size": 320,
+          "sha256": "a10be41c5a1ab54a0458117fb924f33efc92cc9244d79832a950c07e33ae6a28"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/perl-base/unicore/lib/NFKDQC/Y.pl",
+          "size": 4820,
+          "sha256": "7087a679dea02e4d3bd26dc496e028ad5b6d3f470c71eac12365dad2e32fb444"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/orca/scripts/toolkits/J2SE-access-bridge/speech_generator.py",
+          "size": 6887,
+          "sha256": "029c15f90064810ee2ece4aa11cb064626bf96a34cbd50c3d1a7df49e4d316bb"
+        }
+      ]
+    }
   ]
 }

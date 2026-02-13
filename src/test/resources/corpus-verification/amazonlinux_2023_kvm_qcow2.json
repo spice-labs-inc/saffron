@@ -1,29 +1,135 @@
 {
   "imagePath": "/corpus/qcow2/modern/amazonlinux-2023-kvm.qcow2",
   "imageBasename": "amazonlinux-2023-kvm.qcow2",
-  "filesystemType": "xfs",
+  "filesystemCount": 2,
   "totalFiles": 39412,
-  "totalDirectories": 5016,
-  "sampleFiles": [
-    {"path": "/usr/share/man/man3p/timer_delete.3p.gz", "sha256": "8614a03aa1901be40024024ac43700c23e7bfad5f3ef981dbad8b4df21227c56", "size": 1289},
-    {"path": "/usr/share/man/man2/execve.2.gz", "sha256": "43218cf44cf294602c92e6c83b82007eed29f68ff398d0011b495104da80c4df", "size": 9433},
-    {"path": "/usr/lib64/python3.9/encodings/__pycache__/hex_codec.cpython-39.opt-2.pyc", "sha256": "f9d5ed6104064b095d98b57ecb8c222262bf828c1c6f9099176fa20b9870437d", "size": 2107},
-    {"path": "/usr/lib/modules/6.1.79-99.164.amzn2023.x86_64/kernel/drivers/mfd/lpc_ich.ko", "sha256": "69d6f3b07b2a2169db75516f19192735b0f15a6a37f5788f998d766d4a063245", "size": 67828},
-    {"path": "/usr/lib/python3.9/site-packages/awscli/examples/acm-pca/get-certificate-authority-certificate.rst", "sha256": "b14490b5df4dab6b765eb937d5f43fdd72dffb828d42cabbf59db957f9870dc9", "size": 406},
-    {"path": "/usr/lib/kbd/consolefonts/UniCyr_8x8.psf.gz", "sha256": "d2511fd5407b97dc4be6ba5f657970176ba7350bf3204c5c2b0a26178ea6b0c2", "size": 1728},
-    {"path": "/usr/bin/mapscrn", "sha256": "e571f4e6a7f9aa8f89d05be0b31d34610aa892c9ebb799c4869a7ff52236a182", "size": 32920},
-    {"path": "/usr/share/zoneinfo/Kwajalein", "sha256": "2f89c7deac6fe4404a551c58b7aedbf487d97c1ce0e4a264d7d8aeef1de804c9", "size": 316},
-    {"path": "/usr/share/perl5/vendor_perl/Time/Local.pm", "sha256": "277be62ed2520a35e94a5acb8f8e4cadd6fff682b8fbcefc34648884988d3a7c", "size": 16312},
-    {"path": "/usr/lib64/python3.9/site-packages/setools/diff/__pycache__/ibendportcon.cpython-39.pyc", "sha256": "21b2a2e9fadcfdf5b0c39b693c922b32f49b243d3db00c3d4aa3ca4636ab5838", "size": 3169},
-    {"path": "/usr/share/licenses/python3-jsonschema/LICENSE", "sha256": "837402bd25fad9b704265801ca3f92566a98157c1f9a7acd6f446299ba1c305a", "size": 1057},
-    {"path": "/usr/lib/python3.9/site-packages/prompt_toolkit/lexers/__pycache__/pygments.cpython-39.opt-1.pyc", "sha256": "8fd5b57548a83fc4f962dd401de9c1a6e2bd8e9303b23ec8f1509634fca85c37", "size": 9410},
-    {"path": "/usr/share/doc/python3-setuptools/userguide/index.rst", "sha256": "14476a7853c88c22ebd9cf4dacd1d868aaad5a1994d18c545369ca26b737006e", "size": 1147},
-    {"path": "/usr/share/locale/fil/LC_MESSAGES/selinux-python.mo", "sha256": "12f3c6684a6d8e1b1a6fb1e1937593916a0e4bec10165d19f390f43d60b8afef", "size": 627},
-    {"path": "/usr/share/man/man3/__ppc_mdoom.3.gz", "sha256": "eb513a9c834f52fac954e4b6dae6222e43e5d43dcbd17bac5edbca85d1f9536c", "size": 43},
-    {"path": "/usr/lib/python3.9/site-packages/docutils/parsers/rst/directives/__pycache__/misc.cpython-39.pyc", "sha256": "e08b4b4ed831e1c8f63b3d98a446ab1060c495fb687401ccc436b2a077539ae9", "size": 14425},
-    {"path": "/usr/share/zoneinfo/right/America/Argentina/Ushuaia", "sha256": "6f6501bb2ed32ea45cb028227428fb905615c9c88d247ab9ad1697c0349c29a4", "size": 1610},
-    {"path": "/var/lib/selinux/targeted/active/modules/100/pegasus/hll", "sha256": "13986d5d7c167bcafde4b977727e3d787e6b1823365a08db04b3a33f60342359", "size": 18349},
-    {"path": "/var/lib/selinux/targeted/active/modules/100/libraries/cil", "sha256": "9bdec3e248c2c93485156fd773a7df11bbbecebb1437d7a30ac5541215200ce6", "size": 4594},
-    {"path": "/usr/share/doc/less/INSTALL", "sha256": "3d25856c602472492f068a9854cd0b76688887c57a243f369622384142837963", "size": 7901}
+  "totalDirectories": 5015,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "xfs",
+      "fileCount": 39410,
+      "directoryCount": 5012,
+      "sampleFiles": [
+        {
+          "path": "/usr/lib/python3.9/site-packages/awscli/examples/budgets/describe-notifications-for-budget.rst",
+          "size": 440,
+          "sha256": "ca99615ad61003ac706eb3de7154c4cccc0180b7b66fcd92a30c0ec03b3d93ed"
+        },
+        {
+          "path": "/usr/share/man/man3p/munlock.3p.gz",
+          "size": 824,
+          "sha256": "c97be7bc21ed24ab725ea4a4a9bd3749ae0e7d39eaf04b2aeeda47b329ed7067"
+        },
+        {
+          "path": "/usr/lib64/perl5/vendor_perl/auto/Socket/Socket.so",
+          "size": 48816,
+          "sha256": "e6d607539d1e0348e06d28430a23db9e0a21f115e53f46fce1a9a08bd22bd458"
+        },
+        {
+          "path": "/usr/share/vim/vim90/syntax/sql.vim",
+          "size": 1120,
+          "sha256": "97510ff4fb9fb491150150c91fbccc95455a222c7709a36d54fb1e058a3622bf"
+        },
+        {
+          "path": "/usr/lib64/gconv/IBM273.so",
+          "size": 20176,
+          "sha256": "ec81cf35df667aaff7d184dbc1d9669ed75b5f75c47894ca96ab6be2fafb60c9"
+        },
+        {
+          "path": "/usr/lib/python3.9/site-packages/ruamel/yaml/__pycache__/scanner.cpython-39.pyc",
+          "size": 33085,
+          "sha256": "cda5709a069988324a08275f801d7b04d35d0a88a1ad0152054d84164ed20e99"
+        },
+        {
+          "path": "/usr/share/locale/sk/LC_MESSAGES/chkconfig.mo",
+          "size": 10864,
+          "sha256": "15be61b91be1bda864c36674ae1d107df7e8c922a4fc3c630e4741e049f535a2"
+        },
+        {
+          "path": "/usr/lib/grub/i386-pc/spkmodem.mod",
+          "size": 2040,
+          "sha256": "07f6a8c362f625ccff5dcca1121364562d46e4930071b57e008cd1c13a92920c"
+        },
+        {
+          "path": "/usr/lib64/python3.9/lib2to3/fixes/__pycache__/fix_types.cpython-39.opt-2.pyc",
+          "size": 1354,
+          "sha256": "ea8165cc1e18529b202c8e21c9c95fc3e8a9ad054d6f8e752a333a4967965f41"
+        },
+        {
+          "path": "/usr/lib/python3.9/site-packages/awscli/examples/ivs-realtime/create-stage.rst",
+          "size": 918,
+          "sha256": "28fef04225c4e71bd3eb9e5dd43f350da8b50a2c7475f687649b40b8904dcd88"
+        },
+        {
+          "path": "/usr/share/doc/screen/ChangeLog",
+          "size": 19576,
+          "sha256": "f351bc93c426ba93d07e43db81f619fadb90b87dffcf315cd49772c62874e53f"
+        },
+        {
+          "path": "/usr/share/man/man3/aio_error.3.gz",
+          "size": 1500,
+          "sha256": "18c49f9407ab3ae6caa6d0fb68e303318628465cb00ea0f28058b9393b8bc99c"
+        },
+        {
+          "path": "/usr/lib/systemd/network/80-vm-vt.network",
+          "size": 970,
+          "sha256": "b12f333797d60b1dd8ea811bd4b18be1ef253b6de6fa4c116874855539f1b21c"
+        },
+        {
+          "path": "/usr/share/vim/vim90/doc/os_msdos.txt",
+          "size": 523,
+          "sha256": "0a85bd0aca910676e36316093abc6896386fff4887c1c0d930be42c4574f410d"
+        },
+        {
+          "path": "/usr/lib/python3.9/site-packages/python_dateutil-2.8.1-py3.9.egg-info/SOURCES.txt",
+          "size": 2068,
+          "sha256": "f39d86799ddb6c1642bf653d30900f20869e5e1cd656ce66bd537bdefc24b33f"
+        },
+        {
+          "path": "/usr/lib64/python3.9/wave.py",
+          "size": 18004,
+          "sha256": "2d6ddc0c5e408bb993274ad4f7806252158fec7c569e5a78a50a06ecf02e681d"
+        },
+        {
+          "path": "/usr/share/man/man3/fenv_t.3.gz",
+          "size": 49,
+          "sha256": "ddbcdd30a71b2f37abea332cbf94436eac21e6f082a1824fe1fcf453b5e2cf13"
+        },
+        {
+          "path": "/usr/share/zoneinfo/posix/Atlantic/South_Georgia",
+          "size": 164,
+          "sha256": "419ef67d12a9e8a82fcbb0dfc871a1b753159f31a048fba32d07785cc8cdaeb7"
+        },
+        {
+          "path": "/usr/share/zoneinfo/Atlantic/Bermuda",
+          "size": 2396,
+          "sha256": "2cd18a7ccb2762fc089a34f2cd7acb84c3871c3bbba88ebb45b60d2afbc8d792"
+        },
+        {
+          "path": "/usr/share/vim/vim90/doc/map.txt",
+          "size": 80974,
+          "sha256": "d15278386b05c7b869e938d60c18d4bc5ea73c83057a03dfc38dbedf3f32be83"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda128",
+      "fstype": "vfat",
+      "fileCount": 2,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 1332992,
+          "sha256": "8dc6fc5d1f8108285e1ca4ecb40dabf2e3d21ede3e753e587f9e46d3ac8806c9"
+        },
+        {
+          "path": "/EFI/amzn/grub.cfg",
+          "size": 134,
+          "sha256": "02f7e4ea96325bf5a61d9653cc32902680543cace1775f46cfd0d694a550102c"
+        }
+      ]
+    }
   ]
 }

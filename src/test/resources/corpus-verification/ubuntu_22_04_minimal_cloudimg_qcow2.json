@@ -1,29 +1,165 @@
 {
   "imagePath": "/corpus/qcow2/modern/ubuntu-22.04-minimal-cloudimg.qcow2",
   "imageBasename": "ubuntu-22.04-minimal-cloudimg.qcow2",
-  "filesystemType": "ext4",
+  "filesystemCount": 2,
   "totalFiles": 35966,
-  "totalDirectories": 6398,
-  "sampleFiles": [
-    {"path": "/usr/src/linux-kvm-headers-5.15.0-1091/arch/m68k/include/asm/ide.h", "sha256": "c0874e4bc725d9fba1efe6387526b979935d13a3f11e43e5b24e1076b8d77fc4", "size": 1708},
-    {"path": "/usr/lib/systemd/network/80-wifi-adhoc.network", "sha256": "322e03c0daeba1407938d484f9a3babb0162ef8d458ffa9cd73e57e0b13704e0", "size": 78},
-    {"path": "/var/lib/dpkg/info/python3-cryptography.md5sums", "sha256": "8fde1a0bb5f5c33eea42083ebfdb643a755867d918beab18935b3535852fa481", "size": 10464},
-    {"path": "/usr/src/linux-kvm-headers-5.15.0-1091/arch/microblaze/include/asm/mmu_context_mm.h", "sha256": "8532a615b16739c6659e9aaea0608457589b7a216f8ce59366c026167b6880b5", "size": 3893},
-    {"path": "/etc/apparmor.d/abstractions/dbus-session-strict", "sha256": "ea290b396889d2d113d50437a3c4c3c44b0fa4685969605ec330df0a9a37240f", "size": 1010},
-    {"path": "/usr/src/linux-kvm-headers-5.15.0-1091/include/soc/imx/cpu.h", "sha256": "b4609fd53dbec62a1842319e7a417fcbaefc232960077ef98798ac89f8655f1f", "size": 914},
-    {"path": "/usr/src/linux-kvm-headers-5.15.0-1091/drivers/staging/media/omap4iss/Kconfig", "sha256": "1704624ad5a44fe0e47a8632e2198e7cb231fd8d05073fffa641dbe537559b4c", "size": 308},
-    {"path": "/var/lib/systemd/deb-systemd-helper-enabled/fstrim.timer.dsh-also", "sha256": "6a9438efc04c93e981d38ad13aadb92e4207e12a6cf9bca683460be1a06257b2", "size": 53},
-    {"path": "/usr/share/ca-certificates/mozilla/SwissSign_Gold_CA_-_G2.crt", "sha256": "0ebb1a5d93b86ad9dcbd294413f272817fe3bb8ba46f4ec8192b3b805f2fa8ae", "size": 2045},
-    {"path": "/usr/src/linux-kvm-headers-5.15.0-1091/include/linux/u64_stats_sync.h", "sha256": "b8969140b81a2a2fd61b3dd9eff943a562d294080e00c29b4033f1784c5d9224", "size": 6563},
-    {"path": "/usr/lib/grub/i386-pc/drivemap.mod", "sha256": "a84b14d45b861b051ced9eb7f918766caf4161cab1f72f0d5638b709c3171d77", "size": 5316},
-    {"path": "/usr/src/linux-kvm-headers-5.15.0-1091/include/linux/fwnode_mdio.h", "sha256": "0bc64e896c8f781281d9e8d0509ae8ec5e206dd2c5992012b7e1b7f8ad284495", "size": 858},
-    {"path": "/usr/src/linux-kvm-headers-5.15.0-1091/include/uapi/rdma/ib_user_ioctl_verbs.h", "sha256": "872a61fc6e9b1146b4ab0cc6759d9b84c686ca5d7b507952c859f815f145d371", "size": 7790},
-    {"path": "/usr/src/linux-kvm-headers-5.15.0-1091/arch/riscv/include/asm/atomic.h", "sha256": "d0f4af697445f6655c4259dd1e0193a85da26b9e04cd5cd5d88f29f4202d4fb9", "size": 11028},
-    {"path": "/usr/src/linux-kvm-headers-5.15.0-1091/drivers/clk/mediatek/Makefile", "sha256": "360ad86fb1a9ce7a99a5631486cd48e25cc6a0b7c43e94a9435886149837ee96", "size": 4864},
-    {"path": "/usr/lib/python3/dist-packages/dbus/__pycache__/glib.cpython-310.pyc", "sha256": "a8a8fe60dd06d1ba9604393c86e60c967bb09653446fe4ec112aaf40880a35e8", "size": 1016},
-    {"path": "/usr/src/linux-kvm-headers-5.15.0-1091/include/linux/fcdevice.h", "sha256": "c4c7f34bc5a0dea3a267fc680a724a003cab4a3f29ea6e934f6a1fdca9d1c1ca", "size": 774},
-    {"path": "/usr/bin/tic", "sha256": "b687116ce80840988c7f782aa157401d8d87b8a09c00a88b8e59f517f2df0223", "size": 88488},
-    {"path": "/var/lib/dpkg/info/libgmp10:amd64.triggers", "sha256": "3cbe5d60ae30189cb43c60640240d43b72f3009ea690588b70cb8c2c1848cfb4", "size": 74},
-    {"path": "/var/lib/dpkg/info/pinentry-curses.prerm", "sha256": "b5e3b3e647c5159fa901bd5e2f5366f1e424d3e3323d862eb7303a4523e03f73", "size": 124}
+  "totalDirectories": 6397,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext4",
+      "fileCount": 35958,
+      "directoryCount": 6394,
+      "sampleFiles": [
+        {
+          "path": "/usr/lib/systemd/system/blockdev@.target",
+          "size": 449,
+          "sha256": "ee28cd878acd2212ead10a22f8d5e16a28d330a424d0d66ea0b5d13b9c955ebe"
+        },
+        {
+          "path": "/boot/grub/x86_64-efi/loadenv.mod",
+          "size": 9208,
+          "sha256": "1ff8b9232e481614ceb002caa584b8e96fb7dcdc156c42ab573455928648c962"
+        },
+        {
+          "path": "/usr/share/zoneinfo/right/Etc/GMT-13",
+          "size": 664,
+          "sha256": "37432010d9d43b9be4529e96db967ce3c0253add9e683ec8c87dfe25581351f2"
+        },
+        {
+          "path": "/usr/lib/grub/x86_64-efi/datehook.mod",
+          "size": 3064,
+          "sha256": "8fca83ea8371024467a1470068376fb7a0326fc39bea4cd33365f3e178739eb2"
+        },
+        {
+          "path": "/usr/src/linux-kvm-headers-5.15.0-1091/tools/testing/selftests/ir/ir_loopback.sh",
+          "size": 525,
+          "sha256": "ac70e2aebce285b174b6bf7d7bc1db923e4f4d4fba7fb3ba72ada197fcbb2583"
+        },
+        {
+          "path": "/usr/src/linux-kvm-headers-5.15.0-1091/arch/mips/include/asm/cop2.h",
+          "size": 1812,
+          "sha256": "9ea791d163968b368936cf55e2ec81c0cfdd38f77f485a2c24f7d8f7b0ad86dd"
+        },
+        {
+          "path": "/usr/src/linux-kvm-headers-5.15.0-1091/include/media/i2c/s5k4ecgx.h",
+          "size": 683,
+          "sha256": "25febe8803630086db4fe500cdba81153c97c2a7798fbabc258c361a00f7ae07"
+        },
+        {
+          "path": "/var/lib/dpkg/info/libpcre2-8-0:amd64.list",
+          "size": 314,
+          "sha256": "886acd730e3e049e83b400a6ee74f21de3088edca79836033d89119c22ef09db"
+        },
+        {
+          "path": "/usr/src/linux-kvm-headers-5.15.0-1091/arch/riscv/include/asm/vdso/clocksource.h",
+          "size": 169,
+          "sha256": "e707c167573a062e78bfe27b966908bb8d8bc7fbe5212029f12814371a34b534"
+        },
+        {
+          "path": "/usr/share/perl5/Debconf/Element/Dialog/Multiselect.pm",
+          "size": 2188,
+          "sha256": "5a89b6e6233776c40896589664ad74bf8c78235f23ebcc19e9dcda32beb21e9e"
+        },
+        {
+          "path": "/usr/src/linux-kvm-headers-5.15.0-1091/arch/um/include/asm/sections.h",
+          "size": 219,
+          "sha256": "621a9620435bdd5e12f3cfa33b17ae8235c3e0588f83115276e9e6fb1a8cfb57"
+        },
+        {
+          "path": "/usr/src/linux-kvm-headers-5.15.0-1091/drivers/media/i2c/Kconfig",
+          "size": 42208,
+          "sha256": "f07578649208040acf68d004a59d01b0f2728c04c412c0de03a756006bd68a43"
+        },
+        {
+          "path": "/usr/share/zoneinfo/right/America/Indiana/Petersburg",
+          "size": 2116,
+          "sha256": "f89839c604ca596e42af7e2749738ba75b3130516ce4c1fd057e6c2a1bc12e54"
+        },
+        {
+          "path": "/usr/src/linux-kvm-headers-5.15.0-1091/arch/sh/include/mach-dreamcast/mach/dma.h",
+          "size": 702,
+          "sha256": "1f691d3e3567c71ad8fc2c2ac8a07250904be395c12aa343a68c1de47529deb6"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/setuptools/_distutils/command/__pycache__/clean.cpython-310.pyc",
+          "size": 2116,
+          "sha256": "cf1be659a300445d58f44c13bb6a28c8b0879535aff5e00abb275d51eb9c514b"
+        },
+        {
+          "path": "/usr/src/linux-kvm-headers-5.15.0-1091/tools/testing/ktest/compare-ktest-sample.pl",
+          "size": 563,
+          "sha256": "29178c96102d6b2a40166166d79523f130dd181b275a9b50db0c916923186b75"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/babel/localtime/__pycache__/__init__.cpython-310.pyc",
+          "size": 2170,
+          "sha256": "9bb26f4ee0afbc82f29f707b9fa7cb79e47c6e148d263e8021ce5fe1e543fac9"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/perl/5.34.0/bits/environments.ph",
+          "size": 2096,
+          "sha256": "1cdfe59e9ea11bc01406af0498f1e107b571b0d8cbee92b6b639674f9495197c"
+        },
+        {
+          "path": "/usr/include/iproute2/bpf_elf.h",
+          "size": 1271,
+          "sha256": "c014cdae68ed40e69569c497321a55e469913896868caca248f67aaa4a882a7a"
+        },
+        {
+          "path": "/var/lib/dpkg/info/libfreetype6:amd64.list",
+          "size": 309,
+          "sha256": "c9831181c495fe38080e2bb5c29f823f409f21613fe3e45b5f7524d814ad0b91"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda15",
+      "fstype": "vfat",
+      "fileCount": 8,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/ubuntu/shimx64.efi",
+          "size": 966664,
+          "sha256": "6fe6e1bcbe6cf6baec8e056d40361ca1aa715cc04ddcc2855351de060b84350b"
+        },
+        {
+          "path": "/EFI/BOOT/fbx64.efi",
+          "size": 88344,
+          "sha256": "79b4f54e53f93e6353bf929a85afafadb3286b307f8deeea14fbf4a074a7f9da"
+        },
+        {
+          "path": "/EFI/ubuntu/BOOTX64.CSV",
+          "size": 108,
+          "sha256": "6add06de471015ad4460964f30fb115e7fdc286da6a527d0643fc7815b728fbf"
+        },
+        {
+          "path": "/EFI/ubuntu/mmx64.efi",
+          "size": 856280,
+          "sha256": "ef27f3a6e2901f1cdc9e25d2cf7ca3f99f57e67d37021b2ba0729129687675ec"
+        },
+        {
+          "path": "/EFI/BOOT/mmx64.efi",
+          "size": 856280,
+          "sha256": "ef27f3a6e2901f1cdc9e25d2cf7ca3f99f57e67d37021b2ba0729129687675ec"
+        },
+        {
+          "path": "/EFI/ubuntu/grubx64.efi",
+          "size": 2602888,
+          "sha256": "c42fc43479c63d522bf816e2cbee8bcea516fc6d1354753518a4db7478e8373a"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 966664,
+          "sha256": "6fe6e1bcbe6cf6baec8e056d40361ca1aa715cc04ddcc2855351de060b84350b"
+        },
+        {
+          "path": "/EFI/ubuntu/grub.cfg",
+          "size": 117,
+          "sha256": "3815ab802b29d45ab5da9ca3b06b3bfe6a8f47eb9b5febd7d566c25b1cbd56df"
+        }
+      ]
+    }
   ]
 }

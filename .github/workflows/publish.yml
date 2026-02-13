@@ -1,0 +1,96 @@
+name: Publish Saffron
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish_jars:
+    name: Publish JAR Artifacts
+    runs-on: ubuntu-24.04
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Extract and Validate Version
+        id: version
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: Tag '$TAG' does not match semantic versioning (vX.Y.Z)"
+            exit 1
+          fi
+          VERSION="${TAG#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Validated version: $VERSION"
+
+      - name: Set up JDK 21 and GitHub Maven auth
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+          cache: "maven"
+          server-id: github
+          server-username: ${{ secrets.GH_USERNAME_SG }}
+          server-password: ${{ secrets.GH_TOKEN }}
+
+      - name: Write settings.xml for GitHub + Maven Central
+        run: |
+          mkdir -p ~/.m2
+          cat <<EOF > ~/.m2/settings.xml
+          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+            <servers>
+              <server>
+                <id>github</id>
+                <username>${{ secrets.GH_USERNAME_SG }}</username>
+                <password>${{ secrets.GH_TOKEN }}</password>
+              </server>
+              <server>
+                <id>central</id>
+                <username>${{ secrets.MAVEN_CENTRAL_USERNAME }}</username>
+                <password>${{ secrets.MAVEN_CENTRAL_PASSWORD }}</password>
+              </server>
+            </servers>
+
+          </settings>
+          EOF
+
+      - name: Import GPG Key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Set Release Version
+        run: |
+          mvn versions:set -DnewVersion=${{ steps.version.outputs.version }} -DgenerateBackupPoms=false
+
+      - name: Build and Verify
+        run: mvn --batch-mode clean verify -DskipTests
+
+      - name: Publish to GitHub Packages
+        run: mvn --batch-mode deploy -DskipTests -Pgithub
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Publish to Maven Central
+        run: mvn --batch-mode deploy -DskipTests -Pmaven-central
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Upload JAR to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            target/saffron-${{ steps.version.outputs.version }}.jar
+            target/saffron-${{ steps.version.outputs.version }}-sources.jar
+            target/saffron-${{ steps.version.outputs.version }}-javadoc.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

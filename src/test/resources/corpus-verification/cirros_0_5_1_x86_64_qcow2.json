@@ -1,16 +1,70 @@
 {
   "imagePath": "/corpus/qcow2/modern/cirros-0.5.1-x86_64.qcow2",
   "imageBasename": "cirros-0.5.1-x86_64.qcow2",
-  "filesystemType": "ext3",
-  "totalFiles": 7,
-  "totalDirectories": 4,
-  "sampleFiles": [
-    {"path": "/boot/grub/stage2", "sha256": "bc172b23a49e7c4d6f49e1af9568aa17ffabbf314fc56a1e50efe97369d4b7bf", "size": 121188},
-    {"path": "/boot/grub/e2fs_stage1_5", "sha256": "1d317c1e94328cdbe00dc05d50b02f0cb9ec673159145b7f4448cec28a33dc14", "size": 8344},
-    {"path": "/boot/grub/menu.lst", "sha256": "bd4b7aa84740262bca78bd8e737693cdf5f90773f7aa2ece36572abb73fa2182", "size": 308},
-    {"path": "/boot/vmlinuz-5.3.0-26-generic", "sha256": "c586660bd24dcda1c14d352997168e9210e7974b3ed9fa7501a007857bd22a06", "size": 9144704},
-    {"path": "/boot/config-5.3.0-26-generic", "sha256": "2e9c29d4bc3e9a31ecab64e262087a4bb5561db024c25befd2fac29bf44898ea", "size": 235811},
-    {"path": "/boot/initrd.img-5.3.0-26-generic", "sha256": "d2076feb3fe0eea5fa844bd72088e2e644e148a48e9ba845161ec0660752864b", "size": 6504567},
-    {"path": "/boot/grub/stage1", "sha256": "77c1024a494c2170d0236dabdb795131d8a0f1809792735b3dd7f563ef5d951e", "size": 512}
+  "filesystemCount": 2,
+  "totalFiles": 9,
+  "totalDirectories": 6,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext3",
+      "fileCount": 7,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/boot/grub/stage1",
+          "size": 512,
+          "sha256": "77c1024a494c2170d0236dabdb795131d8a0f1809792735b3dd7f563ef5d951e"
+        },
+        {
+          "path": "/boot/grub/stage2",
+          "size": 121188,
+          "sha256": "bc172b23a49e7c4d6f49e1af9568aa17ffabbf314fc56a1e50efe97369d4b7bf"
+        },
+        {
+          "path": "/boot/initrd.img-5.3.0-26-generic",
+          "size": 6504567,
+          "sha256": "d2076feb3fe0eea5fa844bd72088e2e644e148a48e9ba845161ec0660752864b"
+        },
+        {
+          "path": "/boot/vmlinuz-5.3.0-26-generic",
+          "size": 9144704,
+          "sha256": "c586660bd24dcda1c14d352997168e9210e7974b3ed9fa7501a007857bd22a06"
+        },
+        {
+          "path": "/boot/grub/e2fs_stage1_5",
+          "size": 8344,
+          "sha256": "1d317c1e94328cdbe00dc05d50b02f0cb9ec673159145b7f4448cec28a33dc14"
+        },
+        {
+          "path": "/boot/config-5.3.0-26-generic",
+          "size": 235811,
+          "sha256": "2e9c29d4bc3e9a31ecab64e262087a4bb5561db024c25befd2fac29bf44898ea"
+        },
+        {
+          "path": "/boot/grub/menu.lst",
+          "size": 308,
+          "sha256": "bd4b7aa84740262bca78bd8e737693cdf5f90773f7aa2ece36572abb73fa2182"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda15",
+      "fstype": "vfat",
+      "fileCount": 2,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/bootx64.efi",
+          "size": 968704,
+          "sha256": "11bac5c8c7a164f4c95ce4712f86c2d1085899721837d8ac91fa0590e635df1d"
+        },
+        {
+          "path": "/EFI/ubuntu/grub.cfg",
+          "size": 437,
+          "sha256": "cbc8cbf16b4500604011eae0e0cea934d41cf8c19159d359ce85bf86782dfe5c"
+        }
+      ]
+    }
   ]
 }

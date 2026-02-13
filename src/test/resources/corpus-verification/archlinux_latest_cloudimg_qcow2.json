@@ -1,29 +1,151 @@
 {
   "imagePath": "/corpus/qcow2/modern/archlinux-latest-cloudimg.qcow2",
   "imageBasename": "archlinux-latest-cloudimg.qcow2",
-  "filesystemType": "unknown",
-  "totalFiles": 38043,
-  "totalDirectories": 3007,
-  "sampleFiles": [
-    {"path": "/usr/share/man/man3/sd_machine_get_class.3.gz", "sha256": "2be4d9e489d3f64165c327eba6def1d50356fdf8af52485f2bb7ee53bb93a51d", "size": 1387},
-    {"path": "/usr/share/man/man3/gnutls_srp_set_server_credentials_file.3", "sha256": "e8727f62c3b7721f8bf23d056bc8874ec352689a8b61a97374cf5924dab36d88", "size": 1509},
-    {"path": "/usr/include/python3.14/typeslots.h", "sha256": "f8cd57ebc160c8385d7675c8bfddd44386a64680b86868678f3eab46926f7251", "size": 2569},
-    {"path": "/usr/lib/modules/6.18.5-arch1-1/kernel/drivers/media/rc/keymaps/rc-flydvb.ko.zst", "sha256": "552eabd857ebab47c5cd99fe53e0a9feff4dcf218ac43e8737baf21c49b5ead1", "size": 1720},
-    {"path": "/usr/lib/python3.14/logging/__pycache__/__init__.cpython-314.pyc", "sha256": "0f43f3a90d87fba57284fc869048622ec0d73770de399ceab0f220a3b2cba70a", "size": 96731},
-    {"path": "/usr/share/man/man3/CURLOPT_POSTREDIR.3.gz", "sha256": "169512d95617cc430c2254ff1a930d1c733d690d89921663da978c5709fb0e79", "size": 1208},
-    {"path": "/usr/include/evutil.h", "sha256": "1ff1e5990aaa53eb2fb160523f5f8bd58196317436d5c48d402304d8a32f261a", "size": 1782},
-    {"path": "/usr/lib/python3.14/__pycache__/random.cpython-314.opt-1.pyc", "sha256": "7d41d45f522dc3a3a2bd6328eed8a19a4a989c41c6b46ee67cc337718d8f09ed", "size": 37712},
-    {"path": "/usr/lib/python3.14/site-packages/cloudinit/__pycache__/cloud.cpython-314.pyc", "sha256": "dd107179e2ba02d37073fd59c99051819f0b35ad96ad1f86b1eeded4d302e89b", "size": 5333},
-    {"path": "/usr/share/terminfo/r/regent200", "sha256": "1ccbaeecaf4c784c896d8ecfe3f64d5f356aaf1e3d939abc3d021a55179376f5", "size": 728},
-    {"path": "/usr/share/man/uk/man8/setarch.8.gz", "sha256": "b3ec7e970f7e759aa6c1052c7b6a145343f34aa60de190c2b5042fe67c05105e", "size": 3286},
-    {"path": "/usr/share/man/man8/ctrlaltdel.8.gz", "sha256": "807757c7ee6bf473aadef557102a2e6124a8c3ac0aff079de4ae3ee2895f52be", "size": 1133},
-    {"path": "/usr/include/openssl/ui.h", "sha256": "3930cf36459a3c6c281953393a02e480c612d88325a999e8b1a79a032583e77f", "size": 19252},
-    {"path": "/usr/lib/python3.14/lib-dynload/_testsinglephase.cpython-314-x86_64-linux-gnu.so", "sha256": "e8cd1eef596fa3bf6883abf4ca4620c161ef35fed236389a5a2b6dc2ff9ecb1c", "size": 15864},
-    {"path": "/usr/lib/modules/6.18.5-arch1-1/kernel/drivers/media/i2c/saa6752hs.ko.zst", "sha256": "f3ebca16d5c4c7294bdcdfd0505b69ed8c6fb2a6320a7b4bcee27a4cd8f855e1", "size": 19290},
-    {"path": "/usr/include/verto-libevent.h", "sha256": "d81f94a55024e318880f10e2a6ac3254ad128b4864a5e8322a16420a4a3fddc6", "size": 1518},
-    {"path": "/usr/share/terminfo/a/ansiw", "sha256": "76f8f6265f666d322de3ba56e6579318589af3dc57c8588ae4df0f9480e4900e", "size": 1459},
-    {"path": "/usr/lib/python3.14/pathlib/_os.py", "sha256": "61e844988e54bdf47c0b11ad2b3fd961f058bb370793428f4c6868bd40cab6f2", "size": 18161},
-    {"path": "/usr/share/man/man3/sd_bus_message_new_method_return.3.gz", "sha256": "a9c2f0b7f99f050c8295814b10723261ffc640fbc50bf1ade2041a6b1d293ce4", "size": 55},
-    {"path": "/usr/share/man/man8/pam_permit.8.gz", "sha256": "93802cb052bdfebd47ed4eeb8d5b234dc8a05fa682f77eab0b4967cd10221d54", "size": 1045}
+  "filesystemCount": 5,
+  "totalFiles": 38045,
+  "totalDirectories": 3008,
+  "filesystems": [
+    {
+      "device": "/dev/sda2",
+      "fstype": "vfat",
+      "fileCount": 1,
+      "directoryCount": 2,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 331776,
+          "sha256": "b07ef76374237de1ed8c20bc84f4020d11a43407bb4b04f997583dd196ab480a"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda3",
+      "fstype": "btrfs",
+      "fileCount": 38043,
+      "directoryCount": 3006,
+      "sampleFiles": [
+        {
+          "path": "/usr/include/glib-2.0/gio/gunixconnection.h",
+          "size": 5801,
+          "sha256": "07f6415b4db556067f7d0275f8d8eee6fb81c83cc496ed0d39dddf905a77e5a9"
+        },
+        {
+          "path": "/usr/lib/modules/6.18.5-arch1-1/kernel/drivers/ata/pata_parport/epat.ko.zst",
+          "size": 8232,
+          "sha256": "18462a9a1dd1f06d7ed72172e41ad1438d44eb938c89593e10b8fec6b9942f16"
+        },
+        {
+          "path": "/usr/share/man/pl/man8/swapon.8.gz",
+          "size": 3927,
+          "sha256": "4e4b7c262191e8461022b46ae0b21150d6f4ccf81a92b6a8f3e0b53b99a0002a"
+        },
+        {
+          "path": "/usr/lib/grub/i386-efi/multiboot2.mod",
+          "size": 17332,
+          "sha256": "237983982ee48bdf605275b5e1b20f579b7d99d9d8ee3b454b0e8a04a698aa1e"
+        },
+        {
+          "path": "/usr/lib/python3.14/site-packages/cloudinit/sources/helpers/vmware/imc/__pycache__/guestcust_event.cpython-314.opt-1.pyc",
+          "size": 662,
+          "sha256": "64dbe023e9697be88a484098e1e755497d7a2923a50f31257d7de8ccbf9328cc"
+        },
+        {
+          "path": "/usr/lib/modules/6.18.5-arch1-1/kernel/drivers/media/dvb-frontends/stv0910.ko.zst",
+          "size": 18549,
+          "sha256": "189d1aaab43af98023ccda1ef75e5b6d16a2740fcaf9b1097032c74a8da839ac"
+        },
+        {
+          "path": "/etc/cloud/templates/hosts.openeuler.tmpl",
+          "size": 918,
+          "sha256": "516465a5ba8e625ca7997417d668af0fc3914e7b71a7211d230df02356f5005c"
+        },
+        {
+          "path": "/usr/lib/systemd/system/systemd-storagetm.service",
+          "size": 978,
+          "sha256": "23e70d440ac440387cd2a76857665940845e712a643c2fedea77900c76bd4e91"
+        },
+        {
+          "path": "/usr/share/terminfo/a/att4415-rv-nl",
+          "size": 1404,
+          "sha256": "d416c875a03cca08bae16c382fdf5498e631e1ef67477d8b80944e1b856080db"
+        },
+        {
+          "path": "/usr/share/man/man3/gnutls_hmac_deinit.3",
+          "size": 1094,
+          "sha256": "c39ed8d47380636462d5de566877cf3de49f6904831752ce6f7cf338d7daebb5"
+        },
+        {
+          "path": "/usr/include/tirpc/rpc/types.h",
+          "size": 3838,
+          "sha256": "2d4687cf177197f252b631deb4cb57ea5b5b31a5c9e0f91c1b6276399ad41b28"
+        },
+        {
+          "path": "/usr/lib/modules/6.18.5-arch1-1/kernel/drivers/scsi/BusLogic.ko.zst",
+          "size": 51720,
+          "sha256": "76f2db49d3c434890f525a83e165062b78d3207292b4e7031d6c6b3254dfde8d"
+        },
+        {
+          "path": "/usr/lib/modules/6.18.5-arch1-1/kernel/drivers/net/ethernet/microchip/encx24j600-regmap.ko.zst",
+          "size": 6508,
+          "sha256": "5f72825425f67ddd9fd1c7c8a61a221964224a9e9ab4dcbd34e87ca9deb3a5d7"
+        },
+        {
+          "path": "/usr/lib/python3.14/site-packages/charset_normalizer/__pycache__/models.cpython-314.opt-1.pyc",
+          "size": 22109,
+          "sha256": "85e65a14740f968577234985cd21fc9e90b64054d194b0533e33610a5e7daaf2"
+        },
+        {
+          "path": "/usr/lib/modules/6.18.5-arch1-1/kernel/drivers/platform/x86/oxpec.ko.zst",
+          "size": 7481,
+          "sha256": "d0ca44997b6bb6703cb89345992efc7f52e626069178def8e65e221bf9d2f6c9"
+        },
+        {
+          "path": "/usr/share/locale/gl/LC_MESSAGES/pacman-scripts.mo",
+          "size": 39400,
+          "sha256": "cef4bc1da85fe6680a4cfdcb59c2a918f59898bacaf596071ebc65c9a79bbb17"
+        },
+        {
+          "path": "/usr/lib/python3.14/json/scanner.py",
+          "size": 2434,
+          "sha256": "572958017eae8842eeddd0e3d18d3c56cc0a197348224915e1d87ce937841764"
+        },
+        {
+          "path": "/usr/bin/head",
+          "size": 51504,
+          "sha256": "2320ecbb3473356fb352776c173838cf0fdbc022a1fc9f65f1ffa002f74d6c62"
+        },
+        {
+          "path": "/usr/share/readline/rlbasic.c",
+          "size": 565,
+          "sha256": "6474e618baf6dd874050ec10b88552ba2ecb17bba431258a1319d61fb5019701"
+        },
+        {
+          "path": "/usr/share/man/man8/icupkg.8.gz",
+          "size": 1818,
+          "sha256": "c4766bb744d0a3e09aa63b27cc4ec468b2de7c157a729bfc7c03dc311b106f38"
+        }
+      ]
+    },
+    {
+      "device": "btrfsvol:/dev/sda3/swap",
+      "fstype": "btrfs",
+      "fileCount": 1,
+      "directoryCount": 0,
+      "sampleFiles": []
+    },
+    {
+      "device": "btrfsvol:/dev/sda3/var/lib/machines",
+      "fstype": "btrfs",
+      "fileCount": 0,
+      "directoryCount": 0,
+      "sampleFiles": []
+    },
+    {
+      "device": "btrfsvol:/dev/sda3/var/lib/portables",
+      "fstype": "btrfs",
+      "fileCount": 0,
+      "directoryCount": 0,
+      "sampleFiles": []
+    }
   ]
 }

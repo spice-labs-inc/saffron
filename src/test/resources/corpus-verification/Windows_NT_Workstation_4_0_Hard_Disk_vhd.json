@@ -1,25 +1,117 @@
 {
   "imagePath": "/corpus/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/Windows NT Workstation 4.0 Hard Disk.vhd",
   "imageBasename": "Windows NT Workstation 4.0 Hard Disk.vhd",
-  "filesystemType": "ntfs",
+  "filesystemCount": 1,
   "totalFiles": 2245,
-  "totalDirectories": 115,
-  "sampleFiles": [
-    {"path": "/WINNT/INF/mdmadc.PNF", "sha256": "0326e0b496356d2764f2b8eace4169f7d4612a928484b4f1e4f9130316a58a34", "size": 15964},
-    {"path": "/WINNT/system32/restore.exe", "sha256": "0ea61cc930d7d5ca70dd9be3e147342633cbf5f3c6d8bb76cc377ddb825423cb", "size": 64272},
-    {"path": "/WINNT/system32/posix.exe", "sha256": "a23cae22fd9237ab5dc3c6e4cfff81f5e35e0aeb81eab6891f2b1d51042db5b5", "size": 68368},
-    {"path": "/WINNT/ShellNew/amipro.sam", "sha256": "c4f73fe84bb916ac77b2cbc70964a26d5547c0a601e5e5c1eda57aee43cc759d", "size": 4570},
-    {"path": "/WINNT/system32/attrib.exe", "sha256": "4b6d603b178765ac3b59f0c44c5bbb0430689b2c2313fa27ea5419f7d697e034", "size": 27920},
-    {"path": "/WINNT/Help/int-mail.hlp", "sha256": "fbd5bb8673723f5989c0f325325a9dbb9c18c7da25c48b5e836a15e55ca8e725", "size": 36853},
-    {"path": "/WINNT/Cursors/barber.ani", "sha256": "d343070c13b5ed2e221cdf8e01e54d3860da06bb31b16c33b3e39ed2d4802a9e", "size": 8660},
-    {"path": "/WINNT/INF/mdmtexas.inf", "sha256": "a773b0bb68aee906730ea189cf676578c4a873e7ea646d8be5328b94ba0f08d2", "size": 23435},
-    {"path": "/WINNT/system32/wgpoadmn.dll", "sha256": "7f07ac0c5c4806fa3f3c9e775cf676a6a91ffff6e1eedfdf39a5a28c194b51c5", "size": 87312},
-    {"path": "/WINNT/system32/XCOPY.EXE", "sha256": "6f5c2f222aa88583b8e0432ad1d2a548364d2c2fc22441150a73537e71d81652", "size": 47376},
-    {"path": "/WINNT/Help/mspaint.hlp", "sha256": "733c4d0815a327415b08c22708bc7e088361d9acd14bc8635ce4ac9bfe0adb1d", "size": 39803},
-    {"path": "/WINNT/system32/MPR.DLL", "sha256": "67cc1b4abe1a6a7bf21ddf32921c51f6786070f3437a6369576fdb77e18bbf9f", "size": 59152},
-    {"path": "/Program Files/Windows NT/Pinball/SOUND12.WAV", "sha256": "9902227bb6cedede8636c99688391d1a0a77428193e3a12dd7fb12401a598d5a", "size": 4296},
-    {"path": "/WINNT/system32/notepad.exe", "sha256": "1e09c1b58d78f1a415eb90f480c020998297a918cf5e658a1f9b22f5d651d2e9", "size": 45328},
-    {"path": "/WINNT/system32/oitwa400.dll", "sha256": "f8749b92b0e3840f0344d06c21ac96fae9e9ddb346d9716262a87de83f424359", "size": 24336},
-    {"path": "/WINNT/system32/secsspi.dll", "sha256": "ae65408c7449c131727b9901650c8f254d0cca737709f1db987df48982243673", "size": 14608}
+  "totalDirectories": 114,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "ntfs",
+      "fileCount": 2245,
+      "directoryCount": 114,
+      "sampleFiles": [
+        {
+          "path": "/WINNT/Cursors/wagtail.ani",
+          "size": 2548,
+          "sha256": "3b38b4209ceb7f4e361d8cd778951856cff48722b27d7224b452af9b11612399"
+        },
+        {
+          "path": "/WINNT/INF/mdmcomm1.PNF",
+          "size": 38828,
+          "sha256": "6722724f1401ba439b89b51ece565dc75a97ae81db6402cae9e3f053b9976a10"
+        },
+        {
+          "path": "/WINNT/system32/USERINIT.EXE",
+          "size": 26896,
+          "sha256": "448bfe6c17d6b0219cff8ee9941a6bddceca675dbe5f1c5bc75c504eacc8f089"
+        },
+        {
+          "path": "/WINNT/INF/mdmlce.PNF",
+          "size": 41688,
+          "sha256": "5698a3618f81f0c0be3c624334c9ae91a9ed7178e00c7947af90a905c5848582"
+        },
+        {
+          "path": "/WINNT/INF/perms.PNF",
+          "size": 6584,
+          "sha256": "ddb9a570aa70555be3b8a7542ff83baa53580d2c00030317b09bde552987a9e2"
+        },
+        {
+          "path": "/WINNT/system32/CSVROOT.EXE",
+          "size": 7168,
+          "sha256": "d7987e7ee445aab599abac2c1eb2df1d21d081e5cbb7eff96219039a2459bc95"
+        },
+        {
+          "path": "/WINNT/system32/CRYPTEXT.DLL",
+          "size": 50448,
+          "sha256": "71aae940e5ac43a82b3395d07518e77cffc11f8cd4c876b7b67607c02f42584a"
+        },
+        {
+          "path": "/WINNT/ShellNew/quattro.wb2",
+          "size": 4017,
+          "sha256": "c37719c45ec901e8483d8b0c6706bdf8b66dad1f9cea3c2c7f8bcb7311e8a3e7"
+        },
+        {
+          "path": "/WINNT/system32/SCHANNEL.DLL",
+          "size": 154896,
+          "sha256": "d2e20063eb22ecfa3638bbe5335a3039c88b153b793a4487bd745288d4b9d384"
+        },
+        {
+          "path": "/WINNT/Media/Jungle Error.WAV",
+          "size": 166954,
+          "sha256": "6e9a54b444cb3f1d9a2dbc94cc1015af0d588fb026db7fab2d499d1f6b335aac"
+        },
+        {
+          "path": "/WINNT/INF/mdmhayes.PNF",
+          "size": 56916,
+          "sha256": "860b6ded2ef13cf35fb86e82a3b9e987de4f536a780d6f8bfe72a5ddcd43ad16"
+        },
+        {
+          "path": "/Program Files/Windows NT/Pinball/SOUND713.WAV",
+          "size": 14592,
+          "sha256": "292605cfdf32af50de7179aca4ca3b89ba7d576278b22ebd7b43b38d372bc81c"
+        },
+        {
+          "path": "/WINNT/system32/USER.EXE",
+          "size": 47392,
+          "sha256": "bcebe9b30bd3fbc8ca3280b5e1f2c430f695ef4d1137563cdf84f0b4428cc18f"
+        },
+        {
+          "path": "/WINNT/system32/oislb400.dll",
+          "size": 25872,
+          "sha256": "37a13b92a419c88cb50019234f15335d59547739cacb809ba3e9e5ad29d135e2"
+        },
+        {
+          "path": "/WINNT/INF/WAVE.INF",
+          "size": 9149,
+          "sha256": "e26eb70a567acec7b2363c0f8eb453257afd667357ca05d9b3f2f53dbe46c28d"
+        },
+        {
+          "path": "/WINNT/INF/scsi.PNF",
+          "size": 49572,
+          "sha256": "7edbb0f3d93331498c2ecd56c9f181daa30e687b7e125ba77a40a2f85106460e"
+        },
+        {
+          "path": "/WINNT/INF/mdmmoton.PNF",
+          "size": 40048,
+          "sha256": "8ad6032ff7eba0fe45fce57d887a1b14dbbbfc7928ec4000735102d8ac3cedac"
+        },
+        {
+          "path": "/WINNT/system32/NDDENB32.DLL",
+          "size": 20240,
+          "sha256": "25eaca5d893a9a7efb27cf3b171abaec4072eb58e03355781de87852170a9f89"
+        },
+        {
+          "path": "/Program Files/Plus!/Microsoft Internet/docs/space.gif",
+          "size": 826,
+          "sha256": "ef1ba790c8259181f4556640d1e856825cc1c8463c1da817558e604123a57a94"
+        },
+        {
+          "path": "/WINNT/INF/layout.inf",
+          "size": 90859,
+          "sha256": "efbb0b7327721c3392be29a3dd17073f151e656beb510551060eb90d8593e831"
+        }
+      ]
+    }
   ]
 }

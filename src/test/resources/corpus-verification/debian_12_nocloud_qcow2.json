@@ -1,109 +1,170 @@
 {
   "imagePath": "/corpus/qcow2/modern/debian-12-nocloud.qcow2",
   "imageBasename": "debian-12-nocloud.qcow2",
-  "filesystemType": "ext4",
-  "totalFiles": 21558,
-  "totalDirectories": 2762,
-  "sampleFiles": [
+  "filesystemCount": 2,
+  "totalFiles": 21567,
+  "totalDirectories": 2764,
+  "filesystems": [
     {
-      "path": "/boot/System.map-6.1.0-42-amd64",
-      "sha256": "f47b4c00d87f4b5378487972ded9d447074d4771bea98af3f852220ee34392e5",
-      "size": 83
+      "device": "/dev/sda1",
+      "fstype": "ext4",
+      "fileCount": 21558,
+      "directoryCount": 2761,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/vim/vim90/keymap/greek_iso-8859-7.vim",
+          "size": 2132,
+          "sha256": "3f527d5d9d58053d31415db3ad491c298d7ef24d05a654d92ddc83f8550e851c"
+        },
+        {
+          "path": "/var/cache/man/it/index.db",
+          "size": 20480,
+          "sha256": "2e4b833212be121369da5c1c04c8e8f24b22ccbb295796d95407d2e467a9a4eb"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/pygments/lexers/__pycache__/_qlik_builtins.cpython-311.pyc",
+          "size": 6413,
+          "sha256": "1467ee64d7c81a1ee517440a3f257a1b3ddb1fb49bc800e4eb2aba083631f60d"
+        },
+        {
+          "path": "/usr/lib/modules/6.1.0-42-amd64/kernel/sound/soc/sof/intel/snd-sof-pci-intel-apl.ko",
+          "size": 59441,
+          "sha256": "78314b3c5c3883a4479e6f38bc4ef7ed0b6006d12169b6cb6e5e4da0d497cb62"
+        },
+        {
+          "path": "/usr/share/lintian/overrides/libsmartcols1",
+          "size": 113,
+          "sha256": "00a6307e9ccfbcda48668a712e81917f2781c6d458a20577c5a68ae11a6db2b6"
+        },
+        {
+          "path": "/usr/lib/python3.11/asyncore.py",
+          "size": 20310,
+          "sha256": "0dc49691ced7a3d7c67eb42f1319d1a93f7fae9cec65712a38cfaeee26fefffb"
+        },
+        {
+          "path": "/usr/lib/python3.11/dbm/dumb.py",
+          "size": 11594,
+          "sha256": "c99202d9eb4e25a023715a1b804c886fdb7d9f957730959bb071a57d607443b5"
+        },
+        {
+          "path": "/usr/bin/test",
+          "size": 60304,
+          "sha256": "9a9cb09f9f71ae289fd3a93a86c1b8189048ea01f6b956dfa4734bb74dc834f7"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/urllib3/contrib/_appengine_environ.py",
+          "size": 957,
+          "sha256": "6c36f2384856d8228b25c42a00a032ac41cdf9a925b321c52aaeaf17c645b269"
+        },
+        {
+          "path": "/usr/share/doc/libsasl2-2/changelog.Debian.gz",
+          "size": 2755,
+          "sha256": "a504f59cd75651fa4c20dd5418bb2fda96009ed3d2eb2cbf00440ff5f11f850b"
+        },
+        {
+          "path": "/usr/lib/modules/6.1.0-42-amd64/kernel/drivers/net/wireless/realtek/rtlwifi/rtl8723be/rtl8723be.ko",
+          "size": 289937,
+          "sha256": "365512231f345729244708359bb3f121616cc677fc89393b5d4d95744e46e3cd"
+        },
+        {
+          "path": "/usr/share/bash-completion/completions/clisp",
+          "size": 668,
+          "sha256": "149c2614f0c5dbd6786c31b77fa23f745d9964002014982b86372443db33eb38"
+        },
+        {
+          "path": "/usr/share/locale/vi/LC_MESSAGES/grep.mo",
+          "size": 19176,
+          "sha256": "e2d843342df90139f208603626fb5cae3ca43aeb61f9672b9b42d2448a6fbb4e"
+        },
+        {
+          "path": "/var/lib/dpkg/info/libuchardet0:amd64.shlibs",
+          "size": 38,
+          "sha256": "69bebf123b06cd0bc0cdfef55c8e4a45e2d21458b2ae8e8c94bd88eb02b57f75"
+        },
+        {
+          "path": "/usr/share/zoneinfo/Pacific/Port_Moresby",
+          "size": 186,
+          "sha256": "7a2fd78e68910cb87e454f78bafcfd0822084451f5af45fb58bfac07ee8317ad"
+        },
+        {
+          "path": "/usr/share/bash-completion/completions/hostnamectl",
+          "size": 2752,
+          "sha256": "6c076abb27efd993cec1865de2a453ce9e996a4553383fd8639c08aaf20b4486"
+        },
+        {
+          "path": "/usr/lib/python3.11/imaplib.py",
+          "size": 54865,
+          "sha256": "dc3be105fb6b3e28074c4dbe0d4177c8445a803b5a935f3c4bbfe77701259c39"
+        },
+        {
+          "path": "/usr/lib/python3.11/__pycache__/csv.cpython-311.pyc",
+          "size": 20054,
+          "sha256": "a6d1708286262a46b41e103ba5c089aa618850c55138bc672be655c558f9ac70"
+        },
+        {
+          "path": "/usr/share/doc/libbsd0/copyright",
+          "size": 23960,
+          "sha256": "00fd7be5d907a6bcc409a80f2d565f508673db4761d54623691f89ae3aa20fc7"
+        },
+        {
+          "path": "/usr/share/vim/vim90/doc/usr_28.txt",
+          "size": 16020,
+          "sha256": "09be5d6f2e400ff3706a3f84cc78201c528ab84ba54ae050d3991a16b4508ed1"
+        }
+      ]
     },
     {
-      "path": "/usr/bin/expand",
-      "sha256": "18303d60bad5cdf52eaa0e6b3ff2d21db8c975a9011d62bdd493381c90a4062c",
-      "size": 43952
-    },
-    {
-      "path": "/usr/lib/modules/6.1.0-42-amd64/kernel/crypto/adiantum.ko",
-      "sha256": "64a9f3d94bd936c4c40c648668877e2157910fda22e33749ad11a1bc010ff90b",
-      "size": 23745
-    },
-    {
-      "path": "/usr/lib/modules/6.1.0-42-amd64/kernel/drivers/input/joystick/gf2k.ko",
-      "sha256": "7e0ec6ef0cd12e6c0b3d1abf77871b7c15faa5bb3dc22da260b396d3d6a7fd21",
-      "size": 21537
-    },
-    {
-      "path": "/usr/lib/modules/6.1.0-42-amd64/kernel/drivers/net/phy/et1011c.ko",
-      "sha256": "4a5d27a5582a9796d06e8314f80316566c75408c11ae98fc18a2bec4cf9801ec",
-      "size": 9209
-    },
-    {
-      "path": "/usr/lib/modules/6.1.0-42-amd64/kernel/net/6lowpan/nhc_ipv6.ko",
-      "sha256": "68ccc35c467bf89c4ceda729ced771819d5965dabe21bb1ab3cfecb9229259bb",
-      "size": 6617
-    },
-    {
-      "path": "/usr/lib/python3.11/concurrent/futures/thread.py",
-      "sha256": "b06f8899881193efc72cfc3ebf2836dce4e668b3856ad35f4016616d643a519e",
-      "size": 8771
-    },
-    {
-      "path": "/usr/lib/python3/dist-packages/debian/__pycache__/__init__.cpython-311.pyc",
-      "sha256": "1d1c0ec5d9e6e146afa95efebb4f4a3879f4a46ea101678fe26bfe72eab50aa3",
-      "size": 1531
-    },
-    {
-      "path": "/usr/lib/python3/dist-packages/rich-13.3.1.dist-info/RECORD",
-      "sha256": "a3cf7d5cf81412c8143cccc594dcbcb839b2635284da81a921594b8e0d23a6d6",
-      "size": 5929
-    },
-    {
-      "path": "/usr/lib/x86_64-linux-gnu/libgpg-error.so.0.33.1",
-      "sha256": "f93b4f9a2d482d553f743d1fe6ac6b219f88f20d59b528d46a61610c5d0ac10e",
-      "size": 157768
-    },
-    {
-      "path": "/usr/share/apt-listchanges/__pycache__/ALCConfig.cpython-311.pyc",
-      "sha256": "ad27bf69b5b8949524be57e8b5a457a7ea76e16bbb83df2c5000be52caaaee2a",
-      "size": 10848
-    },
-    {
-      "path": "/usr/share/doc/gettext-base/changelog.gz",
-      "sha256": "3d6b7a32dec45e222a65003eaea842e04309fcf52f5065357f203f3328710f2d",
-      "size": 72621
-    },
-    {
-      "path": "/usr/share/doc/udev/copyright",
-      "sha256": "a7d06854714a1ca99f6dbd1a1641dde5bcf28635be149f6554449618f8f427f3",
-      "size": 12776
-    },
-    {
-      "path": "/usr/share/locale/km/LC_MESSAGES/apt.mo",
-      "sha256": "757a4f61a8b6b7ecb6c665f5c47e02adf8f1f06950c4a670ef9ef08c4e933a6a",
-      "size": 36159
-    },
-    {
-      "path": "/usr/share/man/ja/man8/catman.8.gz",
-      "sha256": "f90301a153896bf8bca15f464b72a361c2748982800a2ffefc959e7cfe929548",
-      "size": 1974
-    },
-    {
-      "path": "/usr/share/man/man8/e4defrag.8.gz",
-      "sha256": "cf38dc7f5c66eac839c23de4d3da229aa020a612b5089277a06026b90be84577",
-      "size": 1145
-    },
-    {
-      "path": "/usr/share/screen/utf8encodings/c2",
-      "sha256": "0d7b3cdb9a0de80545254ffb82e78b33afe5ec4e438b11a2b6b454cefcc6a4e8",
-      "size": 256
-    },
-    {
-      "path": "/usr/share/vim/vim90/lang/no/LC_MESSAGES/vim.mo",
-      "sha256": "ddc122f2873d3fd7bd1715522990803c2d695e8d4f7db95e2f4ab773aa7cd55f",
-      "size": 140940
-    },
-    {
-      "path": "/usr/share/zoneinfo/Antarctica/DumontDUrville",
-      "sha256": "83c1d02d8f9a377a7a6b3fb4e0a74739d65816737fffef25b4746e63d7905fe2",
-      "size": 194
-    },
-    {
-      "path": "/var/lib/dpkg/info/libargon2-1:amd64.symbols",
-      "sha256": "261a8bf5fcc8489c4c8a77eb059b66cb35da5c62bebaf2c6cec5b6fc211cb6a2",
-      "size": 780
+      "device": "/dev/sda15",
+      "fstype": "vfat",
+      "fileCount": 9,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/mmx64.efi",
+          "size": 850176,
+          "sha256": "e6ff92628eb3ab915032af43574ae39c5d0a9069bf89bd7b9bd832630e09d906"
+        },
+        {
+          "path": "/EFI/debian/grubx64.efi",
+          "size": 4199872,
+          "sha256": "808d78ade39fbcfbd8c77d061b6b8cbdabffeabd58e54effcb6e621accb01445"
+        },
+        {
+          "path": "/EFI/debian/grub.cfg",
+          "size": 117,
+          "sha256": "0864fc65a4fc36acc1505456aa59b209d3fc777787f2ee9f26ad0ea0483ed5e4"
+        },
+        {
+          "path": "/EFI/debian/fbx64.efi",
+          "size": 87376,
+          "sha256": "2af8ca2c387172273ab41f6c9ead636745e04006631385d389f8d4dfe928b21b"
+        },
+        {
+          "path": "/EFI/debian/mmx64.efi",
+          "size": 850176,
+          "sha256": "e6ff92628eb3ab915032af43574ae39c5d0a9069bf89bd7b9bd832630e09d906"
+        },
+        {
+          "path": "/EFI/BOOT/grubx64.efi",
+          "size": 4199872,
+          "sha256": "808d78ade39fbcfbd8c77d061b6b8cbdabffeabd58e54effcb6e621accb01445"
+        },
+        {
+          "path": "/EFI/debian/shimx64.efi",
+          "size": 960080,
+          "sha256": "c5fc5e5e74057e7a6be857eb5dc39209396dffd945a3e8c93e9cf13c103f88f8"
+        },
+        {
+          "path": "/EFI/debian/BOOTX64.CSV",
+          "size": 108,
+          "sha256": "726dfb8abb923624c188b2505dc744409c3d589bed82b627984b6390c230a384"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 960080,
+          "sha256": "c5fc5e5e74057e7a6be857eb5dc39209396dffd945a3e8c93e9cf13c103f88f8"
+        }
+      ]
     }
   ]
 }

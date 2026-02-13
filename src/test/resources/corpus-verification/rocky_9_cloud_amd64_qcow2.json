@@ -1,29 +1,293 @@
 {
   "imagePath": "/corpus/qcow2/modern/rocky-9-cloud-amd64.qcow2",
   "imageBasename": "rocky-9-cloud-amd64.qcow2",
-  "filesystemType": "unknown",
+  "filesystemCount": 3,
   "totalFiles": 29516,
   "totalDirectories": 5088,
-  "sampleFiles": [
-    {"path": "/usr/lib64/python3.9/site-packages/setools/diff/__pycache__/context.cpython-39.opt-1.pyc", "sha256": "240b6a4a1cedf32bb1a484a9d249d9ac7749bef380f5f66783f00eb661d3b1d4", "size": 1590},
-    {"path": "/usr/lib/python3.9/site-packages/sos/report/plugins/pulseaudio.py", "sha256": "df4ce3e14bb2fe6400810c2d1c7e98feab235fedd84d8b5d44d495d89cbf9821", "size": 1597},
-    {"path": "/usr/lib/dracut/modules.d/95hwdb/module-setup.sh", "sha256": "651a90112070b83adc015ba46ec0c64e17ae09d7c7076ad2ff732ea77c913c88", "size": 591},
-    {"path": "/usr/share/zoneinfo/right/America/St_Kitts", "sha256": "cd1b4743077fc93db54825488796a092a1cc18bc11bcbfaefea6db74ef7c14e0", "size": 796},
-    {"path": "/usr/lib/grub/x86_64-efi/gfxterm_menu.mod", "sha256": "fd984000ec446f478dc1f1d2dadfb6e4f88828fa695ba72e999d9fdd3b5f4e67", "size": 8800},
-    {"path": "/usr/lib/python3.9/site-packages/sos/report/plugins/__pycache__/bootc.cpython-39.pyc", "sha256": "4b614a48dc6942579b459c47181a11471f9a411245114eeaa75b94656c58ec9c", "size": 792},
-    {"path": "/usr/lib/python3.9/site-packages/chardet/big5freq.py", "sha256": "0ffccae46cb3a15b117acd0790b2738a5b45417d1b2822ceac57bdff10ef3bff", "size": 31254},
-    {"path": "/usr/lib/dracut/modules.d/90lvm/64-lvm.rules", "sha256": "c3f5d19b9169781bbbd71fa96e30ed09d2f6a4ff83f6bac623a4df0f476e81f3", "size": 1308},
-    {"path": "/usr/share/licenses/keyutils/LICENCE.GPL", "sha256": "f46409d4822b2457b39bbd0e7881eecb396130eb8320b7748fa7e9488970aa6d", "size": 17997},
-    {"path": "/usr/share/groff/1.22.4/font/devps/CR", "sha256": "e0bfd353a7be753a25dd22a9bb3f5ed0dcb45de1a3e2cb260fd4aa87fe02989f", "size": 6447},
-    {"path": "/usr/lib/modules/5.14.0-611.5.1.el9_7.x86_64/kernel/drivers/hwmon/via-cputemp.ko.xz", "sha256": "a798f17dd8b98094ae4e3ad27cd55908389c39cef77ac60abb2c427832f9c4b3", "size": 5328},
-    {"path": "/usr/lib/python3.9/site-packages/pytz/lazy.py", "sha256": "b68791e6e0d62818fa7b3b146787a534fe8210cb4aec23b68d2f40df49ec15ba", "size": 5404},
-    {"path": "/etc/pki/ca-trust/extracted/pem/directory-hash/TrustAsia_TLS_RSA_Root_CA.pem", "sha256": "76ae2d0df1228b565cf3533a7c22d59fc3683f240ce7192201072260fc6f0e27", "size": 1968},
-    {"path": "/usr/share/cockpit/networkmanager/po.ka.js.gz", "sha256": "2bbf05741c887c77a565743fbd99c90dcf14b11f7d313528ef3c229b3cb565a4", "size": 12945},
-    {"path": "/usr/lib/python3.9/site-packages/cockpit/_version.py", "sha256": "cd31d6938beeb506030020b253c1d42c58bdcd31f33687d52a66c692edc2e6f2", "size": 20},
-    {"path": "/usr/lib/udev/rules.d/95-dm-notify.rules", "sha256": "d24e725fc78306ff2355eb91e4eebcc7dc9388d54dc27d20d6fe6f695054d536", "size": 483},
-    {"path": "/usr/lib/python3.9/site-packages/cockpit/_vendor/bei/data/__pycache__/__init__.cpython-39.opt-1.pyc", "sha256": "d9be583d18c466ccfb700f725e04e0e7eba397355ef9ab909fcdbcd7fd97883b", "size": 693},
-    {"path": "/usr/share/locale/gu/LC_MESSAGES/gdk-pixbuf.mo", "sha256": "36584312b97f085ab6e6ea4a547893c5d511038a77d188934479b44826d4e566", "size": 29033},
-    {"path": "/usr/lib/python3.9/site-packages/requests-2.25.1.dist-info/top_level.txt", "sha256": "7cc4959877dbe6b6c63a8eb1bfe3bfb545fa8fe5b28b1b2c13e4a7c1c0d1c4d4", "size": 9},
-    {"path": "/usr/lib64/python3.9/unittest/__pycache__/_log.cpython-39.pyc", "sha256": "e41ea89ea46c4eaab25cb9cfbc53a2c630d08ad74dd41b76a7336d21901d5d5f", "size": 2523}
+  "filesystems": [
+    {
+      "device": "/dev/sda2",
+      "fstype": "vfat",
+      "fileCount": 12,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/rocky/mmx64.efi",
+          "size": 857352,
+          "sha256": "eb142a794ae260631fc4347b0a2e6be6e9b7543a057565d6b7fab17e85453e14"
+        },
+        {
+          "path": "/EFI/rocky/shim.efi",
+          "size": 959224,
+          "sha256": "b49c7d6911be1dc9ba05d9160d4f3ce8dc422cf454d11b6b0ea28ac2d81ffb30"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 959224,
+          "sha256": "b49c7d6911be1dc9ba05d9160d4f3ce8dc422cf454d11b6b0ea28ac2d81ffb30"
+        },
+        {
+          "path": "/EFI/rocky/BOOTX64.CSV",
+          "size": 104,
+          "sha256": "407faf41257c23a112728216e86c1a198f7d7481de8bd01fc39cebedea7f1d26"
+        },
+        {
+          "path": "/EFI/BOOT/mmx64.efi",
+          "size": 857352,
+          "sha256": "eb142a794ae260631fc4347b0a2e6be6e9b7543a057565d6b7fab17e85453e14"
+        },
+        {
+          "path": "/EFI/BOOT/grub.cfg",
+          "size": 154,
+          "sha256": "da7b928e5782e2914fb1a7b283023703bdf84964417e553facd25cdca905fda6"
+        },
+        {
+          "path": "/EFI/BOOT/grubx64.efi",
+          "size": 2566472,
+          "sha256": "1816b7bb13033131859791ed1d3bc36fe3d07ecf8bab30fa1ff458a33e04991f"
+        },
+        {
+          "path": "/EFI/BOOT/fbx64.efi",
+          "size": 91432,
+          "sha256": "cc516f9090e5786faa83a3f869ea7da9ed5de0b92ed6e3c4e2f28d97c27b767d"
+        },
+        {
+          "path": "/EFI/rocky/shimx64.efi",
+          "size": 959224,
+          "sha256": "b49c7d6911be1dc9ba05d9160d4f3ce8dc422cf454d11b6b0ea28ac2d81ffb30"
+        },
+        {
+          "path": "/EFI/rocky/grub.cfg",
+          "size": 154,
+          "sha256": "da7b928e5782e2914fb1a7b283023703bdf84964417e553facd25cdca905fda6"
+        },
+        {
+          "path": "/EFI/rocky/grubx64.efi",
+          "size": 2566472,
+          "sha256": "1816b7bb13033131859791ed1d3bc36fe3d07ecf8bab30fa1ff458a33e04991f"
+        },
+        {
+          "path": "/EFI/rocky/shimx64-rocky.efi",
+          "size": 952016,
+          "sha256": "77f6bfce07984cf433cc9499a28c0b59c6bf85f5efe534ee8bca37f02c5254d0"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda3",
+      "fstype": "xfs",
+      "fileCount": 351,
+      "directoryCount": 8,
+      "sampleFiles": [
+        {
+          "path": "/grub2/locale/es.mo",
+          "size": 131671,
+          "sha256": "7e95f527f5acc3124a8553677d7e66cc6786ef159da5a50037d24f6b751fb4e5"
+        },
+        {
+          "path": "/grub2/i386-pc/halt.mod",
+          "size": 5816,
+          "sha256": "71cef9b7329a93143b43dc8b319fc9e2f2892c3f37015393940e81e4415c6d8f"
+        },
+        {
+          "path": "/grub2/i386-pc/linux.mod",
+          "size": 12504,
+          "sha256": "9a511d2beece67aaffee0205737170cb7406e243f5f4cc6ee7192520dc06c3a0"
+        },
+        {
+          "path": "/grub2/locale/en@cyrillic.mo",
+          "size": 159227,
+          "sha256": "be1f2614e089c1c3d047ca631aaea5d70d285a74c4906a6bf20f32ac61c7ea55"
+        },
+        {
+          "path": "/grub2/i386-pc/bsd.mod",
+          "size": 41824,
+          "sha256": "c13428f9ba5955eb12b06be7f4b4f065895625031461bd2ac64ac0ed52ead812"
+        },
+        {
+          "path": "/grub2/i386-pc/procfs.mod",
+          "size": 2684,
+          "sha256": "6d4564e52b50569998dad0890d138b156b759c52fd2aba9cd5721db4f8f857b0"
+        },
+        {
+          "path": "/grub2/i386-pc/freedos.mod",
+          "size": 2964,
+          "sha256": "331fda8d88626b26158ce833096313fa0143e5b395affc2f87f9cde9efdda560"
+        },
+        {
+          "path": "/grub2/i386-pc/wrmsr.mod",
+          "size": 1956,
+          "sha256": "9659dbe9c2cbc127279712faa06ac0b8f65b824ce1712a6f0563acd218cf293c"
+        },
+        {
+          "path": "/grub2/i386-pc/lspci.mod",
+          "size": 5380,
+          "sha256": "b1eb9f79480eff21b7ab7d4731353eb3604c85321f0aaa56201df1a97b6df99d"
+        },
+        {
+          "path": "/grub2/i386-pc/spkmodem.mod",
+          "size": 2388,
+          "sha256": "ba87f8ebf9b0bf223bbc9e6ee30d3c6f439d4f80d5669079ea9f10574c96f91c"
+        },
+        {
+          "path": "/grub2/i386-pc/gettext.mod",
+          "size": 6392,
+          "sha256": "af1c47f843b1fc6d993f917829fbdce896c8d70579cb84ec1def8ca1a000bbe8"
+        },
+        {
+          "path": "/grub2/i386-pc/diskfilter.mod",
+          "size": 15420,
+          "sha256": "0b9286567fd00d23a4d7592bdc18c694cae37f968b80d90dce482926e9f27630"
+        },
+        {
+          "path": "/grub2/i386-pc/reboot.mod",
+          "size": 2056,
+          "sha256": "fbf1efefc2e2818a11774ff5804d8b8e3f4cf69f108f7a42077fd74ee7aeb6da"
+        },
+        {
+          "path": "/grub2/i386-pc/password_pbkdf2.mod",
+          "size": 3516,
+          "sha256": "a5814a86bf90dbff7143b65e989a9dd5dfd19cc4edabe8d2f775f467a9677c03"
+        },
+        {
+          "path": "/grub2/i386-pc/udf.mod",
+          "size": 12436,
+          "sha256": "9adbd8120f68783432c4511f6780ba993633f333e59637528c3d9e07b7b71912"
+        },
+        {
+          "path": "/grub2/i386-pc/strtoull_test.mod",
+          "size": 2220,
+          "sha256": "8e25049a80e1800f5466144c26d57830619f8dab6f43d8b4aa747fed95e60de5"
+        },
+        {
+          "path": "/grub2/locale/de_CH.mo",
+          "size": 38902,
+          "sha256": "7594244c9935ab95ce09e4478c993d6362f465d534019f112521ac55e7ef7688"
+        },
+        {
+          "path": "/grub2/i386-pc/lvm.mod",
+          "size": 11740,
+          "sha256": "416efa255bf25a48fab7aae24542e6575dddd8ea6d3c343d39f3edde95797e41"
+        },
+        {
+          "path": "/grub2/i386-pc/sfs.mod",
+          "size": 7408,
+          "sha256": "63067aa12d1fc7e8f765c97116759be1da6f6f32d41aa1da3c37428955602f12"
+        },
+        {
+          "path": "/grub2/i386-pc/tr.mod",
+          "size": 2716,
+          "sha256": "94b003af6f76e6c96dff5747d3106ca9732c54dee3ef1ebcf4c92ed3f7968a35"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda4",
+      "fstype": "xfs",
+      "fileCount": 29153,
+      "directoryCount": 5077,
+      "sampleFiles": [
+        {
+          "path": "/usr/lib/python3.9/site-packages/sos/cleaner/parsers/__pycache__/ip_parser.cpython-39.opt-1.pyc",
+          "size": 1261,
+          "sha256": "51edfb2a1e2756894a622e6963420abe521620816f5795139158ced9060d5665"
+        },
+        {
+          "path": "/usr/lib64/python3.9/site-packages/libdnf/repo.py",
+          "size": 18566,
+          "sha256": "135f07db4aef437102a95a927c1b6db5333b4dd34d7392cfbc40294a50349d90"
+        },
+        {
+          "path": "/usr/share/locale/ro/LC_MESSAGES/kbd.mo",
+          "size": 5928,
+          "sha256": "38a8bae6f2f86cad763128b32db5b8c5a54dd9386c50ea00abc06b3540f4607e"
+        },
+        {
+          "path": "/usr/lib/python3.9/site-packages/sos/policies/init_systems/__pycache__/__init__.cpython-39.opt-1.pyc",
+          "size": 5828,
+          "sha256": "7daca12b90f3467c5271b05112b0a7090db190e74e82d885315fadf82b05f7a4"
+        },
+        {
+          "path": "/usr/lib64/python3.9/lib2to3/fixes/__pycache__/fix_basestring.cpython-39.opt-2.pyc",
+          "size": 613,
+          "sha256": "3566216ee6b9b8a4a3337a2213b0fc6aff7944ac3deaddf38c9ba679bb5bb7ea"
+        },
+        {
+          "path": "/usr/lib/python3.9/site-packages/gi/overrides/__pycache__/Pango.cpython-39.opt-1.pyc",
+          "size": 1535,
+          "sha256": "c0e7ab2b667c5315c04810975e4f51b7d2b5539d80ddc4e0d2e9dccd228e2aa4"
+        },
+        {
+          "path": "/usr/lib/modules/5.14.0-611.5.1.el9_7.x86_64/kernel/drivers/net/phy/air_en8811h.ko.xz",
+          "size": 8908,
+          "sha256": "84fb0c62ba868c9a8ac0a5313a531650e4e6e7e59cbab3cf6914dc9067018683"
+        },
+        {
+          "path": "/usr/share/locale/lt/LC_MESSAGES/gsettings-desktop-schemas.mo",
+          "size": 105427,
+          "sha256": "2fcaa97d5682f72f54d2414b75b1da783604f6037eaf8b1746104cf295ce4b78"
+        },
+        {
+          "path": "/usr/lib/grub/x86_64-efi/gcry_rfc2268.mod",
+          "size": 5024,
+          "sha256": "4423ccd5fc5036cedb9ec5be60bd4e6249c25777c2ca497c1ed3f5e01fbd82a2"
+        },
+        {
+          "path": "/usr/lib/modules/5.14.0-611.5.1.el9_7.x86_64/kernel/net/802/garp.ko.xz",
+          "size": 8152,
+          "sha256": "517ebe07b37175e09dad8fa5e04129a0a9d78869126ed1a648b26bbb121b64d8"
+        },
+        {
+          "path": "/usr/share/microcode_ctl/ucode_with_caveats/intel/intel-ucode/06-3d-04",
+          "size": 19456,
+          "sha256": "33c8eb1ab12d4d901711c91a0858937edb811c40358d2fd7ce502bb5e01149eb"
+        },
+        {
+          "path": "/usr/lib/rpm/platform/noarch-linux/macros",
+          "size": 3332,
+          "sha256": "d353f17840c886992e03bd579bc27ccec781b1d640c74ffff2523936b0f8184d"
+        },
+        {
+          "path": "/usr/lib/kbd/consolefonts/lat4-08.psfu.gz",
+          "size": 1821,
+          "sha256": "0ec846cb635398cbc5ce789fa45858af56deaced1dd8531485d929bf9080cb15"
+        },
+        {
+          "path": "/usr/lib64/python3.9/distutils/command/sdist.py",
+          "size": 19005,
+          "sha256": "aa8b498c03b3ca1263ab6fa80c89a3345aceb5a4a778414325307eb04935c275"
+        },
+        {
+          "path": "/usr/lib/python3.9/site-packages/sos/report/plugins/__pycache__/rhc.cpython-39.pyc",
+          "size": 1365,
+          "sha256": "47603459b8cd9ecb71c52c4bc9f39e002c41dc1a25984031d38a743a3d0e906a"
+        },
+        {
+          "path": "/var/lib/selinux/targeted/active/modules/100/vdagent/hll",
+          "size": 10225,
+          "sha256": "efb8f9e93a5da279b9630517ea38545deb194af39fa45223c7091514bb74e89f"
+        },
+        {
+          "path": "/usr/share/zoneinfo/America/Argentina/ComodRivadavia",
+          "size": 1076,
+          "sha256": "7621f57fdea46db63eee0258427482347b379fd7701c9a94852746371d4bec8d"
+        },
+        {
+          "path": "/usr/lib/modules/5.14.0-611.5.1.el9_7.x86_64/kernel/sound/soc/intel/boards/snd-soc-sst-bxt-rt298.ko.xz",
+          "size": 15896,
+          "sha256": "96c0c209b3ee255b2fc0a33cf98fc35d39f37c1a3f4a83b5269b803abe54ebc8"
+        },
+        {
+          "path": "/usr/lib64/python3.9/logging/__pycache__/handlers.cpython-39.opt-1.pyc",
+          "size": 44194,
+          "sha256": "b808831b6a30ec55025e7bf3fab6d00d2704b5376825d3ee4b2108dda649ed55"
+        },
+        {
+          "path": "/usr/lib64/python3.9/site-packages/pyrsistent/__pycache__/__init__.cpython-39.pyc",
+          "size": 1613,
+          "sha256": "993f841d79f0ea0143f896c61024acdcb2a35de606b680d6226551b696db781c"
+        }
+      ]
+    }
   ]
 }

@@ -1,0 +1,541 @@
+{
+  "imagePath": "/corpus/qcow2/modern/Fedora-Cloud-Base-Generic-42-1.1.x86_64.qcow2",
+  "imageBasename": "Fedora-Cloud-Base-Generic-42-1.1.x86_64.qcow2",
+  "filesystemCount": 6,
+  "totalFiles": 51276,
+  "totalDirectories": 10804,
+  "filesystems": [
+    {
+      "device": "/dev/sda2",
+      "fstype": "vfat",
+      "fileCount": 17,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/grub.cfg",
+          "size": 154,
+          "sha256": "05a832b4c02960ab6a20a17a202ca340db839c9bd88c8c608bfcc06328e458da"
+        },
+        {
+          "path": "/EFI/fedora/mmia32.efi",
+          "size": 673992,
+          "sha256": "c0aca1c783936992460e2857749cc647894a08c61fd17992f510d4be6b35e050"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTIA32.EFI",
+          "size": 747681,
+          "sha256": "5ec41801add3ff171fedc68bb343b794c330756796e12af23d28ff9fc5cadb79"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 949424,
+          "sha256": "4773d74d87c2371a25883b59a3b6d98d157de46933676706d215015b1130f2d1"
+        },
+        {
+          "path": "/EFI/fedora/grubia32.efi",
+          "size": 3022144,
+          "sha256": "223c87e1553044cc97549cb39845bad73b37ea872279afe0628748e105fa84df"
+        },
+        {
+          "path": "/EFI/BOOT/fbx64.efi",
+          "size": 87816,
+          "sha256": "e6ac4f6428bfd524bba6ccf69bef22538c1114e9ae3be23e084a4304df51064b"
+        },
+        {
+          "path": "/EFI/fedora/shim.efi",
+          "size": 949424,
+          "sha256": "4773d74d87c2371a25883b59a3b6d98d157de46933676706d215015b1130f2d1"
+        },
+        {
+          "path": "/EFI/BOOT/fbia32.efi",
+          "size": 70360,
+          "sha256": "8411f49e3299eafb92eb44992e373eef6be17943505df7431c901c95cdda3e1f"
+        },
+        {
+          "path": "/EFI/fedora/BOOTX64.CSV",
+          "size": 110,
+          "sha256": "282a3b2872bebcf3d1ba42fe17c17ebe32a60759a20f058b5e960e542785fe82"
+        },
+        {
+          "path": "/EFI/fedora/BOOTIA32.CSV",
+          "size": 112,
+          "sha256": "43f8aba93558f40b14e10d2cace57111014b041b40e3f57344e40681cfde4fd5"
+        },
+        {
+          "path": "/EFI/BOOT/mmia32.efi",
+          "size": 673992,
+          "sha256": "c0aca1c783936992460e2857749cc647894a08c61fd17992f510d4be6b35e050"
+        },
+        {
+          "path": "/EFI/fedora/grubx64.efi",
+          "size": 4037952,
+          "sha256": "6bd05558dd681dd7bfc2d7b48fd8d6e634456a979f0da7bf92edf9900cbe9b59"
+        },
+        {
+          "path": "/EFI/fedora/shimia32.efi",
+          "size": 747681,
+          "sha256": "5ec41801add3ff171fedc68bb343b794c330756796e12af23d28ff9fc5cadb79"
+        },
+        {
+          "path": "/EFI/fedora/mmx64.efi",
+          "size": 848080,
+          "sha256": "83a49149f5a7060d0de43de3a0c683d99f3c58c418ab651ac9c254b4efaef0b8"
+        },
+        {
+          "path": "/EFI/fedora/grub.cfg",
+          "size": 154,
+          "sha256": "05a832b4c02960ab6a20a17a202ca340db839c9bd88c8c608bfcc06328e458da"
+        },
+        {
+          "path": "/EFI/fedora/shimx64.efi",
+          "size": 949424,
+          "sha256": "4773d74d87c2371a25883b59a3b6d98d157de46933676706d215015b1130f2d1"
+        },
+        {
+          "path": "/EFI/BOOT/grubx64.efi",
+          "size": 4037952,
+          "sha256": "6bd05558dd681dd7bfc2d7b48fd8d6e634456a979f0da7bf92edf9900cbe9b59"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda3",
+      "fstype": "ext4",
+      "fileCount": 643,
+      "directoryCount": 10,
+      "sampleFiles": [
+        {
+          "path": "/grub2/x86_64-efi/nativedisk.mod",
+          "size": 9096,
+          "sha256": "3101d969d9a2d633636cf8c1e4199beaa63f09d53409f63efe10f61fca513990"
+        },
+        {
+          "path": "/grub2/i386-pc/tr.mod",
+          "size": 2648,
+          "sha256": "24f15134bb7232d8ae9c14b34d32e5a449394525eb156a16d0c0a69c80f1eb7e"
+        },
+        {
+          "path": "/grub2/x86_64-efi/gcry_seed.mod",
+          "size": 30560,
+          "sha256": "2d0fe27dc8e232a8533c04edcb0faafcaa6e5aac4addf44f13c81e305241ea53"
+        },
+        {
+          "path": "/grub2/i386-pc/afs.mod",
+          "size": 8932,
+          "sha256": "790ff3114c99d1e374f248bf9bd9be17a49644dfc0345803d91e4ca73dfffaf9"
+        },
+        {
+          "path": "/grub2/x86_64-efi/jfs.mod",
+          "size": 15080,
+          "sha256": "0b34079b28d75a6b4fbf57c660a6e343bf97af76318068cc7bf0ba4788d44c12"
+        },
+        {
+          "path": "/grub2/x86_64-efi/bitmap_scale.mod",
+          "size": 8240,
+          "sha256": "8ae6fa42f0997f18e3b69ed661360393f656c875101f3aac078d2832e18a9318"
+        },
+        {
+          "path": "/grub2/i386-pc/mdraid09.mod",
+          "size": 2200,
+          "sha256": "98ff8e8b3088b319020e22d635b1f5f96452118f3024ba0338ccd0d19b361723"
+        },
+        {
+          "path": "/grub2/x86_64-efi/adler32.mod",
+          "size": 2184,
+          "sha256": "e1bf3368d0b56e3c2dd0b73f62c5112f8adfaeac6ee54a96e30b797fd2dcd158"
+        },
+        {
+          "path": "/grub2/i386-pc/ata.mod",
+          "size": 7480,
+          "sha256": "6cbeba0825b95790a3cbd6cbcb159c45691a5f15cf0d0bd327789152e5ac1de6"
+        },
+        {
+          "path": "/grub2/x86_64-efi/efitextmode.mod",
+          "size": 5192,
+          "sha256": "7294f9e98469045f9cf550bf00dfbfb292b12c6ff30253b5043384d068e480fa"
+        },
+        {
+          "path": "/grub2/x86_64-efi/gdb_grub",
+          "size": 3516,
+          "sha256": "7689043d9b1a889cbf4718a6dd8b549cdcea4ac8b480abb07cb5cfa550c88a88"
+        },
+        {
+          "path": "/grub2/x86_64-efi/fshelp.mod",
+          "size": 6352,
+          "sha256": "f9a4c2d464a4c6a7795bbe0ac7d436462c44ca9c7b5e22eca4b732baca667fe3"
+        },
+        {
+          "path": "/grub2/i386-pc/iso9660.mod",
+          "size": 13512,
+          "sha256": "83b93ab64df9cc800fa84eeab09f2eb09774824eea97b486988e8ec2eeb37f8f"
+        },
+        {
+          "path": "/grub2/i386-pc/minix2_be.mod",
+          "size": 5628,
+          "sha256": "544d6e3a0b174a37b934b3463f95d1bae06edd19de2d3c5ab82a3f61af08ab58"
+        },
+        {
+          "path": "/grub2/x86_64-efi/lsefimmap.mod",
+          "size": 4816,
+          "sha256": "083711419fa49d24c8bd8aed258d88e154c9faf69a3a726c96e7d31e63806949"
+        },
+        {
+          "path": "/grub2/i386-pc/biosdisk.mod",
+          "size": 6496,
+          "sha256": "278e705b9819e1984769bcb2568689ce49f19738c912a36be816401476dc1f8b"
+        },
+        {
+          "path": "/grub2/x86_64-efi/usbserial_usbdebug.mod",
+          "size": 2352,
+          "sha256": "cd22e383b81ad81dc07804f85b6174d416596966c270b2f4b36c5f40c37a39ca"
+        },
+        {
+          "path": "/grub2/x86_64-efi/luks2.mod",
+          "size": 32968,
+          "sha256": "7a9f30554478f0732d9810b207650e933d1ba0dd78101cf451b258a119443bc9"
+        },
+        {
+          "path": "/grub2/i386-pc/boot.mod",
+          "size": 3156,
+          "sha256": "ca441b46adf7a5bd44d8372d1ea390d25e56646cdc219ea1c67d908fcd79d25b"
+        },
+        {
+          "path": "/grub2/i386-pc/acpi.mod",
+          "size": 13376,
+          "sha256": "c4896b20a3f66f81ddca531d8db220eb9b19dd7ed3b3dcb6aa96b70021c4284c"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda4",
+      "fstype": "btrfs",
+      "fileCount": 25308,
+      "directoryCount": 5397,
+      "sampleFiles": [
+        {
+          "path": "/root/usr/share/licenses/libbrotli/LICENSE",
+          "size": 1084,
+          "sha256": "3d180008e36922a4e8daec11c34c7af264fed5962d07924aea928c38e8663c94"
+        },
+        {
+          "path": "/root/usr/lib/python3.13/site-packages/cloudinit/distros/almalinux.py",
+          "size": 151,
+          "sha256": "5281d34cad0a81272512c25561e913e0802e84125d5f47f3735a7f23bde58569"
+        },
+        {
+          "path": "/root/usr/share/zoneinfo/posix/Etc/GMT-14",
+          "size": 118,
+          "sha256": "3e95e8444061d36a85a6fc55323da957d200cd242f044ed73ef9cdf6a499f8a7"
+        },
+        {
+          "path": "/root/usr/lib64/python3.13/zipfile/_path/__pycache__/glob.cpython-313.opt-1.pyc",
+          "size": 5204,
+          "sha256": "30cf6bae2106a9ec28a4ff440820983bb855943ab930bdcd244fd4771784fe70"
+        },
+        {
+          "path": "/root/usr/bin/avcstat",
+          "size": 19976,
+          "sha256": "eb3387ddde5ab3e3456cdab7eee1ddf8ce283fb689c0e7b91d7828381f278d84"
+        },
+        {
+          "path": "/root/usr/share/locale/nb/LC_MESSAGES/bash.mo",
+          "size": 172246,
+          "sha256": "08b3214f1f5b39fc690cb1bc709e3115b4ba5a7c69e3f0ce0fb03e29cb2096b6"
+        },
+        {
+          "path": "/root/usr/share/man/man8/getpcaps.8.gz",
+          "size": 827,
+          "sha256": "1e833d5501adbe8daff43e29b3551f3712a74b1cd065daf508865e2589d2109b"
+        },
+        {
+          "path": "/root/usr/share/dbus-1/interfaces/org.freedesktop.login1.Manager.xml",
+          "size": 19299,
+          "sha256": "858191afe9e1b225a6440b77a3640b2aa95b154d727d30f0abe73976fba1e467"
+        },
+        {
+          "path": "/root/usr/share/authselect/default/local/dconf-db",
+          "size": 132,
+          "sha256": "75435979f8e79a6fd675be1142800be76d661dde6fa7c8b1900bf509d2204ad7"
+        },
+        {
+          "path": "/root/usr/share/crypto-policies/policies/GOST-ONLY.pol",
+          "size": 936,
+          "sha256": "118ff07d1ace310f1020c2f87055585bd44ff1e025cba6b761f6844fed268891"
+        },
+        {
+          "path": "/root/usr/lib/dracut/modules.d/90lvm/lvm_scan.sh",
+          "size": 4856,
+          "sha256": "402325e8b909dcac3ada29043e94a934d8d1c8ab9957435bec507d3f355e36a9"
+        },
+        {
+          "path": "/var/lib/selinux/targeted/active/modules/100/openhpid/hll",
+          "size": 9866,
+          "sha256": "d19f58060560538cd2cdb7301dc4a5c3489ee8c3884c64c3e09d383d650fca1a"
+        },
+        {
+          "path": "/root/usr/lib/locale/en_GB/LC_IDENTIFICATION",
+          "size": 376,
+          "sha256": "20c9f7e0af4824b9e1acc2a929df97e995a799afde8496b90e2f7712e618cd7d"
+        },
+        {
+          "path": "/root/usr/lib/locale/en_AU/LC_COLLATE",
+          "size": 21267,
+          "sha256": "c2228135bc5d8d23e511af634953113a89e4d50cbd0d8375a60b3da879f457ba"
+        },
+        {
+          "path": "/root/usr/share/locale/fr/LC_MESSAGES/shadow.mo",
+          "size": 86458,
+          "sha256": "705502f4e752062a16fa6a2d32b39c7a321d2b441f856912b76ad9a10a929725"
+        },
+        {
+          "path": "/root/usr/share/zsh/site-functions/_systemd-delta",
+          "size": 645,
+          "sha256": "9d7f3de4cac0bcf165a323101bea453d3f4f92b1ad4b3efee862d161714d77c3"
+        },
+        {
+          "path": "/root/usr/share/man/man5/.k5identity.5.gz",
+          "size": 42,
+          "sha256": "38df17b9e89d0628fcb53e9f1685ebfee9696029f48d16af80f712d9769c55d9"
+        },
+        {
+          "path": "/root/usr/lib/modules/6.14.0-63.fc42.x86_64/kernel/drivers/hwmon/lm92.ko.xz",
+          "size": 5108,
+          "sha256": "c5a3b91e974ba1e3c977159189f73a714654ad99b1e274146adc47e3e85ec76c"
+        },
+        {
+          "path": "/var/lib/selinux/targeted/active/modules/100/zosremote/lang_ext",
+          "size": 2,
+          "sha256": "d53315bea08cec50d2591fcaf3b32dc5d289cdc6c16b7e8bed8c8e3f7ceaa34e"
+        },
+        {
+          "path": "/root/usr/lib/modules/6.14.0-63.fc42.x86_64/kernel/drivers/accessibility/speakup/speakup_txprt.ko.xz",
+          "size": 4440,
+          "sha256": "511abd23930c3de5cb5bc6ccfb9995c6b752bfd9f236a456f51f26951fff7ef8"
+        }
+      ]
+    },
+    {
+      "device": "btrfsvol:/dev/sda4/home",
+      "fstype": "btrfs",
+      "fileCount": 0,
+      "directoryCount": 0,
+      "sampleFiles": []
+    },
+    {
+      "device": "btrfsvol:/dev/sda4/root",
+      "fstype": "btrfs",
+      "fileCount": 24001,
+      "directoryCount": 4873,
+      "sampleFiles": [
+        {
+          "path": "/usr/lib/dracut/ossl-config",
+          "size": 11576,
+          "sha256": "a808a74d11b273760da95c8899dce128011c225657a26017504b2cbed5cd2d84"
+        },
+        {
+          "path": "/usr/share/licenses/harfbuzz/COPYING",
+          "size": 1971,
+          "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64"
+        },
+        {
+          "path": "/usr/share/groff/1.23.0/font/devps/NBI",
+          "size": 20470,
+          "sha256": "e3a84b6499f057c95b23e3d04ceabb09d063de86ee6f107c6f8113c556fb86f7"
+        },
+        {
+          "path": "/usr/lib64/python3.13/__pycache__/fnmatch.cpython-313.opt-2.pyc",
+          "size": 5539,
+          "sha256": "ade5b19886e80a5a222d7323ccde08e6861e36687d5884fa2b4ccadfb53a722c"
+        },
+        {
+          "path": "/usr/share/man/man7/fips_module.7ossl.gz",
+          "size": 7619,
+          "sha256": "9164907c2f547354429c5955bd447cac5a0968f12e84f6ffebe08df838275bdd"
+        },
+        {
+          "path": "/usr/lib/kbd/keymaps/legacy/i386/qwerty/ru4.map.gz",
+          "size": 3386,
+          "sha256": "ef2bb072ad58d5d5d367096656e79963f04f16500eeedf758cb4a369a614bc1c"
+        },
+        {
+          "path": "/usr/lib/grub/x86_64-efi/plainmount.mod",
+          "size": 15728,
+          "sha256": "1a65bee80556ebafaa01313cdea2e3a1e8c04aae41b9b7c66b3927c6f159aa1f"
+        },
+        {
+          "path": "/usr/lib64/python3.13/asyncio/__main__.py",
+          "size": 6083,
+          "sha256": "8f7fd35d222db1f004b6daf159769e56913a055fa9ec5c6c544bbe1109bfea51"
+        },
+        {
+          "path": "/usr/share/locale/vi_VN/LC_MESSAGES/policycoreutils.mo",
+          "size": 440,
+          "sha256": "04bba71dc2d66dd7e6d1914b2075e438b50740c6720dd06a4f748f7cd04cee22"
+        },
+        {
+          "path": "/usr/lib/modules/6.14.0-63.fc42.x86_64/kernel/drivers/hid/hid-topre.ko.xz",
+          "size": 2812,
+          "sha256": "14922174705c9339a79bb4ce04beb4715cba47b0ebafb82e2a304c195890aa8a"
+        },
+        {
+          "path": "/usr/lib64/python3.13/ctypes/__pycache__/util.cpython-313.pyc",
+          "size": 17224,
+          "sha256": "029f62a7caad77e99626e7c4ccf238b0c0a913cc3e308e005cb8283eda3a1bb9"
+        },
+        {
+          "path": "/usr/share/doc/sed/NEWS",
+          "size": 27314,
+          "sha256": "ced4666ad2f1eb12f29bc0a549c5ee6dd277dad6541f803f7f6147c7473fd888"
+        },
+        {
+          "path": "/usr/bin/secret-tool",
+          "size": 24192,
+          "sha256": "4d49f4fb50e109d3cac7af50b33beabcb3999adb7b4d368d0a6e92470b8dfb62"
+        },
+        {
+          "path": "/usr/share/locale/hu/LC_MESSAGES/tar.mo",
+          "size": 65464,
+          "sha256": "a86991178385a63a9caa7bf1572f92fd9f5cf5f29379624018c8ffe3ed5ab3b2"
+        },
+        {
+          "path": "/usr/share/locale/gu/LC_MESSAGES/rpm.mo",
+          "size": 458,
+          "sha256": "0688aa3c2d5a5318b6b648d554cfa59458dadc447af354f281430271f26e085c"
+        },
+        {
+          "path": "/usr/share/zoneinfo/US/Arizona",
+          "size": 360,
+          "sha256": "8a5973d2c62e2cbf2520f2b44e4a2ee9d2f455c93f0f45bfdeb4533af1584664"
+        },
+        {
+          "path": "/usr/share/zoneinfo/right/America/Antigua",
+          "size": 786,
+          "sha256": "380d72f2d6623dac48cff2dfb46eec2e48b68053c708dca04168321b6453d185"
+        },
+        {
+          "path": "/usr/bin/kbd_mode",
+          "size": 20312,
+          "sha256": "55c2fc1ff9b100a828136ae616a6d3fe429c4ea6bb363362b45ae97ea3de752b"
+        },
+        {
+          "path": "/usr/lib/python3.13/site-packages/jinja2/constants.py",
+          "size": 1433,
+          "sha256": "18ca05c9d045fe476969128fa0ce5c97932f8aab9544b57266d7e9e7ed7a8e0d"
+        },
+        {
+          "path": "/usr/lib/python3.13/site-packages/dnf/cli/__pycache__/completion_helper.cpython-313.pyc",
+          "size": 13546,
+          "sha256": "dc0d3c7644d7c18385799e8f89099e9ca5612a15025c7005988e41c74dd62c91"
+        }
+      ]
+    },
+    {
+      "device": "btrfsvol:/dev/sda4/var",
+      "fstype": "btrfs",
+      "fileCount": 1307,
+      "directoryCount": 521,
+      "sampleFiles": [
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/dhcp/lang_ext",
+          "size": 2,
+          "sha256": "d53315bea08cec50d2591fcaf3b32dc5d289cdc6c16b7e8bed8c8e3f7ceaa34e"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/rasdaemon/cil",
+          "size": 1201,
+          "sha256": "5f35baf23e4bd480fd74d2811fc35e6d963ea3fae1430c968d4dd7a751306e2c"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/cvs/hll",
+          "size": 12362,
+          "sha256": "36ac9f2d51ab90c98b2119cee7300f17af45a406776d4361aa0bfbe3b8dcc450"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/pdns/cil",
+          "size": 1739,
+          "sha256": "513cace81cb5e42f4ecc652568b3552296c8b6288ab411dd80b98658abed781e"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/automount/lang_ext",
+          "size": 2,
+          "sha256": "d53315bea08cec50d2591fcaf3b32dc5d289cdc6c16b7e8bed8c8e3f7ceaa34e"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/ccs/cil",
+          "size": 2342,
+          "sha256": "34459036d84136f7ff321047d2460ebd3faa22333bad842dd392b9d5a31e2c76"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/dovecot/hll",
+          "size": 15191,
+          "sha256": "a1a3106c59b9a59ffc67f90a3082952ada95302ee3fb7827745d023afac32098"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/sblim/hll",
+          "size": 12501,
+          "sha256": "6e2a002875f002808e47ad49401e0adb0a022a16100af32f7e262c9383aacc8e"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/boothd/cil",
+          "size": 1822,
+          "sha256": "cf0683d1c90225e0ae91c66136aa6272a21723440469eee938055da0e206ded0"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/acct/lang_ext",
+          "size": 2,
+          "sha256": "d53315bea08cec50d2591fcaf3b32dc5d289cdc6c16b7e8bed8c8e3f7ceaa34e"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/bootupd/lang_ext",
+          "size": 2,
+          "sha256": "d53315bea08cec50d2591fcaf3b32dc5d289cdc6c16b7e8bed8c8e3f7ceaa34e"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/lsm/hll",
+          "size": 10908,
+          "sha256": "e326427c1c4ac22056a2e5237f824d54482ef857134ca54f88094c9c6fc2617a"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/iotop/lang_ext",
+          "size": 2,
+          "sha256": "d53315bea08cec50d2591fcaf3b32dc5d289cdc6c16b7e8bed8c8e3f7ceaa34e"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/kpatch/hll",
+          "size": 11045,
+          "sha256": "117188e51de1b501f9396e1a02b84aa5ea856b264305fc2687130f2bb2c49b83"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/systemd-homed/hll",
+          "size": 12559,
+          "sha256": "38765a2700dc315d6d756bdef374a556551cd73965ae1f512e9439d9c48a79ed"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/setrans/hll",
+          "size": 9906,
+          "sha256": "b9bf46fe125df172fbacb368e71b5ffce66e058393afbbe0acf9f6abb8fe9250"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/xguest/cil",
+          "size": 11987,
+          "sha256": "6d43094eb1f66e55539e6a6ef79b694e99474132f6769b4a8b1b4fa06bf2f17e"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/swift/cil",
+          "size": 1891,
+          "sha256": "2ad4051e954c03def9cc86d947d15569baca86f578bee110ed82dc73ec80534e"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/vpn/lang_ext",
+          "size": 2,
+          "sha256": "d53315bea08cec50d2591fcaf3b32dc5d289cdc6c16b7e8bed8c8e3f7ceaa34e"
+        },
+        {
+          "path": "/lib/selinux/targeted/active/modules/100/zoneminder/lang_ext",
+          "size": 2,
+          "sha256": "d53315bea08cec50d2591fcaf3b32dc5d289cdc6c16b7e8bed8c8e3f7ceaa34e"
+        }
+      ]
+    }
+  ]
+}

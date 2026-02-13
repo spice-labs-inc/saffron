@@ -48,10 +48,10 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
  */
 class CorpusVerificationTest {
 
-    private static final String CORPUS_BASE = "/home/dpp/tmp/vmreader/saffron/test-corpus";
+    private static final String CORPUS_BASE = Path.of("test-corpus").toAbsolutePath().toString();
     private static final Gson GSON = new Gson();
     private static final Duration TEST_TIMEOUT = Duration.ofMinutes(5);
-    private static List<CorpusImageData> corpusData;
+    private static List<CorpusTestData.CorpusImageData> corpusData;
 
     @BeforeAll
     static void loadCorpusData() throws IOException {
@@ -87,7 +87,7 @@ class CorpusVerificationTest {
             try (InputStream is = CorpusVerificationTest.class.getResourceAsStream(
                     "/corpus-verification/" + jsonFile)) {
                 if (is != null) {
-                    CorpusImageData data = GSON.fromJson(new InputStreamReader(is), CorpusImageData.class);
+                    CorpusTestData.CorpusImageData data = GSON.fromJson(new InputStreamReader(is), CorpusTestData.CorpusImageData.class);
                     if (data != null) {
                         corpusData.add(data);
                     }
@@ -107,7 +107,7 @@ class CorpusVerificationTest {
     Collection<DynamicTest> testCorpusImagesCanBeOpened() {
         List<DynamicTest> tests = new ArrayList<>();
 
-        for (CorpusImageData data : corpusData) {
+        for (CorpusTestData.CorpusImageData data : corpusData) {
             Path imagePath = resolveImagePath(data.imagePath);
             if (imagePath != null && Files.exists(imagePath)) {
                 tests.add(DynamicTest.dynamicTest(
@@ -126,7 +126,7 @@ class CorpusVerificationTest {
     Collection<DynamicTest> testCorpusPartitionDetection() {
         List<DynamicTest> tests = new ArrayList<>();
 
-        for (CorpusImageData data : corpusData) {
+        for (CorpusTestData.CorpusImageData data : corpusData) {
             Path imagePath = resolveImagePath(data.imagePath);
             if (imagePath != null && Files.exists(imagePath)) {
                 tests.add(DynamicTest.dynamicTest(
@@ -145,7 +145,7 @@ class CorpusVerificationTest {
     Collection<DynamicTest> testCorpusFilesystemDetection() {
         List<DynamicTest> tests = new ArrayList<>();
 
-        for (CorpusImageData data : corpusData) {
+        for (CorpusTestData.CorpusImageData data : corpusData) {
             Path imagePath = resolveImagePath(data.imagePath);
             if (imagePath != null && Files.exists(imagePath)) {
                 tests.add(DynamicTest.dynamicTest(
@@ -159,7 +159,7 @@ class CorpusVerificationTest {
         return tests;
     }
 
-    private void verifyImageCanBeOpened(Path imagePath, CorpusImageData data) throws IOException {
+    private void verifyImageCanBeOpened(Path imagePath, CorpusTestData.CorpusImageData data) throws IOException {
         try (VirtualDisk disk = DiskReader.open(imagePath)) {
             assertThat(disk).isNotNull();
             assertThat(disk.virtualSize()).isGreaterThan(0);
@@ -178,7 +178,7 @@ class CorpusVerificationTest {
         }
     }
 
-    private void verifyPartitionDetection(Path imagePath, CorpusImageData data) throws IOException {
+    private void verifyPartitionDetection(Path imagePath, CorpusTestData.CorpusImageData data) throws IOException {
         try (VirtualDisk disk = DiskReader.open(imagePath)) {
             Optional<PartitionTable> table = PartitionTable.detect(disk);
 
@@ -212,7 +212,7 @@ class CorpusVerificationTest {
         }
     }
 
-    private void verifyFilesystemDetection(Path imagePath, CorpusImageData data) throws IOException {
+    private void verifyFilesystemDetection(Path imagePath, CorpusTestData.CorpusImageData data) throws IOException {
         try (VirtualDisk disk = DiskReader.open(imagePath)) {
             Optional<PartitionTable> table = PartitionTable.detect(disk);
 
@@ -247,26 +247,31 @@ class CorpusVerificationTest {
             }
 
             // Only assert if we have expected filesystem type
-            if (data.filesystemType != null && !data.filesystemType.equals("unknown")) {
+            String expectedFsType = data.firstFilesystemType();
+            if (expectedFsType != null && !expectedFsType.equals("unknown")) {
                 assertThat(foundFilesystem)
                     .as("Should detect filesystem type for " + data.imageBasename +
-                        " (expected: " + data.filesystemType + ")")
+                        " (expected: " + expectedFsType + ")")
                     .isTrue();
 
                 // Verify the detected filesystem type matches expected
                 if (detectedType != null) {
-                    String expectedType = data.filesystemType.toLowerCase();
+                    String expectedLower = expectedFsType.toLowerCase();
                     String actualType = detectedType.toLowerCase();
 
                     // Allow for ext2/ext3/ext4 variants
-                    if (expectedType.startsWith("ext") && actualType.startsWith("ext")) {
-                        // Both are ext variants, that's acceptable
+                    if (expectedLower.startsWith("ext") && actualType.startsWith("ext")) {
                         assertThat(actualType).startsWith("ext");
+                    } else if (expectedLower.equals("vfat") || expectedLower.equals("fat32")
+                            || expectedLower.equals("fat16") || expectedLower.equals("fat")) {
+                        // Linux reports FAT as "vfat"; Saffron detects "fat32" or "fat16"
+                        assertThat(actualType)
+                            .as("Filesystem type should be FAT variant for " + data.imageBasename)
+                            .startsWith("fat");
                     } else {
-                        // For other types, verify they match (at least first 3 chars)
                         assertThat(actualType)
                             .as("Filesystem type should match for " + data.imageBasename)
-                            .containsIgnoringCase(expectedType.substring(0, Math.min(3, expectedType.length())));
+                            .containsIgnoringCase(expectedLower.substring(0, Math.min(3, expectedLower.length())));
                     }
                 }
             }
@@ -280,26 +285,5 @@ class CorpusVerificationTest {
             return Paths.get(CORPUS_BASE, relativePath);
         }
         return null;
-    }
-
-    /**
-     * Data class for corpus image verification data.
-     */
-    static class CorpusImageData {
-        String imagePath;
-        String imageBasename;
-        String filesystemType;
-        int totalFiles;
-        int totalDirectories;
-        List<SampleFile> sampleFiles;
-    }
-
-    /**
-     * Data class for sample file verification.
-     */
-    static class SampleFile {
-        String path;
-        String sha256;
-        long size;
     }
 }

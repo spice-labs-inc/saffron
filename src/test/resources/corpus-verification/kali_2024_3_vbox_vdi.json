@@ -1,29 +1,549 @@
 {
   "imagePath": "/corpus/vdi/modern/kali-2024.3-vbox.vdi",
   "imageBasename": "kali-2024.3-vbox.vdi",
-  "filesystemType": "ext2",
+  "filesystemCount": 5,
   "totalFiles": 363900,
-  "totalDirectories": 37746,
-  "sampleFiles": [
-    {"path": "/usr/share/doc/python3-pysmi/examples/download-and-compile-smistar-mibs-into-json.py", "sha256": "66f50bc385da375ae64af38bf415080916384e7f27c67a7fa3e72fcdfcb9a215", "size": 1452},
-    {"path": "/usr/share/locale/uk/LC_MESSAGES/lightdm.mo", "sha256": "89dc092856bee9721800269c45f9593c6721ffac42cf32263d93afd761891393", "size": 2643},
-    {"path": "/usr/lib/python3/dist-packages/types_Deprecated-1.2.dist-info/METADATA", "sha256": "36d86c7ebb9e04c46e310c947fd5b0220ae62c051ca6172c4cee0bce20c371e5", "size": 1541},
-    {"path": "/usr/share/exploitdb/exploits/php/webapps/32760.txt", "sha256": "87d4b5d4c048beaab1d63cb304c235808143736eeef46ab2bcdd2d6e22f43953", "size": 403},
-    {"path": "/usr/lib/python3/dist-packages/neotime/arithmetic.py", "sha256": "dd3a2098f3b987702831c15f2fd7c5c9e51b3ffe8ea69e110192aa77e0d2b773", "size": 4071},
-    {"path": "/usr/lib/x86_64-linux-gnu/rubygems-integration/3.1.0/gems/ffi-1.17.0/lib/ffi/platform/x86_64-haiku/types.conf", "sha256": "076e70af05b65eab646a2e7ef70fb6f28a0ca8b5f09e6e2ccf57eb0eb0f96667", "size": 4572},
-    {"path": "/usr/lib/python3/dist-packages/pyqtgraph/parametertree/parameterTypes/__pycache__/slider.cpython-311.pyc", "sha256": "e7b52f919eab4e87e40e8b2af5f4feb7ce6a32f808f76de3fa9eb6cc933c9bfe", "size": 8813},
-    {"path": "/usr/share/texlive/texmf-dist/tex/latex/utfsym/usym1F0DD.tikz", "sha256": "68c14f35326e77ec3a34d07fb429720e4dce2cc5c627f44bae3bf78b1765c1e7", "size": 27849},
-    {"path": "/usr/lib/python3/dist-packages/ufoLib2/_version.py", "sha256": "c4a4ce442833bd55cfe84503c255a3ae289a018811bd91f7836887d5d8ff1542", "size": 162},
-    {"path": "/usr/lib/ruby/gems/3.1.0/specifications/net-smtp-0.3.1.gemspec", "sha256": "2eadd4ccb6a780bb285a71166a87843a25aee0ec3e06efdb8f4d9816320db66b", "size": 1498},
-    {"path": "/usr/lib/python3/dist-packages/jedi/third_party/typeshed/stdlib/3/multiprocessing/__init__.pyi", "sha256": "277a43cdfbfdddbd404b885febd8e1ca89ef8569ab8f57986c27270290969542", "size": 3802},
-    {"path": "/usr/share/texlive/texmf-dist/tex4ht/ht-fonts/alias/Sf-Kp/jkpssosnbsl8t.htf", "sha256": "7d572bcc601473d9b9e2352d3357b35f76e1a3f60c61dca92793ac4fd04a51cb", "size": 64},
-    {"path": "/opt/microsoft/powershell/7/System.Management.Automation.xml", "sha256": "84f4a4a854c2d517beaa2ba3db3d5cd03b97feb3da8b4af817f9c35b91bf7122", "size": 7658226},
-    {"path": "/var/lib/dpkg/info/mariadb-server.postinst", "sha256": "e8e51c2a40bdb22c597c866525babcd5c6f11f33174c1febd8913b3e2b73c24e", "size": 14359},
-    {"path": "/usr/share/man/man3/readdir.3am.gz", "sha256": "84383aaafb67f73b423ae0b508b2ccdd53564684bd51e7c4e5f161e51731c6d3", "size": 1355},
-    {"path": "/usr/share/perl5/Net/DNS/Mailbox.pm", "sha256": "b5a5c0d81881a53e590b1a6c3211547997d5d02d4a8f330e038e560d7997752f", "size": 4089},
-    {"path": "/usr/share/exploitdb/exploits/windows/dos/17896.txt", "sha256": "953b36231911ea9ed701c78bf78c9fa3f969e8294cfd10cfd764cf428d23f806", "size": 3659},
-    {"path": "/usr/lib/firmware/iwlwifi-so-a0-hr-b0-72.ucode", "sha256": "9cbe5de12153790e4c3ad2fc54ceaecec6821b229d75ebbca9f37ecf31d5a9db", "size": 1470384},
-    {"path": "/usr/share/themes/Daloa/xfwm4/bottom-right-active.png", "sha256": "ebf2911f05efe69e4fc68da6a11b68927ac081ab8485d97c281526f7a51fcf92", "size": 138},
-    {"path": "/usr/share/icons/Flat-Remix-Blue-Light/actions/16/edit-select-text.svg", "sha256": "c418091cf40f30ccd725703d72b461151b7b37706c58a77a4719f7fc40bd6a60", "size": 616}
+  "totalDirectories": 37745,
+  "filesystems": [
+    {
+      "device": "/dev/kalilinux-vg/home",
+      "fstype": "ext4",
+      "fileCount": 77,
+      "directoryCount": 56,
+      "sampleFiles": [
+        {
+          "path": "/kalilinux/.vboxclient-display-svga-x11-tty7-control.pid",
+          "size": 5,
+          "sha256": "de236469a739f245af5da6384a913664a76765cc2155d834ae1b8885902da27d"
+        },
+        {
+          "path": "/kalilinux/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-notifyd.xml",
+          "size": 163,
+          "sha256": "66ee0129f24350c6a071c531b27760092eea59b6494a121cb03af3702e7f3aff"
+        },
+        {
+          "path": "/kalilinux/.bashrc.original",
+          "size": 3526,
+          "sha256": "afae8986f549c6403410e029f9cce7983311512d04b1f02af02e4ce0af0dd2bf"
+        },
+        {
+          "path": "/kalilinux/.config/xfce4/desktop/icons.screen0-784x549.rc",
+          "size": 163,
+          "sha256": "37c586f4f988f53be0c363e431cd149f5eb175da294f64f765e9fd46dd8b6b3d"
+        },
+        {
+          "path": "/kalilinux/.vboxclient-draganddrop-tty7-control.pid",
+          "size": 4,
+          "sha256": "acc9a6c273bcb01a205aed16c6e1a3689bb312fbd66742848a7d1fb774846b3f"
+        },
+        {
+          "path": "/kalilinux/.cache/thumbnails/large/b0c6f2c004d881af476732391018234a.png",
+          "size": 83695,
+          "sha256": "af74cb4d5de1e314a4479ae417676fa6ae7d8b999c06a2c39c25a007ded33a56"
+        },
+        {
+          "path": "/kalilinux/.viminfo",
+          "size": 1123,
+          "sha256": "c290700e83882107237ec32797fc5316dde2a15f698b426d383dabc5a634eadd"
+        },
+        {
+          "path": "/kalilinux/.cache/mesa_shader_cache/aa/b274504c52d8ab920c0925dc0c4f760bbcf865",
+          "size": 515,
+          "sha256": "92e7dfbe88cd1d9fc014a560c85d0ebf2cc8ac3d465356759d70c5f88707939f"
+        },
+        {
+          "path": "/kalilinux/.config/xfce4/panel/launcher-7/17319040335.desktop",
+          "size": 328,
+          "sha256": "c94c2a5894248d1cf718ee3b4b39f949e25b5f43b874ae0af498605ba947e9c9"
+        },
+        {
+          "path": "/kalilinux/.bash_logout",
+          "size": 220,
+          "sha256": "26882b79471c25f945c970f8233d8ce29d54e9d5eedcd2884f88affa84a18f56"
+        },
+        {
+          "path": "/kalilinux/.config/dconf/user",
+          "size": 627,
+          "sha256": "400b9a41be0ed2a04fb9a9ae73d70dcad781f1acceddd18c541f6ff8fd904017"
+        },
+        {
+          "path": "/kalilinux/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml",
+          "size": 420,
+          "sha256": "7a1d55185d0263208c442449eb01e4a39f0fff66e3162324024066762f58d025"
+        },
+        {
+          "path": "/kalilinux/.local/share/keyrings/login.keyring",
+          "size": 105,
+          "sha256": "4a84e13f820763329c371d8eb059ceb973887b99d6944916e356782fe744cfa6"
+        },
+        {
+          "path": "/kalilinux/.config/xfce4/panel/genmon-15.rc",
+          "size": 129,
+          "sha256": "b754260ba6f9a6609ec84e0788340efd2850b007bc7bc2576bb530fdcae7a76e"
+        },
+        {
+          "path": "/kalilinux/.cache/zcompdump",
+          "size": 50813,
+          "sha256": "9247cf4a78d362ad0f4bc88ca77718a3d1186e0131ead0a894e9220f6f5aae41"
+        },
+        {
+          "path": "/kalilinux/.config/xfce4/panel/launcher-7/17319040333.desktop",
+          "size": 363,
+          "sha256": "73c42a3faa6477e3a4dd5412e48714b8e6a98dce9b2b931d76c70f5a7d398f5e"
+        },
+        {
+          "path": "/kalilinux/.cache/sessions/xfce4-session-kalilinux:0",
+          "size": 2529,
+          "sha256": "0f4e24f82dce3acb7677850e4fb28281e0ec7b66cd448e71c64138420f682920"
+        },
+        {
+          "path": "/kalilinux/.cache/thumbnails/normal/f18d689c51512129d236408ecbff2d9e.png",
+          "size": 10042,
+          "sha256": "e4aa2563b99a93d7f33bc72d275fbbc770e18c3be8460f78ec605872b7789dc4"
+        },
+        {
+          "path": "/kalilinux/.config/pulse/cookie",
+          "size": 256,
+          "sha256": "9fc9def33c5eacf776ffab4dd68c895f94b4e0ec2a67792d881217173f4d36ad"
+        },
+        {
+          "path": "/kalilinux/.cache/thumbnails/large/7f7cf3d545631387eb530b62f1e43f96.png",
+          "size": 38387,
+          "sha256": "a026200e1e74442bb0acf1ea7749c03d021cc77b7b193f3bd4d2d9d5bb25bebc"
+        }
+      ]
+    },
+    {
+      "device": "/dev/kalilinux-vg/root",
+      "fstype": "ext4",
+      "fileCount": 350622,
+      "directoryCount": 37212,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/doc/dictionaries-common/NEWS.Debian.gz",
+          "size": 374,
+          "sha256": "fc7ed5f9f5acab708df6719254bc3a1b21e8411775019aace6945b40ec128199"
+        },
+        {
+          "path": "/usr/share/doc/gstreamer1.0-x/changelog.gz",
+          "size": 64980,
+          "sha256": "6c0b7295d765271d30c75f147416a6d44f1f6cba63bee3ff998bb35b0f9f0bef"
+        },
+        {
+          "path": "/usr/share/kali-menu/applications/kali-sparrow-wifi.desktop",
+          "size": 273,
+          "sha256": "f11660c5aac7db5e9f637346ac3967ebd0cd92b9b45b3cc04b9d0612ef2feb37"
+        },
+        {
+          "path": "/usr/share/ri/3.1.0/system/Syslog/instance-c.ri",
+          "size": 317,
+          "sha256": "f78f33215745b8ce7770bf0be8c28202884e513efb27a0b4419ae55612c1e42b"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/networkx/classes/multidigraph.py",
+          "size": 36283,
+          "sha256": "ff9c89bd5cfdf50324a7dda24b6a8e35c6a110186c992dc2edb7da2ab34d2a80"
+        },
+        {
+          "path": "/usr/share/exploitdb/exploits/multiple/remote/24019.rb",
+          "size": 5325,
+          "sha256": "7635468d695567a5c9b1e5830518a291d7c1c838ef1ee5e32f0eed39e94feb68"
+        },
+        {
+          "path": "/usr/share/metasploit-framework/vendor/bundle/ruby/3.1.0/gems/tzinfo-data-1.2024.1/lib/tzinfo/data/definitions/Asia/Seoul.rb",
+          "size": 2471,
+          "sha256": "c92de8ceb95e133ec9b32a793479f93fe2c9c2bbdf0ce4ea3a5b3859a78f8cee"
+        },
+        {
+          "path": "/usr/share/doc/python3-impacket/examples/GetNPUsers.py",
+          "size": 22367,
+          "sha256": "c706b90f585f730deac6ef08233a6eee048d0a876e31afd80a460d1597b3a68c"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/termcolor-2.4.0.dist-info/INSTALLER",
+          "size": 7,
+          "sha256": "53ad2edfc7474c3122e601b9f23fca705eae85b405c7c52b9b53d400618a9bd4"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/scipy/sparse/linalg/_eigen/arpack/__pycache__/__init__.cpython-311.pyc",
+          "size": 779,
+          "sha256": "462249b788bdfdcd927b4509d23ba16ee72c35f48547f4b443176bd4c6e46cd9"
+        },
+        {
+          "path": "/usr/share/texlive/texmf-dist/tex4ht/ht-fonts/alias/Spectral_ExtraLight/Spectral-ExtraLightItalic-lf-sc-ot1.htf",
+          "size": 165,
+          "sha256": "b7084d206b2387ffff13c810093d03fbc68c842079504d41f05d6775d7bff283"
+        },
+        {
+          "path": "/usr/share/fonts/X11/misc/5x7-ISO8859-3.pcf.gz",
+          "size": 3920,
+          "sha256": "87a25c1831a4d69766f7c94bfc229a73fdf1f727d92511460441943043e74998"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/bs4/element.py",
+          "size": 92845,
+          "sha256": "0eca25da27a19128e4d741b3620c05ca3504829aa6619a7268099b2f4ad6336c"
+        },
+        {
+          "path": "/usr/share/texlive/texmf-dist/tex/generic/tikz-ext/tikzlibraryext.node-families.shapes.geometric.code.tex",
+          "size": 1535,
+          "sha256": "d9edaac6f9bf0c18d01069dcd56e8f6a956d57e61267c9f6bda040765a040335"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/twisted/application/twist/test/test_twist.py",
+          "size": 8079,
+          "sha256": "7e6cca4cdd28dc2148ea80fd1d6d83593eb5fd263e6f98adab51d4468763e043"
+        },
+        {
+          "path": "/usr/share/javascript/mathjax/unpacked/localization/mk/HTML-CSS.js",
+          "size": 2226,
+          "sha256": "2d722c6706a85e560479e4ec32f95afaebe870a4b749a969f001aa49533b6ba3"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/unidecode/__pycache__/x056.cpython-311.pyc",
+          "size": 1594,
+          "sha256": "dc0442038d55c0b5f32ad9c2d3d12874c1f38c9c75cc5fa321af915e14143ef5"
+        },
+        {
+          "path": "/usr/share/exploitdb/exploits/windows/dos/3119.py",
+          "size": 2645,
+          "sha256": "714dc147121836d6afd5a05e32eab87762258d81fdf86ea7a82fe7cccc715376"
+        },
+        {
+          "path": "/usr/share/powershell-empire/empire/server/modules/python/collection/osx/osx_mic_record.yaml",
+          "size": 2893,
+          "sha256": "d07a81197e6f5dfcbc97ca60bc5370e614fa489ec1dc7d295e6c53170ebc211d"
+        },
+        {
+          "path": "/usr/share/texlive/texmf-dist/tex4ht/ht-fonts/alias/pxfonts/pxex.htf",
+          "size": 7,
+          "sha256": "e355841a9d23dd36792a660218781ab54ca5bd14cf4a38441e56d93537628f84"
+        }
+      ]
+    },
+    {
+      "device": "/dev/kalilinux-vg/tmp",
+      "fstype": "ext4",
+      "fileCount": 50,
+      "directoryCount": 15,
+      "sampleFiles": [
+        {
+          "path": "/AUTORUN.INF",
+          "size": 1048,
+          "sha256": "e8060fdd441bcb732e9e01adcbc81f51bb1dc295c86d6b9bac961317641dbaa3"
+        },
+        {
+          "path": "/NT3x/Readme.txt",
+          "size": 2099,
+          "sha256": "e5abc041effec041181a3e85d7d2998ce911e71f74ef7b89bf31410d26f33d51"
+        },
+        {
+          "path": "/cert/vbox-sha256-root.cer",
+          "size": 1428,
+          "sha256": "552f7bdcf1a7af9e6ce672017f4f12abf77240c78e761ac203d1d9d20ac89988"
+        },
+        {
+          "path": "/OS2/VBoxService.exe",
+          "size": 1502265,
+          "sha256": "c2b132756355f6ce98235b9a213d4a40d060b98306905bbc8755d06799aebb1e"
+        },
+        {
+          "path": "/cert/TRANS.TBL",
+          "size": 310,
+          "sha256": "5d5d1c9dd5724698dbf16f567dfcba1161382bfa5aceeecbd94d98912c2e8030"
+        },
+        {
+          "path": "/VBoxDarwinAdditionsUninstall.tool",
+          "size": 4224,
+          "sha256": "41f2392cceef9afaa09e886b13f1f187a8785f6795ae213d425d8e982c605d6a"
+        },
+        {
+          "path": "/VBoxSolarisAdditions.pkg",
+          "size": 9415168,
+          "sha256": "9f68767c770c02aedcd0f60a81baccd2047d9ef6adead08537476e2bbfbf35cf"
+        },
+        {
+          "path": "/dotnet-installer/.dotnet/MachineId.v1.dotnetUserLevelCache",
+          "size": 64,
+          "sha256": "27371edeba163691cbced3c9a16fa222787f2bcaaa58c67f07027eb98ef0273d"
+        },
+        {
+          "path": "/VBoxWindowsAdditions.exe",
+          "size": 998024,
+          "sha256": "85dc06e94f523a21de9a1ba6f666caeede4d353b1edf58d9efd7308f00330574"
+        },
+        {
+          "path": "/.xfsm-ICE-MYW0W2",
+          "size": 414,
+          "sha256": "06cd6ef5ac0687f1e71f702d5e22fcfe5100bc3d15f8fb96b3342a75c8fbb0bb"
+        },
+        {
+          "path": "/OS2/VBoxSF.ifs",
+          "size": 666013,
+          "sha256": "67a8c853824e7116d55755b15a8edd3315086f8701fa1ec72e9153a3bd005309"
+        },
+        {
+          "path": "/autorun.sh",
+          "size": 6848,
+          "sha256": "f17d89e9736daec3c09310d2b0cbe7ccdb497e7397d7f18a5e9b6b7de6ad5247"
+        },
+        {
+          "path": "/OS2/VBoxControl.exe",
+          "size": 2093181,
+          "sha256": "bd6da00f9d794444d4193294f92a668ab7f5aebf6b5b1a8c87d53d596c2b578e"
+        },
+        {
+          "path": "/OS2/libc062.dll",
+          "size": 157161,
+          "sha256": "11985aad9fdbbc26f6ff129c91e43b78a7144ad52f8a59b4e9a0627fee530ae8"
+        },
+        {
+          "path": "/windows11-bypass.reg",
+          "size": 261,
+          "sha256": "dceded5ef9059100cf78bd1e83c127cb892af17bd68152b0c906b89297e39779"
+        },
+        {
+          "path": "/NT3x/VBoxService.exe",
+          "size": 892648,
+          "sha256": "8f113df034d5068e0e1074b6267ca96d122bef80e3466eba27acd53d884633e0"
+        },
+        {
+          "path": "/VBoxLinuxAdditions.run",
+          "size": 6306247,
+          "sha256": "321fb7fde2cef13490f00eaaf673d9f2fcc0e224bfb6f41a2d9ae2813a96bf71"
+        },
+        {
+          "path": "/OS2/VBoxMouse.sys",
+          "size": 58713,
+          "sha256": "0fb093dcc661afe83bb7a335cc27859e6163d1c7f67361df5d16808e4cae760d"
+        },
+        {
+          "path": "/cert/vbox-sha1-timestamp-root.cer",
+          "size": 1603,
+          "sha256": "7571425facd7a0d7dc42adfcee3113ff03cc1405155961ee4d8633e07709d9bc"
+        },
+        {
+          "path": "/OS2/VBoxGuest.sys",
+          "size": 572865,
+          "sha256": "0722d2106bf167596c2fa22f2effa75324e4a1d5ccafb190aac1ee401ce2bca5"
+        }
+      ]
+    },
+    {
+      "device": "/dev/kalilinux-vg/var",
+      "fstype": "ext4",
+      "fileCount": 12804,
+      "directoryCount": 455,
+      "sampleFiles": [
+        {
+          "path": "/lib/systemd/deb-systemd-helper-enabled/grub-common.service.dsh-also",
+          "size": 330,
+          "sha256": "5ea7ec123003e37dcd7d4aa6183c006ddc92ea95c71b57da227498c3f46ac075"
+        },
+        {
+          "path": "/lib/dpkg/info/librabbitmq4:amd64.shlibs",
+          "size": 39,
+          "sha256": "eaec2a2a1af6bb348d23da30add03c9ef5df46c07ca6e327c2b603b09fa364f9"
+        },
+        {
+          "path": "/lib/dpkg/info/libpwquality1:amd64.symbols",
+          "size": 632,
+          "sha256": "d3bc6c7e8a91b10aec53d30e9d6ee1ebe04ad502695845a4deb4a11c6e17c7fb"
+        },
+        {
+          "path": "/lib/dpkg/info/usbmuxd.md5sums",
+          "size": 714,
+          "sha256": "6d1405bc23f20841d300a8f52813b60b46fe66e356bc6fe52191022951755565"
+        },
+        {
+          "path": "/lib/dpkg/info/libtcl8.6:amd64.md5sums",
+          "size": 17026,
+          "sha256": "9ceb13120d165a2c49bd41d38ce04a34b15d4879e7dbeffc934c7b1d7dec0125"
+        },
+        {
+          "path": "/lib/dpkg/info/libcephfs2.triggers",
+          "size": 68,
+          "sha256": "6161f821aa492ea081b055f2cf56e8f97a208cf5435dd6cc184fe7765f6d87d3"
+        },
+        {
+          "path": "/lib/dpkg/info/python3-secure.prerm",
+          "size": 402,
+          "sha256": "39ac9b718f651218383a693dc3aac3803a3273070020899a880d4526a04b2a46"
+        },
+        {
+          "path": "/lib/dpkg/info/pipewire:amd64.postrm",
+          "size": 421,
+          "sha256": "dc27f12e18d46643824741f75f7c94a8fa05e502deb91d0b5d23331df17c8fcb"
+        },
+        {
+          "path": "/lib/dpkg/info/python3-autocommand.postinst",
+          "size": 273,
+          "sha256": "91b1daaab82fdb6f6265ee89214c359cffdd7619fc4fd890d04a85a4a859adc2"
+        },
+        {
+          "path": "/lib/dpkg/info/python3-dev.md5sums",
+          "size": 681,
+          "sha256": "3def2fecc59194695123f0b9da6edd3d1df0a119c8f714766f2e217daeea229b"
+        },
+        {
+          "path": "/lib/dpkg/info/java-wrappers.list",
+          "size": 505,
+          "sha256": "4de75e57c074b8d04d0b57bbc6050b17b1cce0651dd6d6b2b525cccc37006bca"
+        },
+        {
+          "path": "/lib/dpkg/alternatives/compare",
+          "size": 142,
+          "sha256": "e05b23b2f68b1f98355786bef145b21db0e223e8edaad24cfe7ebbfb806ba788"
+        },
+        {
+          "path": "/lib/dpkg/info/libfile-desktopentry-perl.md5sums",
+          "size": 503,
+          "sha256": "62bf628b55e23de5ebf552f887541bd2447033f26034b2ce3c6dde59ef53765f"
+        },
+        {
+          "path": "/lib/dpkg/info/libvte-2.91-0:amd64.triggers",
+          "size": 68,
+          "sha256": "7000db10dc14bb9249ecccb56cd529b381c328d84f11e6e99ed4cc09f13df038"
+        },
+        {
+          "path": "/lib/dpkg/info/python3-pyexploitdb.postinst",
+          "size": 273,
+          "sha256": "b2fa41870b0cfa5cc79743186b847ef21fe0d4373c208d85c4ca7851b06f7aa9"
+        },
+        {
+          "path": "/lib/dpkg/info/fdisk.list",
+          "size": 590,
+          "sha256": "583505ebaa95662f864a870336a471450cb33803b1b6406d26917920e2bbb8fb"
+        },
+        {
+          "path": "/lib/dpkg/info/xserver-xorg-input-wacom.postinst",
+          "size": 539,
+          "sha256": "d0d3d7e12f0aba69048359250ce646ab44b59b466e2309d069144e0f8fdf99b2"
+        },
+        {
+          "path": "/lib/dpkg/info/thunar-data.conffiles",
+          "size": 24,
+          "sha256": "cc1c6ae722b9f2c02ef141782cb103809651900f1d1a924fdc31e8b6ff76d909"
+        },
+        {
+          "path": "/lib/dpkg/info/python3-dicttoxml.prerm",
+          "size": 382,
+          "sha256": "434662dcc80366109c908b7b0555f1bca17e752c5bb4a1a5fe38b894e7b80758"
+        },
+        {
+          "path": "/lib/dpkg/info/python3-stack-data.list",
+          "size": 966,
+          "sha256": "9987a54380f59889057eb5cb179cd08e5eada80067d9dc69dce0bf56f014e03f"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext2",
+      "fileCount": 347,
+      "directoryCount": 7,
+      "sampleFiles": [
+        {
+          "path": "/grub/i386-pc/boot.img",
+          "size": 512,
+          "sha256": "6343b7e9f06388566ea5b6e8a3535fbaec1f695a0b3793caee5386237d4d3450"
+        },
+        {
+          "path": "/grub/i386-pc/setjmp_test.mod",
+          "size": 1624,
+          "sha256": "f59d6c55b19bee1a8cc4cb9b951c124354f4e4735c64264383af1c0f00f734f0"
+        },
+        {
+          "path": "/grub/i386-pc/shift_test.mod",
+          "size": 2448,
+          "sha256": "a3c5ccc1c223bf8b321f274053ef682bc3db7ab57516053bcdbd24da07bd17eb"
+        },
+        {
+          "path": "/grub/i386-pc/part_acorn.mod",
+          "size": 1588,
+          "sha256": "b2c7891baad57f3c4ea758ba475f0a1fdae336cf888ca5e3f6f74a5402635530"
+        },
+        {
+          "path": "/grub/fonts/unicode.pf2",
+          "size": 2411806,
+          "sha256": "662eb86fc1ea89635e4bba8413590b79eb714ade5a2b5a5aa3dc5cf5f53a4463"
+        },
+        {
+          "path": "/grub/i386-pc/xnu.mod",
+          "size": 27340,
+          "sha256": "1e523e3d213a422e1c1010b2fac2cd148a9be926e26a39c7b2df0b5addb5dbd8"
+        },
+        {
+          "path": "/grub/i386-pc/affs.mod",
+          "size": 5584,
+          "sha256": "913518fc3b2269d7f17d039b3a0fe397de22c431c8adb84382c12d375ab5c551"
+        },
+        {
+          "path": "/grub/i386-pc/plainmount.mod",
+          "size": 7164,
+          "sha256": "8a32037ee25184a6068a17cffe174643ae22429b1d5935c2023cabc71beee43c"
+        },
+        {
+          "path": "/grub/locale/lt.mo",
+          "size": 94844,
+          "sha256": "8262dff4c367b267413f29aab2cc93140b9553ce4f8fff56d1f73e0fa9896b0d"
+        },
+        {
+          "path": "/grub/i386-pc/terminfo.mod",
+          "size": 12196,
+          "sha256": "02c4a3f66cea667d6ba66569675ea59bbf9e2959389cdff5f00b142d8a56cbcd"
+        },
+        {
+          "path": "/grub/i386-pc/loopback.mod",
+          "size": 3052,
+          "sha256": "7d0ff43d917b71955dc8f72b3f53bd85a928dc8fb91fc1e1cc9e97413fd35131"
+        },
+        {
+          "path": "/grub/i386-pc/part_gpt.mod",
+          "size": 2300,
+          "sha256": "3371e52b2b99f3efbf29c04d0c4669155c8b608ce830380689e3050320e093af"
+        },
+        {
+          "path": "/grub/i386-pc/linux.mod",
+          "size": 13540,
+          "sha256": "537c9b98de1505113bf91351f1675dcee5882d38427cb65e7a582997a713af71"
+        },
+        {
+          "path": "/grub/i386-pc/http.mod",
+          "size": 5856,
+          "sha256": "b35e4e4f167c223a0b8adc30a5859f82c46f8a48a0afe0f3b6df0aebaaf846c9"
+        },
+        {
+          "path": "/grub/locale/ja.mo",
+          "size": 43864,
+          "sha256": "a1f847aa3ea3220b7899d51c47b8a5879be08bf79ae3da15787ce049ec2354ad"
+        },
+        {
+          "path": "/grub/i386-pc/gcry_seed.mod",
+          "size": 14792,
+          "sha256": "91eff6b0b46bd9bed6d9a014fb0306f53c66c21430af6d4c3422942740b787b2"
+        },
+        {
+          "path": "/grub/i386-pc/usb_keyboard.mod",
+          "size": 3764,
+          "sha256": "5d925c2ca45defdc3b037e7381c7d5c3dd5031614a844abb1d712887fc64b5ca"
+        },
+        {
+          "path": "/grub/i386-pc/jpeg.mod",
+          "size": 7728,
+          "sha256": "9cde0900b45b649a9ef34522151a953ba25e877618731480728eb88a86f60c93"
+        },
+        {
+          "path": "/grub/i386-pc/gcry_arcfour.mod",
+          "size": 1580,
+          "sha256": "7b381171fc9b1a6b991178140872078885c1132b7d1007a740716d300d92f84f"
+        },
+        {
+          "path": "/grub/i386-pc/setjmp.mod",
+          "size": 628,
+          "sha256": "98fa60cd657fce787ad7294c94c0f175a0a0198f8d724846024bdd0ba27d9505"
+        }
+      ]
+    }
   ]
 }

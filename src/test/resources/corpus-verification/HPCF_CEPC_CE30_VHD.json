@@ -1,74 +1,82 @@
 {
   "imagePath": "/corpus/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/HPCF-CEPC-CE30.VHD",
   "imageBasename": "HPCF-CEPC-CE30.VHD",
-  "filesystemType": "fat32",
+  "filesystemCount": 1,
   "totalFiles": 13,
-  "totalDirectories": 3,
-  "sampleFiles": [
+  "totalDirectories": 2,
+  "filesystems": [
     {
-      "path": "/AUTOEXEC.BAK",
-      "sha256": "7e86937df522dc77b593ee3afa364ecb05a18c0168bb60ebae5b8df99cc3cef2",
-      "size": 1040
-    },
-    {
-      "path": "/AUTOEXEC.BAT",
-      "sha256": "eddd79d3fd1ad27939ae51892f681a24bf47e7bc2dd6ff080eb1e9e23817f276",
-      "size": 1032
-    },
-    {
-      "path": "/CE30.BIN",
-      "sha256": "2c8c3da85369cef5e58bb95d7f6e509defd0b41aecd00f63d77baaeb6880578e",
-      "size": 7705783
-    },
-    {
-      "path": "/COMMAND.COM",
-      "sha256": "c5e875554a45e8a1b14e81b69e822c1c2a355e32b170451799f20ab92b69199c",
-      "size": 66785
-    },
-    {
-      "path": "/CONFIG.BAK",
-      "sha256": "aa72f037814cb44e2fd5005f9e14aa5e889f68799216ca34784fd13b50401a7b",
-      "size": 78
-    },
-    {
-      "path": "/CONFIG.SYS",
-      "sha256": "3fc101bf49b20fab5c30554bc56f12cc071983c26148b05099102eb6d51c709d",
-      "size": 91
-    },
-    {
-      "path": "/EBOOT.BIN",
-      "sha256": "52c22d299b2beb7141f1c676be371c936139402a9a53b6183759ed5c75c68f5e",
-      "size": 31579
-    },
-    {
-      "path": "/HIMEM.SYS",
-      "sha256": "615b656d0d094a31cb10ab56ab31273062c535d819e8208d412ad5d022847c93",
-      "size": 29136
-    },
-    {
-      "path": "/IBMBIO.COM",
-      "sha256": "c8539b4ca08dd5ac1970a7c24799a9f1ac1bcf6b1a7f6ddc3763de4713c0f23c",
-      "size": 24810
-    },
-    {
-      "path": "/IBMDOS.COM",
-      "sha256": "79cb4a9b44d253d4dcd0c5ebd553d498ad2e62b189cf74ce895dd6f0b7c7b016",
-      "size": 30880
-    },
-    {
-      "path": "/LOADCEPC.EXE",
-      "sha256": "602dfdf636e2b4b2110087c6296dedbc8aa1161a9e13dbe49af727ec84c4a060",
-      "size": 97820
-    },
-    {
-      "path": "/VESATEST.EXE",
-      "sha256": "c6d119b5d955da2c289af424445c270d95bed9bf99711962d31ecba722884bfc",
-      "size": 7057
-    },
-    {
-      "path": "/_Restore/SRDISKID.DAT",
-      "sha256": "3f39d5c348e5b79d06e842c114e6cc571583bbf44e4b0ebfda1a01ec05745d43",
-      "size": 1
+      "device": "/dev/sda4",
+      "fstype": "vfat",
+      "fileCount": 13,
+      "directoryCount": 2,
+      "sampleFiles": [
+        {
+          "path": "/CONFIG.SYS",
+          "size": 91,
+          "sha256": "3fc101bf49b20fab5c30554bc56f12cc071983c26148b05099102eb6d51c709d"
+        },
+        {
+          "path": "/IBMBIO.COM",
+          "size": 24810,
+          "sha256": "c8539b4ca08dd5ac1970a7c24799a9f1ac1bcf6b1a7f6ddc3763de4713c0f23c"
+        },
+        {
+          "path": "/EBOOT.BIN",
+          "size": 31579,
+          "sha256": "52c22d299b2beb7141f1c676be371c936139402a9a53b6183759ed5c75c68f5e"
+        },
+        {
+          "path": "/AUTOEXEC.BAK",
+          "size": 1040,
+          "sha256": "7e86937df522dc77b593ee3afa364ecb05a18c0168bb60ebae5b8df99cc3cef2"
+        },
+        {
+          "path": "/AUTOEXEC.BAT",
+          "size": 1032,
+          "sha256": "eddd79d3fd1ad27939ae51892f681a24bf47e7bc2dd6ff080eb1e9e23817f276"
+        },
+        {
+          "path": "/_Restore/SRDISKID.DAT",
+          "size": 1,
+          "sha256": "3f39d5c348e5b79d06e842c114e6cc571583bbf44e4b0ebfda1a01ec05745d43"
+        },
+        {
+          "path": "/COMMAND.COM",
+          "size": 66785,
+          "sha256": "c5e875554a45e8a1b14e81b69e822c1c2a355e32b170451799f20ab92b69199c"
+        },
+        {
+          "path": "/LOADCEPC.EXE",
+          "size": 97820,
+          "sha256": "602dfdf636e2b4b2110087c6296dedbc8aa1161a9e13dbe49af727ec84c4a060"
+        },
+        {
+          "path": "/CONFIG.BAK",
+          "size": 78,
+          "sha256": "aa72f037814cb44e2fd5005f9e14aa5e889f68799216ca34784fd13b50401a7b"
+        },
+        {
+          "path": "/IBMDOS.COM",
+          "size": 30880,
+          "sha256": "79cb4a9b44d253d4dcd0c5ebd553d498ad2e62b189cf74ce895dd6f0b7c7b016"
+        },
+        {
+          "path": "/VESATEST.EXE",
+          "size": 7057,
+          "sha256": "c6d119b5d955da2c289af424445c270d95bed9bf99711962d31ecba722884bfc"
+        },
+        {
+          "path": "/CE30.bin",
+          "size": 7705783,
+          "sha256": "2c8c3da85369cef5e58bb95d7f6e509defd0b41aecd00f63d77baaeb6880578e"
+        },
+        {
+          "path": "/HIMEM.SYS",
+          "size": 29136,
+          "sha256": "615b656d0d094a31cb10ab56ab31273062c535d819e8208d412ad5d022847c93"
+        }
+      ]
     }
   ]
 }

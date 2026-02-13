@@ -809,8 +809,8 @@ public final class FilesystemDetector {
             return Optional.empty();
         }
 
-        // Read full superblock
-        ByteBuffer sb = disk.read(sbOffset, 512);
+        // Read superblock (need at least 0x12B + 256 = 555 bytes for label field)
+        ByteBuffer sb = disk.read(sbOffset, 576);
         sb.order(ByteOrder.LITTLE_ENDIAN);
 
         return parseBtrfsSuperblock(sb);
@@ -829,8 +829,8 @@ public final class FilesystemDetector {
             return Optional.empty();
         }
 
-        // Read superblock
-        ByteBuffer sb = region.read(BtrfsSuperblock.SUPERBLOCK_OFFSET, 512);
+        // Read superblock (need at least 0x12B + 256 = 555 bytes for label field)
+        ByteBuffer sb = region.read(BtrfsSuperblock.SUPERBLOCK_OFFSET, 576);
         sb.order(ByteOrder.LITTLE_ENDIAN);
 
         return parseBtrfsSuperblock(sb);

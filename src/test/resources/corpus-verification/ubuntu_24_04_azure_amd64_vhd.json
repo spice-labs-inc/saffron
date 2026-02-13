@@ -1,0 +1,273 @@
+{
+  "imagePath": "/corpus/vhd/native/ubuntu/ubuntu-24.04-azure-amd64.vhd",
+  "imageBasename": "ubuntu-24.04-azure-amd64.vhd",
+  "filesystemCount": 3,
+  "totalFiles": 64732,
+  "totalDirectories": 9285,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext4",
+      "fileCount": 64145,
+      "directoryCount": 9275,
+      "sampleFiles": [
+        {
+          "path": "/usr/lib/modules/6.14.0-1017-azure/kernel/lib/reed_solomon/reed_solomon.ko.zst",
+          "size": 9680,
+          "sha256": "3d8832acdfdbac7dd8dcffad0fa78b70eaf7d6d30db363ca13f429a82719b7b7"
+        },
+        {
+          "path": "/usr/share/perl/5.38.2/Test2/Util/HashBase.pm",
+          "size": 13221,
+          "sha256": "52631d3c8bc1f0d53fa70521e4b25db51b8cceb01ecfb4fb088b597d45be0c74"
+        },
+        {
+          "path": "/usr/share/man/man8/netplan-get.8.gz",
+          "size": 729,
+          "sha256": "eb955ad80a55c4becd867b63c1bf77dff531ff753cd85face184d5765af1fa0f"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/security/pam_succeed_if.so",
+          "size": 18584,
+          "sha256": "2f57cf7b54dcb2a68ee1fda25f5efab7f2a0cf14bf081be21c58ecec650ea630"
+        },
+        {
+          "path": "/var/lib/dpkg/info/python3-problem-report.md5sums",
+          "size": 254,
+          "sha256": "e605bb66eefa2c1a616cf16bf70e6cae3ce5bdf11295ef481fe6b0e99c6ff193"
+        },
+        {
+          "path": "/usr/share/python-babel-localedata/locale-data/ru_UA.dat",
+          "size": 1668,
+          "sha256": "f936937c4e170f6b0b09823e287624f252260358d9832d950784cdff624b4ef7"
+        },
+        {
+          "path": "/usr/share/man/man8/sg_rmsn.8.gz",
+          "size": 1283,
+          "sha256": "713868ded489e1efcf4ad5f26421eff47a7bd7759708b27e2d6be04eee7f86db"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/twisted/positioning/test/__pycache__/test_base.cpython-312.pyc",
+          "size": 47937,
+          "sha256": "c2de7cc789b7a8243e68dc8992cade8789e036b1aae89c1efb4d9dd4c47ca092"
+        },
+        {
+          "path": "/usr/src/linux-azure-6.14-headers-6.14.0-1017/scripts/ipe/Makefile",
+          "size": 59,
+          "sha256": "c6063afa8194598aa6cce3aca6ddb65928808b128c0c5349a43f37bb723c8404"
+        },
+        {
+          "path": "/usr/share/terminfo/d/d430c-unix-s-ccc",
+          "size": 1809,
+          "sha256": "f36934795169685588df77726d261067d9bf76241c7d547b95aea2017771451c"
+        },
+        {
+          "path": "/usr/src/linux-azure-6.14-headers-6.14.0-1017/drivers/net/ethernet/qlogic/qede/Makefile",
+          "size": 288,
+          "sha256": "fa170e1ae8459425e005793ad92c956765c2e7cd27d31dab38a3927f6e498ff1"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/rich/__pycache__/theme.cpython-312.pyc",
+          "size": 6297,
+          "sha256": "c59d02bc9e546e00235068366172c31676553424d67af4028cb7cfe65ddc825f"
+        },
+        {
+          "path": "/usr/bin/true",
+          "size": 26936,
+          "sha256": "b860051e15938770f4164177f2fc2d4e1af26b226c9b0c3ea75a36d1be33a3cf"
+        },
+        {
+          "path": "/usr/share/man/man8/fsck.minix.8.gz",
+          "size": 2129,
+          "sha256": "584862fdc0e4aa2e590c01447ae17f762a96cc5ee310e19e2846e09997c4d484"
+        },
+        {
+          "path": "/usr/share/doc/libidn2-0/README.md.gz",
+          "size": 1858,
+          "sha256": "7ec3926fa0a013a2efb06e26c3097ba7be03c56158e5ebb72beb7135e1754f52"
+        },
+        {
+          "path": "/usr/src/linux-azure-6.14-headers-6.14.0-1017/drivers/staging/gpib/eastwood/Makefile",
+          "size": 43,
+          "sha256": "41be1075b0d74a4e7f3b3d56efaeb945346c4ad0121eccd7fb0d0110418eeb42"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/twisted/python/__pycache__/filepath.cpython-312.pyc",
+          "size": 70646,
+          "sha256": "a6c2c286ba61c4dad6698efeb17b88de6f0806ec35e746e0ca5a069087dd3542"
+        },
+        {
+          "path": "/usr/share/locale/ve/LC_MESSAGES/iso_639-3.mo",
+          "size": 1997,
+          "sha256": "b736c491e1b231c0a20032f619aa1a68ceba36639c12bfff9a1d0fe6c5ebbef6"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/lazr/uri/tests/__pycache__/test_uri.cpython-312.pyc",
+          "size": 9573,
+          "sha256": "f8889bfb0f26c920d1ac29c47bf7903d36a2adccbfbd929703e7ea699db361e0"
+        },
+        {
+          "path": "/usr/src/linux-azure-6.14-headers-6.14.0-1017/include/linux/dma-heap.h",
+          "size": 1160,
+          "sha256": "5fd73cbf6611ecc40ae6beaf87dc02dd0866b8385e2b49c57ae825d0d8120c66"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda15",
+      "fstype": "vfat",
+      "fileCount": 8,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/ubuntu/shimx64.efi",
+          "size": 966664,
+          "sha256": "6fe6e1bcbe6cf6baec8e056d40361ca1aa715cc04ddcc2855351de060b84350b"
+        },
+        {
+          "path": "/EFI/BOOT/fbx64.efi",
+          "size": 88344,
+          "sha256": "8f57751703470403ff7377c26a90a810eba9f6db36f262ac6ad94d132ddc5a60"
+        },
+        {
+          "path": "/EFI/ubuntu/BOOTX64.CSV",
+          "size": 108,
+          "sha256": "01c3fe5a779f0204a10631793596d8e9acecfcf3e0c6b52ad73ea492c7797c28"
+        },
+        {
+          "path": "/EFI/ubuntu/mmx64.efi",
+          "size": 856280,
+          "sha256": "d2fa8e52fddc99dad94a0009fee23cb2478c28373b777d50b2f784eb4e96f88e"
+        },
+        {
+          "path": "/EFI/BOOT/mmx64.efi",
+          "size": 856280,
+          "sha256": "d2fa8e52fddc99dad94a0009fee23cb2478c28373b777d50b2f784eb4e96f88e"
+        },
+        {
+          "path": "/EFI/ubuntu/grubx64.efi",
+          "size": 2660232,
+          "sha256": "a831af01e4fb5e3c9457120e1d08ea13d98a0a47b62728c284b7f502d535965c"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 966664,
+          "sha256": "6fe6e1bcbe6cf6baec8e056d40361ca1aa715cc04ddcc2855351de060b84350b"
+        },
+        {
+          "path": "/EFI/ubuntu/grub.cfg",
+          "size": 112,
+          "sha256": "1c66ffb62a9a6deed26718ee54ba362c05d23d1c90ff522ccb943845baeee48f"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda16",
+      "fstype": "ext4",
+      "fileCount": 579,
+      "directoryCount": 7,
+      "sampleFiles": [
+        {
+          "path": "/grub/x86_64-efi/mmap.mod",
+          "size": 9344,
+          "sha256": "5c9992ff6cd9074221553fee56d29ed148ad713d57789d453726edcf94f9f5c9"
+        },
+        {
+          "path": "/grub/x86_64-efi/mdraid09_be.mod",
+          "size": 2832,
+          "sha256": "81aa71fc6fe780e3156b5b92ff8fd81b64d12fc6f02de2c22a8efdf8fc6c7587"
+        },
+        {
+          "path": "/grub/i386-pc/cs5536.mod",
+          "size": 3588,
+          "sha256": "5f6f7abfb8ae933ec93d3f6b32065e185e9cbd96042b930961596708ff1f7421"
+        },
+        {
+          "path": "/grub/x86_64-efi/aout.mod",
+          "size": 1496,
+          "sha256": "fd01f96d3b98d66e99929eac0bac1b7a1eaee68dd92f4eef06b71b2d9daa3122"
+        },
+        {
+          "path": "/grub/i386-pc/raid5rec.mod",
+          "size": 1292,
+          "sha256": "64d3dac31f25b680803037538dfa2e6e62e37de3bdfba5b19d1fdfcc1e05c7b3"
+        },
+        {
+          "path": "/grub/x86_64-efi/usbserial_usbdebug.mod",
+          "size": 2392,
+          "sha256": "d1098bffc61092a34cf5becd35af3be604976984c3dc38890f8b52cff1f930da"
+        },
+        {
+          "path": "/grub/i386-pc/part_bsd.mod",
+          "size": 2680,
+          "sha256": "f1a02b0385832aa8fca2f3cc5550573fb9ad2765e07ef74298819f732826ddaa"
+        },
+        {
+          "path": "/grub/x86_64-efi/fshelp.mod",
+          "size": 4512,
+          "sha256": "ec1050b15c4cb45a66a35a67afb2c5edd8ee1b94b81a885ed0316c2d9a2dce26"
+        },
+        {
+          "path": "/grub/i386-pc/multiboot2.mod",
+          "size": 15940,
+          "sha256": "0964abe92a64e5b3dcf75687d89d580720d889d8d658ac19e0da3aec1d84b1e5"
+        },
+        {
+          "path": "/grub/i386-pc/morse.mod",
+          "size": 2348,
+          "sha256": "4b164ad6adec86f4d73f15bbe9475901a0c87f2bfd69865fdc8b9bdf44c53405"
+        },
+        {
+          "path": "/grub/i386-pc/geli.mod",
+          "size": 5552,
+          "sha256": "9761dfe6d02617e7425e885ea9926c008f9ece544ce54d9f34a8a2ff518552c2"
+        },
+        {
+          "path": "/grub/x86_64-efi/cs5536.mod",
+          "size": 3984,
+          "sha256": "f76d010314f3d576401b7779db2fa128393c82150cb4220d4bb11afa4007e7a7"
+        },
+        {
+          "path": "/grub/x86_64-efi/gcry_camellia.mod",
+          "size": 27880,
+          "sha256": "0fd1b4ef7f90e2f7977333b14d72b7e956da9a0b49076e07ef95ba5dcce14ac2"
+        },
+        {
+          "path": "/grub/i386-pc/verifiers.mod",
+          "size": 2624,
+          "sha256": "3d7e28f2bde2b0171c823c38bde443d599160bac64aab01411e6a870e325b02f"
+        },
+        {
+          "path": "/grub/i386-pc/parttool.mod",
+          "size": 4644,
+          "sha256": "c7d77a57bc425e30f8d765953e968411eb83a2dbb44eea517e17441598a4f929"
+        },
+        {
+          "path": "/grub/x86_64-efi/lsacpi.mod",
+          "size": 7256,
+          "sha256": "0653c3b117fadb92db82bab76edf60e622039f1c3d285f259547a096d96f8fda"
+        },
+        {
+          "path": "/grub/i386-pc/videotest.mod",
+          "size": 4216,
+          "sha256": "a75db9927781347e394646c7850307548e33edc128726ad15b8f851cc01fd6b7"
+        },
+        {
+          "path": "/grub/x86_64-efi/eval.mod",
+          "size": 2232,
+          "sha256": "51f72fe708b296cd599aaec2722eeb8b22e767b403331ef7896507d7b5808dec"
+        },
+        {
+          "path": "/grub/i386-pc/minix.mod",
+          "size": 3616,
+          "sha256": "9db49786a2612c391ec99e21ed34e7e67ffb7446da317b72775b171dfa56b67d"
+        },
+        {
+          "path": "/grub/unicode.pf2",
+          "size": 2411806,
+          "sha256": "662eb86fc1ea89635e4bba8413590b79eb714ade5a2b5a5aa3dc5cf5f53a4463"
+        }
+      ]
+    }
+  ]
+}

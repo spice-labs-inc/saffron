@@ -5,6 +5,7 @@
 package io.spicelabs.saffron.filesystem.hfsplus;
 
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
@@ -30,19 +31,25 @@ public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
     /** Maximum file size that can be read into memory (256 MB) */
     private static final long MAX_READABLE_SIZE = 256 * 1024 * 1024;
 
+    /** Maximum symlink resolution depth to prevent infinite loops */
+    private static final int MAX_SYMLINK_DEPTH = 40;
+
     /** Root folder CNID */
     private static final int ROOT_CNID = 2;
 
     private final DiskRegion region;
     private final HfsPlusVolumeHeader volumeHeader;
     private final HfsPlusBTreeReader catalogReader;
+    private final HfsPlusBTreeReader overflowBTree;
     private final String volumeName;
 
     private HfsPlusFileSystemImpl(DiskRegion region, HfsPlusVolumeHeader volumeHeader,
-                                   HfsPlusBTreeReader catalogReader, String volumeName) {
+                                   HfsPlusBTreeReader catalogReader,
+                                   HfsPlusBTreeReader overflowBTree, String volumeName) {
         this.region = region;
         this.volumeHeader = volumeHeader;
         this.catalogReader = catalogReader;
+        this.overflowBTree = overflowBTree;
         this.volumeName = volumeName;
     }
 
@@ -63,6 +70,17 @@ public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
         HfsPlusBTreeReader catalogReader = HfsPlusBTreeReader.open(
                 region, header.catalogExtents(), header.blockSize());
 
+        // Initialize extents overflow B-tree if present
+        HfsPlusBTreeReader overflowBTree = null;
+        if (!header.extentsOverflowExtents().isEmpty()) {
+            try {
+                overflowBTree = HfsPlusBTreeReader.open(
+                        region, header.extentsOverflowExtents(), header.blockSize());
+            } catch (IOException e) {
+                // Overflow B-tree is not critical for volumes with small files
+            }
+        }
+
         // Try to find volume name from root folder's thread record
         String volumeName = "Untitled";
         try {
@@ -77,7 +95,7 @@ public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
             // Volume name is non-critical
         }
 
-        return new HfsPlusFileSystemImpl(region, header, catalogReader, volumeName);
+        return new HfsPlusFileSystemImpl(region, header, catalogReader, overflowBTree, volumeName);
     }
 
     @Override
@@ -154,12 +172,21 @@ public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
         if (start.isEmpty()) {
             return Stream.empty();
         }
-        return walkEntry(start.get(), 0, maxDepth);
+        Set<Long> visited = new HashSet<>();
+        return walkEntry(start.get(), 0, maxDepth, visited);
     }
 
-    private Stream<FileSystemEntry> walkEntry(FileSystemEntry entry, int depth, int maxDepth) {
+    private Stream<FileSystemEntry> walkEntry(FileSystemEntry entry, int depth, int maxDepth,
+                                               Set<Long> visited) {
         if (depth > maxDepth) {
             return Stream.empty();
+        }
+
+        if (entry instanceof HfsPlusDirectory dir) {
+            long cnid = (long) dir.cnid;
+            if (!visited.add(cnid)) {
+                return Stream.empty(); // cycle detected
+            }
         }
 
         Stream<FileSystemEntry> self = Stream.of(entry);
@@ -170,7 +197,7 @@ public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
                         Spliterators.spliteratorUnknownSize(
                                 new DirectoryIterator(dir), Spliterator.ORDERED
                         ), false
-                ).flatMap(child -> walkEntry(child, depth + 1, maxDepth));
+                ).flatMap(child -> walkEntry(child, depth + 1, maxDepth, visited));
                 return Stream.concat(self, children);
             } catch (Exception e) {
                 return self;
@@ -224,12 +251,12 @@ public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
     }
 
     /**
-     * Reads file data from the data fork extents.
+     * Reads file data from the data fork extents, including overflow extents if needed.
      */
     private byte[] readFileData(HfsPlusCatalogRecord.FileRecord file) throws IOException {
         long size = file.dataLogicalSize();
         if (size > MAX_READABLE_SIZE) {
-            throw new IOException("File too large to read: " + size + " bytes");
+            throw new ResourceLimitException("File too large to read into memory: " + size + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, size);
         }
         if (size == 0 || file.dataExtents().isEmpty()) {
             return new byte[0];
@@ -239,7 +266,34 @@ public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
         int bytesRead = 0;
         int bs = volumeHeader.blockSize();
 
-        for (HfsPlusExtent extent : file.dataExtents()) {
+        // Read from inline extents (up to 8)
+        bytesRead = readFromExtents(file.dataExtents(), data, bytesRead, size, bs);
+
+        // If inline extents were not enough, look up overflow extents
+        if (bytesRead < size && overflowBTree != null) {
+            long blocksRead = 0;
+            for (HfsPlusExtent extent : file.dataExtents()) {
+                blocksRead += extent.blockCount();
+            }
+
+            List<HfsPlusExtent> overflowExtents = overflowBTree.findOverflowExtents(
+                    file.cnid(), 0, blocksRead);
+            if (!overflowExtents.isEmpty()) {
+                bytesRead = readFromExtents(overflowExtents, data, bytesRead, size, bs);
+            }
+        }
+
+        return data;
+    }
+
+    /**
+     * Reads data from a list of extents into the destination array.
+     *
+     * @return the updated bytesRead position
+     */
+    private int readFromExtents(List<HfsPlusExtent> extents, byte[] data,
+                                 int bytesRead, long size, int bs) throws IOException {
+        for (HfsPlusExtent extent : extents) {
             if (bytesRead >= size) break;
             long diskOffset = extent.startBlock() * bs;
             long bytesToRead = extent.blockCount() * bs;
@@ -254,8 +308,7 @@ public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
                 bytesToRead -= chunkSize;
             }
         }
-
-        return data;
+        return bytesRead;
     }
 
     /**
@@ -462,14 +515,27 @@ public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
 
         @Override
         public @NotNull Optional<FileSystemEntry> resolve() throws IOException {
-            String targetPath = target();
-            if (targetPath.startsWith("/")) {
-                return HfsPlusFileSystemImpl.this.resolve(targetPath);
+            return resolveWithDepth(MAX_SYMLINK_DEPTH);
+        }
+
+        private @NotNull Optional<FileSystemEntry> resolveWithDepth(int remaining) throws IOException {
+            if (remaining <= 0) {
+                throw new IOException("Symlink depth exceeded for: " + path);
             }
-            // Relative path resolution
-            String parentPath = path.substring(0, path.lastIndexOf('/'));
-            if (parentPath.isEmpty()) parentPath = "/";
-            return HfsPlusFileSystemImpl.this.resolve(parentPath + "/" + targetPath);
+            String targetPath = target();
+            Optional<FileSystemEntry> result;
+            if (targetPath.startsWith("/")) {
+                result = HfsPlusFileSystemImpl.this.resolve(targetPath);
+            } else {
+                // Relative path resolution
+                String parentPath = path.substring(0, path.lastIndexOf('/'));
+                if (parentPath.isEmpty()) parentPath = "/";
+                result = HfsPlusFileSystemImpl.this.resolve(parentPath + "/" + targetPath);
+            }
+            if (result.isPresent() && result.get() instanceof HfsPlusSymlink nested) {
+                return nested.resolveWithDepth(remaining - 1);
+            }
+            return result;
         }
     }
 

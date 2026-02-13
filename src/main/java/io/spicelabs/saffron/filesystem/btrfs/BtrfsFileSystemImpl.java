@@ -5,6 +5,7 @@
 package io.spicelabs.saffron.filesystem.btrfs;
 
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
@@ -25,21 +26,26 @@ import java.util.stream.StreamSupport;
  */
 public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
 
+    private static final int MAX_SYMLINK_DEPTH = 40;
+
     private final DiskRegion region;
     private final long partitionOffset;
     private final BtrfsSuperblock superblock;
     private final BtrfsChunkTree chunkTree;
     private final BtrfsTreeReader treeReader;
     private final long fsTreeRoot;
+    private final long rootTreeRoot;
+    private final Map<Long, Long> subvolumeTreeRoots = new HashMap<>();
 
     private BtrfsFileSystemImpl(DiskRegion region, long partitionOffset, BtrfsSuperblock superblock,
-                                 BtrfsChunkTree chunkTree, long fsTreeRoot) {
+                                 BtrfsChunkTree chunkTree, long fsTreeRoot, long rootTreeRoot) {
         this.region = region;
         this.partitionOffset = partitionOffset;
         this.superblock = superblock;
         this.chunkTree = chunkTree;
         this.treeReader = new BtrfsTreeReader(chunkTree, superblock.nodeSize());
         this.fsTreeRoot = fsTreeRoot;
+        this.rootTreeRoot = rootTreeRoot;
     }
 
     /**
@@ -63,7 +69,49 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
         BtrfsTreeReader tempReader = new BtrfsTreeReader(chunkTree, superblock.nodeSize());
         long fsTreeRoot = findFsTreeRoot(tempReader, superblock.rootTreeRoot());
 
-        return new BtrfsFileSystemImpl(region, offset, superblock, chunkTree, fsTreeRoot);
+        return new BtrfsFileSystemImpl(region, offset, superblock, chunkTree, fsTreeRoot, superblock.rootTreeRoot());
+    }
+
+    /**
+     * Mounts a Btrfs filesystem and all its subvolumes as separate filesystem instances.
+     *
+     * <p>The first element is always the main FS_TREE (objectid 5). Subsequent elements
+     * are subvolumes (objectid >= 256), each rooted at their own tree root.
+     *
+     * @param region the disk region containing the filesystem
+     * @param offset the byte offset where the filesystem starts
+     * @return list of filesystem instances (main + subvolumes)
+     * @throws IOException if an I/O error occurs
+     */
+    public static List<BtrfsFileSystemImpl> mountWithSubvolumes(DiskRegion region, long offset) throws IOException {
+        BtrfsFileSystemImpl main = mount(region, offset);
+        List<BtrfsFileSystemImpl> all = new ArrayList<>();
+        all.add(main);
+
+        // Scan ROOT_TREE for all ROOT_ITEM entries with objectid >= 256
+        List<BtrfsTreeReader.SearchResult> rootItems = main.treeReader.scanForType(
+                main.rootTreeRoot, BtrfsKey.ROOT_ITEM, 10000);
+
+        for (BtrfsTreeReader.SearchResult result : rootItems) {
+            long objId = result.item().key().objectId();
+            if (objId < BtrfsKey.FIRST_FREE_OBJECTID) continue;
+
+            byte[] data = result.data();
+            if (data.length < 184) continue; // ROOT_ITEM too small to contain bytenr
+
+            ByteBuffer buf = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
+            buf.position(176); // inode (160) + generation (8) + root_dirid (8) = 176
+            long treeRoot = buf.getLong();
+            if (treeRoot == 0) continue;
+
+            try {
+                all.add(new BtrfsFileSystemImpl(region, offset, main.superblock,
+                        main.chunkTree, treeRoot, main.rootTreeRoot));
+            } catch (Exception e) {
+                // Skip subvolumes that fail to mount
+            }
+        }
+        return all;
     }
 
     private static long findFsTreeRoot(BtrfsTreeReader reader, long rootTreeRoot) throws IOException {
@@ -84,6 +132,27 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
         // ROOT_ITEM structure: inode (160) + generation (8) + root_dirid (8) + bytenr (8)
         buf.position(160 + 8 + 8);
         return buf.getLong();
+    }
+
+    /**
+     * Resolves a subvolume tree root address from the ROOT_TREE.
+     */
+    private long resolveSubvolumeTreeRoot(long subvolumeObjectId) throws IOException {
+        Long cached = subvolumeTreeRoots.get(subvolumeObjectId);
+        if (cached != null) return cached;
+
+        List<BtrfsTreeReader.SearchResult> results = treeReader.search(
+                rootTreeRoot, subvolumeObjectId, BtrfsKey.ROOT_ITEM);
+        if (results.isEmpty()) {
+            throw new IOException("Subvolume not found: " + subvolumeObjectId);
+        }
+
+        byte[] data = results.get(0).data();
+        ByteBuffer buf = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
+        buf.position(176);
+        long treeRoot = buf.getLong();
+        subvolumeTreeRoots.put(subvolumeObjectId, treeRoot);
+        return treeRoot;
     }
 
     @Override
@@ -140,7 +209,7 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
 
     @Override
     public @NotNull FileSystemEntry.Directory root() throws IOException {
-        return new BtrfsDirectory("/", BtrfsKey.FIRST_FREE_OBJECTID);
+        return new BtrfsDirectory("/", BtrfsKey.FIRST_FREE_OBJECTID, fsTreeRoot);
     }
 
     @Override
@@ -180,24 +249,49 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
         if (entry.isEmpty()) {
             return Stream.empty();
         }
-        return walkEntry(entry.get(), 0, maxDepth);
+        return walkEntry(entry.get(), 0, maxDepth, new HashSet<TreeObjectKey>());
     }
 
-    private Stream<FileSystemEntry> walkEntry(FileSystemEntry entry, int depth, int maxDepth) {
+    private record TreeObjectKey(long treeRoot, long objectId) {}
+
+    private Stream<FileSystemEntry> walkEntry(FileSystemEntry entry, int depth, int maxDepth,
+                                               Set<TreeObjectKey> ancestorKeys) {
         if (depth > maxDepth) {
             return Stream.empty();
         }
 
         Stream<FileSystemEntry> self = Stream.of(entry);
 
-        if (entry instanceof FileSystemEntry.Directory dir && depth < maxDepth) {
+        if (entry instanceof BtrfsDirectory btrfsDir && depth < maxDepth) {
+            // Cycle detection: skip if this (treeRoot, objectId) pair was already seen in an ancestor
+            TreeObjectKey key = new TreeObjectKey(btrfsDir.treeRoot, btrfsDir.objectId);
+            if (!ancestorKeys.add(key)) {
+                return self;
+            }
+            Set<TreeObjectKey> childAncestors = new HashSet<>(ancestorKeys);
+            try {
+                Stream<FileSystemEntry> children = StreamSupport.stream(
+                        Spliterators.spliteratorUnknownSize(btrfsDir.list().iterator(), Spliterator.ORDERED),
+                        false
+                ).flatMap(child -> {
+                    try {
+                        return walkEntry(child, depth + 1, maxDepth, childAncestors);
+                    } catch (Exception e) {
+                        return Stream.empty();
+                    }
+                });
+                return Stream.concat(self, children);
+            } catch (IOException e) {
+                return self;
+            }
+        } else if (entry instanceof FileSystemEntry.Directory dir && depth < maxDepth) {
             try {
                 Stream<FileSystemEntry> children = StreamSupport.stream(
                         Spliterators.spliteratorUnknownSize(dir.list().iterator(), Spliterator.ORDERED),
                         false
                 ).flatMap(child -> {
                     try {
-                        return walkEntry(child, depth + 1, maxDepth);
+                        return walkEntry(child, depth + 1, maxDepth, ancestorKeys);
                     } catch (Exception e) {
                         return Stream.empty();
                     }
@@ -216,8 +310,12 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
     }
 
     private BtrfsInode readInode(long objectId) throws IOException {
+        return readInode(fsTreeRoot, objectId);
+    }
+
+    private BtrfsInode readInode(long treeRoot, long objectId) throws IOException {
         List<BtrfsTreeReader.SearchResult> results = treeReader.search(
-                fsTreeRoot, objectId, BtrfsKey.INODE_ITEM);
+                treeRoot, objectId, BtrfsKey.INODE_ITEM);
         if (results.isEmpty()) {
             throw new IOException("Inode not found: " + objectId);
         }
@@ -225,11 +323,15 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
     }
 
     private List<BtrfsDirectoryEntry> readDirEntries(long dirObjectId) throws IOException {
+        return readDirEntries(fsTreeRoot, dirObjectId);
+    }
+
+    private List<BtrfsDirectoryEntry> readDirEntries(long treeRoot, long dirObjectId) throws IOException {
         Map<String, BtrfsDirectoryEntry> entriesByName = new LinkedHashMap<>();
 
         // Search DIR_INDEX first (primary, sorted by sequence)
         List<BtrfsTreeReader.SearchResult> indexResults = treeReader.search(
-                fsTreeRoot, dirObjectId, BtrfsKey.DIR_INDEX);
+                treeRoot, dirObjectId, BtrfsKey.DIR_INDEX);
         for (BtrfsTreeReader.SearchResult result : indexResults) {
             BtrfsDirectoryEntry entry = BtrfsDirectoryEntry.parse(result.data());
             if (!entry.name().equals(".") && !entry.name().equals("..")) {
@@ -239,7 +341,7 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
 
         // Also search DIR_ITEM as fallback for entries not in DIR_INDEX
         List<BtrfsTreeReader.SearchResult> itemResults = treeReader.search(
-                fsTreeRoot, dirObjectId, BtrfsKey.DIR_ITEM);
+                treeRoot, dirObjectId, BtrfsKey.DIR_ITEM);
         for (BtrfsTreeReader.SearchResult result : itemResults) {
             BtrfsDirectoryEntry entry = BtrfsDirectoryEntry.parse(result.data());
             if (!entry.name().equals(".") && !entry.name().equals("..")) {
@@ -251,12 +353,16 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
     }
 
     private byte[] readFileData(long objectId, long size) throws IOException {
+        return readFileData(fsTreeRoot, objectId, size);
+    }
+
+    private byte[] readFileData(long treeRoot, long objectId, long size) throws IOException {
         if (size > 256 * 1024 * 1024) {
-            throw new IOException("File too large: " + size + " bytes (max 256MB)");
+            throw new ResourceLimitException("File too large to read into memory: " + size + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", 256L * 1024 * 1024, size);
         }
 
         List<BtrfsTreeReader.SearchResult> extents = treeReader.search(
-                fsTreeRoot, objectId, BtrfsKey.EXTENT_DATA);
+                treeRoot, objectId, BtrfsKey.EXTENT_DATA);
 
         if (extents.isEmpty()) {
             return new byte[0];
@@ -338,8 +444,12 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
     }
 
     private String readSymlinkTarget(long objectId) throws IOException {
+        return readSymlinkTarget(fsTreeRoot, objectId);
+    }
+
+    private String readSymlinkTarget(long treeRoot, long objectId) throws IOException {
         List<BtrfsTreeReader.SearchResult> extents = treeReader.search(
-                fsTreeRoot, objectId, BtrfsKey.EXTENT_DATA);
+                treeRoot, objectId, BtrfsKey.EXTENT_DATA);
 
         if (extents.isEmpty()) {
             return "";
@@ -387,8 +497,27 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
     }
 
     private static byte[] decompressZstd(byte[] compressed, int uncompressedSize) throws IOException {
-        try {
-            return com.github.luben.zstd.Zstd.decompress(compressed, uncompressedSize);
+        // Btrfs stores compressed extents in sector-aligned blocks. The actual zstd
+        // frame may be smaller than disk_num_bytes (the rest is padding). Use streaming
+        // decompression which reads exactly one frame and stops. After the frame ends,
+        // the stream may throw on trailing padding bytes — this is expected and handled.
+        try (var zis = new com.github.luben.zstd.ZstdInputStream(
+                new ByteArrayInputStream(compressed))) {
+            byte[] output = new byte[uncompressedSize];
+            int totalRead = 0;
+            while (totalRead < uncompressedSize) {
+                int n;
+                try {
+                    n = zis.read(output, totalRead, uncompressedSize - totalRead);
+                } catch (com.github.luben.zstd.ZstdIOException e) {
+                    // End of zstd frame reached; trailing padding in the sector caused
+                    // an "Unknown frame descriptor" error — this is normal for Btrfs.
+                    break;
+                }
+                if (n <= 0) break;
+                totalRead += n;
+            }
+            return output;
         } catch (Exception e) {
             throw new IOException("Zstd decompression failed", e);
         }
@@ -401,16 +530,18 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
     private class BtrfsDirectory implements FileSystemEntry.Directory {
         private final String path;
         private final long objectId;
+        private final long treeRoot;
         private BtrfsInode inode;
 
-        BtrfsDirectory(String path, long objectId) {
+        BtrfsDirectory(String path, long objectId, long treeRoot) {
             this.path = path;
             this.objectId = objectId;
+            this.treeRoot = treeRoot;
         }
 
         private BtrfsInode getInode() throws IOException {
             if (inode == null) {
-                inode = readInode(objectId);
+                inode = readInode(treeRoot, objectId);
             }
             return inode;
         }
@@ -486,22 +617,33 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
 
         @Override
         public @NotNull Stream<FileSystemEntry> list() throws IOException {
-            List<BtrfsDirectoryEntry> entries = readDirEntries(objectId);
+            List<BtrfsDirectoryEntry> entries = readDirEntries(treeRoot, objectId);
             List<FileSystemEntry> result = new ArrayList<>();
 
             for (BtrfsDirectoryEntry entry : entries) {
                 String childPath = path.equals("/") ? "/" + entry.name() : path + "/" + entry.name();
                 long childObjId = entry.targetObjectId();
 
-                FileSystemEntry fsEntry = switch (entry.type()) {
-                    case BtrfsDirectoryEntry.FT_DIR -> new BtrfsDirectory(childPath, childObjId);
-                    case BtrfsDirectoryEntry.FT_REG_FILE -> new BtrfsRegularFile(childPath, childObjId);
-                    case BtrfsDirectoryEntry.FT_SYMLINK -> new BtrfsSymlink(childPath, childObjId);
-                    case BtrfsDirectoryEntry.FT_CHRDEV, BtrfsDirectoryEntry.FT_BLKDEV ->
-                            new BtrfsSpecialFile(childPath, childObjId, entry.type());
-                    default -> new BtrfsRegularFile(childPath, childObjId);  // Fallback
-                };
-                result.add(fsEntry);
+                try {
+                    FileSystemEntry fsEntry;
+                    if (entry.location().type() == BtrfsKey.ROOT_ITEM) {
+                        // Subvolume entry — resolve its tree root, root dir is always objectid 256
+                        long subvolTreeRoot = resolveSubvolumeTreeRoot(childObjId);
+                        fsEntry = new BtrfsDirectory(childPath, BtrfsKey.FIRST_FREE_OBJECTID, subvolTreeRoot);
+                    } else {
+                        fsEntry = switch (entry.type()) {
+                            case BtrfsDirectoryEntry.FT_DIR -> new BtrfsDirectory(childPath, childObjId, treeRoot);
+                            case BtrfsDirectoryEntry.FT_REG_FILE -> new BtrfsRegularFile(childPath, childObjId, treeRoot);
+                            case BtrfsDirectoryEntry.FT_SYMLINK -> new BtrfsSymlink(childPath, childObjId, treeRoot);
+                            case BtrfsDirectoryEntry.FT_CHRDEV, BtrfsDirectoryEntry.FT_BLKDEV ->
+                                    new BtrfsSpecialFile(childPath, childObjId, entry.type(), treeRoot);
+                            default -> new BtrfsRegularFile(childPath, childObjId, treeRoot);  // Fallback
+                        };
+                    }
+                    result.add(fsEntry);
+                } catch (Exception e) {
+                    // Skip entries that fail to resolve (e.g. deleted subvolumes)
+                }
             }
             return result.stream();
         }
@@ -515,16 +657,18 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
     private class BtrfsRegularFile implements FileSystemEntry.RegularFile {
         private final String path;
         private final long objectId;
+        private final long treeRoot;
         private BtrfsInode inode;
 
-        BtrfsRegularFile(String path, long objectId) {
+        BtrfsRegularFile(String path, long objectId, long treeRoot) {
             this.path = path;
             this.objectId = objectId;
+            this.treeRoot = treeRoot;
         }
 
         private BtrfsInode getInode() throws IOException {
             if (inode == null) {
-                inode = readInode(objectId);
+                inode = readInode(treeRoot, objectId);
             }
             return inode;
         }
@@ -599,29 +743,31 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
 
         @Override
         public @NotNull InputStream openStream() throws IOException {
-            byte[] data = readFileData(objectId, size());
+            byte[] data = readFileData(treeRoot, objectId, size());
             return new ByteArrayInputStream(data);
         }
 
         @Override
         public byte[] readAllBytes() throws IOException {
-            return readFileData(objectId, size());
+            return readFileData(treeRoot, objectId, size());
         }
     }
 
     private class BtrfsSymlink implements FileSystemEntry.SymbolicLink {
         private final String path;
         private final long objectId;
+        private final long treeRoot;
         private final String target;
         private BtrfsInode inode;
 
-        BtrfsSymlink(String path, long objectId) {
+        BtrfsSymlink(String path, long objectId, long treeRoot) {
             this.path = path;
             this.objectId = objectId;
+            this.treeRoot = treeRoot;
             // Read target eagerly since interface doesn't allow IOException
             String targetValue;
             try {
-                targetValue = readSymlinkTarget(objectId);
+                targetValue = readSymlinkTarget(treeRoot, objectId);
             } catch (IOException e) {
                 targetValue = "";
             }
@@ -630,7 +776,7 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
 
         private BtrfsInode getInode() throws IOException {
             if (inode == null) {
-                inode = readInode(objectId);
+                inode = readInode(treeRoot, objectId);
             }
             return inode;
         }
@@ -709,14 +855,27 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
 
         @Override
         public @NotNull Optional<FileSystemEntry> resolve() throws IOException {
-            String targetPath = target();
-            if (targetPath.startsWith("/")) {
-                return BtrfsFileSystemImpl.this.resolve(targetPath);
+            return resolveWithDepth(MAX_SYMLINK_DEPTH);
+        }
+
+        private @NotNull Optional<FileSystemEntry> resolveWithDepth(int remaining) throws IOException {
+            if (remaining <= 0) {
+                throw new IOException("Symlink depth exceeded (max " + MAX_SYMLINK_DEPTH + "): " + path);
             }
-            // Relative path
-            String parentPath = path.substring(0, path.lastIndexOf('/'));
-            if (parentPath.isEmpty()) parentPath = "/";
-            return BtrfsFileSystemImpl.this.resolve(parentPath + "/" + targetPath);
+            String targetPath = target();
+            Optional<FileSystemEntry> resolved;
+            if (targetPath.startsWith("/")) {
+                resolved = BtrfsFileSystemImpl.this.resolve(targetPath);
+            } else {
+                // Relative path
+                String parentPath = path.substring(0, path.lastIndexOf('/'));
+                if (parentPath.isEmpty()) parentPath = "/";
+                resolved = BtrfsFileSystemImpl.this.resolve(parentPath + "/" + targetPath);
+            }
+            if (resolved.isPresent() && resolved.get() instanceof BtrfsSymlink nextLink) {
+                return nextLink.resolveWithDepth(remaining - 1);
+            }
+            return resolved;
         }
     }
 
@@ -724,17 +883,19 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
         private final String path;
         private final long objectId;
         private final int fileType;
+        private final long treeRoot;
         private BtrfsInode inode;
 
-        BtrfsSpecialFile(String path, long objectId, int fileType) {
+        BtrfsSpecialFile(String path, long objectId, int fileType, long treeRoot) {
             this.path = path;
             this.objectId = objectId;
             this.fileType = fileType;
+            this.treeRoot = treeRoot;
         }
 
         private BtrfsInode getInode() throws IOException {
             if (inode == null) {
-                inode = readInode(objectId);
+                inode = readInode(treeRoot, objectId);
             }
             return inode;
         }

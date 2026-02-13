@@ -18,6 +18,7 @@
 package io.spicelabs.saffron.filesystem.xfs;
 
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
@@ -56,6 +57,11 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
     private final int inodePerBlockLog; // log2(inodes per block)
     private final long agBlocks;
     private final boolean isV5;
+    private final int dirBlockLog;   // log2(fs blocks per directory block)
+    private final int dirBlockSize;  // directory block size in bytes
+
+    /** Maximum depth for resolving chained symbolic links, matching Linux kernel MAXSYMLINKS. */
+    private static final int MAX_SYMLINK_DEPTH = 40;
 
     private XfsFileSystemImpl(DiskRegion region, XfsSuperblock superblock,
                               int agBlockLog, int inodePerBlockLog) {
@@ -67,6 +73,8 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
         this.inodePerBlockLog = inodePerBlockLog;
         this.agBlocks = superblock.blocksPerAg();
         this.isV5 = superblock.isV5();
+        this.dirBlockLog = superblock.dirBlockLog();
+        this.dirBlockSize = blockSize << dirBlockLog;
     }
 
     /**
@@ -144,7 +152,8 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
 
     @Override
     public @NotNull Stream<FileSystemEntry> walk() throws IOException {
-        return walkDirectory(root(), Integer.MAX_VALUE);
+        Set<Long> visited = new HashSet<>();
+        return walkDirectory(root(), Integer.MAX_VALUE, visited);
     }
 
     @Override
@@ -155,13 +164,22 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
         }
 
         if (entry.get() instanceof FileSystemEntry.Directory dir) {
-            return walkDirectory(dir, maxDepth);
+            Set<Long> visited = new HashSet<>();
+            return walkDirectory(dir, maxDepth, visited);
         } else {
             return Stream.of(entry.get());
         }
     }
 
-    private Stream<FileSystemEntry> walkDirectory(FileSystemEntry.Directory dir, int maxDepth) throws IOException {
+    private Stream<FileSystemEntry> walkDirectory(FileSystemEntry.Directory dir, int maxDepth,
+                                                   Set<Long> visited) throws IOException {
+        // Cycle detection: skip directories we have already entered
+        if (dir instanceof XfsDirectory xfsDir) {
+            if (!visited.add(xfsDir.inode.inodeNumber())) {
+                return Stream.of(dir);
+            }
+        }
+
         if (maxDepth <= 0) {
             return Stream.of(dir);
         }
@@ -173,12 +191,12 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
             children.forEach(entry -> {
                 try {
                     if (entry instanceof FileSystemEntry.Directory subDir) {
-                        walkDirectory(subDir, maxDepth - 1).forEach(result::add);
+                        walkDirectory(subDir, maxDepth - 1, visited).forEach(result::add);
                     } else {
                         result.add(entry);
                     }
-                } catch (IOException e) {
-                    // Skip entries that can't be read
+                } catch (Exception e) {
+                    // Skip entries/subtrees that can't be read
                 }
             });
         }
@@ -278,10 +296,22 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
     }
 
     /**
-     * Reads a filesystem block.
+     * Converts a filesystem block number (FSBNO) to a byte offset.
+     * XFS FSBNOs encode: (agno << agBlockLog) | agbno.
+     * The byte offset is: (agno * agBlocks + agbno) * blockSize.
+     * This is NOT simply fsbno * blockSize when agBlocks != 2^agBlockLog.
      */
-    ByteBuffer readBlock(long blockNumber) throws IOException {
-        return region.read(blockNumber * blockSize, blockSize);
+    long fsBlockToByteOffset(long fsbno) {
+        long agNo = fsbno >> agBlockLog;
+        long agBno = fsbno & ((1L << agBlockLog) - 1);
+        return (agNo * agBlocks + agBno) * blockSize;
+    }
+
+    /**
+     * Reads a filesystem block by its FSBNO.
+     */
+    ByteBuffer readBlock(long fsbno) throws IOException {
+        return region.read(fsBlockToByteOffset(fsbno), blockSize);
     }
 
     /** Maximum file size that can be read into memory (256 MB) */
@@ -296,8 +326,7 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
         }
 
         if (inode.size() > MAX_READABLE_SIZE) {
-            throw new IOException("File too large to read into memory: " + inode.size() +
-                    " bytes (max " + MAX_READABLE_SIZE + " bytes)");
+            throw new ResourceLimitException("File too large to read into memory: " + inode.size() + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, inode.size());
         }
 
         // For symlinks with inline data
@@ -333,7 +362,7 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
             if (bytesRead >= result.length) break;
             if (extent.blockCount() == 0) continue;
 
-            long physicalOffset = extent.physicalBlock() * blockSize;
+            long physicalOffset = fsBlockToByteOffset(extent.physicalBlock());
             int bytesToRead = Math.min(extent.blockCount() * blockSize, result.length - bytesRead);
 
             ByteBuffer data = region.read(physicalOffset, bytesToRead);
@@ -356,7 +385,7 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
             if (bytesRead >= result.length) break;
             if (extent.blockCount() == 0) continue;
 
-            long physicalOffset = extent.physicalBlock() * blockSize;
+            long physicalOffset = fsBlockToByteOffset(extent.physicalBlock());
             int bytesToRead = Math.min(extent.blockCount() * blockSize, result.length - bytesRead);
 
             ByteBuffer data = region.read(physicalOffset, bytesToRead);
@@ -412,13 +441,16 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
                 }
             } else {
                 // Internal node - recurse
+                // In XFS BMBT blocks, keys and pointers each have MAXRECS slots.
+                // maxrecs = (blockSize - headerSize) / (keySize + ptrSize) = (blockSize - headerSize) / 16
+                // Pointers start at: headerSize + maxrecs * keySize
                 List<Long> childPtrs = new ArrayList<>();
                 ByteBuffer ptrBuf = ByteBuffer.wrap(blockBytes);
                 ptrBuf.order(ByteOrder.BIG_ENDIAN);
 
-                // Pointers start after keys
                 int keySize = 8; // startoff
-                int ptrOffset = headerSize + header.numrecs() * keySize;
+                int maxrecs = (blockSize - headerSize) / 16;
+                int ptrOffset = headerSize + maxrecs * keySize;
 
                 for (int i = 0; i < header.numrecs(); i++) {
                     if (ptrOffset + i * 8 + 8 > blockBytes.length) break;
@@ -484,20 +516,29 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
         // Extents at or above this logical block are leaf/free index blocks, not data
         long leafBlockOffset = XFS_DIR2_LEAF_OFFSET / blockSize;
 
+        // Number of filesystem blocks per directory block (sb_dirblklog).
+        // A directory block may span multiple filesystem blocks; the XDD3/XDB3 header
+        // only appears at the start of each directory block, not each filesystem block.
+        int fsBlocksPerDirBlock = 1 << dirBlockLog;
+
         for (XfsExtent extent : extents) {
             if (extent.blockCount() == 0 || extent.physicalBlock() == 0) continue;
 
             // Skip leaf and free-space index extents
             if (extent.logicalOffset() >= leafBlockOffset) continue;
 
-            for (int i = 0; i < extent.blockCount(); i++) {
+            // Step through the extent in directory-block-sized chunks
+            for (int i = 0; i < extent.blockCount(); i += fsBlocksPerDirBlock) {
                 // Stop if this block crosses into the leaf region
                 if (extent.logicalOffset() + i >= leafBlockOffset) break;
 
-                long physicalOffset = (extent.physicalBlock() + i) * blockSize;
+                // Read the full directory block (may span multiple filesystem blocks)
+                long fsbno = extent.physicalBlock() + i;
+                long physicalOffset = fsBlockToByteOffset(fsbno);
+                int readSize = Math.min(dirBlockSize, (extent.blockCount() - i) * blockSize);
 
-                ByteBuffer blockBuf = region.read(physicalOffset, blockSize);
-                byte[] block = new byte[blockSize];
+                ByteBuffer blockBuf = region.read(physicalOffset, readSize);
+                byte[] block = new byte[readSize];
                 blockBuf.get(block);
 
                 // Check block magic
@@ -505,14 +546,17 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
                 buf.order(ByteOrder.BIG_ENDIAN);
                 int magic = buf.getInt(0);
 
-                if (magic == 0x58444233 || magic == 0x58443244) {
-                    // XDB3 or XD2D - data block
-                    entries.addAll(XfsDirectoryEntry.parseBlock(block, blockSize, isV5));
+                if (magic == 0x58444233   // XDB3 - v5 single-block directory
+                        || magic == 0x58444433   // XDD3 - v5 multi-block data block
+                        || magic == 0x58443242   // XD2B - v4 single-block directory
+                        || magic == 0x58443244)  // XD2D - v4 multi-block data block
+                {
+                    entries.addAll(XfsDirectoryEntry.parseBlock(block, readSize, isV5));
                     if (entries.size() > MAX_DIRECTORY_ENTRIES) {
                         return entries;
                     }
                 }
-                // Skip leaf blocks (XDL3, XD2L) - they're just indexes
+                // Skip leaf blocks (XDL3, XD2L) and free blocks (XDF3, XD2F)
             }
         }
 
@@ -601,9 +645,13 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
                 if (entry.isDot() || entry.isDotDot()) continue;
 
                 String childPath = path.equals("/") ? "/" + entry.name() : path + "/" + entry.name();
-                FileSystemEntry fsEntry = createEntry(entry.inode(), entry.name(), childPath);
-                if (fsEntry != null) {
-                    result.add(fsEntry);
+                try {
+                    FileSystemEntry fsEntry = createEntry(entry.inode(), entry.name(), childPath);
+                    if (fsEntry != null) {
+                        result.add(fsEntry);
+                    }
+                } catch (Exception e) {
+                    // Skip entries with unreadable inodes (e.g., out-of-range inode numbers)
                 }
             }
 
@@ -784,14 +832,30 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
 
         @Override
         public @NotNull Optional<FileSystemEntry> resolve() throws IOException {
+            return resolveWithDepth(MAX_SYMLINK_DEPTH);
+        }
+
+        private Optional<FileSystemEntry> resolveWithDepth(int remaining) throws IOException {
+            if (remaining <= 0) {
+                throw new IOException("Symlink depth exceeded: too many levels of symbolic links at " + path);
+            }
+
             String targetPath = target();
+            Optional<FileSystemEntry> resolved;
             if (targetPath.startsWith("/")) {
-                return fs.resolve(targetPath);
+                resolved = fs.resolve(targetPath);
             } else {
                 String parentPath = path.substring(0, path.lastIndexOf('/'));
                 if (parentPath.isEmpty()) parentPath = "/";
-                return fs.resolve(parentPath + "/" + targetPath);
+                resolved = fs.resolve(parentPath + "/" + targetPath);
             }
+
+            // If the resolved entry is itself a symlink, continue resolving with decremented depth
+            if (resolved.isPresent() && resolved.get() instanceof XfsSymbolicLink nextLink) {
+                return nextLink.resolveWithDepth(remaining - 1);
+            }
+
+            return resolved;
         }
     }
 

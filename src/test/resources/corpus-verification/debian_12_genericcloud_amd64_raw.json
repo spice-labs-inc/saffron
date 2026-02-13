@@ -1,0 +1,170 @@
+{
+  "imagePath": "/corpus/raw/cloud/debian/debian-12-genericcloud-amd64.raw",
+  "imageBasename": "debian-12-genericcloud-amd64.raw",
+  "filesystemCount": 2,
+  "totalFiles": 21356,
+  "totalDirectories": 2343,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext4",
+      "fileCount": 21347,
+      "directoryCount": 2340,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/man/de/man8/chgpasswd.8.gz",
+          "size": 1809,
+          "sha256": "5d9017e602affe58fbc92702d835623c0ee41244827e2a0cc6f820a4e875bfbc"
+        },
+        {
+          "path": "/usr/share/man/uk/man1/free.1.gz",
+          "size": 2688,
+          "sha256": "0e731cd97c058816d64672e837d18c8862339c68a8218a6250669a8dd3bd630b"
+        },
+        {
+          "path": "/usr/lib/grub/i386-pc/password.mod",
+          "size": 1820,
+          "sha256": "ae5249904ab0ff9d959983f497eea90425b28aeca9df0d4848f15aeccb3ad5e7"
+        },
+        {
+          "path": "/usr/share/zoneinfo/WET",
+          "size": 1905,
+          "sha256": "49cd25d3711f56cfda222d7b2382b2649164c220076ade418298eeb850e1810d"
+        },
+        {
+          "path": "/usr/lib/systemd/system/systemd-reboot.service",
+          "size": 568,
+          "sha256": "c7ba107db4bd819ea7cfb30293dd7bbe595669d1eaa25238471a55b6845c8bf8"
+        },
+        {
+          "path": "/usr/share/locale/hr/LC_MESSAGES/grub.mo",
+          "size": 122210,
+          "sha256": "f53d0288a5e1d011b19260f7acb0b5d7f2060589da88f4b66433b88e0a58b962"
+        },
+        {
+          "path": "/usr/share/doc/python3-serial/examples/rfc2217_server.py",
+          "size": 6148,
+          "sha256": "bc0a49c6c1b4c3c680e1fad214d91d4198887daa950a39ea36e3d30dcdb01813"
+        },
+        {
+          "path": "/usr/share/vim/vim90/lang/menu_fi_fi.utf-8.vim",
+          "size": 90,
+          "sha256": "85a74eac62e1b1c58e28b50fdc941747935123addd2e55a6740509383a488874"
+        },
+        {
+          "path": "/usr/lib/python3.11/encodings/__pycache__/rot_13.cpython-311.pyc",
+          "size": 4832,
+          "sha256": "dab825f8ca175545915a6f982d8bc93c93a8dd3c8823c2c93af695675e581945"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/pysimplesoap/__pycache__/__init__.cpython-311.pyc",
+          "size": 556,
+          "sha256": "7e55a6583b814ea434dee03944264f78721d8b9c908093e48e279db043f4abe3"
+        },
+        {
+          "path": "/usr/share/man/man8/tc-route.8.gz",
+          "size": 863,
+          "sha256": "400d788e959362baf58631992484f111c2034871f10c05915ad6e89db0ff37a6"
+        },
+        {
+          "path": "/usr/share/vim/vim90/macros/less.sh",
+          "size": 588,
+          "sha256": "aa232444007967a0ad5c6f8e90fcb0a8a95d8b0eaa37b519ca947f74d68e8c65"
+        },
+        {
+          "path": "/usr/share/vim/vim90/doc/starting.txt",
+          "size": 74476,
+          "sha256": "d6fcb89fbc660accbce3a454b1022f57d23fd3bf3ad9b87a252e077b1376b253"
+        },
+        {
+          "path": "/usr/lib/modules/6.1.0-42-cloud-amd64/kernel/net/sunrpc/xprtrdma/rpcrdma.ko",
+          "size": 791753,
+          "sha256": "c87d2a58f13a7360849f4f95592f6a67666590e3042529026371d8e381147ada"
+        },
+        {
+          "path": "/usr/share/man/da/man1/manpath.1.gz",
+          "size": 1573,
+          "sha256": "2fb6ade9a7ffac78c16f176c6c8722cb8e6bf2dffbc70719ea3776339d5f7942"
+        },
+        {
+          "path": "/usr/share/zoneinfo/right/Atlantic/Stanley",
+          "size": 1748,
+          "sha256": "8e17fa24405bdeab427f31d715b75aad22ff767bca0f421f47a0c1ea57410bba"
+        },
+        {
+          "path": "/usr/share/vim/vim90/indent/automake.vim",
+          "size": 243,
+          "sha256": "c2e0cba25f5924b38ac099c66acc758ae8bf51cbbccb9c22a76dea1a4358d9aa"
+        },
+        {
+          "path": "/usr/bin/dbus-cleanup-sockets",
+          "size": 14560,
+          "sha256": "2c98833abc15760432888b2c64d86ba033ea9ff00c98ebb2dd4ff27a0473d816"
+        },
+        {
+          "path": "/usr/share/locale/nl/LC_MESSAGES/python-apt.mo",
+          "size": 11456,
+          "sha256": "f2ddadc59cf4f841cac5a359a209b5f9668bf36d0e0abb59ec14bb521f96180d"
+        },
+        {
+          "path": "/usr/share/man/man7/credentials.7.gz",
+          "size": 3687,
+          "sha256": "9c6b9d692be8d7ccc71a5cb88fffefbb9991bf1b95900c5b0b5174a0ee75765f"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda15",
+      "fstype": "vfat",
+      "fileCount": 9,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/mmx64.efi",
+          "size": 850176,
+          "sha256": "e6ff92628eb3ab915032af43574ae39c5d0a9069bf89bd7b9bd832630e09d906"
+        },
+        {
+          "path": "/EFI/debian/grubx64.efi",
+          "size": 4199872,
+          "sha256": "808d78ade39fbcfbd8c77d061b6b8cbdabffeabd58e54effcb6e621accb01445"
+        },
+        {
+          "path": "/EFI/debian/grub.cfg",
+          "size": 117,
+          "sha256": "a15b3ec698514361b8eaae67920725fe8867908534a482869f332a2ae7a9e211"
+        },
+        {
+          "path": "/EFI/debian/fbx64.efi",
+          "size": 87376,
+          "sha256": "2af8ca2c387172273ab41f6c9ead636745e04006631385d389f8d4dfe928b21b"
+        },
+        {
+          "path": "/EFI/debian/mmx64.efi",
+          "size": 850176,
+          "sha256": "e6ff92628eb3ab915032af43574ae39c5d0a9069bf89bd7b9bd832630e09d906"
+        },
+        {
+          "path": "/EFI/BOOT/grubx64.efi",
+          "size": 4199872,
+          "sha256": "808d78ade39fbcfbd8c77d061b6b8cbdabffeabd58e54effcb6e621accb01445"
+        },
+        {
+          "path": "/EFI/debian/shimx64.efi",
+          "size": 960080,
+          "sha256": "c5fc5e5e74057e7a6be857eb5dc39209396dffd945a3e8c93e9cf13c103f88f8"
+        },
+        {
+          "path": "/EFI/debian/BOOTX64.CSV",
+          "size": 108,
+          "sha256": "726dfb8abb923624c188b2505dc744409c3d589bed82b627984b6390c230a384"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 960080,
+          "sha256": "c5fc5e5e74057e7a6be857eb5dc39209396dffd945a3e8c93e9cf13c103f88f8"
+        }
+      ]
+    }
+  ]
+}

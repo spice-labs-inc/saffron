@@ -1,54 +1,145 @@
 {
   "imagePath": "/corpus/qcow2/modern/opensuse-leap-15.6.qcow2",
   "imageBasename": "opensuse-leap-15.6.qcow2",
-  "filesystemType": "xfs",
-  "totalFiles": 18,
-  "totalDirectories": 114,
-  "sampleFiles": [
+  "filesystemCount": 2,
+  "totalFiles": 49626,
+  "totalDirectories": 5983,
+  "filesystems": [
     {
-      "path": "/config.partids",
-      "sha256": "b51d352c010f316752172444609747e699925ea8aa30e8ac4fcca4d3201b7542",
-      "size": 4653056
+      "device": "/dev/sda2",
+      "fstype": "vfat",
+      "fileCount": 4,
+      "directoryCount": 2,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/bootx64.efi",
+          "size": 965672,
+          "sha256": "4f5c118a947b3af976ff6b5df05a46c7c2d1d77c0c8199e8ff81397566452e5b"
+        },
+        {
+          "path": "/EFI/BOOT/MokManager.efi",
+          "size": 852456,
+          "sha256": "1c21f3b6fd9d96a4230a7cc3082e2bd158128dc94cafe9f2b5eb626a1136db3d"
+        },
+        {
+          "path": "/EFI/BOOT/grub.cfg",
+          "size": 137,
+          "sha256": "b3c99306c331eddf1d5c29c4ece9640312f6a07aaef600c1c82c3a9fb7bb023e"
+        },
+        {
+          "path": "/EFI/BOOT/grub.efi",
+          "size": 2082816,
+          "sha256": "783ad613d4344caf338261b0e6cf04bef16e8f702e1088b497f5251a06c54ae6"
+        }
+      ]
     },
     {
-      "path": "/lib/depmod.d/00-system.conf",
-      "sha256": "47fd7541fa6ffa3ae2f325a6b5f7edfb7fffbd49c2d4d7d7f28f31db2dabf5ac",
-      "size": 31784960
-    },
-    {
-      "path": "/var/cache/fontconfig/3830d5c3ddfd5cd38a049b759396e72e-x86_64.cache-8",
-      "sha256": "d85ef2a08aeac2812a648deb875485a6e3848fc3d43ce4aa380937f08199f86b",
-      "size": 6815744
-    },
-    {
-      "path": "/var/cache/fontconfig/CACHEDIR.TAG",
-      "sha256": "06572c6b057163ea79097fdf528827c507b67b4a7bac799e7c5e5a92220b6f40",
-      "size": 13107200
-    },
-    {
-      "path": "/var/cache/gio-2.0/gnome-mimeapps.list",
-      "sha256": "733cf513448ce6b20ad1bc5e50eb27c06aefae0c320713a5dd99f4e51bc1ca60",
-      "size": 5767168
-    },
-    {
-      "path": "/var/cache/gio-2.0/lxde-mimeapps.list",
-      "sha256": "733cf513448ce6b20ad1bc5e50eb27c06aefae0c320713a5dd99f4e51bc1ca60",
-      "size": 5767168
-    },
-    {
-      "path": "/var/cache/gio-2.0/mate-mimeapps.list",
-      "sha256": "733cf513448ce6b20ad1bc5e50eb27c06aefae0c320713a5dd99f4e51bc1ca60",
-      "size": 5767168
-    },
-    {
-      "path": "/var/cache/gio-2.0/pantheon-mimeapps.list",
-      "sha256": "733cf513448ce6b20ad1bc5e50eb27c06aefae0c320713a5dd99f4e51bc1ca60",
-      "size": 5767168
-    },
-    {
-      "path": "/var/cache/gio-2.0/xfce-mimeapps.list",
-      "sha256": "733cf513448ce6b20ad1bc5e50eb27c06aefae0c320713a5dd99f4e51bc1ca60",
-      "size": 5767168
+      "device": "/dev/sda3",
+      "fstype": "xfs",
+      "fileCount": 49622,
+      "directoryCount": 5981,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/terminfo/a/avt-w",
+          "size": 1226,
+          "sha256": "e375bcb782f5695b00d30f9e84a8a9601b675be9a7a034de29861126db9c7fdb"
+        },
+        {
+          "path": "/usr/lib64/python3.6/_import_failed/_ctypes_test.py",
+          "size": 706,
+          "sha256": "3dab1fc749b5e285769da5611aebe18789a1a78cd91c40561f768ba9f8e90017"
+        },
+        {
+          "path": "/usr/share/terminfo/n/ncr7901",
+          "size": 534,
+          "sha256": "e0b2c448d0f20669f1b68070feda00eaa4ab4d060d533c4dd1ea0b746932cac9"
+        },
+        {
+          "path": "/usr/lib/python3.6/site-packages/babel/locale-data/ar_QA.dat",
+          "size": 651,
+          "sha256": "408ea9cec563798fe7c6493c88a872fc35337c126b6455a82fdb9828cdcbf423"
+        },
+        {
+          "path": "/usr/share/zoneinfo/Australia/Eucla",
+          "size": 456,
+          "sha256": "8b5f97186f08e84d1d5c8756185e039647c32d686203127fde0329b7e9e6feee"
+        },
+        {
+          "path": "/usr/share/locale/de/LC_MESSAGES/iputils.mo",
+          "size": 17292,
+          "sha256": "0e58559215cf9a096d57512432e39dc959f262c62cdf2da99f7bff67eed58444"
+        },
+        {
+          "path": "/usr/lib/locale/el_CY.utf8/LC_MESSAGES/SYS_LC_MESSAGES",
+          "size": 76,
+          "sha256": "71941348d33dd97b5f9268571e0e2f2bfbdd8054a9e61e2e2b926a4e19ebb5d0"
+        },
+        {
+          "path": "/usr/share/man/man2/getunwind.2.gz",
+          "size": 1200,
+          "sha256": "0a7df21ac058f66c212f36567a9352391836d79a5b9f53758317d8c0ab64d08b"
+        },
+        {
+          "path": "/usr/lib/perl5/vendor_perl/5.26.1/x86_64-linux-thread-multi/linux/sync_file.ph",
+          "size": 564,
+          "sha256": "7e3710faf74526b58d3358015302ef45d059298d0ec38300dd5168a3123a05dd"
+        },
+        {
+          "path": "/usr/lib/systemd/system/lvm2-lvmpolld.socket",
+          "size": 239,
+          "sha256": "a9c45602d9bc5f14583d7dfb27c3db6d3f07ae99dbc455e59bceaf401d446bce"
+        },
+        {
+          "path": "/usr/lib/python3.6/site-packages/salt/executors/__pycache__/direct_call.cpython-36.pyc",
+          "size": 378,
+          "sha256": "da9e4cc0ef2717007a550b00914eb76783db650cfebdf68c4b4f48b00ee5db72"
+        },
+        {
+          "path": "/usr/lib/locale/fr_CA/LC_COLLATE",
+          "size": 21267,
+          "sha256": "a611a3c0a795281f0bd703171b09879f4faf4290d55fdfa6f99239f15ad8c192"
+        },
+        {
+          "path": "/usr/share/YaST2/lib/y2partitioner/widgets/encrypt_password.rb",
+          "size": 2699,
+          "sha256": "4d24ecdf465425e7e3560d11db42a985dbe443ead98f55ee1967f3d3a2f90260"
+        },
+        {
+          "path": "/usr/lib/perl5/vendor_perl/5.26.1/x86_64-linux-thread-multi/net/if_arp.ph",
+          "size": 5640,
+          "sha256": "4a459f7137071428429486f9957d26e000bbf204dc555af35c3174bf80f0208c"
+        },
+        {
+          "path": "/usr/lib/locale/niu_NZ/LC_MEASUREMENT",
+          "size": 23,
+          "sha256": "bb14a6f2cbd5092a755e8f272079822d3e842620dd4542a8dfa1e5e72fc6115b"
+        },
+        {
+          "path": "/etc/cloud/templates/ntpd.conf.openbsd.tmpl",
+          "size": 543,
+          "sha256": "cf516487772b66a2db46e04cc55654089d8dc3065c3cafed0d5daecf23df921c"
+        },
+        {
+          "path": "/usr/share/terminfo/d/dec+pp",
+          "size": 298,
+          "sha256": "e7b63ffa5db63c3de353374d673b403a4646626d79b64c620225ec61db5653e9"
+        },
+        {
+          "path": "/usr/share/zoneinfo/right/Australia/LHI",
+          "size": 2386,
+          "sha256": "f504eb72841a9ed6b7cb9e34fa394122f83e0e0d0b9d5863f53cad163edd199f"
+        },
+        {
+          "path": "/usr/share/man/man3/XML::LibXML::RegExp.3pm.gz",
+          "size": 1767,
+          "sha256": "248cba2ec0c29aa85bfd6a68f47255b62a9677cb8fe7cc228218dd9c1001a70e"
+        },
+        {
+          "path": "/usr/lib/locale/ckb_IQ/LC_MEASUREMENT",
+          "size": 23,
+          "sha256": "bb14a6f2cbd5092a755e8f272079822d3e842620dd4542a8dfa1e5e72fc6115b"
+        }
+      ]
     }
   ]
 }

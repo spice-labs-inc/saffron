@@ -1,29 +1,117 @@
 {
   "imagePath": "/corpus/qcow2/modern/centos-stream-9-cloud.qcow2",
   "imageBasename": "centos-stream-9-cloud.qcow2",
-  "filesystemType": "xfs",
+  "filesystemCount": 1,
   "totalFiles": 27984,
-  "totalDirectories": 5067,
-  "sampleFiles": [
-    {"path": "/usr/lib64/python3.9/__pycache__/getpass.cpython-39.opt-1.pyc", "sha256": "29675c8ea60a0204e333bb8c925567b61f243435be3e0ef928994b77da40a408", "size": 4200},
-    {"path": "/usr/lib/python3.9/site-packages/setuptools/_distutils/__pycache__/sysconfig.cpython-39.pyc", "sha256": "d1f2e8b5c594a217889bb539559755dfc7be7204d59f44f533fd7a31e5f73685", "size": 12373},
-    {"path": "/usr/lib/modules/5.14.0-665.el9.x86_64/kernel/net/ipv6/ip6_udp_tunnel.ko.xz", "sha256": "5d5621d7983de407268f9dce413872374557f3e9ac6a0a5e62285153812f9ed9", "size": 4608},
-    {"path": "/usr/share/bash-completion/completions/systemd-cryptenroll", "sha256": "4d7696cd3fcdf03c3d5609ae400e6f02aadb36ca50b0041d5351d8400c1535b7", "size": 3305},
-    {"path": "/usr/share/man/man8/auditctl.8.gz", "sha256": "d00c46b5c45ca39272bbfceeb9b5510631073045823d8c42b1d16cc9338438e1", "size": 7692},
-    {"path": "/usr/lib/python3.9/site-packages/cloudinit/sources/helpers/vmware/imc/__pycache__/guestcust_state.cpython-39.opt-1.pyc", "sha256": "b380f575101a62146054ec8a2f0ed466f9290df2685a0a1180ce92602191db13", "size": 479},
-    {"path": "/usr/share/locale/ja/LC_MESSAGES/libidn2.mo", "sha256": "4d7617e2e39cfad70857fc5207e2e738c2bc3fd2c6379cfab9c5ddf414eb3daf", "size": 669},
-    {"path": "/usr/sbin/cgdisk", "sha256": "0f8e6fbc654d161108bf2a6c7e0d46961c60f7f3e1e71ac0b8f792c5ca8b52a9", "size": 154552},
-    {"path": "/usr/share/locale/as/LC_MESSAGES/NetworkManager.mo", "sha256": "40e6990f55061ad9043993800f800538ac23b6554ee02d76f739975b9eeef5f9", "size": 112901},
-    {"path": "/usr/lib/python3.9/site-packages/cockpit/channels/__pycache__/filesystem.cpython-39.pyc", "sha256": "402e5cb19ebfe23df62c49147713e0b94252ef803aaef76a908f82cccbe82513", "size": 20436},
-    {"path": "/usr/share/locale/nl/LC_MESSAGES/cryptsetup.mo", "sha256": "98fd8e426ee25f1914f367aab62e7a154b4524005573218b36413b55d3e475f6", "size": 32957},
-    {"path": "/usr/lib64/python3.9/site-packages/setools/__pycache__/descriptors.cpython-39.opt-1.pyc", "sha256": "6e093525b2508ef76d866124d435f4f4878b264ce8718a017eee4e31ba63e830", "size": 10120},
-    {"path": "/usr/share/cockpit/kdump/po.zh_TW.js.gz", "sha256": "7dd128e6fd3f3275f786190ef64770c06a43a82d0bbb46cf1484a550b6c33675", "size": 8418},
-    {"path": "/usr/lib64/libionic.so.1.0.61.0", "sha256": "2a41b7bed8a4ed6e824dcdff5dd7a432c8f3dcd3d417980cbebb2af0d5f1738d", "size": 56920},
-    {"path": "/usr/share/man/pt_BR/man5/shadow.5.gz", "sha256": "e44fc3c218b791d14b882b4cd0e9daf0b3c70f14cda84b6bc06852ee0615a05a", "size": 1846},
-    {"path": "/var/log/anaconda/syslog", "sha256": "e238a9f293aa4ecd15ef107a763b04478d6844372e61c9f40d8c7a540034702c", "size": 615005},
-    {"path": "/usr/lib64/python3.9/asyncio/__pycache__/selector_events.cpython-39.pyc", "sha256": "abd2c264960e441e02785f2f9eb72f35bb1b068d1ee694d3262ec3232d0fb2ca", "size": 29718},
-    {"path": "/var/lib/selinux/targeted/active/modules/100/livecd/lang_ext", "sha256": "d53315bea08cec50d2591fcaf3b32dc5d289cdc6c16b7e8bed8c8e3f7ceaa34e", "size": 2},
-    {"path": "/usr/share/cockpit/selinux/po.manifest.pl.js.gz", "sha256": "e15c2295c36599cb754462eb689f999e559090e2d6b01e7b1fa462446b69038b", "size": 309},
-    {"path": "/usr/lib/python3.9/site-packages/jsonschema/__pycache__/__main__.cpython-39.opt-1.pyc", "sha256": "2aada4671ddfc76c8273ec284c49991e40d28781d289b2cd71d151de3a2c41b3", "size": 197}
+  "totalDirectories": 5066,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "xfs",
+      "fileCount": 27984,
+      "directoryCount": 5066,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/dbus-1/interfaces/org.freedesktop.locale1.xml",
+          "size": 2566,
+          "sha256": "5df5605def337c67f0bbba9437c293e97805fce81a86d87b35d7a6b01adf1a99"
+        },
+        {
+          "path": "/usr/lib64/python3.9/__pycache__/bdb.cpython-39.opt-1.pyc",
+          "size": 24540,
+          "sha256": "88ad0335f177ec51c7a7e967451df7583d2a1fb488cd020070fa9293d99c8934"
+        },
+        {
+          "path": "/usr/share/man/man8/tc-matchall.8.gz",
+          "size": 794,
+          "sha256": "59146a21160f5512acdc8feba5c7bb97ba4c0ff6fe9846bc9cf7df1fcc0e260e"
+        },
+        {
+          "path": "/usr/lib64/python3.9/site-packages/dbus/__pycache__/decorators.cpython-39.opt-1.pyc",
+          "size": 11715,
+          "sha256": "75b4149b64a4ced9695506403e1a65528ba763288aa52a0e2fe5bdaa7c1a8242"
+        },
+        {
+          "path": "/usr/lib/modules/5.14.0-665.el9.x86_64/kernel/drivers/usb/serial/ch341.ko.xz",
+          "size": 9608,
+          "sha256": "3d50b7afc78307af473c5a09e36250e685406b20c2a163daf2e7b2a30c28575d"
+        },
+        {
+          "path": "/usr/share/locale/it/LC_MESSAGES/coreutils.mo",
+          "size": 165468,
+          "sha256": "20c68911884a156b6aa39c4a38516e1a3c9e12e6606221068bd4cc89423eec7c"
+        },
+        {
+          "path": "/usr/share/zoneinfo/right/US/Samoa",
+          "size": 724,
+          "sha256": "123dc0bb0c84f740272684766dfe16f0bc190dbf9c221b944e4df2c98788d95c"
+        },
+        {
+          "path": "/usr/lib/modules/5.14.0-665.el9.x86_64/kernel/net/netfilter/xt_set.ko.xz",
+          "size": 7900,
+          "sha256": "a667030efb127eb0694a8e748b2bc61391cc93bbee8b0626146f90abff77e595"
+        },
+        {
+          "path": "/usr/bin/lesspipe.sh",
+          "size": 3580,
+          "sha256": "be739c9b1523d972c228098387be220d27fd3fc052162b675a93a2dc436f6cee"
+        },
+        {
+          "path": "/usr/share/locale/de/LC_MESSAGES/passwd.mo",
+          "size": 6504,
+          "sha256": "274d64e0d917c95008b5ca686f1e048df5c8d2544c5915e03a1a4dc11f9644da"
+        },
+        {
+          "path": "/usr/lib/python3.9/site-packages/setuptools/_distutils/__pycache__/py38compat.cpython-39.opt-1.pyc",
+          "size": 391,
+          "sha256": "99e67b109cc5cb98fecaf715e147b9fac47cf89b0811231de235c15307cb7a56"
+        },
+        {
+          "path": "/usr/sbin/lgroupadd",
+          "size": 14472,
+          "sha256": "897937f9274db33b3c48cd39366819417b766e3818c3c14ff7280d375fc84076"
+        },
+        {
+          "path": "/usr/lib/locale/en_ZW.utf8/LC_NAME",
+          "size": 62,
+          "sha256": "710d69ab9ac421f7da9a54bcc5a6cca6ce07f1a3a52840a2fd86879d9417a961"
+        },
+        {
+          "path": "/usr/lib/modules/5.14.0-665.el9.x86_64/kernel/drivers/hwmon/via-cputemp.ko.xz",
+          "size": 5324,
+          "sha256": "c85ebcbab868039e861b11148adb7ac49a91db274e86497829301daeb45f26e2"
+        },
+        {
+          "path": "/usr/share/man/cs/man5/shadow.5.gz",
+          "size": 1017,
+          "sha256": "b8693d578738a33c35251acceba964d74b4ead7f1bb6048a0bd64857cd978997"
+        },
+        {
+          "path": "/usr/share/licenses/rsyslog/COPYING.LESSER",
+          "size": 7639,
+          "sha256": "4038442ca5bde8ffd243cfc235cb4455e7d618d47558ea3d8284733f71d904ed"
+        },
+        {
+          "path": "/usr/share/man/man8/ip-tcp_metrics.8.gz",
+          "size": 1496,
+          "sha256": "829cf41501e8fdb82d3968f9b0ddf40714a54d479c2ba5011b050756984b8638"
+        },
+        {
+          "path": "/usr/share/zoneinfo/America/El_Salvador",
+          "size": 224,
+          "sha256": "82f18df0b923fac1a6dbfaecf0e52300c7f5a0cb4aa765deb3a51f593d16aa05"
+        },
+        {
+          "path": "/usr/share/locale/zh_TW/LC_MESSAGES/man-db-gnulib.mo",
+          "size": 4399,
+          "sha256": "a4de727676e925323e469e55769d33b62701955e24bf69f07f8fb09ff66b3a6d"
+        },
+        {
+          "path": "/usr/lib64/python3.9/site-packages/__pycache__/semanage.cpython-39.opt-1.pyc",
+          "size": 51883,
+          "sha256": "7ac3798b5108386ad9f6da491b2b908b36c2e844997be3980efeee4f4f0a1f1e"
+        }
+      ]
+    }
   ]
 }

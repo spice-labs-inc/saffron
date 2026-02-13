@@ -11,7 +11,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Manages the Btrfs chunk tree for logical-to-physical address translation.
@@ -32,7 +34,7 @@ public class BtrfsChunkTree {
             long logicalAddress,
             long length,
             long stripeLen,
-            int type,
+            long type,
             int numStripes,
             List<Stripe> stripes
     ) {}
@@ -52,44 +54,83 @@ public class BtrfsChunkTree {
     }
 
     /**
-     * Parses the chunk tree from the superblock's embedded system chunk array.
+     * Parses a chunk item from a ByteBuffer at the current position.
+     *
+     * @param logicalAddress the logical address for this chunk (from the key's offset)
+     * @param buf the buffer positioned at the start of the chunk item data
+     * @return the parsed Chunk
+     */
+    private static Chunk parseChunkItem(long logicalAddress, ByteBuffer buf) {
+        long length = buf.getLong();
+        long owner = buf.getLong();
+        long stripeLen = buf.getLong();
+        long type = buf.getLong();  // u64, not u32
+        int ioAlign = buf.getInt();
+        int ioWidth = buf.getInt();
+        int sectorSize = buf.getInt();
+        int numStripes = buf.getShort() & 0xFFFF;
+        int subStripes = buf.getShort() & 0xFFFF;
+
+        List<Stripe> stripes = new ArrayList<>();
+        for (int i = 0; i < numStripes; i++) {
+            if (buf.remaining() < 32) break;
+            long devId = buf.getLong();
+            long offset = buf.getLong();
+            // Skip dev_uuid (16 bytes)
+            buf.position(buf.position() + 16);
+            stripes.add(new Stripe(devId, offset));
+        }
+
+        return new Chunk(logicalAddress, length, stripeLen, type, numStripes, stripes);
+    }
+
+    /**
+     * Parses the chunk tree from the superblock's embedded system chunk array,
+     * then loads the full chunk tree from disk for complete logical-to-physical mappings.
      */
     public static BtrfsChunkTree parse(DiskRegion region, long partitionOffset, BtrfsSuperblock sb) throws IOException {
         List<Chunk> chunks = new ArrayList<>();
 
-        // Parse system chunk array from superblock
+        // Phase 1: Parse bootstrap (system) chunks from superblock's sys_chunk_array
         ByteBuffer buf = ByteBuffer.wrap(sb.sysChunkArray());
         buf.order(ByteOrder.LITTLE_ENDIAN);
 
         while (buf.remaining() >= BtrfsKey.SIZE + 48) {
-            // Read key
             BtrfsKey key = BtrfsKey.read(buf);
             if (key.type() != BtrfsKey.CHUNK_ITEM) {
                 break;
             }
+            chunks.add(parseChunkItem(key.offset(), buf));
+        }
 
-            // Read chunk item
-            long length = buf.getLong();
-            long owner = buf.getLong();
-            long stripeLen = buf.getLong();
-            int type = buf.getInt();
-            int ioAlign = buf.getInt();
-            int ioWidth = buf.getInt();
-            int sectorSize = buf.getInt();
-            int numStripes = buf.getShort() & 0xFFFF;
-            int subStripes = buf.getShort() & 0xFFFF;
+        // Phase 2: Load the full chunk tree from disk using bootstrap chunks
+        Set<Long> knownLogicalAddresses = new HashSet<>();
+        for (Chunk c : chunks) {
+            knownLogicalAddresses.add(c.logicalAddress());
+        }
 
-            List<Stripe> stripes = new ArrayList<>();
-            for (int i = 0; i < numStripes; i++) {
-                if (buf.remaining() < 32) break;
-                long devId = buf.getLong();
-                long offset = buf.getLong();
-                // Skip dev_uuid (16 bytes)
-                buf.position(buf.position() + 16);
-                stripes.add(new Stripe(devId, offset));
+        BtrfsChunkTree bootstrapTree = new BtrfsChunkTree(region, partitionOffset,
+                List.copyOf(chunks));
+        BtrfsTreeReader treeReader = new BtrfsTreeReader(bootstrapTree, sb.nodeSize());
+
+        try {
+            List<BtrfsTreeReader.SearchResult> chunkItems =
+                    treeReader.scanForType(sb.chunkTreeRoot(), BtrfsKey.CHUNK_ITEM, Integer.MAX_VALUE);
+
+            for (BtrfsTreeReader.SearchResult result : chunkItems) {
+                long logicalAddr = result.item().key().offset();
+                if (knownLogicalAddresses.contains(logicalAddr)) {
+                    continue; // Already have this from bootstrap
+                }
+                ByteBuffer itemBuf = ByteBuffer.wrap(result.data());
+                itemBuf.order(ByteOrder.LITTLE_ENDIAN);
+                chunks.add(parseChunkItem(logicalAddr, itemBuf));
+                knownLogicalAddresses.add(logicalAddr);
             }
-
-            chunks.add(new Chunk(key.offset(), length, stripeLen, type, numStripes, stripes));
+        } catch (IOException | IllegalArgumentException e) {
+            // If full chunk tree loading fails, fall back to bootstrap-only chunks.
+            // This can happen if the chunk tree root itself is not mappable via bootstrap,
+            // or if the underlying disk reader rejects the translated physical address.
         }
 
         // Sort chunks by logical address for binary search

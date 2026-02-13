@@ -1,0 +1,117 @@
+{
+  "imagePath": "/corpus/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/Windows 98 Plus! Hard Disk.vhd",
+  "imageBasename": "Windows 98 Plus! Hard Disk.vhd",
+  "filesystemCount": 1,
+  "totalFiles": 4738,
+  "totalDirectories": 260,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "vfat",
+      "fileCount": 4738,
+      "directoryCount": 260,
+      "sampleFiles": [
+        {
+          "path": "/WINDOWS/Desktop/Online Services/America Online.lnk",
+          "size": 405,
+          "sha256": "a840eba534e7de69f20fbdd9ac58c20903532fdb2f6910e429373c587cd43427"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/OOBE/IMAGES/WM_PC.GIF",
+          "size": 5486,
+          "sha256": "3a41b2416be194bf8fc3d1ff9b8b99509882f9b5e1942256b30276212c9138a0"
+        },
+        {
+          "path": "/Program Files/PLUS!/THEMES/RockRoll/Ro_WVLft.bmp",
+          "size": 44686,
+          "sha256": "b15c95162bcdfdab2c8844e49e8e09919d27043838bec9a23873b67b0fb99291"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/RNATHUNK.DLL",
+          "size": 24576,
+          "sha256": "fc7681e4345d9f81baef476797a3ff30807f4521284ad86f44075a6af1dadbe3"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/SENSCFG.DLL",
+          "size": 20480,
+          "sha256": "7832a09ea061eff204bb9df36925731e08ea28831f2399b560a616c8d359bbea"
+        },
+        {
+          "path": "/WINDOWS/Application Data/Mozilla/Firefox/Profiles/q2k4b504.default/chrome/userChrome-example.css",
+          "size": 1132,
+          "sha256": "234bbfb0ab5e40542d5928d6673b057fd76fde9bba83af6e37b2d8117abefd39"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/CatRoot/{F750E6C3-38EE-11D1-85E5-00C04FC295EE}/CATMAST.cbd",
+          "size": 8674,
+          "sha256": "5aa1620cc0ec5598628bfaafd9b55795bf6e1b5d79d748a401b70c06aba859d1"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/MTXOCI.DLL",
+          "size": 69904,
+          "sha256": "2fed0bb78d734e1ffb62138d3d3f6b0e360c7c3500fef69dc5f868b7044d2ef5"
+        },
+        {
+          "path": "/Program Files/PLUS!/THEMES/PhoDisc/PD_04bus.ani",
+          "size": 11326,
+          "sha256": "d17c5968335a7b87c203c804924a8e9a9b19cb5fd98bbe4da5c17965f203bb85"
+        },
+        {
+          "path": "/Program Files/PLUS!/OAPlus/Grdmelon.gif",
+          "size": 22297,
+          "sha256": "21aa37b3a3f941d08e4678e1a70b2512e26f6d49b47dab9aec4bf394888b9fd4"
+        },
+        {
+          "path": "/Program Files/Internet Explorer/IESETUP.CIF",
+          "size": 44570,
+          "sha256": "33bb8a5b1abedb76a77687d0eb57fa944c88f601413aacccbc4dd0dab68015a7"
+        },
+        {
+          "path": "/Program Files/PLUS!/Golf/res/fslpash.bmp",
+          "size": 119078,
+          "sha256": "ddd68c6298cb80387bc9e3684884d22438db3882b8cf08d79bb30fae270810cd"
+        },
+        {
+          "path": "/WINDOWS/FONTS/COURBD.TTF",
+          "size": 306688,
+          "sha256": "17e6764d7699970cb80861ad8e39f1e0bf61c1a1e461edc0c8ab4979716d63b4"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/PANMAP.DLL",
+          "size": 40960,
+          "sha256": "53fe42fb273567548c7cd120350f62d8ebe9680890b3d7543b937d7e059ad16a"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/MCIVISCA.DRV",
+          "size": 95792,
+          "sha256": "e6066f79f4dc046753a88b5de469ce278ebe6455bda7a29e98d9cb3e142f115b"
+        },
+        {
+          "path": "/WINDOWS/INF/MDMDICOM.INF",
+          "size": 23639,
+          "sha256": "9a3b0d068ef63102f0c7bc1b1a72aa51c0b12b357538d048b31f0f28df80f297"
+        },
+        {
+          "path": "/Program Files/PLUS!/THEMES/RockRoll/Ro_Minim.wav",
+          "size": 64926,
+          "sha256": "4498d75bd20fbfcdc139f5cab0cdadc50ba702d70e3d570b60c1f6d806e7f336"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/SMMSETUP.DLL",
+          "size": 24576,
+          "sha256": "05d0151c067cfb4fda6385cf119eba2aa1e9554b3d5671d3daef9d9f12a8f3d2"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/OOBE/MSN/MSNPYMNT.HTM",
+          "size": 1686,
+          "sha256": "63e4c9a915126e22f73f12e29dd3662edde643854f89b7394f7d526c17a63d86"
+        },
+        {
+          "path": "/Program Files/Common Files/SERVICES/BIGFOOT.BMP",
+          "size": 2702,
+          "sha256": "f27660b88f3f810e00f8dca282bd8f7e90d4c76a7d03041715d89cc5862b5780"
+        }
+      ]
+    }
+  ]
+}

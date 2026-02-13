@@ -1,29 +1,165 @@
 {
   "imagePath": "/corpus/vmdk/modern/ubuntu-21.10-vmware.vmdk",
   "imageBasename": "ubuntu-21.10-vmware.vmdk",
-  "filesystemType": "unknown",
+  "filesystemCount": 2,
   "totalFiles": 123511,
-  "totalDirectories": 14425,
-  "sampleFiles": [
-    {"path": "/usr/lib/libreoffice/program/libucpgio1lo.so", "sha256": "127ae4012a3b309d08b8db4e10404e312fe383f9adce428ab02307abba04f529", "size": 176160},
-    {"path": "/usr/src/linux-headers-5.13.0-16/include/sound/soc-acpi.h", "sha256": "d8f8703b3fcfa02a3915ee5788e262d71bdc03ad718c45f9df15d84c3f7a0a21", "size": 5637},
-    {"path": "/usr/share/help/C/gnome-logs/introduction.page", "sha256": "3b1c778318745bc30d3d3621973041478454c87eec4d46ea9e006b74fe98470c", "size": 1243},
-    {"path": "/usr/lib/python3/dist-packages/future/moves/urllib/__pycache__/error.cpython-39.pyc", "sha256": "aa3135dadcfcfb2671e57cbbae8e3cd905b560114cf3b294dc55b35e02b2ec51", "size": 515},
-    {"path": "/usr/lib/python3.9/__pycache__/textwrap.cpython-39.pyc", "sha256": "1a78bb7cc619f4d71c94f8e64c1bbe980ee640ab610ee2d317d9f2efc8971672", "size": 13519},
-    {"path": "/usr/src/linux-headers-5.13.0-16/drivers/media/Kconfig", "sha256": "840c9ce2a62d8883bf1dcaa7a3660887b01f0930805d821ea820fe680b8e9cbf", "size": 7197},
-    {"path": "/etc/init/whoopsie.conf", "sha256": "e7c9819f96531925daadde07d08dae97581e506d5d0004f95e243c7b7f41f13e", "size": 453},
-    {"path": "/usr/share/icons/Yaru/24x24/legacy/process-stop.png", "sha256": "d1ab0633468bf95aee464de04b2702aeac83efbf020f32534761e91d3f7b65d3", "size": 1205},
-    {"path": "/usr/share/libreoffice/help/media/icon-themes/cmd/lc_insertcolumnbreak.svg", "sha256": "38cdf2b50bc804147b8490ffa4e009bff7a8775ddff1921736912e741f55f461", "size": 1138},
-    {"path": "/usr/lib/python3/dist-packages/future/backports/test/__pycache__/__init__.cpython-39.pyc", "sha256": "3917fe8111fe528a142130811d5c42cb190d0235fdb0206bda40fffa9105c63c", "size": 427},
-    {"path": "/var/lib/app-info/icons/ubuntu-impish-universe/48x48/qelectrotech_qelectrotech.png", "sha256": "cb354ccdf96cbd67fe0f68d7625644827aa43ba7a9325d7df05b662ed40a2eb6", "size": 1849},
-    {"path": "/usr/share/icons/Yaru/256x256@2x/categories/unity-color-panel.png", "sha256": "9d4e884f9b60e9a481d237d50920957c3a95fcf02a033440baf6ff13d132d808", "size": 35446},
-    {"path": "/usr/lib/x86_64-linux-gnu/ModemManager/libmm-plugin-mtk.so", "sha256": "de27320707c8cc8097b536b5ffb8714d69b90372c487505960fa6ef1113958f4", "size": 31384},
-    {"path": "/usr/share/icons/Yaru/24x24@2x/places/folder-templates.png", "sha256": "376b4cdb3ed85ddeb41d5996d46c3ae8e8697b99198bcfa9f9712f3b33ef0058", "size": 1952},
-    {"path": "/usr/share/icons/whiteglass/cursors/left_ptr", "sha256": "6c020e7f85d484999732ec627fdff64647cddf0c77d364b7674561fd191a4ba7", "size": 33280},
-    {"path": "/boot/grub/x86_64-efi/pcidump.mod", "sha256": "e772b8d36ec1b9ab29a420a7ac3778053d14a6093776e69df6dba3c80f21ebbd", "size": 3576},
-    {"path": "/usr/share/ibus/dicts/emoji-es_US.dict", "sha256": "67df8022ace1b2f7e0bbfc08f2ba60434bd0f741bf68808ca7f166ba3dd0a8de", "size": 336057},
-    {"path": "/usr/lib/firmware/amd-ucode/microcode_amd_fam17h.bin", "sha256": "5288d1ac032abe61441c5626091458803f925304ee45ca18de38a4edd66cddd2", "size": 6476},
-    {"path": "/usr/share/doc/libgweather-3-16/changelog.Debian.gz", "sha256": "ea66bffe152b4e923b932488755172c28d0b6eb008732f0ebf7e949fb6edfaa5", "size": 2606},
-    {"path": "/usr/src/linux-headers-5.13.0-16-generic/include/config/GENERIC_MSI_IRQ_DOMAIN", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0}
+  "totalDirectories": 14424,
+  "filesystems": [
+    {
+      "device": "/dev/sda2",
+      "fstype": "vfat",
+      "fileCount": 8,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/fbx64.efi",
+          "size": 85672,
+          "sha256": "52c7ae0db66ec19a46327a9e25aeb9167d247317bbc8154cccbf5cca72a341c3"
+        },
+        {
+          "path": "/EFI/ubuntu/BOOTX64.CSV",
+          "size": 108,
+          "sha256": "6add06de471015ad4460964f30fb115e7fdc286da6a527d0643fc7815b728fbf"
+        },
+        {
+          "path": "/EFI/ubuntu/grubx64.efi",
+          "size": 1722240,
+          "sha256": "9f3e2720f04c782f5170c476fffd2e2f85b5d037209946d6772e40514c35318e"
+        },
+        {
+          "path": "/EFI/BOOT/mmx64.efi",
+          "size": 856232,
+          "sha256": "d66f9c08f8ffcc3b47221b6ad7301c66c6f3d79dfe707d95f2ad036fbf097a98"
+        },
+        {
+          "path": "/EFI/ubuntu/grub.cfg",
+          "size": 201,
+          "sha256": "a9211292b28cbb231fbdc7c281674045cc5c740287405e12f55de4c9b0797831"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 955656,
+          "sha256": "f037d2f20ce5d739c95fa71435410f1d71876868b7e635adb23cdb66fcf4619a"
+        },
+        {
+          "path": "/EFI/ubuntu/mmx64.efi",
+          "size": 856232,
+          "sha256": "d66f9c08f8ffcc3b47221b6ad7301c66c6f3d79dfe707d95f2ad036fbf097a98"
+        },
+        {
+          "path": "/EFI/ubuntu/shimx64.efi",
+          "size": 955656,
+          "sha256": "f037d2f20ce5d739c95fa71435410f1d71876868b7e635adb23cdb66fcf4619a"
+        }
+      ]
+    },
+    {
+      "device": "/dev/vgubuntu/root",
+      "fstype": "ext4",
+      "fileCount": 123503,
+      "directoryCount": 14421,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/doc/libgspell-1-common/changelog.Debian.gz",
+          "size": 1241,
+          "sha256": "ea551fc8ff3269e9b1d8852d3b8a1b9b84d731fedeb7efda70b22d1d8ba436fb"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/oauthlib/oauth2/rfc6749/endpoints/token.py",
+          "size": 4741,
+          "sha256": "863777a5f3842d8df0e5b66f979b5f43bf16e1283bbb6b2a1a1fba97aefc9e40"
+        },
+        {
+          "path": "/usr/lib/firmware/ti-connectivity/wl18xx-fw-4.bin",
+          "size": 745180,
+          "sha256": "95f04731257febabc358b95ff06dbb2025d047c6ad3ae0239c8afb92dedc7c5c"
+        },
+        {
+          "path": "/var/lib/app-info/icons/ubuntu-impish-universe/64x64/gcu-bin_gchemtable.png",
+          "size": 1358,
+          "sha256": "c40ae3f969c49e94a1d611d36f3ece9758e8b6593a309537228c8a605f4ec8b3"
+        },
+        {
+          "path": "/usr/share/doc/libclutter-1.0-0/README.md.gz",
+          "size": 1834,
+          "sha256": "4651fb4b9331dc4710a29ea0a570a68117f981e6f8d0eae0d4376a9816245c56"
+        },
+        {
+          "path": "/usr/share/libreoffice/help/media/icon-themes/cmd/lc_insertrowbreak.svg",
+          "size": 501,
+          "sha256": "cae83beda21f912189cd96ce588386fb34b523b4a59d53b47e8026ff637471a6"
+        },
+        {
+          "path": "/usr/lib/udev/rules.d/77-mm-dlink-port-types.rules",
+          "size": 830,
+          "sha256": "4038000b7e0574996e8dc015244e08243f32edd7a0d9cda8b5d8b163dc5b8083"
+        },
+        {
+          "path": "/usr/lib/firmware/nvidia/tu106/gr/sw_method_init.bin",
+          "size": 13424,
+          "sha256": "4070c3b6387f1a756e765bd11e47348d4305005edd1d7a0e62f60210a28f46f0"
+        },
+        {
+          "path": "/usr/share/help-langpack/en_GB/evolution/mail-account-manage-microsoft-exchange.page",
+          "size": 2455,
+          "sha256": "b42f52dc89f278e4fbf5b5cb4fe005aec16ea4a2bfcd5f5152b9309cd02811ca"
+        },
+        {
+          "path": "/usr/share/icons/Humanity/actions/48/media-seek-backward.svg",
+          "size": 2292,
+          "sha256": "d404d4272992c77dc8901b651eb7f063c089b1939f680a2b63c3c97e1c6937e0"
+        },
+        {
+          "path": "/usr/lib/modules/5.13.0-16-generic/kernel/drivers/comedi/drivers/addi_apci_3501.ko",
+          "size": 15425,
+          "sha256": "a2157449580d204aa479771e42dee5a7681273628d21b4aaa989e05747203f86"
+        },
+        {
+          "path": "/usr/share/dbus-1/services/org.gnome.Todo.service",
+          "size": 84,
+          "sha256": "930e7d768b8096c66fd4aa941de653098c5f09292b14a991e3317a161134c8fd"
+        },
+        {
+          "path": "/usr/src/linux-headers-5.13.0-16/arch/arm64/boot/dts/amazon/Makefile",
+          "size": 134,
+          "sha256": "43c21f9a67eb5ad9aa9eccd2bf08967a59d97b92a9eb39c2ae553ea8980da83b"
+        },
+        {
+          "path": "/usr/src/linux-headers-5.13.0-16/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h",
+          "size": 2931,
+          "sha256": "ee2405f16fb4457d0512e8a065cb963d038e85a1d2d39d734c734f4523011756"
+        },
+        {
+          "path": "/usr/share/icons/Yaru/256x256/mimetypes/application-vnd.ms-word.png",
+          "size": 8908,
+          "sha256": "88543d96deff417a39fae03db7ced068f3708a9ff50a313e232d4c50b204435b"
+        },
+        {
+          "path": "/usr/share/libreoffice/help/media/icon-themes/cmd/32/renamemasterpage.svg",
+          "size": 1464,
+          "sha256": "8dbc0f9463003480e232a38cb184ee559a32f26b621fde8c2d609f2684e9f580"
+        },
+        {
+          "path": "/usr/src/linux-headers-5.13.0-16/scripts/kconfig/lxdialog/textbox.c",
+          "size": 8523,
+          "sha256": "5511d33704a7f9a3b31eb158d7110592cdf9a1f2c26be9f03adc10701e93a638"
+        },
+        {
+          "path": "/usr/src/linux-headers-5.13.0-16/drivers/i3c/master/Kconfig",
+          "size": 1283,
+          "sha256": "aab073e9edaeb11d0dc9b30660995ff5cf11e0e6ba3ae22a70ef3d2229d49485"
+        },
+        {
+          "path": "/usr/share/locale/sc/LC_MESSAGES/language-selector.mo",
+          "size": 11454,
+          "sha256": "74d7e398fa226c85086023e2ab6073177ba540594b1ce844f1da10d619393c40"
+        },
+        {
+          "path": "/usr/share/libreoffice/help/media/icon-themes/cmd/lc_symbolshapes.diamond-bevel.svg",
+          "size": 672,
+          "sha256": "364d4c9bfda1e902b4ee179a90651f62cc99598a4116355ad6e77dc1ecbac67e"
+        }
+      ]
+    }
   ]
 }

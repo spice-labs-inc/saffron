@@ -118,14 +118,43 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
             return new int[0];
         }
 
+        // Stream-optimized VMDKs with gdOffset == -1 store the real GD offset in a footer
+        // at the end of the file (last 2 sectors: footer marker + footer header copy)
+        SparseExtentHeader effectiveHeader = header;
+        if (header.gdOffset() < 0) {
+            long fileSize = channel.size();
+            if (fileSize > SparseExtentHeader.HEADER_SIZE * 2) {
+                try {
+                    SparseExtentHeader footer = SparseExtentHeader.read(channel,
+                            fileSize - SparseExtentHeader.HEADER_SIZE * 2);
+                    if (footer.gdOffset() > 0) {
+                        effectiveHeader = footer;
+                    } else {
+                        // Try last sector
+                        footer = SparseExtentHeader.read(channel,
+                                fileSize - SparseExtentHeader.HEADER_SIZE);
+                        if (footer.gdOffset() > 0) {
+                            effectiveHeader = footer;
+                        } else {
+                            return new int[0];
+                        }
+                    }
+                } catch (Exception e) {
+                    return new int[0];
+                }
+            } else {
+                return new int[0];
+            }
+        }
+
         // Calculate number of grain directory entries
-        int grainSizeBytes = header.grainSizeBytes();
+        int grainSizeBytes = effectiveHeader.grainSizeBytes();
         if (grainSizeBytes == 0) {
             return new int[0];
         }
 
-        long capacity = header.capacity() * SparseExtentHeader.SECTOR_SIZE;
-        long grainsPerGT = header.numGTEsPerGT();
+        long capacity = effectiveHeader.capacity() * SparseExtentHeader.SECTOR_SIZE;
+        long grainsPerGT = effectiveHeader.numGTEsPerGT();
         if (grainsPerGT == 0) {
             grainsPerGT = 512; // Default
         }
@@ -133,7 +162,11 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
         long totalGrains = (capacity + grainSizeBytes - 1) / grainSizeBytes;
         int numGDEntries = (int) ((totalGrains + grainsPerGT - 1) / grainsPerGT);
 
-        if (numGDEntries == 0 || header.gdOffset() == 0) {
+        // Always use the primary grain directory (GD). The RGD is a backup copy
+        // for recovery; the GD is the authoritative copy for reading.
+        long gdSectorOffset = effectiveHeader.gdOffset();
+
+        if (numGDEntries == 0 || gdSectorOffset <= 0) {
             return new int[0];
         }
 
@@ -145,7 +178,7 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
         int[] gd = new int[numGDEntries];
         ByteBuffer buffer = ByteBuffer.allocate(numGDEntries * 4);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        channel.position(header.grainDirectoryOffsetBytes());
+        channel.position(gdSectorOffset * SparseExtentHeader.SECTOR_SIZE);
         int read = channel.read(buffer);
         if (read < numGDEntries * 4) {
             // Partial read is okay for some VMDKs
@@ -234,8 +267,8 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
             return new byte[length];
         }
 
-        // Read grain table entry
-        long gtOffset = (long) grainDirectory[gdIndex] * SparseExtentHeader.SECTOR_SIZE;
+        // Read grain table entry (sector offsets are unsigned 32-bit)
+        long gtOffset = Integer.toUnsignedLong(grainDirectory[gdIndex]) * SparseExtentHeader.SECTOR_SIZE;
         ByteBuffer gtBuffer = ByteBuffer.allocate(4);
         gtBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
@@ -244,7 +277,7 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
             channel.read(gtBuffer);
         }
         gtBuffer.flip();
-        int grainOffset = gtBuffer.getInt();
+        long grainOffset = Integer.toUnsignedLong(gtBuffer.getInt());
 
         if (grainOffset == 0) {
             // Unallocated grain - return zeros
@@ -252,7 +285,7 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
         }
 
         // Read grain data
-        long grainDataOffset = (long) grainOffset * SparseExtentHeader.SECTOR_SIZE;
+        long grainDataOffset = grainOffset * SparseExtentHeader.SECTOR_SIZE;
 
         if (header.isCompressed()) {
             return readCompressedGrain(grainDataOffset, offsetInGrain, length, grainSizeBytes);
@@ -317,15 +350,21 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
             channel.read(compBuffer);
         }
 
-        // Decompress
+        // Decompress (may require multiple inflate() calls for large grains)
         byte[] decompressed = new byte[grainSize];
         Inflater inflater = new Inflater();
         try {
             inflater.setInput(compressed);
-            int decompressedLength = inflater.inflate(decompressed);
-            if (decompressedLength < grainSize) {
-                // Pad with zeros
-                Arrays.fill(decompressed, decompressedLength, grainSize, (byte) 0);
+            int totalDecompressed = 0;
+            while (!inflater.finished() && totalDecompressed < grainSize) {
+                int n = inflater.inflate(decompressed, totalDecompressed, grainSize - totalDecompressed);
+                if (n == 0 && inflater.needsInput()) {
+                    break; // No more input data
+                }
+                totalDecompressed += n;
+            }
+            if (totalDecompressed < grainSize) {
+                Arrays.fill(decompressed, totalDecompressed, grainSize, (byte) 0);
             }
         } catch (DataFormatException e) {
             // Return zeros if decompression fails

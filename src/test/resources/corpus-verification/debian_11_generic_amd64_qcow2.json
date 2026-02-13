@@ -1,29 +1,165 @@
 {
   "imagePath": "/corpus/qcow2/modern/debian-11-generic-amd64.qcow2",
   "imageBasename": "debian-11-generic-amd64.qcow2",
-  "filesystemType": "ext4",
-  "totalFiles": 23059,
-  "totalDirectories": 2868,
-  "sampleFiles": [
-    {"path": "/usr/share/i18n/locales/ur_IN", "sha256": "e8200f3c9d0e0748b9e58e534b9adcf5eedf182a1514e239ca570b64b6defdde", "size": 4909},
-    {"path": "/usr/share/zoneinfo/America/Monterrey", "sha256": "622c5311226e6dfe990545f2ea0df6840336811e065d73ea394e2dbf42f7906d", "size": 1114},
-    {"path": "/usr/share/vim/vim82/syntax/systemd.vim", "sha256": "67cd3110b24029d4956c513a290fff3c883a6356bf83ddd25f98ddb5c5635aee", "size": 184},
-    {"path": "/var/lib/dpkg/info/init.md5sums", "sha256": "9d39febd8d4883e5315c8680edc3e64b0ec2eeae272d3f7e3bdfb65febf88413", "size": 129},
-    {"path": "/usr/share/vim/vim82/ftplugin/javascript.vim", "sha256": "60ee5cae5d46a7fb71ba1c1b41180b8ed74b3f1db7a34344417d5677ba1e2f67", "size": 2605},
-    {"path": "/etc/systemd/sleep.conf", "sha256": "7e31316213bfdfa28038188507a53a94696da7699828e85369ec343f9fad17e9", "size": 790},
-    {"path": "/usr/lib/python3/dist-packages/PyJWT-1.7.1.egg-info/PKG-INFO", "sha256": "b37e1d78d8dd4a34035269f5db524be8764a319289ae512c33728ce8cc881c86", "size": 4157},
-    {"path": "/usr/share/vim/vim82/compiler/zsh.vim", "sha256": "e3e9367f09657d5fe427f914deada094d47acef97f37438b90182e6500defc0a", "size": 481},
-    {"path": "/usr/lib/x86_64-linux-gnu/gconv/IBM1047.so", "sha256": "4a72a7fbc6db5959effd4684afb57a45fd45f2d389b278078843f7d5de7d029f", "size": 18544},
-    {"path": "/usr/share/man/zh_CN/man1/man.1.gz", "sha256": "84fa6143ee94c9e1a6888a3e08105249cca00cb8b65e7b940082535a7c5070c0", "size": 12981},
-    {"path": "/usr/lib/modules/5.10.0-37-amd64/kernel/drivers/mfd/axp20x-i2c.ko", "sha256": "ed53ec467abb58fcb177f4088770a87d41f38b38e7efc5ba0c4f3ffb513f534b", "size": 12849},
-    {"path": "/usr/lib/python3/dist-packages/setuptools/__pycache__/errors.cpython-39.pyc", "sha256": "f421120c280bcb832b3ea2f94fd2a9b2ba305599e9ccbdc734b6f64ee52b677c", "size": 814},
-    {"path": "/usr/share/perl5/Debconf/DbDriver/Cache.pm", "sha256": "7075a4f322db7e12d96e2391267073cf11a01277ed972b8fd5285c8b3b89e272", "size": 4825},
-    {"path": "/usr/share/zoneinfo/America/Argentina/Jujuy", "sha256": "fdac90138bd00135c6ffd8ac7be9d7b3d90362a64af0f4a6c9281ab6a00ea2e9", "size": 1072},
-    {"path": "/usr/share/doc/less/changelog.Debian.gz", "sha256": "ec4352218606f3ebdcbd5ffe7d52b2db329689fee906f4e27bb5aef578ed89f1", "size": 12708},
-    {"path": "/usr/share/locale/sk/LC_MESSAGES/man-db-gnulib.mo", "sha256": "03ed50c99fc11cc91feba6e0c0df8128512319a8e50c73ed378c57dae3df60d0", "size": 577},
-    {"path": "/usr/lib/python3/dist-packages/jwt/contrib/algorithms/__init__.py", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/usr/lib/modules/5.10.0-37-amd64/kernel/net/vmw_vsock/vmw_vsock_virtio_transport.ko", "sha256": "d4f5f66198ecd78d131c356154ba777b654396591295e3a7dd72f2bd096a06c0", "size": 33097},
-    {"path": "/usr/share/vim/vim82/autoload/context.vim", "sha256": "6fa994d6db3ad2bb92d2c0287aa0ee72ba4eee4807097dc81e11f106fe882e71", "size": 5462},
-    {"path": "/var/lib/dpkg/info/tar.prerm", "sha256": "de3fa1115a52ea8e0017f65b767176146e35585e050581adcef95aab495d648c", "size": 231}
+  "filesystemCount": 2,
+  "totalFiles": 23067,
+  "totalDirectories": 2870,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext4",
+      "fileCount": 23059,
+      "directoryCount": 2867,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/zoneinfo/Australia/Perth",
+          "size": 468,
+          "sha256": "c65d9e0c5f2cc8c5047fd2c81856fe5d78b2c315fdabd1e2396b777eb7e906bb"
+        },
+        {
+          "path": "/usr/lib/python3.9/xml/dom/minidom.py",
+          "size": 68066,
+          "sha256": "9684ca07a67464ee178086d10c76d2e1c5c19ca5d2343357fe94bb58e1dff2fa"
+        },
+        {
+          "path": "/var/lib/dpkg/info/reportbug.conffiles",
+          "size": 20,
+          "sha256": "a8172860bfa9c13a7026d0310c2bb9e0c7f5fc8a946db1c0fad5379d25f044a7"
+        },
+        {
+          "path": "/usr/share/perl5/Debconf/Template.pm",
+          "size": 8201,
+          "sha256": "4ee3d67fccb651ed7bca60a48bd85758e3a177fdda3167a5209f1513379eb6ac"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/cryptography/hazmat/primitives/ciphers/__pycache__/__init__.cpython-39.pyc",
+          "size": 569,
+          "sha256": "40acc0104b159e51415def181e72e6b65d9fdcb56132b371777afce5030edb5f"
+        },
+        {
+          "path": "/usr/lib/modules/5.10.0-37-amd64/kernel/drivers/spi/spi-pxa2xx-platform.ko",
+          "size": 56593,
+          "sha256": "e4b2017def25d493231cf84b5c601fec751cda5fbd12e9303f61b57b6bc58a1f"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/rsyslog/mmjsonparse.so",
+          "size": 18656,
+          "sha256": "0b1541fc997cb037d153ee01d5844345daec95996f4a2724b3f8ea7e8ad1b91b"
+        },
+        {
+          "path": "/usr/share/locale/eo/LC_MESSAGES/gettext-runtime.mo",
+          "size": 8681,
+          "sha256": "1b4103a002c8670d1da962b0962cba49be66e9d3117cf46f96ef3dfa9cd1edd2"
+        },
+        {
+          "path": "/usr/lib/modules/5.10.0-37-amd64/kernel/drivers/mfd/intel-lpss.ko",
+          "size": 20313,
+          "sha256": "b23b726bc032004eebd1f2642f71af9bbbb11944995ba0a9144dead0db95d504"
+        },
+        {
+          "path": "/usr/share/man/man1/apt-ftparchive.1.gz",
+          "size": 6424,
+          "sha256": "1c43a114993c24cee399498e01377937595922c4e0dee59c99fdc38dd5aaff92"
+        },
+        {
+          "path": "/usr/lib/modules/5.10.0-37-amd64/kernel/net/ipv6/tunnel6.ko",
+          "size": 20225,
+          "sha256": "a4cd9f46d3f5129a708663eea84a2942f816ecfda95969a1aabef8a2611c0954"
+        },
+        {
+          "path": "/usr/share/doc/shim-signed/changelog.gz",
+          "size": 3304,
+          "sha256": "4266d2c89f10fd1b29219fc7fad1077cb9b1f92a0c82c4fa45658300fa9b5b64"
+        },
+        {
+          "path": "/usr/share/unattended-upgrades/update-motd-unattended-upgrades",
+          "size": 284,
+          "sha256": "1360977e29fd3cb8e50fb8f92d9291a5c398f499158fd86b0c13263d453aa139"
+        },
+        {
+          "path": "/usr/lib/udev/rules.d/64-btrfs.rules",
+          "size": 612,
+          "sha256": "d039055ad6614820d4190ccad91b7c45736e6d541d2506e858e8edb7a8627386"
+        },
+        {
+          "path": "/usr/lib/systemd/system/e2scrub_fail@.service",
+          "size": 245,
+          "sha256": "2d11a0ceea342723aefe89e0dce95b66c2a6a6936d2da95dde51934f15d0ed0a"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/cryptography/hazmat/primitives/twofactor/utils.py",
+          "size": 982,
+          "sha256": "64a65238bd9c2ec182b1235fc77918958b7dd40e1b714d70f6ea7610bd61c1a0"
+        },
+        {
+          "path": "/usr/share/doc/openssh-client/README",
+          "size": 2134,
+          "sha256": "310f98f3e5a5369da093f879fc9a6f077c1ecf94040727550cdfa8c030a2d36e"
+        },
+        {
+          "path": "/usr/bin/chcon",
+          "size": 72768,
+          "sha256": "b1264e36f39cbbc571e895704bf96d80d87e37d73bb2480488a948c2ed8aae7a"
+        },
+        {
+          "path": "/usr/share/locale/sq/LC_MESSAGES/shadow.mo",
+          "size": 1027,
+          "sha256": "d202a1c5b950130cbacc993287946462be0c66e5a99dd2fd67bcca5fde1fc0b2"
+        },
+        {
+          "path": "/boot/grub/i386-pc/modinfo.sh",
+          "size": 2573,
+          "sha256": "c571fb84edb1c337fd4d81ca93ea82fdd146089476f2c07563d07dadcd43c084"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda15",
+      "fstype": "vfat",
+      "fileCount": 8,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/debian/grubx64.efi",
+          "size": 4150720,
+          "sha256": "7619bff2ed53721aca7bdaf8c31a9ccc63a5d022a3eaa44e29de3c4d97c7cb03"
+        },
+        {
+          "path": "/EFI/debian/mmx64.efi",
+          "size": 852328,
+          "sha256": "ba745e6dcc8b0b4adfd4f9b8185f8895d94b62cf7be581119351d736406b7817"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 963840,
+          "sha256": "5b84505a85bf920a5f39e5f86e936a68628f65019bbd1d6133ac68964db5a10e"
+        },
+        {
+          "path": "/EFI/debian/grub.cfg",
+          "size": 117,
+          "sha256": "892ecfd2775aeaba7ec7de1388d16933c085e818cd2f0a7380121a378f84a959"
+        },
+        {
+          "path": "/EFI/debian/fbx64.efi",
+          "size": 87944,
+          "sha256": "5f1eac4d3c8f08631b6cadd85fa4cafbd1501eb194e8198a5f003238712e3797"
+        },
+        {
+          "path": "/EFI/BOOT/grubx64.efi",
+          "size": 4150720,
+          "sha256": "7619bff2ed53721aca7bdaf8c31a9ccc63a5d022a3eaa44e29de3c4d97c7cb03"
+        },
+        {
+          "path": "/EFI/debian/BOOTX64.CSV",
+          "size": 108,
+          "sha256": "726dfb8abb923624c188b2505dc744409c3d589bed82b627984b6390c230a384"
+        },
+        {
+          "path": "/EFI/debian/shimx64.efi",
+          "size": 963840,
+          "sha256": "5b84505a85bf920a5f39e5f86e936a68628f65019bbd1d6133ac68964db5a10e"
+        }
+      ]
+    }
   ]
 }

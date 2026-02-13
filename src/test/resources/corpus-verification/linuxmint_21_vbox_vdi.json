@@ -1,29 +1,165 @@
 {
   "imagePath": "/corpus/vdi/modern/linuxmint-21-vbox.vdi",
   "imageBasename": "linuxmint-21-vbox.vdi",
-  "filesystemType": "unknown",
+  "filesystemCount": 2,
   "totalFiles": 215229,
-  "totalDirectories": 20984,
-  "sampleFiles": [
-    {"path": "/usr/share/libreoffice/help/zh-CN/text/scalc/01/06080000.html", "sha256": "16fcebc536b2b3315c412ae7b797320f1768c3c445bd4528cddbfd1adf18a174", "size": 6042},
-    {"path": "/usr/share/themes/Mint-Y-Dark/xfwm4/stick-pressed.png", "sha256": "21b68a6fb9e9dd7108b27dba6f1d7b8c799e13625ef77bd727863f3cdfdf892c", "size": 361},
-    {"path": "/usr/share/icons/hicolor/128x128/apps/libreoffice-math.png", "sha256": "825d4ea5cc5f7657378f80eb95f30d830444f859afdd0080c92a09cdd52c9a16", "size": 4790},
-    {"path": "/usr/share/libreoffice/help/media/helpimg/starmath/mi21608.svg", "sha256": "6ce9a1af1a22acbb8767d2f078e14650270659470b1c51fb445be28e102971e4", "size": 1738},
-    {"path": "/usr/share/javascript/mathjax/jax/output/SVG/autoload/multiline.js", "sha256": "6af4a8967c1bda74e03bd01b7ddfc34c422ac6a6309efa8dc89479e0e99fe972", "size": 12203},
-    {"path": "/var/lib/dpkg/info/libnss3:amd64.md5sums", "sha256": "fbbc832797897dcb82df1ff00b300c3f9edd536fd66f3ba77cb0355aaaa979ba", "size": 1205},
-    {"path": "/usr/share/icons/Mint-Y/apps/48/mpv.png", "sha256": "6804de159e734f6d2a026d4d92e42cf8cf88525767b69d3944ad26fcaead49df", "size": 1770},
-    {"path": "/usr/lib/modules/5.15.0-41-generic/kernel/drivers/net/phy/dp83822.ko", "sha256": "31fec17e3d376355d8dfe6d02a3a2e1bd3e5e938f912d7541222986c53ac79d9", "size": 18969},
-    {"path": "/usr/lib/modules/5.15.0-41-generic/kernel/net/ipv4/netfilter/nf_socket_ipv4.ko", "sha256": "0e32275e17f5c93beef247c2e86c8849c897505e970bb622a9bbe587ec0591a9", "size": 7825},
-    {"path": "/usr/share/man/de/man1/tload.1.gz", "sha256": "dd83b7111e306934e404091aaebdb97dc16f81a889c22e901094bd1a1fb15282", "size": 1025},
-    {"path": "/usr/share/icons/Mint-X/emblems/24/emblem-symbolic-link.icon", "sha256": "39f4772870af24771cd15810c996f228608fb0ca58b1776896755cbe90534867", "size": 40},
-    {"path": "/usr/share/fontconfig/conf.avail/64-15-laksaman.conf", "sha256": "08db94eb2f12006670ebc85c3526f8e802dd30521854821db3f5dffcf881eef8", "size": 191},
-    {"path": "/usr/share/app-install/desktop/five-or-more:five-or-more.desktop", "sha256": "07cd61d7fc652e91d9f546885a71c610952e9a7b9ff983dc682bb12e5407c0f7", "size": 381},
-    {"path": "/usr/share/liblouis/tables/my-g2.ctb", "sha256": "ab76a449d639108157bcd816ffedeafbc18d2e81e50921f6ec3d60606ac030f9", "size": 130322},
-    {"path": "/usr/src/linux-headers-5.15.0-41/scripts/syscallhdr.sh", "sha256": "a0faed17e23781d10296eeebe89a7ed35cd80e70ce309c309b95fb916fee779f", "size": 1935},
-    {"path": "/usr/share/man/man5/org.freedesktop.resolve1.5.gz", "sha256": "8fa603d377b1022b7a333d17c472634baed512e6899da99b3b20bb5fdc73bbfb", "size": 10806},
-    {"path": "/usr/src/linux-headers-5.15.0-41-generic/include/config/NFP", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/usr/share/icons/Mint-X/apps/48/youtube.png", "sha256": "cd3620270c4235837aec5e7ddc140a11b852e70f643c352ab448eda42ccbcca0", "size": 2708},
-    {"path": "/var/lib/dpkg/info/libxtables12:amd64.triggers", "sha256": "5d84abb82775d01b9d3656b045595eb316da0f59d5b007e4612bca4ef0d057b3", "size": 72},
-    {"path": "/usr/share/app-install/icons/fcitx.svg", "sha256": "52965f102842d0d547a272ef30aa0548384bb1e8c6256da814cdf617ce53f198", "size": 98307}
+  "totalDirectories": 20983,
+  "filesystems": [
+    {
+      "device": "/dev/sda2",
+      "fstype": "vfat",
+      "fileCount": 8,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/fbx64.efi",
+          "size": 85672,
+          "sha256": "52c7ae0db66ec19a46327a9e25aeb9167d247317bbc8154cccbf5cca72a341c3"
+        },
+        {
+          "path": "/EFI/ubuntu/BOOTX64.CSV",
+          "size": 108,
+          "sha256": "6add06de471015ad4460964f30fb115e7fdc286da6a527d0643fc7815b728fbf"
+        },
+        {
+          "path": "/EFI/ubuntu/grubx64.efi",
+          "size": 1742728,
+          "sha256": "528e0dde1d31a60f78bfe6e205128f4984c2a61155861b22be5f76d52348892d"
+        },
+        {
+          "path": "/EFI/BOOT/mmx64.efi",
+          "size": 856232,
+          "sha256": "d66f9c08f8ffcc3b47221b6ad7301c66c6f3d79dfe707d95f2ad036fbf097a98"
+        },
+        {
+          "path": "/EFI/ubuntu/grub.cfg",
+          "size": 201,
+          "sha256": "42483a7805bf563b07a74962c21356e98f7c825ad90815acb46a3b8b69da7481"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 955656,
+          "sha256": "f037d2f20ce5d739c95fa71435410f1d71876868b7e635adb23cdb66fcf4619a"
+        },
+        {
+          "path": "/EFI/ubuntu/mmx64.efi",
+          "size": 856232,
+          "sha256": "d66f9c08f8ffcc3b47221b6ad7301c66c6f3d79dfe707d95f2ad036fbf097a98"
+        },
+        {
+          "path": "/EFI/ubuntu/shimx64.efi",
+          "size": 955656,
+          "sha256": "f037d2f20ce5d739c95fa71435410f1d71876868b7e635adb23cdb66fcf4619a"
+        }
+      ]
+    },
+    {
+      "device": "/dev/vgmint/root",
+      "fstype": "ext4",
+      "fileCount": 215221,
+      "directoryCount": 20980,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/help/ar/mate-clock/index.docbook",
+          "size": 16827,
+          "sha256": "2d78ed6742052134b0fedafead4b62adb9febb6a9e0765e06e65dbe99da21fe3"
+        },
+        {
+          "path": "/usr/share/javascript/mathjax/unpacked/jax/output/SVG/fonts/TeX/Main/Italic/GreekAndCoptic.js",
+          "size": 9058,
+          "sha256": "1eaaeeac2c974a74140b991edcaeaf45635f122af045512c523a2770fca72d93"
+        },
+        {
+          "path": "/usr/share/libreoffice/help/pt/text/shared/02/12090101.html",
+          "size": 7375,
+          "sha256": "0e46bd64b64717d40e123d2a60b8552b367fa4ac71532685e00dcd8e06d4682c"
+        },
+        {
+          "path": "/usr/share/libreoffice/help/zh-TW/text/smath/01/05030000.html",
+          "size": 12283,
+          "sha256": "48da8776d6d944f91ba41a2a7c11fd89878da62159d8f453e9623b2856e85a9d"
+        },
+        {
+          "path": "/usr/share/guile/2.2/web/request.scm",
+          "size": 11688,
+          "sha256": "9b4a236874db18a7028df52aaae3521086a11030dcc32f90994c160bd4e3e6f2"
+        },
+        {
+          "path": "/usr/share/themes/Mint-X-Teal/gtk-2.0/images/check-radio/checkbox-unchecked.svg",
+          "size": 6516,
+          "sha256": "2f884ba04e98df95d4fe88f788386a084d7c072091e1a0c4b51723a4a9300857"
+        },
+        {
+          "path": "/usr/share/app-install/icons/bkchem.png",
+          "size": 2472,
+          "sha256": "283954633b8248be4c255e1730b285783836823191008940a9ecf20db9c2812f"
+        },
+        {
+          "path": "/usr/share/app-install/desktop/autokey-qt:autokey-qt.desktop",
+          "size": 378,
+          "sha256": "69c9e14c827ecf018a812804178389712e52475c9f731f64a4627e48e1883dec"
+        },
+        {
+          "path": "/var/lib/dpkg/info/xfonts-utils.postinst",
+          "size": 344,
+          "sha256": "5d0934f4be99a219aaa0a379b5c0e8ff4221d21441df944ab6f4e280358cd8f7"
+        },
+        {
+          "path": "/usr/share/javascript/mathjax/jax/output/SVG/fonts/Latin-Modern/Size5/Regular/Main.js",
+          "size": 10389,
+          "sha256": "d04e3b3d1fc5d73815a77ceb77c750e2b6f16bc2f8330a9b0aea0d70f17b264c"
+        },
+        {
+          "path": "/usr/share/speech-dispatcher/locale/oc/orca-chars.dic",
+          "size": 1635,
+          "sha256": "9535fbfd1ef866c7bd97d1e9789ad189d74f514458e868d5faced395e659bf55"
+        },
+        {
+          "path": "/usr/share/libreoffice/help/it/text/shared/02/flowcharts.html",
+          "size": 4646,
+          "sha256": "3d2c33608a984a9b90ae788817b119c6aa194e81cebb237e25393260801aae24"
+        },
+        {
+          "path": "/usr/share/help/de/gnome-terminal/pref-user-input.page",
+          "size": 3229,
+          "sha256": "6b731d8c3a0bc9fd46746b93f9c92f0521e8b1405e1fa6aec7bf9ed6f7d4589c"
+        },
+        {
+          "path": "/usr/bin/pastebin",
+          "size": 776,
+          "sha256": "0ef4e780fc89768100418ad2b7969a13bd0c9ae156d79524b70d00e11bbef982"
+        },
+        {
+          "path": "/usr/share/locale/de_CH/LC_MESSAGES/mate-desktop.mo",
+          "size": 2259,
+          "sha256": "1958ebe32eb36fc8e87cc28ff4ebcf2cbb8fbacb8e8542d452b82e8707b793db"
+        },
+        {
+          "path": "/usr/lib/firmware/qcom/a650_gmu.bin",
+          "size": 41548,
+          "sha256": "df79fa8482fcc7587bb239b9c9e2b24bce4729893b990fe3f82b30da8175b01c"
+        },
+        {
+          "path": "/usr/share/icons/Mint-X-Yellow/places/32/folder-templates.svg",
+          "size": 21257,
+          "sha256": "fa5f1dd15e5c4fa4b072b92ab73628d976be94ac1af0391fe87202f005f2ec3e"
+        },
+        {
+          "path": "/usr/share/doc/ucf/examples/postinst",
+          "size": 4783,
+          "sha256": "033359f90c2a192ea319a559b1b66a6c449a8c292e95ece8c86e198620980f8e"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/youtube_dl/extractor/__pycache__/telecinco.cpython-310.pyc",
+          "size": 4773,
+          "sha256": "a8bcac856b2ac9535a3dc91892db0c2517bc404febdc16082bde7cbb25ffc973"
+        },
+        {
+          "path": "/usr/share/libreoffice/help/fr/text/swriter/01/01160300.html",
+          "size": 4511,
+          "sha256": "ae17f4284f4560bd109674e8c39e15e8fbff5f7c2902cc124de11088b51abcdf"
+        }
+      ]
+    }
   ]
 }

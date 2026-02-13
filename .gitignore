@@ -1,0 +1,38 @@
+# Build output
+target/
+
+# IDE files
+.idea/
+*.iml
+.bloop/
+.metals/
+.vscode/
+
+# Claude Code
+.claude*/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Maven
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# Logs
+*.log
+
+# Test files
+test-output/
+
+# Local environment
+.env
+.env.local
+
+# Test corpus (large binary disk images fetched separately)
+test-corpus/
+test-corpus-data/

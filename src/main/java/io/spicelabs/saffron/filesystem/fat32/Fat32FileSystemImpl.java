@@ -18,6 +18,7 @@
 package io.spicelabs.saffron.filesystem.fat32;
 
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
@@ -322,7 +323,7 @@ public class Fat32FileSystemImpl implements FileSystem.Fat32FileSystem {
      */
     byte[] readClusterChain(int startCluster, long fileSize) throws IOException {
         if (fileSize > MAX_READABLE_SIZE) {
-            throw new IOException("File too large to read: " + fileSize + " bytes (max " + MAX_READABLE_SIZE + ")");
+            throw new ResourceLimitException("File too large to read into memory: " + fileSize + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, fileSize);
         }
 
         if (startCluster < 2) {
@@ -476,7 +477,7 @@ public class Fat32FileSystemImpl implements FileSystem.Fat32FileSystem {
                 longName = Optional.of(sb.toString());
             }
 
-            FatDirectoryEntry.parse(buffer, longName).ifPresent(entry -> {
+            FatDirectoryEntry.parse(buffer, longName, fatType == 32).ifPresent(entry -> {
                 // Skip . and .. entries
                 if (!entry.name().equals(".") && !entry.name().equals("..")) {
                     entries.add(entry);

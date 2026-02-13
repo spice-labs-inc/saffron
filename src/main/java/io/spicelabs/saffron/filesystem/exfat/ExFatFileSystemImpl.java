@@ -18,6 +18,7 @@
 package io.spicelabs.saffron.filesystem.exfat;
 
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
@@ -284,7 +285,7 @@ public class ExFatFileSystemImpl implements FileSystem.ExFatFileSystem {
      */
     byte[] readClusterChain(int startCluster, long fileSize, boolean noFatChain) throws IOException {
         if (fileSize > MAX_READABLE_SIZE) {
-            throw new IOException("File too large to read: " + fileSize + " bytes (max " + MAX_READABLE_SIZE + ")");
+            throw new ResourceLimitException("File too large to read into memory: " + fileSize + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, fileSize);
         }
 
         if (startCluster < 2) {

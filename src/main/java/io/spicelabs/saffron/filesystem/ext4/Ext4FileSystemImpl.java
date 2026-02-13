@@ -18,6 +18,7 @@
 package io.spicelabs.saffron.filesystem.ext4;
 
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
@@ -41,6 +42,7 @@ import java.util.stream.StreamSupport;
  */
 public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
     private static final long ROOT_INODE = 2;
+    private static final int MAX_SYMLINK_DEPTH = 40;
 
     private final DiskRegion region;
     private final Ext4Superblock superblock;
@@ -165,7 +167,7 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
 
     @Override
     public @NotNull Stream<FileSystemEntry> walk() throws IOException {
-        return walkDirectory(root(), Integer.MAX_VALUE);
+        return walkDirectory(root(), Integer.MAX_VALUE, new HashSet<>());
     }
 
     @Override
@@ -176,15 +178,23 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
         }
 
         if (entry.get() instanceof FileSystemEntry.Directory dir) {
-            return walkDirectory(dir, maxDepth);
+            return walkDirectory(dir, maxDepth, new HashSet<>());
         } else {
             return Stream.of(entry.get());
         }
     }
 
-    private Stream<FileSystemEntry> walkDirectory(FileSystemEntry.Directory dir, int maxDepth) throws IOException {
+    private Stream<FileSystemEntry> walkDirectory(FileSystemEntry.Directory dir, int maxDepth,
+                                                    Set<Long> visitedDirs) throws IOException {
         if (maxDepth <= 0) {
             return Stream.of(dir);
+        }
+
+        // Cycle detection: skip directories we've already visited
+        if (dir instanceof Ext4Directory ext4Dir) {
+            if (!visitedDirs.add(ext4Dir.inode.inodeNumber())) {
+                return Stream.of(dir);
+            }
         }
 
         List<FileSystemEntry> result = new ArrayList<>();
@@ -194,7 +204,7 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
             children.forEach(entry -> {
                 try {
                     if (entry instanceof FileSystemEntry.Directory subDir) {
-                        walkDirectory(subDir, maxDepth - 1).forEach(result::add);
+                        walkDirectory(subDir, maxDepth - 1, visitedDirs).forEach(result::add);
                     } else {
                         result.add(entry);
                     }
@@ -308,8 +318,10 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
 
         // Check for files too large to read into memory
         if (inode.size() > MAX_READABLE_SIZE) {
-            throw new IOException("File too large to read into memory: " + inode.size() +
-                    " bytes (max " + MAX_READABLE_SIZE + " bytes)");
+            throw new ResourceLimitException(
+                    "File too large to read into memory: " + inode.size() +
+                    " bytes (limit: 256 MB). Use openStream() for large files.",
+                    "allocation_size", MAX_READABLE_SIZE, inode.size());
         }
 
         // For symlinks, check if data is inline
@@ -331,20 +343,23 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
      */
     private byte[] readExtentData(Ext4Inode inode) throws IOException {
         byte[] result = new byte[(int) inode.size()];
-        int bytesRead = 0;
+        int blockSize = superblock.blockSize();
 
         List<Ext4Extent.Leaf> extents = collectAllExtents(inode.blockData());
 
         for (Ext4Extent.Leaf extent : extents) {
-            if (bytesRead >= result.length) break;
+            int destOffset = (int) (extent.logicalBlock() * blockSize);
+            if (destOffset >= result.length) break;
 
-            long physicalOffset = extent.physicalBlock() * superblock.blockSize();
-            int bytesToRead = Math.min(extent.length() * superblock.blockSize(),
-                    result.length - bytesRead);
+            int bytesToRead = Math.min(extent.length() * blockSize,
+                    result.length - destOffset);
 
-            ByteBuffer data = region.read(physicalOffset, bytesToRead);
-            data.get(result, bytesRead, bytesToRead);
-            bytesRead += bytesToRead;
+            // Uninitialized extents are allocated but not yet written — read as zeros
+            if (!extent.uninitialized()) {
+                long physicalOffset = extent.physicalBlock() * blockSize;
+                ByteBuffer data = region.read(physicalOffset, bytesToRead);
+                data.get(result, destOffset, bytesToRead);
+            }
         }
 
         return result;
@@ -626,13 +641,112 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
 
         @Override
         public @NotNull InputStream openStream() throws IOException {
-            byte[] data = fs.readInodeData(inode);
-            return new ByteArrayInputStream(data);
+            if (inode.size() == 0) {
+                return new ByteArrayInputStream(new byte[0]);
+            }
+            if (inode.usesExtents()) {
+                List<Ext4Extent.Leaf> extents = fs.collectAllExtents(inode.blockData());
+                return new Ext4ExtentInputStream(fs.region, extents, inode.size(), fs.superblock.blockSize());
+            }
+            // Fall back to full read for indirect block files
+            return new ByteArrayInputStream(fs.readInodeData(inode));
         }
 
         @Override
         public byte[] readAllBytes() throws IOException {
             return fs.readInodeData(inode);
+        }
+    }
+
+    /**
+     * InputStream that reads extent-by-extent without loading the entire file into memory.
+     */
+    private static class Ext4ExtentInputStream extends InputStream {
+        private final DiskRegion region;
+        private final List<Ext4Extent.Leaf> extents;
+        private final long fileSize;
+        private final int blockSize;
+        private long bytesRead;
+        private int currentExtentIndex;
+        private int offsetInCurrentExtent;
+
+        Ext4ExtentInputStream(DiskRegion region, List<Ext4Extent.Leaf> extents,
+                              long fileSize, int blockSize) {
+            this.region = region;
+            this.extents = extents;
+            this.fileSize = fileSize;
+            this.blockSize = blockSize;
+            this.bytesRead = 0;
+            this.currentExtentIndex = 0;
+            this.offsetInCurrentExtent = 0;
+        }
+
+        @Override
+        public int read() throws IOException {
+            byte[] single = new byte[1];
+            int n = read(single, 0, 1);
+            return n == -1 ? -1 : single[0] & 0xFF;
+        }
+
+        @Override
+        public int read(byte[] buf, int off, int len) throws IOException {
+            if (bytesRead >= fileSize) {
+                return -1;
+            }
+
+            int totalRead = 0;
+            while (totalRead < len && bytesRead < fileSize) {
+                if (currentExtentIndex >= extents.size()) {
+                    // No more extents — remaining bytes are sparse (zeros)
+                    int remaining = (int) Math.min(len - totalRead, fileSize - bytesRead);
+                    java.util.Arrays.fill(buf, off + totalRead, off + totalRead + remaining, (byte) 0);
+                    totalRead += remaining;
+                    bytesRead += remaining;
+                    break;
+                }
+
+                Ext4Extent.Leaf extent = extents.get(currentExtentIndex);
+                long extentStartByte = (long) extent.logicalBlock() * blockSize;
+                int extentSize = extent.length() * blockSize;
+
+                // Handle sparse gap before this extent
+                if (bytesRead < extentStartByte) {
+                    int gapSize = (int) Math.min(extentStartByte - bytesRead,
+                            Math.min(len - totalRead, fileSize - bytesRead));
+                    java.util.Arrays.fill(buf, off + totalRead, off + totalRead + gapSize, (byte) 0);
+                    totalRead += gapSize;
+                    bytesRead += gapSize;
+                    continue;
+                }
+
+                // Read from current extent
+                int posInExtent = (int) (bytesRead - extentStartByte);
+                int availInExtent = extentSize - posInExtent;
+                int toRead = (int) Math.min(availInExtent,
+                        Math.min(len - totalRead, fileSize - bytesRead));
+
+                if (toRead <= 0) {
+                    currentExtentIndex++;
+                    continue;
+                }
+
+                if (extent.uninitialized()) {
+                    java.util.Arrays.fill(buf, off + totalRead, off + totalRead + toRead, (byte) 0);
+                } else {
+                    long physicalOffset = (long) extent.physicalBlock() * blockSize + posInExtent;
+                    ByteBuffer data = region.read(physicalOffset, toRead);
+                    data.get(buf, off + totalRead, toRead);
+                }
+
+                totalRead += toRead;
+                bytesRead += toRead;
+
+                if (posInExtent + toRead >= extentSize) {
+                    currentExtentIndex++;
+                }
+            }
+
+            return totalRead == 0 ? -1 : totalRead;
         }
     }
 
@@ -709,15 +823,28 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
 
         @Override
         public @NotNull Optional<FileSystemEntry> resolve() throws IOException {
+            return resolveWithDepth(MAX_SYMLINK_DEPTH);
+        }
+
+        private Optional<FileSystemEntry> resolveWithDepth(int remaining) throws IOException {
+            if (remaining <= 0) {
+                throw new IOException("Symlink depth exceeded (limit: " + MAX_SYMLINK_DEPTH + "): " + path);
+            }
             String targetPath = target();
+            String resolvedPath;
             if (targetPath.startsWith("/")) {
-                return fs.resolve(targetPath);
+                resolvedPath = targetPath;
             } else {
                 // Relative path - resolve from parent directory
                 String parentPath = path.substring(0, path.lastIndexOf('/'));
                 if (parentPath.isEmpty()) parentPath = "/";
-                return fs.resolve(parentPath + "/" + targetPath);
+                resolvedPath = parentPath + "/" + targetPath;
             }
+            Optional<FileSystemEntry> result = fs.resolve(resolvedPath);
+            if (result.isPresent() && result.get() instanceof Ext4SymbolicLink nestedLink) {
+                return nestedLink.resolveWithDepth(remaining - 1);
+            }
+            return result;
         }
     }
 

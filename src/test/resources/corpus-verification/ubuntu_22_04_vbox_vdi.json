@@ -1,29 +1,165 @@
 {
   "imagePath": "/corpus/vdi/modern/ubuntu-22.04-vbox.vdi",
   "imageBasename": "ubuntu-22.04-vbox.vdi",
-  "filesystemType": "unknown",
+  "filesystemCount": 2,
   "totalFiles": 128783,
-  "totalDirectories": 15622,
-  "sampleFiles": [
-    {"path": "/usr/share/bash-completion/completions/lsscsi", "sha256": "31ea9a4902fcbdc0a5cb213fa8f4a2cfbff5d912092d3329e38f836f393c0cfe", "size": 594},
-    {"path": "/var/lib/systemd/deb-systemd-helper-enabled/snapd.recovery-chooser-trigger.service.dsh-also", "sha256": "bc3e7bbbc09f22d20ffc45b98910b172614f251d257d7320dd8988ca5b041e0b", "size": 83},
-    {"path": "/usr/share/terminfo/r/regent60", "sha256": "cafa504c29337853740219ede94b4ce482f4dd9b0f0e25e8512017a2e8038c38", "size": 728},
-    {"path": "/usr/share/help/hr/gnome-help/report-ubuntu-bug.page", "sha256": "1db9cf13606848cb13cab3f4ec37b3e9e243edf69406b3718fe3bbded5f7edf4", "size": 3350},
-    {"path": "/usr/share/doc/alsa-base/driver/hda_codec.txt.gz", "sha256": "2eff928c2312b6d7ebdcad761050b966e0fdbf35954b8e4f1fc993eca8469e52", "size": 4022},
-    {"path": "/usr/share/poppler/cMap/Adobe-Korea1/KSCpc-EUC-UCS2", "sha256": "f53b5d1db587a20a2bf9786cf6fd41f6814a884009ae5362c7aa6897efb1b7ab", "size": 17200},
-    {"path": "/usr/share/mime/application/sdp.xml", "sha256": "3ffa3693add61d2ba8db96b425c9fb68a34ab54a1dafbec4970709fbb04e2bc3", "size": 3844},
-    {"path": "/usr/share/perl5/libwww/lwptut.pod", "sha256": "ffb5d5f3a6ce4086e382a0ad88a7cb704aad9e737d20982f3ac9f8876cc5c53a", "size": 24950},
-    {"path": "/usr/share/libreoffice/help/media/icon-themes/cmd/sc_badcellstyles.svg", "sha256": "c3dbaf5b7d74db699885c0fa54f50f0a79b2b905d5c387ad97fbadc99f2df070", "size": 1311},
-    {"path": "/usr/src/linux-headers-5.15.0-25/arch/arm/mach-pxa/include/mach/poodle.h", "sha256": "41c0f1dafc4fea6a86c2614341e0c597e77d9794461fe146689ecfd92dfb3d08", "size": 3273},
-    {"path": "/usr/sbin/mkhomedir_helper", "sha256": "9ee7be9dd384dbb5f5b17f222fcec2390cf8c4158eb6feae31c93d84b3b85f81", "size": 22704},
-    {"path": "/usr/share/icons/Yaru/scalable/devices/thunderbolt-symbolic.svg", "sha256": "ee824626a548eb4b20bd12f670420c45a8bb2f5eb38ce76f520ebfcea9e3c41c", "size": 359},
-    {"path": "/usr/share/man/man1/dbus-send.1.gz", "sha256": "f497f43de905f7be7c064089f76c608dbe70c466683cd85b7278d015702f0381", "size": 2205},
-    {"path": "/usr/share/icons/Yaru-sage/256x256/places/folder-templates.png", "sha256": "56e0c4b77a8c2124f864d9fbce29a4d96701c18d16f2189b9f29541b70204220", "size": 9142},
-    {"path": "/usr/share/media-player-info/samsung_yp-s5.mpi", "sha256": "c93525e3d6389eab21a868b93a7597339214a0491dfa65eaa05cf4c057932282", "size": 179},
-    {"path": "/usr/src/linux-headers-5.15.0-25/include/linux/fcdevice.h", "sha256": "c4c7f34bc5a0dea3a267fc680a724a003cab4a3f29ea6e934f6a1fdca9d1c1ca", "size": 774},
-    {"path": "/usr/share/icons/Yaru/32x32/emblems/emblem-default.png", "sha256": "ea54cbc3b231f36b813a80d81babfcc378e37111835613ced81eb4c29df4e6b1", "size": 859},
-    {"path": "/usr/src/linux-headers-5.15.0-25/arch/alpha/include/asm/user.h", "sha256": "ebdb29ce8537d9d5efe4fbf73831d48e0f3a6ca519b987a7abb6758d1ee2e0a1", "size": 2192},
-    {"path": "/var/lib/swcatalog/icons/ubuntu-jammy-universe/64x64/frozen-bubble_frozen-bubble.png", "sha256": "0588e3a6ff6cf230b7536a9c1f412d28f43d024481119ae8c184f009a7691741", "size": 4601},
-    {"path": "/usr/share/man/es/man1/dpkg-split.1.gz", "sha256": "81476a7c1453163e4cf59f8303203ce961f3250b672d844f104d2bfb3806245b", "size": 4358}
+  "totalDirectories": 15621,
+  "filesystems": [
+    {
+      "device": "/dev/sda2",
+      "fstype": "vfat",
+      "fileCount": 8,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/fbx64.efi",
+          "size": 85672,
+          "sha256": "52c7ae0db66ec19a46327a9e25aeb9167d247317bbc8154cccbf5cca72a341c3"
+        },
+        {
+          "path": "/EFI/ubuntu/BOOTX64.CSV",
+          "size": 108,
+          "sha256": "6add06de471015ad4460964f30fb115e7fdc286da6a527d0643fc7815b728fbf"
+        },
+        {
+          "path": "/EFI/ubuntu/grubx64.efi",
+          "size": 1742728,
+          "sha256": "528e0dde1d31a60f78bfe6e205128f4984c2a61155861b22be5f76d52348892d"
+        },
+        {
+          "path": "/EFI/BOOT/mmx64.efi",
+          "size": 856232,
+          "sha256": "d66f9c08f8ffcc3b47221b6ad7301c66c6f3d79dfe707d95f2ad036fbf097a98"
+        },
+        {
+          "path": "/EFI/ubuntu/grub.cfg",
+          "size": 201,
+          "sha256": "f8d8b0e2c5634135b1b91e291d0909e4aaea6ac479577915f724e8fe340eb3db"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 955656,
+          "sha256": "f037d2f20ce5d739c95fa71435410f1d71876868b7e635adb23cdb66fcf4619a"
+        },
+        {
+          "path": "/EFI/ubuntu/mmx64.efi",
+          "size": 856232,
+          "sha256": "d66f9c08f8ffcc3b47221b6ad7301c66c6f3d79dfe707d95f2ad036fbf097a98"
+        },
+        {
+          "path": "/EFI/ubuntu/shimx64.efi",
+          "size": 955656,
+          "sha256": "f037d2f20ce5d739c95fa71435410f1d71876868b7e635adb23cdb66fcf4619a"
+        }
+      ]
+    },
+    {
+      "device": "/dev/vgubuntu/root",
+      "fstype": "ext4",
+      "fileCount": 128775,
+      "directoryCount": 15618,
+      "sampleFiles": [
+        {
+          "path": "/var/lib/swcatalog/icons/ubuntu-jammy-universe/48x48/butt_butt.png",
+          "size": 1986,
+          "sha256": "e70927c48de6c642b21d4bd760f2eda09b9d8a0c23be403ba0eeea6286223724"
+        },
+        {
+          "path": "/usr/src/linux-headers-5.15.0-25/drivers/video/fbdev/mmp/Makefile",
+          "size": 115,
+          "sha256": "fb6a16dc7bb344ba6f9b00ffcbe2d0c4c88c62caa3d819a4e505fbec3bcdc1da"
+        },
+        {
+          "path": "/usr/share/icons/Yaru-prussiangreen/48x48/places/preferences-desktop-wallpaper.png",
+          "size": 1986,
+          "sha256": "b496ec37a75b69741d35be049475f70e58081658c53d5f449ec87bd73bacc30e"
+        },
+        {
+          "path": "/usr/lib/aspell/iso-8859-14.cmap",
+          "size": 31433,
+          "sha256": "76681a7e5ac1cfd765ba086f752d142ac959db03dafb81495f9c18300c4acb6d"
+        },
+        {
+          "path": "/usr/sbin/upgrade-from-grub-legacy",
+          "size": 1596,
+          "sha256": "d19f3a2b3d32854e07519639a9897f5068ae87c0122a3afa56a60922b2d65cd8"
+        },
+        {
+          "path": "/usr/src/linux-headers-5.15.0-25/include/linux/regulator/machine.h",
+          "size": 9873,
+          "sha256": "e011ff2ef28cccb8307626467f37d9d118b82e854bb0466690eb7b696afea9f7"
+        },
+        {
+          "path": "/usr/src/linux-headers-5.15.0-25/sound/arm/Makefile",
+          "size": 371,
+          "sha256": "f1c05783c9efae1cfe1bf7f53462e5d96958bcf5927f4af1fb42fb0d0be7aa9f"
+        },
+        {
+          "path": "/usr/lib/modules/5.15.0-25-generic/kernel/drivers/net/dsa/microchip/ksz8863_smi.ko",
+          "size": 16857,
+          "sha256": "3303bc38bd5396284c0be64d44e04b0547e50eba95be24461407a1f00e64d53d"
+        },
+        {
+          "path": "/usr/share/man/man5/org.freedesktop.machine1.5.gz",
+          "size": 5472,
+          "sha256": "95928e1132385094b7c30470986c778303aef2736eaf1fcdb28931d6d667e981"
+        },
+        {
+          "path": "/var/lib/dpkg/info/libxft2:amd64.list",
+          "size": 248,
+          "sha256": "6cd8f25413cb67643f5c08fac2dbf7b15f175618c88b5382b16240312497e649"
+        },
+        {
+          "path": "/usr/share/perl5/Mail/Field/AddrList.pm",
+          "size": 1615,
+          "sha256": "58938b01ca6badd9984b339eb4866d415c3709b5512f4212c179dc3f0b0a3f08"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/cryptography/hazmat/_oid.py",
+          "size": 2372,
+          "sha256": "195b32ce2012cc855c9c03ff0bb771e1ccde23f54871c62ef46355d37ad68c8d"
+        },
+        {
+          "path": "/var/lib/dpkg/info/libcap2:amd64.md5sums",
+          "size": 212,
+          "sha256": "09a336b80d9155ede213451a835c49cd2b0c301ddc879955cf796c5117821bb0"
+        },
+        {
+          "path": "/usr/share/bash-completion/completions/_ionice",
+          "size": 1257,
+          "sha256": "a0a911866bf55099640a0c17a89270ee94d80233bbba72ef72c7b87495a8da58"
+        },
+        {
+          "path": "/var/lib/swcatalog/icons/ubuntu-jammy-universe/48x48/siril_org.free_astro.siril.png",
+          "size": 2202,
+          "sha256": "1b7666df53fdd40af73b287366a9077bcd843261bc0a2cd3533f72a661e09d9e"
+        },
+        {
+          "path": "/usr/lib/aspell/x86_64-linux-gnu/comment.amf",
+          "size": 182,
+          "sha256": "29bddad3aadf0b6f7ddf32b06fe3fb8fb047ac696a8ddde963d726cf03b1cca0"
+        },
+        {
+          "path": "/usr/share/doc/fonts-lohit-guru/copyright",
+          "size": 12328,
+          "sha256": "d04a7007da122dfed08fe184ba15082310b7a219d20ad2469ec74ac3ddaef2e5"
+        },
+        {
+          "path": "/usr/share/man/man3/IO::ScalarArray.3pm.gz",
+          "size": 4282,
+          "sha256": "4b4826a04a75b1ab6f1cf32ce122a96953cb0a70292ce0a6390ec233f65bace1"
+        },
+        {
+          "path": "/usr/bin/crontab",
+          "size": 39568,
+          "sha256": "11651a4bd5c9605dac9df09bcb1ce16e40e740558766081a784e16db0098c042"
+        },
+        {
+          "path": "/usr/share/zoneinfo/Europe/Andorra",
+          "size": 1742,
+          "sha256": "8130798c2426bc8c372498b5fef01c398ba1b733c147a457531f60555ea9eae8"
+        }
+      ]
+    }
   ]
 }

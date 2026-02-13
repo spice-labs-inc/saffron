@@ -327,6 +327,160 @@ public class HfsPlusBTreeReader {
     }
 
     /**
+     * Searches the extents overflow B-tree for additional extents belonging to the
+     * given file (by CNID) and fork type, starting from the given allocation block offset.
+     *
+     * <p>The extents overflow B-tree key format is:
+     * <pre>
+     * offset 0: uint16 keyLength (always 10)
+     * offset 2: uint8  forkType (0=data, 0xFF=resource)
+     * offset 3: uint8  pad (0)
+     * offset 4: uint32 cnid
+     * offset 8: uint32 startBlock
+     * </pre>
+     *
+     * <p>Each record value contains 8 extent descriptors (startBlock:4 + blockCount:4 each).
+     *
+     * @param cnid the catalog node ID of the file
+     * @param forkType 0 for data fork, 0xFF for resource fork
+     * @param startBlock the first allocation block number to search from
+     * @return list of additional extents found in the overflow file
+     */
+    public @NotNull List<HfsPlusExtent> findOverflowExtents(int cnid, int forkType, long startBlock)
+            throws IOException {
+        List<HfsPlusExtent> result = new ArrayList<>();
+        if (header.rootNode() == 0) {
+            return result;
+        }
+
+        // First, navigate to the correct leaf node using B-tree traversal
+        long currentStartBlock = startBlock;
+
+        while (true) {
+            List<HfsPlusExtent> batch = findOverflowExtentRecord(cnid, forkType, currentStartBlock);
+            if (batch.isEmpty()) {
+                break;
+            }
+            long batchBlocks = 0;
+            for (HfsPlusExtent ext : batch) {
+                batchBlocks += ext.blockCount();
+            }
+            result.addAll(batch);
+            currentStartBlock += batchBlocks;
+        }
+
+        return result;
+    }
+
+    /**
+     * Finds a single overflow extent record (8 extents) for the given key.
+     */
+    private @NotNull List<HfsPlusExtent> findOverflowExtentRecord(int cnid, int forkType, long startBlock)
+            throws IOException {
+        int nodeNum = header.rootNode();
+        int maxDepth = header.treeDepth() + 1;
+
+        for (int depth = 0; depth < maxDepth; depth++) {
+            HfsPlusBTreeNode node = readNode(nodeNum);
+
+            if (node.isLeaf()) {
+                // Search leaf for exact match on (forkType, cnid, startBlock)
+                for (int i = 0; i < node.numRecords(); i++) {
+                    byte[] record = node.getRecordData(i);
+                    if (record.length < 12) continue;
+
+                    ByteBuffer keyBuf = ByteBuffer.wrap(record);
+                    keyBuf.order(ByteOrder.BIG_ENDIAN);
+
+                    int keyLength = keyBuf.getShort(0) & 0xFFFF;
+                    int recForkType = record[2] & 0xFF;
+                    int recCnid = keyBuf.getInt(4);
+                    long recStartBlock = keyBuf.getInt(8) & 0xFFFFFFFFL;
+
+                    if (recForkType == forkType && recCnid == cnid && recStartBlock == startBlock) {
+                        // Found matching record; parse 8 extents from value
+                        int valueOffset = 2 + keyLength;
+                        if (valueOffset % 2 != 0) valueOffset++;
+                        return parseExtentRecord(record, valueOffset);
+                    }
+                }
+                return List.of();
+            } else if (node.isIndex()) {
+                int childNode = findOverflowChildPointer(node, cnid, forkType, startBlock);
+                if (childNode == 0) {
+                    return List.of();
+                }
+                nodeNum = childNode;
+            } else {
+                return List.of();
+            }
+        }
+        return List.of();
+    }
+
+    /**
+     * Finds the child pointer in an index node for the extents overflow B-tree.
+     * Key comparison order: forkType, then cnid, then startBlock (all big-endian unsigned).
+     */
+    private int findOverflowChildPointer(HfsPlusBTreeNode node, int cnid, int forkType, long startBlock) {
+        int bestChild = 0;
+        for (int i = 0; i < node.numRecords(); i++) {
+            byte[] record = node.getRecordData(i);
+            if (record.length < 12) continue;
+
+            ByteBuffer keyBuf = ByteBuffer.wrap(record);
+            keyBuf.order(ByteOrder.BIG_ENDIAN);
+
+            int keyLength = keyBuf.getShort(0) & 0xFFFF;
+            int recForkType = record[2] & 0xFF;
+            int recCnid = keyBuf.getInt(4);
+            long recStartBlock = keyBuf.getInt(8) & 0xFFFFFFFFL;
+
+            // Compare: forkType, cnid, startBlock
+            int cmp = Integer.compare(recForkType, forkType);
+            if (cmp == 0) {
+                cmp = Integer.compareUnsigned(recCnid, cnid);
+            }
+            if (cmp == 0) {
+                cmp = Long.compare(recStartBlock, startBlock);
+            }
+
+            if (cmp <= 0) {
+                int pointerOffset = 2 + keyLength;
+                if (pointerOffset % 2 != 0) pointerOffset++;
+                if (pointerOffset + 4 <= record.length) {
+                    bestChild = ((record[pointerOffset] & 0xFF) << 24) |
+                                ((record[pointerOffset + 1] & 0xFF) << 16) |
+                                ((record[pointerOffset + 2] & 0xFF) << 8) |
+                                (record[pointerOffset + 3] & 0xFF);
+                }
+            } else {
+                break;
+            }
+        }
+        return bestChild;
+    }
+
+    /**
+     * Parses 8 extent descriptors from the value portion of an overflow extent record.
+     */
+    private static List<HfsPlusExtent> parseExtentRecord(byte[] record, int valueOffset) {
+        List<HfsPlusExtent> extents = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            int off = valueOffset + i * 8;
+            if (off + 8 > record.length) break;
+            ByteBuffer buf = ByteBuffer.wrap(record, off, 8);
+            buf.order(ByteOrder.BIG_ENDIAN);
+            long sb = buf.getInt(0) & 0xFFFFFFFFL;
+            long bc = buf.getInt(4) & 0xFFFFFFFFL;
+            if (bc > 0) {
+                extents.add(new HfsPlusExtent(sb, bc));
+            }
+        }
+        return extents;
+    }
+
+    /**
      * Reads node data from disk, resolving fork extents to physical locations.
      */
     private static byte[] readNodeData(DiskRegion region, List<HfsPlusExtent> extents,

@@ -18,6 +18,7 @@
 package io.spicelabs.saffron.filesystem.ntfs;
 
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
@@ -43,6 +44,9 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
 
     /** Maximum file size that can be read into memory (256 MB) */
     private static final long MAX_READABLE_SIZE = 256 * 1024 * 1024;
+
+    /** Maximum symlink resolution depth to prevent infinite loops */
+    private static final int MAX_SYMLINK_DEPTH = 40;
 
     private final DiskRegion region;
     private final NtfsBootSector bootSector;
@@ -156,7 +160,7 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
     }
 
     /**
-     * Reads an MFT record by record number.
+     * Reads an MFT record by record number, resolving $ATTRIBUTE_LIST if present.
      */
     MftRecord readMftRecord(long recordNumber) throws IOException {
         // Check cache first
@@ -165,16 +169,28 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
             return cached;
         }
 
-        // Calculate the byte offset within the MFT
+        MftRecord baseRecord = readRawMftRecord(recordNumber);
+
+        // Check for $ATTRIBUTE_LIST — if present, merge attributes from extension records
+        Optional<NtfsAttribute> attrListAttr = baseRecord.findAttribute(NtfsAttribute.TYPE_ATTRIBUTE_LIST);
+        if (attrListAttr.isPresent()) {
+            baseRecord = resolveAttributeList(baseRecord, attrListAttr.get());
+        }
+
+        mftCache.put(recordNumber, baseRecord);
+        return baseRecord;
+    }
+
+    /**
+     * Reads a raw MFT record without resolving $ATTRIBUTE_LIST or caching.
+     */
+    private MftRecord readRawMftRecord(long recordNumber) throws IOException {
         long byteOffsetInMft = recordNumber * mftRecordSize;
 
-        // Find which data run contains this record
         long recordOffset;
         if (mftDataRuns.isEmpty()) {
-            // Simple linear MFT (fallback)
             recordOffset = bootSector.mftOffsetBytes() + byteOffsetInMft;
         } else {
-            // Fragmented MFT - find the correct data run
             recordOffset = findMftRecordOffset(byteOffsetInMft);
             if (recordOffset < 0) {
                 throw new IOException("MFT record " + recordNumber + " is outside MFT data runs");
@@ -188,9 +204,67 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
             throw new IOException("Failed to read MFT record " + recordNumber);
         }
 
-        MftRecord mft = record.get();
-        mftCache.put(recordNumber, mft);
-        return mft;
+        return record.get();
+    }
+
+    /**
+     * Resolves $ATTRIBUTE_LIST by reading extension MFT records and merging their attributes
+     * into the base record. This is needed for large directories and files whose attributes
+     * overflow a single MFT record (1024 bytes).
+     *
+     * <p>$ATTRIBUTE_LIST entry format:
+     * <pre>
+     * Offset  Size  Description
+     * 0       4     Attribute type
+     * 4       2     Record length
+     * 6       1     Name length (in characters)
+     * 7       1     Name offset
+     * 8       8     Starting VCN
+     * 16      8     MFT file reference (lower 48 bits = record number)
+     * 24      2     Attribute ID
+     * </pre>
+     */
+    private MftRecord resolveAttributeList(MftRecord baseRecord, NtfsAttribute attrListAttr) throws IOException {
+        byte[] attrListData;
+        if (attrListAttr.isResident()) {
+            attrListData = attrListAttr.residentData();
+        } else {
+            attrListData = readDataRuns(attrListAttr.dataRuns(), (int) attrListAttr.dataSize());
+        }
+
+        List<NtfsAttribute> mergedAttributes = new ArrayList<>(baseRecord.attributes());
+        Set<Long> processedRecords = new HashSet<>();
+        processedRecords.add((long) baseRecord.recordNumber());
+
+        ByteBuffer buf = ByteBuffer.wrap(attrListData);
+        buf.order(ByteOrder.LITTLE_ENDIAN);
+        int offset = 0;
+
+        while (offset + 26 <= attrListData.length) {
+            int recordLength = buf.getShort(offset + 4) & 0xFFFF;
+            if (recordLength < 26 || offset + recordLength > attrListData.length) break;
+
+            long mftRef = buf.getLong(offset + 16) & 0x0000FFFFFFFFFFFFL;
+
+            if (mftRef != baseRecord.recordNumber() && processedRecords.add(mftRef)) {
+                try {
+                    MftRecord extensionRecord = readRawMftRecord(mftRef);
+                    mergedAttributes.addAll(extensionRecord.attributes());
+                } catch (Exception e) {
+                    // Skip unreadable extension records
+                }
+            }
+
+            offset += recordLength;
+        }
+
+        return new MftRecord(
+            baseRecord.recordNumber(),
+            baseRecord.flags(),
+            baseRecord.sequenceNumber(),
+            baseRecord.hardLinkCount(),
+            mergedAttributes
+        );
     }
 
     /**
@@ -236,7 +310,11 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
         // Non-resident data - read from data runs
         long dataSize = attr.dataSize();
         if (dataSize > MAX_READABLE_SIZE) {
-            throw new IOException("File too large to read: " + dataSize + " bytes (max " + MAX_READABLE_SIZE + ")");
+            throw new ResourceLimitException("File too large to read into memory: " + dataSize + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, dataSize);
+        }
+
+        if (attr.isCompressed()) {
+            return readCompressedDataRuns(attr.dataRuns(), (int) dataSize, attr.compressionUnitSize());
         }
 
         return readDataRuns(attr.dataRuns(), (int) dataSize);
@@ -270,6 +348,77 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
         }
 
         return data;
+    }
+
+    /**
+     * Reads compressed data from data runs using LZNT1 decompression.
+     * Compressed data is organized in compression units (typically 16 clusters).
+     * A sparse run within a compression unit means the preceding non-sparse run
+     * is compressed; a full-size non-sparse run is stored uncompressed.
+     */
+    private byte[] readCompressedDataRuns(List<NtfsAttribute.DataRun> runs, int dataSize,
+                                           int compressionUnitClusters) throws IOException {
+        byte[] result = new byte[dataSize];
+        int resultOffset = 0;
+        int unitBytes = compressionUnitClusters * clusterSize;
+
+        int i = 0;
+        while (i < runs.size() && resultOffset < dataSize) {
+            NtfsAttribute.DataRun run = runs.get(i);
+
+            if (run.sparse()) {
+                // Standalone sparse run — fill with zeros
+                int bytes = (int) Math.min(run.length() * clusterSize, dataSize - resultOffset);
+                // Already zeros in result array
+                resultOffset += bytes;
+                i++;
+                continue;
+            }
+
+            // Check if next run is sparse (indicates this run is compressed)
+            boolean isCompressedUnit = false;
+            long sparseLength = 0;
+            if (i + 1 < runs.size() && runs.get(i + 1).sparse()) {
+                NtfsAttribute.DataRun sparseRun = runs.get(i + 1);
+                // A sparse run following a non-sparse run within a compression unit
+                // means the data in the non-sparse run is LZNT1 compressed
+                if (run.length() + sparseRun.length() == compressionUnitClusters) {
+                    isCompressedUnit = true;
+                    sparseLength = sparseRun.length();
+                }
+            }
+
+            if (isCompressedUnit) {
+                // Read the compressed data
+                int compressedBytes = (int) (run.length() * clusterSize);
+                long clusterOffset = run.lcn() * clusterSize;
+                byte[] compressed = new byte[compressedBytes];
+                ByteBuffer buf = region.read(clusterOffset, compressedBytes);
+                buf.get(compressed);
+
+                // Decompress
+                int decompressedSize = Math.min(unitBytes, dataSize - resultOffset);
+                try {
+                    byte[] decompressed = NtfsLznt1Decompressor.decompress(compressed, decompressedSize);
+                    System.arraycopy(decompressed, 0, result, resultOffset,
+                            Math.min(decompressed.length, dataSize - resultOffset));
+                } catch (Exception e) {
+                    // If decompression fails, skip this unit (leave zeros)
+                }
+                resultOffset += decompressedSize;
+                i += 2; // Skip both the data run and the sparse run
+            } else {
+                // Uncompressed run — read directly
+                int runBytes = (int) Math.min(run.length() * clusterSize, dataSize - resultOffset);
+                long clusterOffset = run.lcn() * clusterSize;
+                ByteBuffer buf = region.read(clusterOffset, runBytes);
+                buf.get(result, resultOffset, runBytes);
+                resultOffset += runBytes;
+                i++;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -314,7 +463,12 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
         Optional<NtfsAttribute> indexAllocAttr = dirRecord.findAttribute(NtfsAttribute.TYPE_INDEX_ALLOCATION);
         if (indexAllocAttr.isPresent() && !indexAllocAttr.get().isResident()) {
             try {
-                for (MftRecord record : readIndexAllocation(indexAllocAttr.get())) {
+                // Use the index block size from INDEX_ROOT (may differ from boot sector)
+                int indexBlockSize = indexRoot.get().indexBlockSize();
+                if (indexBlockSize < 512) {
+                    indexBlockSize = bootSector.indexRecordSize();
+                }
+                for (MftRecord record : readIndexAllocation(indexAllocAttr.get(), indexBlockSize)) {
                     long mftRef = record.recordNumber();
                     if (!entriesByRecord.containsKey(mftRef)) {
                         entriesByRecord.put(mftRef, record);
@@ -333,11 +487,9 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
      * This handles the B+ tree structure where entries may have SUBNODE pointers
      * that need to be followed to read all entries.
      */
-    private List<MftRecord> readIndexAllocation(NtfsAttribute indexAllocAttr) throws IOException {
+    private List<MftRecord> readIndexAllocation(NtfsAttribute indexAllocAttr, int indexBlockSize) throws IOException {
         List<MftRecord> entries = new ArrayList<>();
         byte[] indexData = readDataRuns(indexAllocAttr.dataRuns(), (int) indexAllocAttr.dataSize());
-
-        int indexBlockSize = bootSector.indexRecordSize();
         ByteBuffer buf = ByteBuffer.wrap(indexData);
         buf.order(ByteOrder.LITTLE_ENDIAN);
 
@@ -478,23 +630,29 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
         if (start.isEmpty()) {
             return Stream.empty();
         }
-        return walkEntry(start.get(), 0, maxDepth);
+        Set<Long> visited = new HashSet<>();
+        return walkEntry(start.get(), 0, maxDepth, visited);
     }
 
-    private Stream<FileSystemEntry> walkEntry(FileSystemEntry entry, int depth, int maxDepth) {
+    private Stream<FileSystemEntry> walkEntry(FileSystemEntry entry, int depth, int maxDepth, Set<Long> visited) {
         if (depth > maxDepth) {
             return Stream.empty();
         }
 
         Stream<FileSystemEntry> self = Stream.of(entry);
 
-        if (entry instanceof FileSystemEntry.Directory dir && depth < maxDepth) {
+        if (entry instanceof NtfsDirectory dir && depth < maxDepth) {
+            long mftRecordNumber = (long) dir.record.recordNumber();
+            if (!visited.add(mftRecordNumber)) {
+                // Already visited this directory — cycle detected, skip children
+                return self;
+            }
             try {
                 Stream<FileSystemEntry> children = StreamSupport.stream(
                         Spliterators.spliteratorUnknownSize(
                                 new DirectoryIterator(dir), Spliterator.ORDERED
                         ), false
-                ).flatMap(child -> walkEntry(child, depth + 1, maxDepth));
+                ).flatMap(child -> walkEntry(child, depth + 1, maxDepth, visited));
                 return Stream.concat(self, children);
             } catch (Exception e) {
                 return self;
@@ -571,6 +729,41 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
     @Override
     public int clusterSize() {
         return clusterSize;
+    }
+
+    @Override
+    public byte[] readAlternateStream(FileSystemEntry.RegularFile file, String streamName) throws IOException {
+        if (!(file instanceof NtfsFile ntfsFile)) {
+            throw new IllegalArgumentException("File is not from this NTFS filesystem");
+        }
+        if (streamName == null || streamName.isEmpty()) {
+            throw new IllegalArgumentException("Stream name must not be null or empty");
+        }
+
+        List<NtfsAttribute> dataAttrs = ntfsFile.record.findAttributes(NtfsAttribute.TYPE_DATA);
+        for (NtfsAttribute attr : dataAttrs) {
+            if (attr.name().isPresent() && attr.name().get().equals(streamName)) {
+                if (attr.isResident()) {
+                    return attr.residentData();
+                }
+
+                long dataSize = attr.dataSize();
+                if (dataSize > MAX_READABLE_SIZE) {
+                    throw new ResourceLimitException(
+                            "Alternate data stream too large to read into memory: " + dataSize +
+                            " bytes (limit: 256 MB).",
+                            "allocation_size", MAX_READABLE_SIZE, dataSize);
+                }
+
+                if (attr.isCompressed()) {
+                    return readCompressedDataRuns(attr.dataRuns(), (int) dataSize, attr.compressionUnitSize());
+                }
+
+                return readDataRuns(attr.dataRuns(), (int) dataSize);
+            }
+        }
+
+        throw new IOException("Alternate data stream not found: " + streamName);
     }
 
     @Override
@@ -792,7 +985,26 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
 
         @Override
         public @NotNull Map<String, Object> attributes() {
-            return buildNtfsAttributes(record);
+            Map<String, Object> attrs = new LinkedHashMap<>(buildNtfsAttributes(record));
+
+            // Expose Alternate Data Streams (named $DATA attributes)
+            List<NtfsAttribute> dataAttrs = record.findAttributes(NtfsAttribute.TYPE_DATA);
+            int adsCount = 0;
+            for (NtfsAttribute dataAttr : dataAttrs) {
+                if (dataAttr.name().isPresent()) {
+                    String streamName = dataAttr.name().get();
+                    long streamSize = dataAttr.isResident()
+                            ? dataAttr.residentData().length
+                            : dataAttr.dataSize();
+                    attrs.put("ntfs.ads." + streamName, streamSize);
+                    adsCount++;
+                }
+            }
+            if (adsCount > 0) {
+                attrs.put("ntfs.ads.count", adsCount);
+            }
+
+            return Collections.unmodifiableMap(attrs);
         }
 
         @Override
@@ -856,13 +1068,27 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
 
         @Override
         public @NotNull Optional<FileSystemEntry> resolve() throws IOException {
-            String targetPath = target();
-            if (targetPath.startsWith("/")) {
-                return NtfsFileSystemImpl.this.resolve(targetPath);
+            return resolveWithDepth(MAX_SYMLINK_DEPTH);
+        }
+
+        private Optional<FileSystemEntry> resolveWithDepth(int remaining) throws IOException {
+            if (remaining <= 0) {
+                throw new IOException("Symlink depth exceeded (limit: " + MAX_SYMLINK_DEPTH + "): " + path);
             }
-            String parentPath = path.substring(0, path.lastIndexOf('/'));
-            if (parentPath.isEmpty()) parentPath = "/";
-            return NtfsFileSystemImpl.this.resolve(parentPath + "/" + targetPath);
+            String targetPath = target();
+            String resolvedPath;
+            if (targetPath.startsWith("/")) {
+                resolvedPath = targetPath;
+            } else {
+                String parentPath = path.substring(0, path.lastIndexOf('/'));
+                if (parentPath.isEmpty()) parentPath = "/";
+                resolvedPath = parentPath + "/" + targetPath;
+            }
+            Optional<FileSystemEntry> result = NtfsFileSystemImpl.this.resolve(resolvedPath);
+            if (result.isPresent() && result.get() instanceof NtfsSymlink nestedLink) {
+                return nestedLink.resolveWithDepth(remaining - 1);
+            }
+            return result;
         }
     }
 

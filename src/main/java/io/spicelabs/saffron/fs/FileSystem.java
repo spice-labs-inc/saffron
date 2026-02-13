@@ -207,6 +207,18 @@ public sealed interface FileSystem extends Closeable
          * Returns the NTFS version.
          */
         @NotNull String version();
+
+        /**
+         * Reads the content of an NTFS alternate data stream (named $DATA attribute).
+         *
+         * @param file the regular file containing the alternate stream
+         * @param streamName the name of the alternate data stream
+         * @return the stream content as a byte array
+         * @throws IOException if the stream does not exist or cannot be read
+         */
+        default byte[] readAlternateStream(FileSystemEntry.RegularFile file, String streamName) throws IOException {
+            throw new UnsupportedOperationException("ADS not supported");
+        }
     }
 
     /**

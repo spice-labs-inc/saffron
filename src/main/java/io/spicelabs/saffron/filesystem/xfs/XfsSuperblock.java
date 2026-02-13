@@ -71,7 +71,8 @@ public record XfsSuperblock(
         @Nullable String volumeLabel,
         int versionNum,
         long inodeCount,
-        long freeBlockCount
+        long freeBlockCount,
+        int dirBlockLog
 ) {
 
     /** XFS magic number "XFSB" */
@@ -151,6 +152,9 @@ public record XfsSuperblock(
             // Free blocks - need to check exact offset based on version
         }
 
+        // sb_dirblklog at offset 192: log2(filesystem blocks per directory block)
+        int dirBlockLog = (sb.capacity() > 192) ? (sb.get(192) & 0xFF) : 0;
+
         return new XfsSuperblock(
                 blockSize,
                 totalBlocks,
@@ -164,7 +168,8 @@ public record XfsSuperblock(
                 volumeLabel,
                 versionNum,
                 inodeCount,
-                freeBlockCount
+                freeBlockCount,
+                dirBlockLog
         );
     }
 
@@ -214,6 +219,9 @@ public record XfsSuperblock(
             inodeCount = sb.getLong();
         }
 
+        // sb_dirblklog at offset 192: log2(filesystem blocks per directory block)
+        int dirBlockLog = (sb.capacity() > 192) ? (sb.get(192) & 0xFF) : 0;
+
         return new XfsSuperblock(
                 blockSize,
                 totalBlocks,
@@ -227,7 +235,8 @@ public record XfsSuperblock(
                 volumeLabel,
                 versionNum,
                 inodeCount,
-                freeBlockCount
+                freeBlockCount,
+                dirBlockLog
         );
     }
 

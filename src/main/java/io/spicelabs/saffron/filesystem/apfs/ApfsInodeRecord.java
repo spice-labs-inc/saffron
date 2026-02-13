@@ -38,6 +38,7 @@ public record ApfsInodeRecord(
         long modTime,
         long changeTime,
         long accessTime,
+        long internalFlags,
         int nchildrenOrNlink,
         int bsdFlags,
         int uid,
@@ -69,7 +70,7 @@ public record ApfsInodeRecord(
         long modTime = valBuf.getLong(24);
         long changeTime = valBuf.getLong(32);
         long accessTime = valBuf.getLong(40);
-        // internal_flags at 48
+        long internalFlags = valBuf.getLong(48);
         int nchildrenOrNlink = valBuf.getInt(56);
         // default_protection_class at 60
         // write_generation_counter at 64
@@ -129,7 +130,7 @@ public record ApfsInodeRecord(
         }
 
         return new ApfsInodeRecord(oid, parentId, privateId, createTime, modTime,
-                changeTime, accessTime, nchildrenOrNlink, bsdFlags, uid, gid, mode,
+                changeTime, accessTime, internalFlags, nchildrenOrNlink, bsdFlags, uid, gid, mode,
                 uncompressedSize, name, dataStreamSize);
     }
 
@@ -143,6 +144,15 @@ public record ApfsInodeRecord(
 
     public boolean isSymbolicLink() {
         return (mode & 0xF000) == 0xA000;
+    }
+
+    /**
+     * Checks if this inode represents a compressed file.
+     * APFS uses UF_COMPRESSED (0x0020) in bsd_flags and/or
+     * INODE_IS_COMPRESSED (0x20) in internal_flags.
+     */
+    public boolean isCompressed() {
+        return (bsdFlags & 0x0020) != 0;
     }
 
     public Optional<Instant> creationTime() {

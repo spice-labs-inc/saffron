@@ -27,7 +27,7 @@ import java.util.Optional;
 /**
  * Represents an XFS inode (dinode).
  *
- * <p>XFS inode structure (v3 format, big-endian):
+ * <p>XFS inode structure (big-endian), from xfs_format.h:
  * <pre>
  * Offset  Size  Description
  * 0       2     di_magic (0x494E = "IN")
@@ -40,38 +40,39 @@ import java.util.Optional;
  * 16      4     di_nlink
  * 20      2     di_projid_lo
  * 22      2     di_projid_hi
- * 24      8     padding (v3) or di_pad
- * 32      2     di_flushiter (v1/v2)
- * 34      4     di_atime (seconds)
- * 38      4     di_atime (nanoseconds)
- * 42      4     di_mtime (seconds)
- * 46      4     di_mtime (nanoseconds)
- * 50      4     di_ctime (seconds)
- * 54      4     di_ctime (nanoseconds)
- * 58      8     di_size (file size)
- * 66      8     di_nblocks (block count)
- * 74      4     di_extsize (extent size hint)
- * 78      4     di_nextents (data fork extent count)
- * 82      2     di_anextents (attr fork extent count)
- * 84      1     di_forkoff (attr fork offset)
- * 85      1     di_aformat (attr fork format)
- * 86      4     di_dmevmask
- * 90      2     di_dmstate
- * 92      2     di_flags
- * 94      4     di_gen (generation)
+ * 24      8     union { di_big_nextents(8) | di_v2_pad[6]+di_flushiter(2) }
+ * 32      4     di_atime (seconds)
+ * 36      4     di_atime (nanoseconds)
+ * 40      4     di_mtime (seconds)
+ * 44      4     di_mtime (nanoseconds)
+ * 48      4     di_ctime (seconds)
+ * 52      4     di_ctime (nanoseconds)
+ * 56      8     di_size (file size)
+ * 64      8     di_nblocks (block count)
+ * 72      4     di_extsize (extent size hint)
+ * 76      4     di_nextents (data fork extent count)
+ * 80      2     di_anextents (attr fork extent count)
+ * 82      1     di_forkoff (attr fork offset, in 8-byte units)
+ * 83      1     di_aformat (attr fork format)
+ * 84      4     di_dmevmask
+ * 88      2     di_dmstate
+ * 90      2     di_flags
+ * 92      4     di_gen (generation)
  *
- * For v3 inodes (additional fields at offset 98):
- * 98      4     di_changecount
- * 102     8     di_lsn
- * 110     8     di_flags2
- * 118     4     di_cowextsize
- * 122     12    padding
- * 134     4     di_crtime (seconds)
- * 138     4     di_crtime (nanoseconds)
- * 142     8     di_ino
- * 150     16    di_uuid
+ * For v3 inodes (additional fields at offset 96):
+ * 96      4     di_next_unlinked
+ * 100     4     di_crc
+ * 104     8     di_changecount
+ * 112     8     di_lsn
+ * 120     8     di_flags2
+ * 128     4     di_cowextsize
+ * 132     12    di_pad2
+ * 144     4     di_crtime (seconds)
+ * 148     4     di_crtime (nanoseconds)
+ * 152     8     di_ino
+ * 160     16    di_uuid
  *
- * Data fork starts at offset 100 (v1/v2) or 176 (v3)
+ * Data fork starts at offset 100 (v1/v2: 96 core + 4 di_next_unlinked) or 176 (v3)
  * </pre>
  */
 public record XfsInode(
@@ -138,37 +139,47 @@ public record XfsInode(
         int gid = buffer.getInt(12);
         int nlink = buffer.getInt(16);
 
-        // Timestamps
-        long atimeSec = buffer.getInt(34) & 0xFFFFFFFFL;
-        int atimeNsec = buffer.getInt(38);
+        // Timestamps (di_atime starts at offset 32, NOT 34)
+        long atimeSec = buffer.getInt(32) & 0xFFFFFFFFL;
+        int atimeNsec = buffer.getInt(36);
         Instant accessTime = Instant.ofEpochSecond(atimeSec, atimeNsec);
 
-        long mtimeSec = buffer.getInt(42) & 0xFFFFFFFFL;
-        int mtimeNsec = buffer.getInt(46);
+        long mtimeSec = buffer.getInt(40) & 0xFFFFFFFFL;
+        int mtimeNsec = buffer.getInt(44);
         Instant modificationTime = Instant.ofEpochSecond(mtimeSec, mtimeNsec);
 
-        long ctimeSec = buffer.getInt(50) & 0xFFFFFFFFL;
-        int ctimeNsec = buffer.getInt(54);
+        long ctimeSec = buffer.getInt(48) & 0xFFFFFFFFL;
+        int ctimeNsec = buffer.getInt(52);
         Instant changeTime = Instant.ofEpochSecond(ctimeSec, ctimeNsec);
 
-        long size = buffer.getLong(58);
-        long blockCount = buffer.getLong(66);
-        int extentCount = buffer.getInt(78);
-        int attrExtentCount = buffer.getShort(82) & 0xFFFF;
-        int forkOffset = buffer.get(84) & 0xFF;
-        int attrFormat = buffer.get(85) & 0xFF;
-        int flags = buffer.getShort(92) & 0xFFFF;
-        int generation = buffer.getInt(94);
+        long size = buffer.getLong(56);
+        long blockCount = buffer.getLong(64);
+        int extentCount = buffer.getInt(76);
+        int attrExtentCount = buffer.getShort(80) & 0xFFFF;
+        int forkOffset = buffer.get(82) & 0xFF;
+        int attrFormat = buffer.get(83) & 0xFF;
+        int flags = buffer.getShort(90) & 0xFFFF;
+        int generation = buffer.getInt(92);
 
-        // V3 inodes have creation time
+        // V3 inodes have creation time at offset 144
         Optional<Instant> creationTime = Optional.empty();
         int dataForkOffset;
         if (version >= 3) {
-            long crtimeSec = buffer.getInt(134) & 0xFFFFFFFFL;
-            int crtimeNsec = buffer.getInt(138);
+            long crtimeSec = buffer.getInt(144) & 0xFFFFFFFFL;
+            int crtimeNsec = buffer.getInt(148);
             creationTime = Optional.of(Instant.ofEpochSecond(crtimeSec, crtimeNsec));
             dataForkOffset = 176;
+
+            // NREXT64 feature (di_flags2 bit 4): extent counts stored at offset 24
+            // instead of the traditional offsets 76/80
+            long flags2 = buffer.getLong(120);
+            if ((flags2 & 0x10L) != 0) {
+                long bigNextents = buffer.getLong(24);
+                extentCount = (int) (bigNextents & 0xFFFFFFFFFFFFL); // lower 48 bits: data fork
+                attrExtentCount = (int) (bigNextents >>> 48);         // upper 16 bits: attr fork
+            }
         } else {
+            // v1/v2 core is 96 bytes + 4 bytes for di_next_unlinked = 100
             dataForkOffset = 100;
         }
 

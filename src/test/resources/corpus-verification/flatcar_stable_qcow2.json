@@ -1,8 +1,255 @@
 {
   "imagePath": "/corpus/qcow2/modern/flatcar-stable.qcow2",
   "imageBasename": "flatcar-stable.qcow2",
-  "filesystemType": "ext4",
-  "totalFiles": 0,
-  "totalDirectories": 5,
-  "sampleFiles": []
+  "filesystemCount": 4,
+  "totalFiles": 26667,
+  "totalDirectories": 2115,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "vfat",
+      "fileCount": 458,
+      "directoryCount": 10,
+      "sampleFiles": [
+        {
+          "path": "/flatcar/grub/i386-pc/crypto.lst",
+          "size": 432,
+          "sha256": "37b9af649538ea69aa471e12cdbfa11e551ca0d9c29debb5b401598908f317b1"
+        },
+        {
+          "path": "/flatcar/grub/x86_64-xen/procfs.mod",
+          "size": 1116,
+          "sha256": "a927c4da26c02e36ac821b03df6888fec67a38f4b54193a9ad719e367a67561f"
+        },
+        {
+          "path": "/flatcar/grub/i386-pc/luks.mod",
+          "size": 1908,
+          "sha256": "963a783d0941137468f7d5883f142d46d7d3f53f069fa885e9b9294e33c89bc7"
+        },
+        {
+          "path": "/flatcar/grub/x86_64-xen/keystatus.mod",
+          "size": 960,
+          "sha256": "79e5f0ed9a144f0f7c7049f372447d895935a3e711913b12407f9693de2d68f2"
+        },
+        {
+          "path": "/xen/pvboot-x86_64.elf",
+          "size": 698944,
+          "sha256": "51cd0a08c03a6a64036a22312f63dffe183cc3341a437af2c89f3f64fdc6a2c8"
+        },
+        {
+          "path": "/flatcar/grub/i386-pc/lsacpi.mod",
+          "size": 2088,
+          "sha256": "dc7c546c62399fcd07e4217aa5af4eb09aab9a9e2379fddfab89621b93c49632"
+        },
+        {
+          "path": "/flatcar/grub/x86_64-xen/setjmp.mod",
+          "size": 340,
+          "sha256": "9887cdd356c905e16c348f0f96962ab652d7d4368eafc496c3731e430cb16c2f"
+        },
+        {
+          "path": "/flatcar/grub/x86_64-xen/gcry_des.mod",
+          "size": 4532,
+          "sha256": "26c272377b9803c9db2b607a8b15746b42e95a4998e8b341261ae456c788648d"
+        },
+        {
+          "path": "/flatcar/grub/x86_64-xen/zfs.mod",
+          "size": 20488,
+          "sha256": "0a345ff2d380223b8e9d7fff611162d49742ad75e1033412800ae068dede8334"
+        },
+        {
+          "path": "/flatcar/grub/x86_64-xen/gcry_whirlpool.mod",
+          "size": 5948,
+          "sha256": "cec410de9b52d0b46e49762b1330cec2f5723ee3ceda878170e0351f7f24f689"
+        },
+        {
+          "path": "/flatcar/grub/i386-pc/gdb.mod",
+          "size": 3840,
+          "sha256": "8e6ad3e1508237fe9ab0869134418b86cd0e44b8c27852d5eaa891cbf37a3424"
+        },
+        {
+          "path": "/flatcar/grub/i386-pc/regexp.mod",
+          "size": 27152,
+          "sha256": "973faa3709adc3483df35b00f90c8371160f6f1813f3bb829e4bcfe7e64e5bcf"
+        },
+        {
+          "path": "/flatcar/grub/i386-pc/usbserial_pl2303.mod",
+          "size": 1152,
+          "sha256": "4ae48e4ecb57feb22257e1367efd8a7ba3eb21d6f69bd9d37de55749c5f44730"
+        },
+        {
+          "path": "/flatcar/grub/x86_64-xen/sfs.mod",
+          "size": 2996,
+          "sha256": "c53fb45c73fa9427c77e0ce21b682ad49504f88c4eb4fbeb435fa60aa724e651"
+        },
+        {
+          "path": "/flatcar/grub/i386-pc/gcry_whirlpool.mod",
+          "size": 6108,
+          "sha256": "08d08969d1c24da175e63b176e89929af807ff456ad980c13e376b9627d012ea"
+        },
+        {
+          "path": "/flatcar/grub/i386-pc/squash4.mod",
+          "size": 3876,
+          "sha256": "45a7d65d431cca411c7982e191cbfbc14a7fa6477c366f671ffb0b8ca50d47d7"
+        },
+        {
+          "path": "/flatcar/grub/i386-pc/cmosdump.mod",
+          "size": 580,
+          "sha256": "e7d89c5d1b9bc9a20cac6d4229b651a3e048a94f61551386bab9139e64d2d33c"
+        },
+        {
+          "path": "/flatcar/grub/i386-pc/ufs1_be.mod",
+          "size": 2956,
+          "sha256": "d31de5464cbc3e534e692871d07be36287fee17aa5f6a93036ee5aa87c64df4b"
+        },
+        {
+          "path": "/flatcar/grub/i386-pc/ls.mod",
+          "size": 1760,
+          "sha256": "990369bc72644c2b8256c114b902cda0ab43549c417fed49f9e028a245ae7a97"
+        },
+        {
+          "path": "/flatcar/grub/i386-pc/all_video.mod",
+          "size": 252,
+          "sha256": "27de46977b24cec9ad266b767303216847ab159e6be25aae4eec4dd4a1b4f6ad"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda3",
+      "fstype": "btrfs",
+      "fileCount": 26205,
+      "directoryCount": 2100,
+      "sampleFiles": [
+        {
+          "path": "/bin/etcdctl",
+          "size": 20613488,
+          "sha256": "6fb6fa9b63f6dfef6c9868579dcef0911468922a77687213ab3569ae519b2a8c"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/kernel/arch/x86/crypto/aesni-intel.ko.xz",
+          "size": 25380,
+          "sha256": "baa3fc455409bdaf5b795c27277afbb70d489913b210a3a03fa121db773abc0f"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/source/scripts/dtc/include-prefixes/arm64/freescale/imx8mm-iot-gateway.dts",
+          "size": 4762,
+          "sha256": "81b1a95ac4edbce8caa47a9ddca32a40425e340fb856a73b5c33eb9c52c24785"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/kernel/drivers/char/tpm/tpm_infineon.ko.xz",
+          "size": 7036,
+          "sha256": "9b989a44a260ba74ad1fe322b05d9f5db82e8768faea7669dbd46146f3a46ae3"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/source/include/media/dvbdev.h",
+          "size": 15129,
+          "sha256": "c12c7e38b45406c5ccb5cbed2bcfd4815ead3bd22c0126b58c60fd5f56dcb7ba"
+        },
+        {
+          "path": "/lib/systemd/system/wg-quick@.service",
+          "size": 755,
+          "sha256": "2a7a894a2f396894d061f260f8373809ade98bb78d6d00c44d3ba305c12152cd"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/source/scripts/dtc/include-prefixes/arm/renesas/r8a7790-stout.dts",
+          "size": 6877,
+          "sha256": "d7e8b1bae1d464907bfdf461e43bcb2d99bf72f0e54e096ed25d977894f6b094"
+        },
+        {
+          "path": "/share/zoneinfo/Asia/Dili",
+          "size": 257,
+          "sha256": "d80f6e166c12c28140e68d9e9352c0d2e72884f9cce368215af0fd0f94dd9c99"
+        },
+        {
+          "path": "/share/selinux/targeted/include/services/usbmuxd.if",
+          "size": 891,
+          "sha256": "2d54d2e4ecfe53b687b5ecfddeac018d3c73b636ec6869d9ea20803db364d9a8"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/source/include/linux/gcd.h",
+          "size": 193,
+          "sha256": "7de1b495ed255eb4faa7abbacfc1b0e4fa1d4e54bdadc3783b3176dc2be639c1"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/source/include/linux/regulator/consumer.h",
+          "size": 20221,
+          "sha256": "15a558c1e7494c1b49a6fb21a645408171bc173eea95685a209a8cc95ce89d7d"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/source/include/linux/input.h",
+          "size": 21025,
+          "sha256": "1a9921f1547bf436dc5f650bd9f502ce638ffabf0e3dcea9b9e14e64ba83ab62"
+        },
+        {
+          "path": "/lib/dracut/test/TEST-82-DRACUT-CPIO/test.sh",
+          "size": 2287,
+          "sha256": "74790e6710fa58e9bbdbab0a418eb82daa6e37b3c143abd16ba74d5ceab63a3f"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/source/scripts/dtc/include-prefixes/arm/nxp/imx/imx6ul-tx6ul.dtsi",
+          "size": 24306,
+          "sha256": "460c6085e81dd9827b89a57fafa10213313b3e1d96cc634db54aa2d50ad41241"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/source/scripts/dtc/include-prefixes/arm/samsung/exynos4-cpu-thermal.dtsi",
+          "size": 1047,
+          "sha256": "c6511187a981100926487a95398aff29f24cf296c163c291d0b29d9bd66c1670"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/source/scripts/dtc/include-prefixes/arm64/freescale/fsl-lx2160a-tqmlx2160a-mblx2160a_14_x_x.dtso",
+          "size": 283,
+          "sha256": "017371f9e999d7ec73ae50a20103fd3aa16be97abfd54599fdf395f660c6caee"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/source/scripts/dtc/include-prefixes/arm64/hisilicon/hi3798cv200.dtsi",
+          "size": 17486,
+          "sha256": "37d3dec8d3fa201026c3c07fc31c9419057c6aa8416b34889d889bf0a9a3f3df"
+        },
+        {
+          "path": "/lib/modules/6.12.66-flatcar/kernel/net/mpls/mpls_gso.ko.xz",
+          "size": 2748,
+          "sha256": "ef3850746293e9d1fb2e1b53d437acfd13bb7c49d1674f407ee32ef59ba175a1"
+        },
+        {
+          "path": "/bin/download_sysext",
+          "size": 3938016,
+          "sha256": "86d3e0f5ea0f20b6a50229bc70fc0eb50ee26ae1aff6c76d1fb532a61af25224"
+        },
+        {
+          "path": "/lib64/gconv/IBM866.so",
+          "size": 18464,
+          "sha256": "5d4cd0db25fb87692067d9670d560490fdfbdf6ded8824562c19bbc5893ede63"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda6",
+      "fstype": "btrfs",
+      "fileCount": 4,
+      "directoryCount": 1,
+      "sampleFiles": [
+        {
+          "path": "/sysext/oem-qemu-4459.2.3.raw",
+          "size": 4096,
+          "sha256": "402363f4eafd81ee153e367ac4785eb42664ec0f68eb050da442aacf4d07bcbf"
+        },
+        {
+          "path": "/oem-release",
+          "size": 114,
+          "sha256": "d0bcd3a3fdb254ecf0739341e7181a248acbf5c9f3269e0dadc4ffefaea07937"
+        },
+        {
+          "path": "/grub.cfg",
+          "size": 80,
+          "sha256": "aa38138a088ae0b623bb71fba890d94ec7db23f736f2fe502670de8aa72794a6"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda9",
+      "fstype": "ext4",
+      "fileCount": 0,
+      "directoryCount": 4,
+      "sampleFiles": []
+    }
+  ]
 }

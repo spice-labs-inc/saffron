@@ -44,8 +44,10 @@ import java.util.regex.Pattern;
  * 0       4     Checksum
  * 4       16    Magic " LVM2 x[5A%r0N*>"
  * 20      4     Version
- * 24      8     Start of metadata
- * 32      8     Size of metadata
+ * 24      8     Start (absolute byte offset of MDA header)
+ * 32      8     Size (total MDA area size)
+ * 40      8     raw_locn[0].offset (offset within circular buffer to metadata text)
+ * 48      8     raw_locn[0].size (metadata text size)
  * </pre>
  */
 public record LvmMetadata(
@@ -120,9 +122,9 @@ public record LvmMetadata(
             return Optional.empty();
         }
 
-        // Read metadata area header
+        // Read metadata area header (56 bytes to include raw_locn[0])
         long mdaOffset = partitionOffset + label.metadataOffset();
-        ByteBuffer headerBuf = disk.read(mdaOffset, 40);
+        ByteBuffer headerBuf = disk.read(mdaOffset, 56);
         headerBuf.order(ByteOrder.LITTLE_ENDIAN);
 
         // Skip checksum
@@ -143,41 +145,40 @@ public record LvmMetadata(
             return Optional.empty();
         }
 
-        // Metadata location within the metadata area
-        long metaStart = headerBuf.getLong();
-        long metaSize = headerBuf.getLong();
+        // MDA area self-referencing fields (offset 24-39)
+        headerBuf.getLong(); // start: absolute byte offset of this MDA header (skip)
+        long mdaSize = headerBuf.getLong(); // size: total MDA area size
 
-        if (metaSize == 0 || metaSize > 2 * 1024 * 1024) { // Sanity check: max 2MB
+        // raw_locn[0]: actual metadata text location (offset 40-55)
+        long rawLocnOffset = headerBuf.getLong(); // offset within circular buffer
+        long rawLocnSize = headerBuf.getLong();   // metadata text size
+
+        if (rawLocnSize == 0 || rawLocnSize > 2 * 1024 * 1024) { // Sanity check: max 2MB
             return Optional.empty();
         }
 
-        // The metadata text area starts right after the 512-byte header
-        long textAreaStart = mdaOffset + 512;
-        int readSize = (int) Math.min(metaSize, 256 * 1024);
+        // raw_locn[0].offset is relative to the MDA area start (including the 512-byte header).
+        // On wrap-around, the text skips the header (bytes 0-511) and resumes at byte 512.
+        int readSize = (int) rawLocnSize;
 
-        // Try reading from the indicated metaStart offset first (this is the latest metadata)
-        String metadataText = null;
-        if (metaStart > 0 && metaStart < metaSize) {
-            long textOffset = textAreaStart + metaStart;
-            ByteBuffer textBuf = disk.read(textOffset, readSize);
-            byte[] textBytes = new byte[readSize];
+        byte[] textBytes;
+        if (rawLocnOffset + rawLocnSize <= mdaSize) {
+            // No wrap: text fits entirely within the MDA area
+            ByteBuffer textBuf = disk.read(mdaOffset + rawLocnOffset, readSize);
+            textBytes = new byte[readSize];
             textBuf.get(textBytes);
-            String text = new String(textBytes, StandardCharsets.US_ASCII);
-
-            // Check if this looks like valid LVM metadata (starts with VG name { )
-            if (text.trim().matches("^[\\w-]+\\s*\\{[\\s\\S]*")) {
-                metadataText = text;
-            }
+        } else {
+            // Wrap-around: text crosses the end of the MDA area
+            textBytes = new byte[readSize];
+            int firstPart = (int) (mdaSize - rawLocnOffset);
+            int secondPart = readSize - firstPart;
+            ByteBuffer buf1 = disk.read(mdaOffset + rawLocnOffset, firstPart);
+            buf1.get(textBytes, 0, firstPart);
+            // Wrap resumes after the 512-byte header
+            ByteBuffer buf2 = disk.read(mdaOffset + 512, secondPart);
+            buf2.get(textBytes, firstPart, secondPart);
         }
-
-        // If metaStart didn't have valid data, fall back to offset 0
-        // This handles the case where the circular buffer hasn't wrapped yet
-        if (metadataText == null) {
-            ByteBuffer textBuf = disk.read(textAreaStart, readSize);
-            byte[] textBytes = new byte[readSize];
-            textBuf.get(textBytes);
-            metadataText = new String(textBytes, StandardCharsets.US_ASCII);
-        }
+        String metadataText = new String(textBytes, StandardCharsets.US_ASCII);
 
         return parseMetadataText(metadataText);
     }

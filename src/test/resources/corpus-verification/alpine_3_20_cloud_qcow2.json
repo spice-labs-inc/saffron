@@ -1,109 +1,117 @@
 {
   "imagePath": "/corpus/qcow2/modern/alpine-3.20-cloud.qcow2",
   "imageBasename": "alpine-3.20-cloud.qcow2",
-  "filesystemType": "ext4",
+  "filesystemCount": 1,
   "totalFiles": 4653,
-  "totalDirectories": 654,
-  "sampleFiles": [
+  "totalDirectories": 653,
+  "filesystems": [
     {
-      "path": "/bin/bbsuid",
-      "sha256": "0fac93fd0a866f0f2f982689f47653c316d941f7d70266c9b0e33012c9b54956",
-      "size": 14248
-    },
-    {
-      "path": "/etc/securetty",
-      "sha256": "713fcea5109728883b9147e822429133fcc8b5e253afd3c2a197b10cd0bc3b4d",
-      "size": 156
-    },
-    {
-      "path": "/lib/modules/6.6.31-0-virt/kernel/drivers/block/xen-blkback/xen-blkback.ko.gz",
-      "sha256": "333affb73857df2aaea37fa62b757466c6f8315bb13cceb992100f941ce88443",
-      "size": 32149
-    },
-    {
-      "path": "/lib/modules/6.6.31-0-virt/kernel/drivers/virtio/virtio_mem.ko.gz",
-      "sha256": "18804fc2375ecbf4ffdc314447d43f40d9b93e8fb198266f4e27728991db1e9a",
-      "size": 23255
-    },
-    {
-      "path": "/lib/modules/6.6.31-0-virt/kernel/net/ipv4/netfilter/nft_reject_ipv4.ko.gz",
-      "sha256": "4b2137967f144d5a548ab8fa6f8b200842ae714ffe522e952d5d36072f095164",
-      "size": 4702
-    },
-    {
-      "path": "/lib/modules/6.6.31-0-virt/kernel/net/netfilter/xt_state.ko.gz",
-      "sha256": "af24696043e2d0e9e759cd26d16dc011ab0cded35cdc7568254b1f538158b537",
-      "size": 3694
-    },
-    {
-      "path": "/sbin/blkid",
-      "sha256": "c8208694323d3246a415a02fe19b05bc2f535e17884a2fd999c0b05272545fda",
-      "size": 47208
-    },
-    {
-      "path": "/usr/lib/python3.12/__pycache__/copyreg.cpython-312.pyc",
-      "sha256": "9a6dcba6dee0a1e47455461606c48d974ac76ff89b70f04822bc1fc23d4825cb",
-      "size": 7414
-    },
-    {
-      "path": "/usr/lib/python3.12/concurrent/futures/__pycache__/__init__.cpython-312.pyc",
-      "sha256": "9c81b7992000a6da5c2a8c19651d93005f028eea2fd9e39b6345020baa53414c",
-      "size": 1250
-    },
-    {
-      "path": "/usr/lib/python3.12/encodings/__pycache__/rot_13.cpython-312.pyc",
-      "sha256": "fd64d3d9888d29651e90ff8b7abe0d7a31dc3aca5893d1a75c913c602ac12208",
-      "size": 4402
-    },
-    {
-      "path": "/usr/lib/python3.12/ipaddress.py",
-      "sha256": "687e343fa31d6470a3856d825e410509b24f7117be12ccba8a704d88214e206a",
-      "size": 75012
-    },
-    {
-      "path": "/usr/lib/python3.12/lib2to3/pgen2/pgen.py",
-      "sha256": "8fe2ac7e0303f0110d75832d746e6661fcd5373fa498d929163f557fd1027434",
-      "size": 13830
-    },
-    {
-      "path": "/usr/lib/python3.12/site-packages/cloud_init-24.1.3-py3.12.egg-info/requires.txt",
-      "sha256": "6159c13c0f33c6708e2632e329bfcc67c39ad71dee9b2a4d7ee117b43d656134",
-      "size": 73
-    },
-    {
-      "path": "/usr/lib/python3.12/site-packages/cloudinit/net/__pycache__/eni.cpython-312.pyc",
-      "sha256": "48893ca4947da593f661556b5f07e2fdb4775d622d64cdd5a17a4cbadd66ded7",
-      "size": 21040
-    },
-    {
-      "path": "/usr/lib/python3.12/site-packages/jinja2/__pycache__/loaders.cpython-312.pyc",
-      "sha256": "5d4c7ff1296428447cb623a70f1b10f7ac0a131a0a27cf02daa719f441a1a050",
-      "size": 31009
-    },
-    {
-      "path": "/usr/lib/python3.12/site-packages/urllib3/__pycache__/_version.cpython-312.pyc",
-      "sha256": "aac6fd4d1067c70deb217cd97331fb757c96f1ea8643592d491518361f1f29f6",
-      "size": 178
-    },
-    {
-      "path": "/usr/lib/python3.12/urllib/__pycache__/request.cpython-312.pyc",
-      "sha256": "a80bde7177d337e2ae0bb9cf88792b8bb5044bb4245b619b0be9e1f7a844c987",
-      "size": 115169
-    },
-    {
-      "path": "/usr/share/syslinux/efi64/gfxboot.c32",
-      "sha256": "f1edd7c62aa05874a710464dda6499a5b277e26197315ab75c912291899f9341",
-      "size": 13344
-    },
-    {
-      "path": "/usr/share/zoneinfo/America/Indiana/Winamac",
-      "sha256": "69918cda347c087f411d252aed7ca08b078377a768ad72cf5e0db8e97b1b47ab",
-      "size": 1794
-    },
-    {
-      "path": "/usr/share/zoneinfo/Australia/Tasmania",
-      "sha256": "18b412ce021fb16c4ebe628eae1a5fa1f5aa20d41fea1dfa358cb799caba81c8",
-      "size": 2358
+      "device": "/dev/sda",
+      "fstype": "ext4",
+      "fileCount": 4653,
+      "directoryCount": 653,
+      "sampleFiles": [
+        {
+          "path": "/usr/lib/python3.12/encodings/__pycache__/iso8859_5.cpython-312.pyc",
+          "size": 3107,
+          "sha256": "3bbcbf5b6f8092f0841ab820a0b521dc4865597864dfc12f23ad62e23ce32f9b"
+        },
+        {
+          "path": "/usr/share/syslinux/lua.c32",
+          "size": 6848,
+          "sha256": "5000ee72dbdae40db9b23a2cb9ed8fa2e189911f1c48c8f5a4d74fea5ba50418"
+        },
+        {
+          "path": "/usr/share/syslinux/whichsys.c32",
+          "size": 2488,
+          "sha256": "6ae4af3e254f66f57f2dcf6e6799f1d8626f88a20e66e87bad9004a48c95a875"
+        },
+        {
+          "path": "/lib/modules/6.6.31-0-virt/kernel/net/netfilter/nft_ct.ko.gz",
+          "size": 17232,
+          "sha256": "9e7575165608e8a8e1c3528fe74fd2604f1dc0cf42182341fed7cb3b2e682ede"
+        },
+        {
+          "path": "/usr/lib/python3.12/multiprocessing/resource_sharer.py",
+          "size": 5145,
+          "sha256": "bba3c7f2b76a9cf4e8ceb642801c405411da95adf91947d81b0043586038290e"
+        },
+        {
+          "path": "/lib/modules/6.6.31-0-virt/kernel/net/netfilter/ipset/ip_set_hash_ipmac.ko.gz",
+          "size": 26461,
+          "sha256": "f84c72f82308f59ff076ae70229cf650fb4cb775bc9996aee19562360d494fea"
+        },
+        {
+          "path": "/usr/share/zoneinfo/Asia/Ulan_Bator",
+          "size": 877,
+          "sha256": "a9491746c4dcfeeec1f7427150b4aeef2cca6c6b467ca71f10521ab063c2d9e7"
+        },
+        {
+          "path": "/usr/lib/python3.12/site-packages/cloudinit/sources/DataSourceOpenNebula.py",
+          "size": 16148,
+          "sha256": "04a3bbf07eee20f99dd20d458eb09d8fe7ea80e987717dcca2ed0e7e4abdcabf"
+        },
+        {
+          "path": "/usr/lib/python3.12/site-packages/cloudinit/config/__pycache__/cc_bootcmd.cpython-312.pyc",
+          "size": 3480,
+          "sha256": "ae9c0498ad80b1ed51b85bbe4d625c712c4ba6461eee8e0707b14042ba050983"
+        },
+        {
+          "path": "/lib/modules/6.6.31-0-virt/kernel/virt/lib/irqbypass.ko.gz",
+          "size": 4671,
+          "sha256": "4d82d79a03c1ed2bb67eef3bdd061b76d81b21821eaf0d5d22977a49c83ba362"
+        },
+        {
+          "path": "/lib/modules/6.6.31-0-virt/modules.builtin.modinfo",
+          "size": 38659,
+          "sha256": "ecfe677e31830960ae8d5f0ec7473eacc103e047b7a64777793f6683aad44f4d"
+        },
+        {
+          "path": "/lib/modules/6.6.31-0-virt/kernel/net/sched/sch_pie.ko.gz",
+          "size": 9165,
+          "sha256": "41012152e0aedd9b89b365408e2d749413c5904eeaeaf9537abf2149cd902c77"
+        },
+        {
+          "path": "/lib/modules/6.6.31-0-virt/kernel/net/openvswitch/vport-geneve.ko.gz",
+          "size": 5578,
+          "sha256": "f48b4029c0b47905fffa85df7b32ad562466987295cb85208ee15e2cd823130c"
+        },
+        {
+          "path": "/usr/lib/python3.12/csv.py",
+          "size": 16386,
+          "sha256": "46004923196e98a67f87d30da64d070027c81f144f5ac91242fbfae33507dda8"
+        },
+        {
+          "path": "/lib/modules/6.6.31-0-virt/kernel/net/netfilter/xt_ecn.ko.gz",
+          "size": 4485,
+          "sha256": "547e11bbf0dc288d88d1449c92ad7e0152149d713b69a671bf6010ea9db5ae65"
+        },
+        {
+          "path": "/lib/modules/6.6.31-0-virt/kernel/drivers/block/zram/zram.ko.gz",
+          "size": 17547,
+          "sha256": "8d769a22c95ce2298276290e098d4579d6e1487a2a524e7bcf661930f11bb22d"
+        },
+        {
+          "path": "/usr/share/zoneinfo/Europe/Busingen",
+          "size": 1909,
+          "sha256": "2b9418ed48e3d9551c84a4786e185bd2181d009866c040fbd729170d038629ef"
+        },
+        {
+          "path": "/usr/share/zoneinfo/America/Sitka",
+          "size": 2329,
+          "sha256": "6a24bb164dfb859a7367d56478941e17e06a4cb442d503930a03002704fc5310"
+        },
+        {
+          "path": "/lib/modules/6.6.31-0-virt/kernel/net/netfilter/nf_nat_amanda.ko.gz",
+          "size": 4103,
+          "sha256": "2d8ba1b827626e6f3dce00ce452ce8097c00d8ce71763d171066cb04ccbc1a9f"
+        },
+        {
+          "path": "/usr/lib/python3.12/ntpath.py",
+          "size": 31483,
+          "sha256": "0ba5b71169c209deaf39bb3c6f043f65586c931424236ed10cfe9b932b1e6197"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,160 @@
+{
+  "imagePath": "/corpus/vmdk/native/photon/photon-5.0-x86_64.vmdk",
+  "imageBasename": "photon-5.0-x86_64.vmdk",
+  "filesystemCount": 2,
+  "totalFiles": 13779,
+  "totalDirectories": 1426,
+  "filesystems": [
+    {
+      "device": "/dev/sda2",
+      "fstype": "ext4",
+      "fileCount": 13772,
+      "directoryCount": 1418,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/man/man8/pam_xauth.8.gz",
+          "size": 2248,
+          "sha256": "8a8296d41fdf9d0dfc35b27d40298ee36d3234eeaee429fdf0b39f7cc0b3c9a1"
+        },
+        {
+          "path": "/usr/lib/gconv/gconv-modules",
+          "size": 3916,
+          "sha256": "57793b77fddf602134707ff717c99beb44941904f103175971dd653aa57fac85"
+        },
+        {
+          "path": "/etc/ssl/certs/40547a79.pem",
+          "size": 4864,
+          "sha256": "ba864450891b443ad413db0736c38cefeeb7f38290ce1575c6ecca3bc25c5b2a"
+        },
+        {
+          "path": "/usr/lib/dracut/modules.d/00warpclock/warpclock.sh",
+          "size": 349,
+          "sha256": "bfc0a5f55bef8abfc563e9d9aff48b25eb3e17bdfa80dd7e7ea2a0d63ddc73a2"
+        },
+        {
+          "path": "/usr/lib/dracut/modules.d/90crypt/parse-crypt.sh",
+          "size": 8083,
+          "sha256": "e8436114d07277579be9056eb773bb8bc150373fb631b123f4867135afc66ec2"
+        },
+        {
+          "path": "/usr/lib/python3.11/site-packages/pyrsistent-0.18.1-py3.11.egg-info/PKG-INFO",
+          "size": 26922,
+          "sha256": "d9f01149c4a2e0d0a3e5f04bc78f2240f66c726119a36eba43a555259927c655"
+        },
+        {
+          "path": "/usr/lib/python3.11/encodings/iso8859_11.py",
+          "size": 12335,
+          "sha256": "ed5a964470a241b4da7a6cfb718e4149d09644933af38f0497602baab6e563ef"
+        },
+        {
+          "path": "/usr/share/terminfo/d/d460-w",
+          "size": 1541,
+          "sha256": "de65bc418d029981eef64c6e5aa273fdf76d4d204e8e2c1b4ccb08ca942ae8be"
+        },
+        {
+          "path": "/usr/share/zoneinfo/Asia/Yerevan",
+          "size": 1151,
+          "sha256": "934587b56416fdc0428dc12ff273f4d5c54f79354395fd7c950d3fbba7229f5a"
+        },
+        {
+          "path": "/usr/share/terminfo/s/screen.minitel12-80",
+          "size": 1758,
+          "sha256": "4ae4f1c39f9d159347192ef24f021459e30ca7d45f22e47b9bf850842b69c566"
+        },
+        {
+          "path": "/usr/lib/dracut/modules.d/80lvmmerge/module-setup.sh",
+          "size": 429,
+          "sha256": "677bf698d6bab7f6d7733419028e88c4bc69c310dbc6644d0733e4aeb96fc440"
+        },
+        {
+          "path": "/usr/lib/dracut/modules.d/06rngd/rngd.service",
+          "size": 182,
+          "sha256": "caab73d22a198a0a7c1f00cc09c9c05bc8ea9b2edc094c210e41a34a61a91cc8"
+        },
+        {
+          "path": "/usr/lib/python3.11/site-packages/cloudinit/net/__pycache__/sysconfig.cpython-311.opt-1.pyc",
+          "size": 41510,
+          "sha256": "d86bf597e5a4f4b882811f98fc3062eed1e4288f8e0ba23898cf35b552f609ff"
+        },
+        {
+          "path": "/usr/share/terminfo/a/att730",
+          "size": 1882,
+          "sha256": "2e6372689d104f18a11fa4dace6219e54b8b761785995a30cb6b844b096046c9"
+        },
+        {
+          "path": "/usr/share/locale/ku/LC_MESSAGES/newt.mo",
+          "size": 512,
+          "sha256": "6b6eba47a908b6d7cf75daf9f1c47a23a423ae9b2d6a286cd2858e7fd5eb970c"
+        },
+        {
+          "path": "/usr/share/terminfo/x/xterm+titlestack",
+          "size": 150,
+          "sha256": "78843ab5ac5ce8411fed406634a684a2cd4064e8049ce6934d6b63b57e547c71"
+        },
+        {
+          "path": "/usr/lib/python3.11/distutils/dist.py",
+          "size": 50385,
+          "sha256": "1e797f81633e34c7993030ac4047b0cd43e49739d40dd03ef262d5c7dd7b17d2"
+        },
+        {
+          "path": "/usr/share/terminfo/v/vp90",
+          "size": 561,
+          "sha256": "8669ad48169d1cf8f8f11dcf02c1175bbb1c91938c9eaa4fc27c6e02a774afad"
+        },
+        {
+          "path": "/usr/share/terminfo/a/att4418-w",
+          "size": 910,
+          "sha256": "2ac947f491a1fe7465d84f309d3c335b34b957378d9fa21deb113657db56eb12"
+        },
+        {
+          "path": "/usr/lib/modprobe.d/systemd.conf",
+          "size": 773,
+          "sha256": "5c17ef2bb5dee80b136096b22ceb69dfae20835f5d13f3af571c1b0aa4059c09"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda3",
+      "fstype": "vfat",
+      "fileCount": 7,
+      "directoryCount": 8,
+      "sampleFiles": [
+        {
+          "path": "/boot/grub2/grub.cfg",
+          "size": 115,
+          "sha256": "b4f49cc0656b5473e8e4c9cd549c6588ceebc3751daef6b8c0e9eb051f114ed4"
+        },
+        {
+          "path": "/EFI/systemd/systemd-bootx64.efi",
+          "size": 92160,
+          "sha256": "f8d6ab2373cd77f6c25df8dc0d2e079346b39d05a6cd269bd1c17ae55f8b6029"
+        },
+        {
+          "path": "/loader/loader.conf",
+          "size": 30,
+          "sha256": "ace4df045b8feac0d997c79813bd972d6af42932a2aa66aca95a6f3f578a4666"
+        },
+        {
+          "path": "/loader/entries.srel",
+          "size": 6,
+          "sha256": "067fc514414e89fa29898b3d61ce88577bebc2fbcad0ba42c2b769698c8baafc"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 926040,
+          "sha256": "7f9d7f11e2be2e4b6f9167d0b308865bbecf67ae9d27c7ee8cfb968ba138a4e8"
+        },
+        {
+          "path": "/EFI/BOOT/grubx64.efi",
+          "size": 1182968,
+          "sha256": "586c92d726f12c1925b7386cb3a500c2f93dca7b58129321eba7016dc5822aad"
+        },
+        {
+          "path": "/loader/random-seed",
+          "size": 32,
+          "sha256": "ae4678b3255d128e51d2e300e665f55fa150ef5b8f61ec400a8654b7dd2c38e7"
+        }
+      ]
+    }
+  ]
+}

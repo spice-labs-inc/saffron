@@ -1,29 +1,368 @@
 {
   "imagePath": "/corpus/vdi/modern/debian-12-vbox.vdi",
   "imageBasename": "debian-12-vbox.vdi",
-  "filesystemType": "ext2",
+  "filesystemCount": 5,
   "totalFiles": 27293,
-  "totalDirectories": 3597,
-  "sampleFiles": [
-    {"path": "/usr/lib/udev/hwdb.d/20-acpi-vendor.hwdb", "sha256": "8f1349549d03b1991c10614d994f6d74939bc02943a19ea50dc97c0bd19a1ba0", "size": 153543},
-    {"path": "/usr/share/doc/mawk/examples/nocomment.awk", "sha256": "4b9742fc8772be0d6b0b3e1dfeaebd40e733d242e16ed678b9c84be4014d59d2", "size": 590},
-    {"path": "/usr/lib/python3.11/xml/dom/domreg.py", "sha256": "826b02a803930834b96b1086cbee7db1d21c684f65dd3073706dc7bb5ba1a3e8", "size": 3451},
-    {"path": "/usr/share/man/man1/setterm.1.gz", "sha256": "a898bc62d1787bf5f2fc570663dc3576c66c70676713c83b9464bdd6b18c661f", "size": 3470},
-    {"path": "/usr/lib/mime/packages/man-db", "sha256": "fc959e5b9e9fd5f3d817e652498ae3651b2277928deedf941b007c6d7417c5c6", "size": 1863},
-    {"path": "/usr/share/man/man1/setterm.1.gz", "sha256": "a898bc62d1787bf5f2fc570663dc3576c66c70676713c83b9464bdd6b18c661f", "size": 3470},
-    {"path": "/usr/lib/mime/packages/man-db", "sha256": "fc959e5b9e9fd5f3d817e652498ae3651b2277928deedf941b007c6d7417c5c6", "size": 1863},
-    {"path": "/usr/share/mime/application/x-python-bytecode.xml", "sha256": "ec1dae1009cfe29ca7cd3e1e700172cd378f8974e295c117023a3f23a010b8bd", "size": 3181},
-    {"path": "/usr/share/X11/xkb/keycodes/hp", "sha256": "2410b73208fdb5addbf85c6f245207c07b1e4f0f0d3771c7a297413205f93161", "size": 4971},
-    {"path": "/usr/share/man/pt/man1/debconf-copydb.1.gz", "sha256": "5c6f40288921abcdfba5a66507742f0225f5447aac96832cad1bb5455e3e7f54", "size": 2386},
-    {"path": "/usr/share/man/man8/ip-tcp_metrics.8.gz", "sha256": "829cf41501e8fdb82d3968f9b0ddf40714a54d479c2ba5011b050756984b8638", "size": 1496},
-    {"path": "/var/lib/dpkg/info/libpam0g:amd64.postrm", "sha256": "8e622685856c346b0521806b2e151a2e91206b4f4f11d51759c05a8246370e93", "size": 214},
-    {"path": "/usr/share/man/pl/man1/manconv.1.gz", "sha256": "8540399964ecf5171813a9e6970ce4266906b78daf12d860653cf7bf9a231737", "size": 1444},
-    {"path": "/usr/share/doc/libfreetype6/changelog.gz", "sha256": "3dbd5f56676102d48516996b095a7a0ca39a662f099625d800cf550ff59d7892", "size": 32111},
-    {"path": "/var/lib/dpkg/info/libmagic-mgc.md5sums", "sha256": "868e54d76ddddc2c6d5f5c8d1ac4bd7d54bd0c1e78c66320892b7f796c296b8d", "size": 358},
-    {"path": "/usr/lib/python3.11/test/support/__pycache__/socket_helper.cpython-311.pyc", "sha256": "fe527a0a1bdde500fdf8d901e6a9547e32e25b7541e73c9edfa3da74a55c7148", "size": 14773},
-    {"path": "/var/lib/dpkg/info/python3.11-minimal.preinst", "sha256": "1386bf0fc62ec2c87fb0435bfb8d84856247f1623e1ef9a7c01c459a46017008", "size": 315},
-    {"path": "/var/lib/dpkg/info/linux-base.postinst", "sha256": "e62e67f6bf13c764476911729492cd8147b41864f91cf8d43626a807bc1fe13f", "size": 88},
-    {"path": "/usr/lib/python3/dist-packages/certifi/__pycache__/core.cpython-311.pyc", "sha256": "24d3196cc5f18dace0f358a7fd86e181e4a96f3f29c7aadf93eb872d9d606775", "size": 998},
-    {"path": "/var/lib/dpkg/info/apt.triggers", "sha256": "0a19ada1c65348b986992096777df4232177012e2f12b3612cce1c4f675365de", "size": 68}
+  "totalDirectories": 3596,
+  "filesystems": [
+    {
+      "device": "/dev/debian12-vg/home",
+      "fstype": "ext4",
+      "fileCount": 5,
+      "directoryCount": 2,
+      "sampleFiles": [
+        {
+          "path": "/debian/.bashrc",
+          "size": 3526,
+          "sha256": "afae8986f549c6403410e029f9cce7983311512d04b1f02af02e4ce0af0dd2bf"
+        },
+        {
+          "path": "/debian/.bash_logout",
+          "size": 220,
+          "sha256": "26882b79471c25f945c970f8233d8ce29d54e9d5eedcd2884f88affa84a18f56"
+        },
+        {
+          "path": "/debian/.bash_history",
+          "size": 15,
+          "sha256": "d3ec7cf7ccacb1a521f27162a0c6b1092b6acf972a69d6d0f141c2d8714a1081"
+        },
+        {
+          "path": "/debian/.profile",
+          "size": 807,
+          "sha256": "28b4a453b68dde64f814e94bab14ee651f4f162e15dd9920490aa1d49f05d2a4"
+        }
+      ]
+    },
+    {
+      "device": "/dev/debian12-vg/root",
+      "fstype": "ext4",
+      "fileCount": 25112,
+      "directoryCount": 3377,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/groff/1.22.4/tmac/pspic.tmac",
+          "size": 4998,
+          "sha256": "fbdf5159390d3faaa8bb55f64925491dffb6f278a98da08e0b511bd21fbf1d30"
+        },
+        {
+          "path": "/usr/bin/showconsolefont",
+          "size": 23112,
+          "sha256": "d47d2997252b27b70589990fa7dacceaa754f846587f542764534a5473f8b814"
+        },
+        {
+          "path": "/usr/share/man/man1/systemd-run.1.gz",
+          "size": 6332,
+          "sha256": "b2217ded3cd48db9b6b12012c3c06dc3536e74d1b8c72ad7d450dac254b580b2"
+        },
+        {
+          "path": "/usr/share/bash-completion/completions/debconf",
+          "size": 294,
+          "sha256": "45a6978806b39111a579c0e7d4e85937bd6c8e20c3f6732d3ecf5fbd2344cfb0"
+        },
+        {
+          "path": "/usr/share/nano/sql.nanorc",
+          "size": 2406,
+          "sha256": "ae345fe1a806a97ea7fccbf2d3c4265a05d3c1d7ea0ef5e1e9116a2d1ee953a6"
+        },
+        {
+          "path": "/usr/lib/modules/6.1.0-9-amd64/kernel/drivers/usb/serial/sierra.ko",
+          "size": 57387,
+          "sha256": "9a7207c0cd98448a7d63147ce3bbdbb3d77078b35b46becfe778a255cd2cda29"
+        },
+        {
+          "path": "/usr/lib/python3.11/importlib/__pycache__/simple.cpython-311.pyc",
+          "size": 540,
+          "sha256": "05c6fa52a039f31e7585abbbcb605ffdee3c81559a5f168fc4cc06452b460875"
+        },
+        {
+          "path": "/usr/share/X11/xkb/compat/README",
+          "size": 1712,
+          "sha256": "ab88a02b01ce646a5a3965a05f1876b70b97b24e4d6409973126a0baa59126a5"
+        },
+        {
+          "path": "/usr/share/doc/man-db/TODO",
+          "size": 646,
+          "sha256": "9c64b2a87a810c04891b2dbd24841d7d1c15e5d6b52804d2c3aa93ecfe1e9264"
+        },
+        {
+          "path": "/usr/share/perl/5.36.0/CPAN/Index.pm",
+          "size": 22236,
+          "sha256": "ab149d97db14542e8b83732bd91cd423427f6c2e6e1a2968eed2cff50afd2ee8"
+        },
+        {
+          "path": "/usr/share/mime/application/x-java-keystore.xml",
+          "size": 2818,
+          "sha256": "045474fc5bc6687fb82c94c2ae49b27f1763612a304fa883adc30aa733c29b5b"
+        },
+        {
+          "path": "/usr/share/mime/application/vnd.oasis.opendocument.formula-template.xml",
+          "size": 2776,
+          "sha256": "f3adbe27670d8656117679b60f6c7e3209535041840636cb0a5c48e2d1d81281"
+        },
+        {
+          "path": "/usr/share/terminfo/s/screen.rxvt",
+          "size": 2251,
+          "sha256": "8983e116d7c302b9764918d14a3a1f48efc0475da61bc1d9d094cfc111d470fd"
+        },
+        {
+          "path": "/usr/share/doc/debian-archive-keyring/changelog.gz",
+          "size": 759,
+          "sha256": "bac10513b7c02b11bf389e44f52235bbd62dc8abb03de72518effc04c15491df"
+        },
+        {
+          "path": "/usr/share/perl/5.36.0/Test2/Util.pm",
+          "size": 10572,
+          "sha256": "43d02b06b6deffc39d5bc419d0fae9579a3d48e60f5d7a7e2dfb4862583b930a"
+        },
+        {
+          "path": "/usr/share/bash-completion/completions/usermod",
+          "size": 1397,
+          "sha256": "e2b7fcf41c49778dffa0a4396f322e90e25db42ac4e8d4e427335b08ada351f3"
+        },
+        {
+          "path": "/usr/share/man/nl/man1/dpkg-divert.1.gz",
+          "size": 3992,
+          "sha256": "d3457b76a9bf756c9bb3f7b341822fb79381121c27fcf4ec3f9f442ae66637f0"
+        },
+        {
+          "path": "/usr/share/gettext/its/shared-mime-info.loc",
+          "size": 202,
+          "sha256": "138d9191f65d0645115638174c049ac81acdb1ab192c5f0c52c6dab5ec193e41"
+        },
+        {
+          "path": "/usr/share/mime/application/vnd.stardivision.writer.xml",
+          "size": 3485,
+          "sha256": "ad3d6cf63ae717d29438e39ebac0ca2db32ff4d9b252166d97e1aaf8d550454f"
+        },
+        {
+          "path": "/usr/share/i18n/charmaps/IBM851.gz",
+          "size": 2881,
+          "sha256": "46dd6b7a6ba5d1591ae3b162eee32de8b0ebc71de58cf0bde3418f74890662f0"
+        }
+      ]
+    },
+    {
+      "device": "/dev/debian12-vg/tmp",
+      "fstype": "ext4",
+      "fileCount": 0,
+      "directoryCount": 8,
+      "sampleFiles": []
+    },
+    {
+      "device": "/dev/debian12-vg/var",
+      "fstype": "ext4",
+      "fileCount": 1839,
+      "directoryCount": 204,
+      "sampleFiles": [
+        {
+          "path": "/lib/dpkg/info/debian-archive-keyring.prerm",
+          "size": 1951,
+          "sha256": "f06c5c4109b4fc9634cdcb30950539bbdbb804b6d968542b194392e61c89c0d5"
+        },
+        {
+          "path": "/lib/dpkg/info/sudo.conffiles",
+          "size": 124,
+          "sha256": "250c38d495d6ed96571a8c190e2cc6b043405abe7da782b19adf22722d10de2a"
+        },
+        {
+          "path": "/lib/systemd/deb-systemd-helper-enabled/lvm2-lvmpolld.socket.dsh-also",
+          "size": 62,
+          "sha256": "36a68992675e4a07eb69b60ae7b3b93d8a525c5e2d8d4c22066ef8718ad7c0dd"
+        },
+        {
+          "path": "/lib/dpkg/info/ifupdown.preinst",
+          "size": 947,
+          "sha256": "095a32e583206aacef8345fe347994e6bfa68af42dc19ab7d1ab4afb9068eb4f"
+        },
+        {
+          "path": "/lib/dpkg/info/bluez.md5sums",
+          "size": 3075,
+          "sha256": "771c19f420d62eb93511d00df08a16bc943a0e47e0569ea929c61c3782485559"
+        },
+        {
+          "path": "/lib/dpkg/info/libpopt0:amd64.symbols",
+          "size": 1630,
+          "sha256": "90b73bfb94abcbc9df5eccdccb727e372ecdacbd0442e71489b9eb403cbda31e"
+        },
+        {
+          "path": "/lib/dpkg/info/libgdbm-compat4:amd64.md5sums",
+          "size": 318,
+          "sha256": "9724b33f8a59f492464402266728c95bd5e14b2a9af9641287f824c0fba7c9c8"
+        },
+        {
+          "path": "/lib/dpkg/info/libmd0:amd64.md5sums",
+          "size": 282,
+          "sha256": "81ebcb306cf3600c92b630fbf2405740a24681ea2d26f4bfd796a74bc174f3fe"
+        },
+        {
+          "path": "/lib/dpkg/info/libefivar1:amd64.list",
+          "size": 303,
+          "sha256": "4039380c490e836e4cdd5d41c9081e080daf2ae48692c23248123d1ce233371a"
+        },
+        {
+          "path": "/lib/dpkg/info/libgcrypt20:amd64.list",
+          "size": 530,
+          "sha256": "45841c880069b85784ca6795b9c909cfc1eac9971aae7d70d5283751507e91b2"
+        },
+        {
+          "path": "/lib/dpkg/info/ispell.list",
+          "size": 943,
+          "sha256": "25e783e0116088bb0da8166e9f7b2444c102f1973ec6f26aee7ba147e2d09df8"
+        },
+        {
+          "path": "/log/btmp",
+          "size": 1920,
+          "sha256": "39a76f2ba18170980ef444280cf80e311b34529a1f3d7a8a36cd0cdfad244aca"
+        },
+        {
+          "path": "/cache/man/pt/CACHEDIR.TAG",
+          "size": 190,
+          "sha256": "8b55d7cbbc76e617005d85c23c06a52019a10c6a622a0a43287c198b6f6f2100"
+        },
+        {
+          "path": "/lib/dpkg/info/iucode-tool.list",
+          "size": 452,
+          "sha256": "86138751c92e473bdc36afee9cb07b0dfc12b226c2d4cc7671d81f68bb8c8921"
+        },
+        {
+          "path": "/cache/man/index.db",
+          "size": 278528,
+          "sha256": "52ccf9a51c02329f1962c55f9d98c5fbf12ee2af399f8f251cb0d3a9e33646e3"
+        },
+        {
+          "path": "/lib/dpkg/info/libext2fs2:amd64.symbols",
+          "size": 24689,
+          "sha256": "41ad52d448928f8089878c6cfe11d9d1dc0db823dfac2a2a48cf20ba19e7ef02"
+        },
+        {
+          "path": "/lib/dpkg/info/firmware-linux-free.list",
+          "size": 1275,
+          "sha256": "e1761a53cef0d998ca4d01955e1d34965d037ffc7ed7744ed706bc1e524df2e7"
+        },
+        {
+          "path": "/lib/dpkg/info/groff-base.md5sums",
+          "size": 11414,
+          "sha256": "44bd4aa295349760da740c602e8e8d37abe78efe731be58b8bc6550c26e850a3"
+        },
+        {
+          "path": "/lib/dpkg/info/initramfs-tools.triggers",
+          "size": 32,
+          "sha256": "3fc43b7b97cdad86bfceb6fd7cfab3a52dbbf3a538f0bef5985fa725c1b55507"
+        },
+        {
+          "path": "/lib/dpkg/info/console-setup.postinst",
+          "size": 4047,
+          "sha256": "6122b6f422052f9a56290781dabd4ff166eb3f907ffe4e4e5b0c0562b2d1bc3f"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext2",
+      "fileCount": 337,
+      "directoryCount": 5,
+      "sampleFiles": [
+        {
+          "path": "/grub/i386-pc/cbtable.mod",
+          "size": 1048,
+          "sha256": "7102db460d51d55527d92e6c374af26edf0c76fd033a5bab5ae4236a1baec139"
+        },
+        {
+          "path": "/grub/i386-pc/part_bsd.mod",
+          "size": 2680,
+          "sha256": "3a9b8e9a589deaf3344178bd9c02364decfa5d9ec2cdc6f740d2e3046df28bf9"
+        },
+        {
+          "path": "/grub/i386-pc/date.mod",
+          "size": 2148,
+          "sha256": "cdbb0bc86c07e01e1d72afebb7ee60dc4473f5a3eb209ebebb250e572152bfc5"
+        },
+        {
+          "path": "/grub/i386-pc/test_blockarg.mod",
+          "size": 1272,
+          "sha256": "d092cc97e6bc3f5b2cc1d398d729e9e00d6347d0816aaf2b30ebb120e90c5575"
+        },
+        {
+          "path": "/grub/i386-pc/usbserial_usbdebug.mod",
+          "size": 1460,
+          "sha256": "8e992d74959a1662233026cc755be61750b21f87c151bfca0e6397dba867e2f9"
+        },
+        {
+          "path": "/grub/i386-pc/ufs1.mod",
+          "size": 5332,
+          "sha256": "34ac0ed3fb834c1ee8a4f42c6072d8f02f0fa9b473d40735a87813b0748da940"
+        },
+        {
+          "path": "/grub/i386-pc/btrfs.mod",
+          "size": 19712,
+          "sha256": "764e268f781e3b4e5b9ac529eaab340ff787d34825c1a6ac4e59ca379c8e2ac8"
+        },
+        {
+          "path": "/grub/i386-pc/cbfs.mod",
+          "size": 3892,
+          "sha256": "9082bf2b6d8ca77a785c7db2e179e2fc510ead2306c97555cd072e7dfc9dd7ef"
+        },
+        {
+          "path": "/grub/i386-pc/f2fs.mod",
+          "size": 6460,
+          "sha256": "c83b7fa93d4006dcdc2db877683434bf6f203ec04b0a92b10d70b2622aa90c30"
+        },
+        {
+          "path": "/grub/i386-pc/fs.lst",
+          "size": 219,
+          "sha256": "32fc7f5de8c0a5dc0b1e7eb609ca31a77eb3475539e1d97a4543dca1b9b26c57"
+        },
+        {
+          "path": "/grub/i386-pc/setpci.mod",
+          "size": 5224,
+          "sha256": "dbfe306e724fa50ed0aa401275aa8fc6eb901575058dc23a8d43fadc6c23eec8"
+        },
+        {
+          "path": "/grub/locale/it.mo",
+          "size": 118131,
+          "sha256": "07e9b5780d7187f53a43e3920150404fb77b626974a57bf04dae29210197bbfb"
+        },
+        {
+          "path": "/grub/i386-pc/mda_text.mod",
+          "size": 2044,
+          "sha256": "12642bce2594fbe001c2420342cebfe2036c2cb7df7ecf83e05e36676f738b14"
+        },
+        {
+          "path": "/grub/i386-pc/ldm.mod",
+          "size": 6300,
+          "sha256": "93cebb02d63da835bd27bb6b188658d64296419d13375bd42b562fbea5d50652"
+        },
+        {
+          "path": "/grub/i386-pc/915resolution.mod",
+          "size": 7780,
+          "sha256": "76da23169d83cb2be73a439099d0d2952af3981ab0299a7bd6dda8c2df1deaa5"
+        },
+        {
+          "path": "/grub/i386-pc/ntfscomp.mod",
+          "size": 4260,
+          "sha256": "39b0144118bd503dae4651c015d72f1b7be170816a5d2e5c6f4dc001db148506"
+        },
+        {
+          "path": "/grub/i386-pc/gcry_rfc2268.mod",
+          "size": 2316,
+          "sha256": "a645a654ac6d2d89bfd452dfba4bbf1ba7f0e8b12da9fea14e129ab34ce01183"
+        },
+        {
+          "path": "/grub/locale/pt_BR.mo",
+          "size": 78830,
+          "sha256": "f680ef7d18b4c8478bfa3336fb1a49d421672b67202a65ed240ca11ecde54a22"
+        },
+        {
+          "path": "/grub/i386-pc/shift_test.mod",
+          "size": 2396,
+          "sha256": "c0c72d8b3b45238ea8cdb1d51e0639e2d0808813df5942ffbee5245be3f9de64"
+        },
+        {
+          "path": "/grub/i386-pc/raid5rec.mod",
+          "size": 1292,
+          "sha256": "eddf59a51f65ea0504d9701a2c904d8cbe63b29354aad6bc61561f0e4a55d51f"
+        }
+      ]
+    }
   ]
 }

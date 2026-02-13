@@ -130,8 +130,8 @@ public class BtrfsTreeReader {
         ByteBuffer buf = chunkTree.readLogical(logicalAddr, nodeSize);
         buf.order(ByteOrder.LITTLE_ENDIAN);
 
-        // Item data is stored from end of node, offset is from end
-        int dataStart = nodeSize - item.dataOffset() - item.dataSize();
+        // Item data offset is relative to the leaf data area start (right after the header)
+        int dataStart = NodeHeader.SIZE + item.dataOffset();
         byte[] data = new byte[item.dataSize()];
         buf.position(dataStart);
         buf.get(data);
@@ -190,7 +190,6 @@ public class BtrfsTreeReader {
         NodeHeader header = readHeader(nodeAddr);
 
         if (header.isLeaf()) {
-            // Leaf node: scan items
             List<LeafItem> items = readLeafItems(nodeAddr);
             for (LeafItem item : items) {
                 if (item.key().objectId() == targetObjId && item.key().type() == targetType) {
@@ -199,25 +198,18 @@ public class BtrfsTreeReader {
                 }
             }
         } else {
-            // Internal node: find child to descend
+            // Descend into child i only if target objectId is in range
+            // [ptr[i].objectId, ptr[i+1].objectId] (inclusive both ends,
+            // since items with targetObjId may straddle the boundary)
             List<KeyPtr> ptrs = readKeyPtrs(nodeAddr);
             for (int i = 0; i < ptrs.size(); i++) {
-                KeyPtr ptr = ptrs.get(i);
-                // Check if this subtree might contain our target
-                boolean mightContain = false;
-
-                if (i == ptrs.size() - 1) {
-                    // Last pointer: check if target >= this key
-                    mightContain = targetObjId >= ptr.key().objectId();
-                } else {
-                    // Check if target is in range [this key, next key)
-                    KeyPtr next = ptrs.get(i + 1);
-                    mightContain = (targetObjId >= ptr.key().objectId() && targetObjId < next.key().objectId()) ||
-                            (targetObjId == ptr.key().objectId());
+                long ptrObjId = ptrs.get(i).key().objectId();
+                if (targetObjId < ptrObjId) {
+                    break; // All remaining children have keys > target
                 }
-
-                if (mightContain || targetObjId >= ptr.key().objectId()) {
-                    searchRecursive(ptr.blockPtr(), searchKey, targetObjId, targetType, results);
+                boolean lastChild = (i == ptrs.size() - 1);
+                if (lastChild || targetObjId <= ptrs.get(i + 1).key().objectId()) {
+                    searchRecursive(ptrs.get(i).blockPtr(), searchKey, targetObjId, targetType, results);
                 }
             }
         }
@@ -245,9 +237,14 @@ public class BtrfsTreeReader {
             }
         } else {
             List<KeyPtr> ptrs = readKeyPtrs(nodeAddr);
-            for (KeyPtr ptr : ptrs) {
-                if (ptr.key().objectId() <= targetObjId) {
-                    findAllRecursive(ptr.blockPtr(), targetObjId, results);
+            for (int i = 0; i < ptrs.size(); i++) {
+                long ptrObjId = ptrs.get(i).key().objectId();
+                if (targetObjId < ptrObjId) {
+                    break;
+                }
+                boolean lastChild = (i == ptrs.size() - 1);
+                if (lastChild || targetObjId <= ptrs.get(i + 1).key().objectId()) {
+                    findAllRecursive(ptrs.get(i).blockPtr(), targetObjId, results);
                 }
             }
         }

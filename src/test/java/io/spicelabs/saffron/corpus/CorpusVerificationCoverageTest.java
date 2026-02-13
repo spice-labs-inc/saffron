@@ -26,6 +26,8 @@ class CorpusVerificationCoverageTest {
     private static final Path CORPUS_PATH = Path.of("test-corpus");
     private static final Path VERIFICATION_PATH = Path.of("src/test/resources/corpus-verification");
 
+
+
     /**
      * Only run if corpus is populated.
      */
@@ -75,9 +77,8 @@ class CorpusVerificationCoverageTest {
                 message.append("  - ").append(missing).append("\n");
             }
 
-            message.append("\nTo generate missing verification data, run:\n");
-            message.append("  mvn exec:java -Dexec.mainClass=\"io.spicelabs.saffron.corpus.CorpusVerificationGenerator\" -Dexec.classpathScope=test\n");
-            message.append("\nOr run the generator directly in your IDE.\n");
+            message.append("\nTo generate missing verification data, run the Docker corpus scanner:\n");
+            message.append("  cd tools/corpus-scanner && ./run.sh\n");
 
             fail(message.toString());
         }
@@ -135,20 +136,19 @@ class CorpusVerificationCoverageTest {
 
     /**
      * Converts image path to verification JSON filename.
-     * Must match the logic in CorpusVerificationGenerator.
+     * Must match the logic in tools/corpus-scanner/scan_corpus.py json_filename().
      */
     private static String toVerificationName(Path imagePath) {
         String name = imagePath.getFileName().toString();
-        // Remove extension and convert to safe filename
-        int dotIndex = name.lastIndexOf('.');
-        if (dotIndex > 0) {
-            String extension = name.substring(dotIndex + 1);
-            name = name.substring(0, dotIndex);
-            // Convert to verification name format (replace special chars with underscore)
-            name = name.replace("-", "_").replace(".", "_").replace("!", "_").replace(" ", "_");
-            name = name + "_" + extension + ".json";
+        // Replace .-() and space with underscore (must match Python scanner)
+        for (char ch : new char[]{'.', '-', '(', ')', ' '}) {
+            name = name.replace(ch, '_');
         }
-        return name;
+        // Collapse double underscores
+        while (name.contains("__")) {
+            name = name.replace("__", "_");
+        }
+        return name + ".json";
     }
 
     /**
@@ -157,6 +157,7 @@ class CorpusVerificationCoverageTest {
     private static boolean isVirtualDisk(Path path) {
         String name = path.getFileName().toString().toLowerCase();
         return name.endsWith(".qcow2") || name.endsWith(".vmdk") ||
-               name.endsWith(".vdi") || name.endsWith(".vhd") || name.endsWith(".vhdx");
+               name.endsWith(".vdi") || name.endsWith(".vhd") || name.endsWith(".vhdx") ||
+               name.endsWith(".raw") || name.endsWith(".dmg");
     }
 }

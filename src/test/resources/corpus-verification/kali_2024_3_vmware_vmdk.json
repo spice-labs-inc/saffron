@@ -1,29 +1,479 @@
 {
   "imagePath": "/corpus/vmdk/modern/kali-2024.3-vmware.vmdk",
   "imageBasename": "kali-2024.3-vmware.vmdk",
-  "filesystemType": "ext2",
+  "filesystemCount": 5,
   "totalFiles": 363606,
-  "totalDirectories": 37718,
-  "sampleFiles": [
-    {"path": "/usr/share/help/af/mate-calc/absolute.page", "sha256": "279e79b03e1e01fe316c923f110eb8eefd5256cff5e4d766ea005fd88aaa8582", "size": 453},
-    {"path": "/usr/share/icons/gnome/22x22/devices/media-tape.png", "sha256": "0fac587b09a7ab85eecb81f207ce9a0acca931dd2e065c5436066092de1aef07", "size": 915},
-    {"path": "/usr/share/creddump7/framework/win32/__init__.py", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/usr/lib/x86_64-linux-gnu/perl5/5.38/Tk/Camel.xpm", "sha256": "cdf7ab9e5442e4065947cc25b3781719abeb1fcbcdc20dfa5ef2789a2e3e5aac", "size": 1329},
-    {"path": "/usr/lib/python3/dist-packages/phonenumbers/shortdata/__pycache__/__init__.cpython-311.pyc", "sha256": "eb9da44e502d5182179e470fa90e6f30d643f1cddff51888955d1393682457f7", "size": 1827},
-    {"path": "/usr/share/dbus-1/interfaces/org.fedoraproject.Config.Printing.xml", "sha256": "d717b5ed234fa2edc841028a810f8db729d6b0c5dee49af166d17cabde28d66d", "size": 9743},
-    {"path": "/usr/share/autopsy/pict/tl_t_tl_cur.jpg", "sha256": "2bd7aab5f7f573287410cebb937a2a5a0a029bad09affd1cb9cf00340a7b8d85", "size": 2844},
-    {"path": "/usr/lib/python3/dist-packages/google-stubs/cloud/ndb/msgprop.pyi", "sha256": "1ac2d83e10df5bf26c7b6013ac8f0d915e839f3426e51b874df0e227d94d5c34", "size": 150},
-    {"path": "/usr/share/themes/Kokodi/xfwm4/menu-inactive.png", "sha256": "fecede5571ff5b1b292ca9dab473f4c71794ff839f7d6ab3f21e4667ac9ec343", "size": 224},
-    {"path": "/usr/share/man/fr/man1/gpasswd.1.gz", "sha256": "ac8fd079a63b3144f52ee996d28290ffecca46ccbdbd87c12a685afc7111b86e", "size": 1593},
-    {"path": "/usr/share/icons/gnome/32x32/emblems/emblem-favorite.png", "sha256": "72245da63bd53c453e9cc5800ed03352a88cf837495101b43d3fff68ccc4637b", "size": 1660},
-    {"path": "/usr/lib/modules/6.8.11-amd64/kernel/drivers/media/tuners/mt2266.ko.xz", "sha256": "f85e09b0bd971982dce56a375d2dca3f3dbd662d1fce10cad0a51799455a312d", "size": 9648},
-    {"path": "/usr/share/texlive/texmf-dist/tex4ht/ht-fonts/alias/Open_Sans_Condensed/OpenSansCondensed-Bold-TS1-TOsF.htf", "sha256": "fb6d44ed03357ec6a8ff532050c149c3f8e91e1f18eeafbedeec4f1abb98833b", "size": 166},
-    {"path": "/usr/lib/python3/dist-packages/docx/parts/__pycache__/hdrftr.cpython-311.pyc", "sha256": "7cf826b2c43f4682e64118bcdb0259c1a5dea7a12b6482f24cc5a113f969f9dc", "size": 3172},
-    {"path": "/usr/share/ri/3.1.0/system/Numeric/quo-i.ri", "sha256": "c99ac472013382fde6b5dcd400ee22c6204fb09c99a1885aafaa06a1a4ffd12b", "size": 399},
-    {"path": "/usr/lib/python3/dist-packages/scapy/contrib/__pycache__/knx.cpython-311.pyc", "sha256": "40440884f1c71dab72b0a18f171fdb7abfa9d4841db2d424081a2542025f3edb", "size": 26309},
-    {"path": "/usr/lib/python3/dist-packages/aesedb/structures/__pycache__/rootheader.cpython-311.pyc", "sha256": "ac41b5e89415698976fbbdd7d7b37599863b896ed007f5f971a081716c4ee743", "size": 1925},
-    {"path": "/usr/lib/python3/dist-packages/faraday_agent_dispatcher/static/executors/official/shodan2.py", "sha256": "5a8199c690110f4f525c922109ff710bc46f16b285f95ccac866aebf96b69c33", "size": 2010},
-    {"path": "/usr/share/exploitdb/exploits/hardware/remote/46961.py", "sha256": "1f1fc3995708cf3726f5c9cb3e349e916fe76ebb8d9a59be59318264ddf545db", "size": 3228},
-    {"path": "/usr/lib/python3/dist-packages/pandas/tests/interchange/__pycache__/test_utils.cpython-311.pyc", "sha256": "2fddad9457521f5360130f3e6263205006453cfc5c1e80599477b0426bba3a84", "size": 4038}
+  "totalDirectories": 37717,
+  "filesystems": [
+    {
+      "device": "/dev/kalilinux-vg/home",
+      "fstype": "ext4",
+      "fileCount": 52,
+      "directoryCount": 49,
+      "sampleFiles": [
+        {
+          "path": "/kalilinux/.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml",
+          "size": 209,
+          "sha256": "7937a30e254658f059c2a7fc0e744e858102f45b3986ab5bfa53c0177fca24b5"
+        },
+        {
+          "path": "/kalilinux/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml",
+          "size": 10333,
+          "sha256": "235b3b502823f409d50e5613cc2021e04ae56360c8c2de1bd8cb2bf6d9698441"
+        },
+        {
+          "path": "/kalilinux/.config/cherrytree/config.cfg",
+          "size": 541,
+          "sha256": "02ee403becc4505898b665b64a6d7a3e7564106e8101361e268fe2ee6270e33f"
+        },
+        {
+          "path": "/kalilinux/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml",
+          "size": 1007,
+          "sha256": "d095a0c5af9a2e38bd7b883dc95f138653a4397838bc0ae9c8293538045042d9"
+        },
+        {
+          "path": "/kalilinux/.config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml",
+          "size": 5075,
+          "sha256": "e069d624c5a20514ab38a923d795cd3ea11880f785f5ba316e84031654097cee"
+        },
+        {
+          "path": "/kalilinux/.config/xfce4/xfconf/xfce-perchannel-xml/keyboards.xml",
+          "size": 204,
+          "sha256": "b3146fe2f302263b8a82e4f4f3c0e05ef645787e87d0da932fd011b669881165"
+        },
+        {
+          "path": "/kalilinux/.cache/zcompdump",
+          "size": 50813,
+          "sha256": "9247cf4a78d362ad0f4bc88ca77718a3d1186e0131ead0a894e9220f6f5aae41"
+        },
+        {
+          "path": "/kalilinux/.config/xfce4/panel/launcher-6/17319058602.desktop",
+          "size": 600,
+          "sha256": "27f592509a7d56696ec37a039b8b3cbc3cd03e04328a1f5d9b0bebbbe33cc8eb"
+        },
+        {
+          "path": "/kalilinux/.dmrc",
+          "size": 35,
+          "sha256": "aaf3853303e76b221e2c4f9586212623c8ad72a0ab8d03c25d62a965e103f084"
+        },
+        {
+          "path": "/kalilinux/.config/powershell/Microsoft.PowerShell_profile.ps1",
+          "size": 1345,
+          "sha256": "8c9919428cd89ef13b83c8504f2a511129942ab13ceafdaec8a2c67815d93e06"
+        },
+        {
+          "path": "/kalilinux/.bashrc.original",
+          "size": 3526,
+          "sha256": "afae8986f549c6403410e029f9cce7983311512d04b1f02af02e4ce0af0dd2bf"
+        },
+        {
+          "path": "/kalilinux/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml",
+          "size": 420,
+          "sha256": "7a1d55185d0263208c442449eb01e4a39f0fff66e3162324024066762f58d025"
+        },
+        {
+          "path": "/kalilinux/.local/share/keyrings/login.keyring",
+          "size": 105,
+          "sha256": "f884efcdc3c10c31c34a981cc8133950ac99eae731422792ff39422be330abc1"
+        },
+        {
+          "path": "/kalilinux/.profile",
+          "size": 807,
+          "sha256": "28b4a453b68dde64f814e94bab14ee651f4f162e15dd9920490aa1d49f05d2a4"
+        },
+        {
+          "path": "/kalilinux/.bashrc",
+          "size": 5551,
+          "sha256": "8ef308d7c2df2a84858301a8b4d687385a242ed11b9c6e51db5c3bc782864190"
+        },
+        {
+          "path": "/kalilinux/.cache/sessions/xfce4-session-kalilinux:0",
+          "size": 2529,
+          "sha256": "08ea5d7a10f34db6e4e385891bc12caea2083932993be18ad04163bbe880136b"
+        },
+        {
+          "path": "/kalilinux/.config/pulse/cookie",
+          "size": 256,
+          "sha256": "c2234028e08d9c3e0dc3a10be6759cb8916cd0dca7f183e8dd2408cd206d20b4"
+        },
+        {
+          "path": "/kalilinux/.config/Thunar/accels.scm",
+          "size": 229,
+          "sha256": "a2c800705091c5221e8ff3ea72b0eab30fc9810b7c52259da62edf9c796242f9"
+        },
+        {
+          "path": "/kalilinux/.xsession-errors.old",
+          "size": 4723,
+          "sha256": "848c08dad78ac9259f5b8e1e300e1b48fc2b1b4c6f08a1e8db54bf13ebad1957"
+        },
+        {
+          "path": "/kalilinux/.cache/xfce4/notifyd/log.sqlite",
+          "size": 20480,
+          "sha256": "573383de49df86f55a5d021e0810d90c9198cbae37811f737e4131db159253b3"
+        }
+      ]
+    },
+    {
+      "device": "/dev/kalilinux-vg/root",
+      "fstype": "ext4",
+      "fileCount": 350383,
+      "directoryCount": 37191,
+      "sampleFiles": [
+        {
+          "path": "/usr/lib/python3/dist-packages/impacket/ldap/__pycache__/__init__.cpython-311.pyc",
+          "size": 162,
+          "sha256": "60d002663f9574ffd538eed4d8a3c537d973bdc0d82b265d679db4443bed841e"
+        },
+        {
+          "path": "/usr/share/metasploit-framework/data/exploits/CVE-2017-7494/samba-root-system-linux-glibc-armhf.so.gz",
+          "size": 2477,
+          "sha256": "13e714401f185231b3603c03e7b4b747374ad584d87a0ba9c60bfa9051c15a71"
+        },
+        {
+          "path": "/usr/share/gtksourceview-3.0/language-specs/octave.lang",
+          "size": 60454,
+          "sha256": "5589ee50dbb5a8723ddd6d3b38f649f0dd1e7066d2622715fb0a07e8295ea017"
+        },
+        {
+          "path": "/usr/share/postgresql-common/t/foo/foo-123/foo--100--123.sql",
+          "size": 76,
+          "sha256": "91f5439ea53b8ddf277e9a1868fabbfb42b8bb1083cd6ae07673046bdda58b38"
+        },
+        {
+          "path": "/usr/share/doc/python3-networkx/html/_modules/networkx/algorithms/isomorphism/tree_isomorphism.html",
+          "size": 39682,
+          "sha256": "1a32c23e8a87df9238e439fc911998ecbe8d85a92836b80962f462e2369edcf3"
+        },
+        {
+          "path": "/usr/share/metasploit-framework/vendor/bundle/ruby/3.1.0/gems/nexpose-7.3.0/lib/nexpose/pool.rb",
+          "size": 5289,
+          "sha256": "ae17320481047b3a05aa7f3df90ad961d610395b00d3bf644df5533c852715d3"
+        },
+        {
+          "path": "/usr/share/texlive/texmf-dist/tex/latex/utfsym/usym1F58D.tikz",
+          "size": 1624,
+          "sha256": "720918c4d75d469d3eddb2fa9a72c1d0ca443d79460755b6a862814a074215e6"
+        },
+        {
+          "path": "/usr/share/ri/3.1.0/system/Gem/Commands/ContentsCommand/files_in-i.ri",
+          "size": 295,
+          "sha256": "0c4c4196c377b3bce21bb82b63fb024b74d80a0605cd3f68043fbb8dc6ace830"
+        },
+        {
+          "path": "/usr/lib/python2.7/formatter.py",
+          "size": 14911,
+          "sha256": "630033febf3db1fc51db17c1b2693ddecc8451ff30cc6b7186258aa456f3b4e4"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/faraday_plugins/plugins/repo/medusa/__pycache__/plugin.cpython-311.pyc",
+          "size": 6866,
+          "sha256": "1c33b9318280b8db8b38870eb63001a7f0b60a2046f655dd558ec5fd9c0e8b6f"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/mechanize/__pycache__/_form_controls.cpython-311.pyc",
+          "size": 107863,
+          "sha256": "f9bd2927d9782b2a61a5913e464d5afcc237f28bcce5389602b11ba7fdb8f75f"
+        },
+        {
+          "path": "/usr/share/exploitdb/exploits/php/webapps/34871.txt",
+          "size": 596,
+          "sha256": "fdfbb931de8acf0f987cd5a849928fa439bbc314546e10ec1d84b7e24be47ed3"
+        },
+        {
+          "path": "/usr/share/locale/it/LC_MESSAGES/system-config-printer.mo",
+          "size": 69507,
+          "sha256": "6e8f9fc3c4be7e3c4cf8d1320f61cad97d22c277fdde27e08907616f6ae73cb3"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/pygame/sysfont.py",
+          "size": 15446,
+          "sha256": "0201819f163c91f5d36cd61d3717d60e0a3a34803bc730c3e5210b44b19aab37"
+        },
+        {
+          "path": "/usr/share/exploitdb/exploits/php/webapps/6740.txt",
+          "size": 1037,
+          "sha256": "0fb68e7e6a10237bcc34363e90532a29f163d3052f467c788608360a7df05e1e"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/PyInstaller/hooks/rthooks.dat",
+          "size": 956,
+          "sha256": "6dd5c8aaa7bd306d366fcd57c5234379ec22a03b6328bc9d3c2ca23d9b17f60f"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/faraday/migrations/versions/__pycache__/e61afb450465_add_custom_fields.cpython-311.pyc",
+          "size": 1648,
+          "sha256": "c11da62c7e0b46a60a8f6a9135bb4344cfeef812634decd24a4924439abd443d"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/aardwolf/keyboard/layouts/__pycache__/layout_KBDTH3.cpython-311.pyc",
+          "size": 10519,
+          "sha256": "71f3c31e79b186918c066a5c766a02db3180c45f1eb291b5af4ff915a1654f14"
+        },
+        {
+          "path": "/usr/share/texlive/texmf-dist/tex/latex/bizcard/bizcard.sty",
+          "size": 3465,
+          "sha256": "b7067c1df32bf07958aa068d8c956c547bb8a6ac6826be761b6fdb5b640433fa"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/blueman/main/DhcpClient.py",
+          "size": 2610,
+          "sha256": "e0d4ed1de7d9162bb939636d52f4f6b8897d9417efedd79396b01bf7220a9d09"
+        }
+      ]
+    },
+    {
+      "device": "/dev/kalilinux-vg/tmp",
+      "fstype": "ext4",
+      "fileCount": 6,
+      "directoryCount": 14,
+      "sampleFiles": [
+        {
+          "path": "/dotnet-installer/.dotnet/6.0.400_IsDockerContainer.dotnetUserLevelCache",
+          "size": 5,
+          "sha256": "60a33e6cf5151f2d52eddae9685cfa270426aa89d8dbc7dfb854606f1d1a40fe"
+        },
+        {
+          "path": "/dotnet-installer/.dotnet/MachineId.v1.dotnetUserLevelCache",
+          "size": 64,
+          "sha256": "885959b0541dacb4ade9a59607d7c6de0a19b6df1b3f81f8b8219afe6c5b411f"
+        },
+        {
+          "path": "/.xfsm-ICE-AU8HX2",
+          "size": 418,
+          "sha256": "32656626506851328d641f84e66161b48970aaeed3fc4b5cc91e6a1577155dfc"
+        },
+        {
+          "path": "/dotnet-installer/.dotnet/TelemetryStorageService/20241118044928_8b0b836b11ed4cd6b1165833c45c90d7.trn",
+          "size": 1044,
+          "sha256": "3aea38277f236139966dccdecbedb779ad15f760ad757992966dc81b7759a20b"
+        },
+        {
+          "path": "/dotnet-installer/.dotnet/6.0.400_MachineId.dotnetUserLevelCache",
+          "size": 64,
+          "sha256": "885959b0541dacb4ade9a59607d7c6de0a19b6df1b3f81f8b8219afe6c5b411f"
+        },
+        {
+          "path": "/dotnet-installer/.dotnet/TelemetryStorageService/20241118044928_448ce22c84e54e268229d1e4a923547a.trn",
+          "size": 1124,
+          "sha256": "398df975f24be32a1bad3950d38438f7034bc89f0257f04e35c3e989955b20a8"
+        }
+      ]
+    },
+    {
+      "device": "/dev/kalilinux-vg/var",
+      "fstype": "ext4",
+      "fileCount": 12818,
+      "directoryCount": 456,
+      "sampleFiles": [
+        {
+          "path": "/lib/dpkg/info/libnfnetlink0:amd64.list",
+          "size": 278,
+          "sha256": "a34ee9018d65bbe8319b502ace5322376de6db4dec377b8e0385f63d084a554d"
+        },
+        {
+          "path": "/lib/dpkg/info/upower.prerm",
+          "size": 251,
+          "sha256": "efa8046be376d734bb263d9d8dd2f4595e136d6f98f44cf71b8810d8cf0d245f"
+        },
+        {
+          "path": "/lib/dpkg/info/libxpm4:amd64.shlibs",
+          "size": 17,
+          "sha256": "7e137c3966407c5361e7a2327da6e927d27ab086003020170531b38233b254e0"
+        },
+        {
+          "path": "/lib/dpkg/info/libglx-mesa0:amd64.md5sums",
+          "size": 443,
+          "sha256": "ed453faa6c024a7d93355fe97b51bd7a28605af06e4da185772e1e2bedc530ef"
+        },
+        {
+          "path": "/lib/dpkg/info/ruby-typhoeus.list",
+          "size": 5440,
+          "sha256": "c92ceeb2ebf212b3f707052ebb2383ef06699ead68f8198f15eedb0b2a48b123"
+        },
+        {
+          "path": "/lib/dpkg/info/python3-termcolor.md5sums",
+          "size": 1041,
+          "sha256": "0f74428c7e02a5f9b6aa0a8c557d399ec50ea95e161b70d82f1365407de9916c"
+        },
+        {
+          "path": "/lib/dpkg/info/libxcb-shape0:amd64.list",
+          "size": 320,
+          "sha256": "ab233bca895e9cc8eb0ea7f986c7ea0085abc942442e6e39a75b9da9c4e28e46"
+        },
+        {
+          "path": "/lib/dpkg/info/texlive-latex-base.list",
+          "size": 150655,
+          "sha256": "f37f778be3b506f75c47d80d6487a4c17b99f7f19fc5a51f2b2a52d509331b74"
+        },
+        {
+          "path": "/lib/dpkg/info/onboard-data.list",
+          "size": 1249,
+          "sha256": "7e28c6346b7b17414215e06d8d876e2ab0832197b7c0fe7e6bace64c7fb55d96"
+        },
+        {
+          "path": "/lib/dpkg/info/cpp-x86-64-linux-gnu.list",
+          "size": 302,
+          "sha256": "d797baeab56b42339f706a75b498017a4e4d7dfa0f421ff56f09534ee5d67cb4"
+        },
+        {
+          "path": "/lib/dpkg/info/snmpcheck.list",
+          "size": 239,
+          "sha256": "a5647cf3d10b9b120db7d24d77185a1f64d138d44a8064119f3332878c100f8e"
+        },
+        {
+          "path": "/lib/dpkg/info/iucode-tool.list",
+          "size": 452,
+          "sha256": "86138751c92e473bdc36afee9cb07b0dfc12b226c2d4cc7671d81f68bb8c8921"
+        },
+        {
+          "path": "/lib/dpkg/info/libx11-dev:amd64.md5sums",
+          "size": 1176,
+          "sha256": "4ed6599a470f2cc400dd8c4a947bf0ab120f0a67f6f2e63782d9358a057b02fb"
+        },
+        {
+          "path": "/lib/dpkg/info/python3-wcwidth.postinst",
+          "size": 265,
+          "sha256": "26a06d29ab6ed56339ac84ed621b6869d881df13169b47ace456bb37c5d41767"
+        },
+        {
+          "path": "/lib/dpkg/info/libcc1-0:amd64.shlibs",
+          "size": 18,
+          "sha256": "1fd746d6824bcba598d4c13687ac98269abd7911f3744e661a9c612c60f91928"
+        },
+        {
+          "path": "/lib/dpkg/info/mariadb-plugin-provider-lzma.list",
+          "size": 473,
+          "sha256": "0a27f6b2cdabb41457c2813cec6cb308515978a1b10b19a3b06b6bcdded022ad"
+        },
+        {
+          "path": "/lib/dpkg/info/network-manager-pptp.md5sums",
+          "size": 6273,
+          "sha256": "847211780411a4c0d83ef899c6895398a2a8a6b082b14e39ae8dcdcbb9385d1e"
+        },
+        {
+          "path": "/lib/dpkg/info/libxml-dom-perl.list",
+          "size": 2801,
+          "sha256": "953fc545215c8a2add8fcfad61bbc08332c24597420b90893bd5eb33c2ac74df"
+        },
+        {
+          "path": "/lib/dpkg/info/scalpel.conffiles",
+          "size": 26,
+          "sha256": "6360ff490671dd7dade020923f9baf238947008da1dd9667e6f36bab466f100e"
+        },
+        {
+          "path": "/lib/dpkg/info/libstoken1t64:amd64.list",
+          "size": 460,
+          "sha256": "f246e48cd546c99183b6358fa7c807e67476447846149d6cb840b117bfb164b7"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext2",
+      "fileCount": 347,
+      "directoryCount": 7,
+      "sampleFiles": [
+        {
+          "path": "/grub/i386-pc/pcidump.mod",
+          "size": 2384,
+          "sha256": "6652482a889cd90c0b815d0849ee21d8cb2bb89ab37a74b2368ce2e259de0f45"
+        },
+        {
+          "path": "/grub/i386-pc/cbmemc.mod",
+          "size": 2448,
+          "sha256": "58e0add130d418f0d2798e090462d1a30d711174101cc9ce6ebf30b7854698ec"
+        },
+        {
+          "path": "/grub/i386-pc/bfs.mod",
+          "size": 6736,
+          "sha256": "b212bdb45f84122498cd005b4a098b44ecf4e86976a9c019c407361c5106bd17"
+        },
+        {
+          "path": "/grub/i386-pc/gcry_crc.mod",
+          "size": 10532,
+          "sha256": "bf4f7b3b60a3e1999b8bec308ced51afe4e3549c373ad301cc4ccf6b25a706f5"
+        },
+        {
+          "path": "/grub/locale/de@hebrew.mo",
+          "size": 212344,
+          "sha256": "2619e59ae94073517d048c7d49be067fd4e8840cb3e104f10ed77e7d690b7a3b"
+        },
+        {
+          "path": "/grub/i386-pc/msdospart.mod",
+          "size": 2396,
+          "sha256": "8b94f4281e2172e5c313875ba712acf98aabbe19bb18179cb4f3484c1546f663"
+        },
+        {
+          "path": "/grub/i386-pc/xnu_uuid.mod",
+          "size": 2084,
+          "sha256": "20db8e9b2426fa75c06fcb2e6b715938698363fa6c08f42176be405ca95bd351"
+        },
+        {
+          "path": "/grub/i386-pc/ohci.mod",
+          "size": 10324,
+          "sha256": "671933195b78fea671f57d154a93472235d00bbf3fdea8655d9e54d8ec49c3cd"
+        },
+        {
+          "path": "/grub/themes/kali/grub-4x3.png",
+          "size": 601396,
+          "sha256": "faf0ee5f1f300a15595036badfcd1eb2f2c6a50d868dea1a05e6845b6ec513c6"
+        },
+        {
+          "path": "/grub/i386-pc/play.mod",
+          "size": 2448,
+          "sha256": "4f8e82195cfaeead5914d27f477e197321a2cf1a83c6c99389ebd258ab59fb44"
+        },
+        {
+          "path": "/grub/i386-pc/ehci.mod",
+          "size": 16128,
+          "sha256": "aca55433698923e84c89c9d1d457f2a15129633f97262edf5e704ea201c71007"
+        },
+        {
+          "path": "/grub/i386-pc/pxe.mod",
+          "size": 3680,
+          "sha256": "597267f5d0ddf04fb16878ff524a4d8ba943c62220c1d5cbd30afdf8cc11a091"
+        },
+        {
+          "path": "/grub/i386-pc/loopback.mod",
+          "size": 3052,
+          "sha256": "7d0ff43d917b71955dc8f72b3f53bd85a928dc8fb91fc1e1cc9e97413fd35131"
+        },
+        {
+          "path": "/grub/i386-pc/minicmd.mod",
+          "size": 3504,
+          "sha256": "a1a4651bcff755155146fc5e80115684686f8467e8c0adf36507f1c2213f15f6"
+        },
+        {
+          "path": "/grub/locale/ca.mo",
+          "size": 119925,
+          "sha256": "e09b8d63b5bf6410206a4b708664ba978af80d6dedd33b2eabdd8450afc3f8d3"
+        },
+        {
+          "path": "/grub/i386-pc/part_amiga.mod",
+          "size": 1812,
+          "sha256": "ae6346a94bb2846e2579710d14ad9a2c0626e13087858439bcfdc4d26e08ea06"
+        },
+        {
+          "path": "/grub/i386-pc/ntfscomp.mod",
+          "size": 4252,
+          "sha256": "6aec1163e180167fc587ca993e80e97162d7d7ad4b2b12111482d7070f4d26c9"
+        },
+        {
+          "path": "/grub/i386-pc/password.mod",
+          "size": 1820,
+          "sha256": "ae5249904ab0ff9d959983f497eea90425b28aeca9df0d4848f15aeccb3ad5e7"
+        },
+        {
+          "path": "/grub/i386-pc/bufio.mod",
+          "size": 2096,
+          "sha256": "291b04a8c125e824d187fa2a853f84b2c72e204ee62500a613b913acea550e2e"
+        },
+        {
+          "path": "/grub/i386-pc/datehook.mod",
+          "size": 1716,
+          "sha256": "24b2415d60e372d1dbeb9f3faeb88dabc520934fc1ac222ef190398621d48af0"
+        }
+      ]
+    }
   ]
 }

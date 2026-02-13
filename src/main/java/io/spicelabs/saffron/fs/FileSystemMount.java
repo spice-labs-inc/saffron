@@ -340,6 +340,103 @@ public final class FileSystemMount {
     }
 
     /**
+     * Mounts all filesystems in the disk, including LVM volumes.
+     *
+     * <p>For disks with LVM, returns all LVM Logical Volumes that contain recognized
+     * filesystems plus any non-LVM partitions (e.g., /boot). For disks without LVM,
+     * returns only the largest partition filesystem.
+     *
+     * @param disk the virtual disk
+     * @return list of all mounted filesystems (caller must close each one)
+     * @throws IOException if an I/O error occurs
+     */
+    public static @NotNull List<FileSystem> mountAllIncludingLvm(@NotNull VirtualDisk disk) throws IOException {
+        List<LvmFilesystemLocation> lvmLocations = findLvmFilesystems(disk);
+
+        if (!lvmLocations.isEmpty()) {
+            // LVM detected: mount all LVM volumes + non-LVM partition filesystems
+            List<FileSystem> mounted = new ArrayList<>();
+            for (FilesystemLocation fl : findFilesystems(disk)) {
+                try {
+                    if (fl.info().type() == FileSystem.FileSystemType.BTRFS) {
+                        DiskRegion region = DiskRegion.fromPartition(disk, fl.offset(), 0);
+                        mounted.addAll(BtrfsFileSystemImpl.mountWithSubvolumes(region, 0));
+                    } else {
+                        mounted.add(mount(disk, fl));
+                    }
+                } catch (Exception e) {
+                    // Skip filesystems that fail to mount
+                }
+            }
+            for (LvmFilesystemLocation lfl : lvmLocations) {
+                try {
+                    if (lfl.info().type() == FileSystem.FileSystemType.BTRFS) {
+                        mounted.addAll(BtrfsFileSystemImpl.mountWithSubvolumes(lfl.logicalVolume(), 0));
+                    } else {
+                        mounted.add(mount(lfl));
+                    }
+                } catch (Exception e) {
+                    // Skip filesystems that fail to mount
+                }
+            }
+            return mounted;
+        } else {
+            // No LVM: mount only the largest filesystem
+            List<FileSystem> mounted = new ArrayList<>();
+            Optional<FilesystemLocation> largest = findLargestFilesystem(disk);
+            if (largest.isPresent()) {
+                mounted.add(mount(disk, largest.get()));
+            }
+            return mounted;
+        }
+    }
+
+    /**
+     * Mounts ALL filesystems in the disk, including LVM volumes and all partitions.
+     *
+     * <p>This always returns every mountable filesystem found in the disk,
+     * regardless of whether LVM is present. For LVM disks, it returns both
+     * non-LVM partitions (e.g. /boot) and all LVM logical volumes.
+     * For non-LVM disks, it returns all partition filesystems.
+     *
+     * @param disk the virtual disk
+     * @return list of all mounted filesystems (caller must close each one)
+     * @throws IOException if an I/O error occurs
+     */
+    public static @NotNull List<FileSystem> mountAll(@NotNull VirtualDisk disk) throws IOException {
+        List<FileSystem> mounted = new ArrayList<>();
+
+        // Mount all regular partition filesystems
+        for (FilesystemLocation fl : findFilesystems(disk)) {
+            try {
+                if (fl.info().type() == FileSystem.FileSystemType.BTRFS) {
+                    DiskRegion region = DiskRegion.fromPartition(disk, fl.offset(), 0);
+                    mounted.addAll(BtrfsFileSystemImpl.mountWithSubvolumes(region, 0));
+                } else {
+                    mounted.add(mount(disk, fl));
+                }
+            } catch (Exception e) {
+                // Skip filesystems that fail to mount
+            }
+        }
+
+        // Mount all LVM logical volume filesystems
+        for (LvmFilesystemLocation lfl : findLvmFilesystems(disk)) {
+            try {
+                if (lfl.info().type() == FileSystem.FileSystemType.BTRFS) {
+                    mounted.addAll(BtrfsFileSystemImpl.mountWithSubvolumes(lfl.logicalVolume(), 0));
+                } else {
+                    mounted.add(mount(lfl));
+                }
+            } catch (Exception e) {
+                // Skip filesystems that fail to mount
+            }
+        }
+
+        return mounted;
+    }
+
+    /**
      * Mounts the largest filesystem in the disk, including LVM volumes.
      *
      * <p>This is typically used to mount the root filesystem of a Linux VM.

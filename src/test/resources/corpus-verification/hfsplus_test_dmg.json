@@ -1,0 +1,52 @@
+{
+  "imagePath": "/corpus/dmg/hfsplus-test.dmg",
+  "imageBasename": "hfsplus-test.dmg",
+  "filesystemCount": 1,
+  "totalFiles": 7,
+  "totalDirectories": 3,
+  "filesystems": [
+    {
+      "device": "/dev/sda",
+      "fstype": "hfsplus",
+      "fileCount": 7,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/file2.txt",
+          "size": 23,
+          "sha256": "e397da6bdf086eea67a28a4ad27377d6caf41fa6ea8a56dfcf98dbbe8aa6f6be"
+        },
+        {
+          "path": "/.fseventsd/0000000085c085db",
+          "size": 174,
+          "sha256": "1594835a0fb318e5f363fb7dd5588a7fb6e894199ad750349127178c6416a6d6"
+        },
+        {
+          "path": "/.fseventsd/fseventsd-uuid",
+          "size": 36,
+          "sha256": "4ee1a7ca836387a8e39bd5404d2e516aba91d3d73784ca529b62e52058bc9a7f"
+        },
+        {
+          "path": "/.journal",
+          "size": 8388608,
+          "sha256": "ca3c774a01bb363b4d4946cee7b9a3ab430b0c00fcf52dfa7071b8058e04b05b"
+        },
+        {
+          "path": "/.journal_info_block",
+          "size": 4096,
+          "sha256": "16d0dbd9385279fc4059925b1e768f8d1fe256a051c27cafa92e730be004841c"
+        },
+        {
+          "path": "/file1.txt",
+          "size": 28,
+          "sha256": "e45d8d996597518632b17e03ca2942beb0fc5fbf95ccea4d80eddfcf743a326e"
+        },
+        {
+          "path": "/.fseventsd/0000000085c086a9",
+          "size": 149,
+          "sha256": "71b04072491ea03ecc3126b7b610df0aec344bb43bf9a84b064517eb0ffa6739"
+        }
+      ]
+    }
+  ]
+}

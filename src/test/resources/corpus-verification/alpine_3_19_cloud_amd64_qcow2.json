@@ -1,29 +1,117 @@
 {
   "imagePath": "/corpus/qcow2/modern/alpine-3.19-cloud-amd64.qcow2",
   "imageBasename": "alpine-3.19-cloud-amd64.qcow2",
-  "filesystemType": "ext4",
+  "filesystemCount": 1,
   "totalFiles": 5342,
-  "totalDirectories": 681,
-  "sampleFiles": [
-    {"path": "/usr/lib/python3.11/site-packages/urllib3/util/timeout.py", "sha256": "730ab874c93cee624748192d2b59a2609fbce46fb74f74664f6d2fed2142a67a", "size": 10168},
-    {"path": "/usr/share/zoneinfo/right/America/Toronto", "sha256": "8db7b1463a8cc6793d60fade5b30da892673d9acda9c362933267def5b901b9c", "size": 4034},
-    {"path": "/lib/modules/6.6.4-1-virt/modules.order", "sha256": "9a6ac59cf65e4285367d96cedd6f2fb9fa0c7cde3716c29edcd1ef0fb8161351", "size": 31156},
-    {"path": "/lib/modules/6.6.4-1-virt/kernel/fs/nls/mac-centeuro.ko.gz", "sha256": "0e3b03a5c17adc8f2aaca9e48036773581a10bc948c7839ac213e967a43cd25d", "size": 3625},
-    {"path": "/lib/modules/6.6.4-1-virt/kernel/drivers/xen/xen-pciback/xen-pciback.ko.gz", "sha256": "f3065cfc0b6b61e5be0672d02c55a48764fd69a5873cd7451cf4b7b4c34d8110", "size": 50512},
-    {"path": "/usr/share/zoneinfo/Asia/Irkutsk", "sha256": "215ba85c2c1d788f8a2147c5904b7ac818ea60fdd5f464eb17efd62e77df1739", "size": 1229},
-    {"path": "/lib/modules/6.6.4-1-virt/kernel/drivers/video/fbdev/core/fb.ko.gz", "sha256": "fdbd83c632e881d195ed9d967f7684c52e7c0d095eb05cc1472494f1a4a0acee", "size": 67750},
-    {"path": "/lib/modules/6.6.4-1-virt/kernel/net/sched/sch_qfq.ko.gz", "sha256": "29d5ecf2ff503eb459efc580ec9d82a8fb06919ef21de34144dad68a965f946b", "size": 16273},
-    {"path": "/usr/lib/python3.11/unittest/__init__.py", "sha256": "2a24d1843801ba82eef666abecfa49768422a8058f442af8666bf71baf68d752", "size": 3934},
-    {"path": "/usr/lib/python3.11/site-packages/cloudinit/config/cc_resolv_conf.py", "sha256": "36bd46b5a7592d0b90d6080967ea37b86b3178f4f930cb2d93c48ee61aded3f0", "size": 5060},
-    {"path": "/etc/passwd", "sha256": "adbc70ff43ebb5cd08b1988fb6a0104cd2ff7760058987aed67ef3e03ee52b9b", "size": 1280},
-    {"path": "/usr/bin/findssl.sh", "sha256": "b10123b92ddac4ff3e5d003eed44e92c39693dd8c7d197c99b006aacf80fdaf3", "size": 4797},
-    {"path": "/lib/modules/6.6.4-1-virt/kernel/fs/ntfs3/ntfs3.ko.gz", "sha256": "4c2637b9dde6b4fdfdf143cc86fd0f1422ad30207f2833046c94d50bac497547", "size": 200997},
-    {"path": "/lib/modules/6.6.4-1-virt/kernel/net/netfilter/xt_NETMAP.ko.gz", "sha256": "7be8bb5713796a8849b4399237cf67f31b6325845c0c472830c04fa4f518d30a", "size": 4739},
-    {"path": "/usr/lib/python3.11/__pycache__/pickle.cpython-311.pyc", "sha256": "71da06774d52675f911e49cd3d10025b3e743631bfda8aa4e3e85135ae8028fd", "size": 86633},
-    {"path": "/usr/lib/python3.11/__pycache__/hashlib.cpython-311.pyc", "sha256": "f08f464273001b5430966f4412f4f79346f2e547c7519a1ac77da1b363ae859b", "size": 12336},
-    {"path": "/usr/lib/python3.11/site-packages/cloudinit/config/__pycache__/cc_keyboard.cpython-311.pyc", "sha256": "ec791919109ac5efed36606405510b45285aa6df7c333af7f9f78bff54c30b63", "size": 3069},
-    {"path": "/usr/lib/python3.11/encodings/__pycache__/iso8859_2.cpython-311.pyc", "sha256": "05b0419b6e4f33064e31f74a62db6b67a85de07fda01ff8fffdea3de9eb44d3a", "size": 3383},
-    {"path": "/lib/modules/6.6.4-1-virt/kernel/drivers/ptp/ptp_kvm.ko.gz", "sha256": "6e06fd06016cfd10a847eb69c4d229b81b9bd69b7346c1d30ce5f3e706f19689", "size": 5439},
-    {"path": "/usr/lib/python3.11/site-packages/attr/exceptions.pyi", "sha256": "cd9abc6c2527280cbd983b41130e366613e1014207a1329e7434089c90fcf373", "size": 539}
+  "totalDirectories": 680,
+  "filesystems": [
+    {
+      "device": "/dev/sda",
+      "fstype": "ext4",
+      "fileCount": 5342,
+      "directoryCount": 680,
+      "sampleFiles": [
+        {
+          "path": "/usr/lib/python3.11/site-packages/yaml/serializer.py",
+          "size": 4165,
+          "sha256": "0a1b85826854d35863e31808f0668abfabdf33606e8f06bd8bb7761401e3edc0"
+        },
+        {
+          "path": "/usr/lib/python3.11/shelve.py",
+          "size": 8560,
+          "sha256": "b978c6f0ffa901b041d6518afed03f2938a62168066013ee7d23baac31c356c0"
+        },
+        {
+          "path": "/lib/modules/6.6.4-1-virt/kernel/net/netfilter/xt_nfacct.ko.gz",
+          "size": 3895,
+          "sha256": "fb81fa5dddbf32757e32f1bea89c40092399cb2e19e8b5c13a0fe0bd9a627b6e"
+        },
+        {
+          "path": "/lib/rc/bin/service_wasinactive",
+          "size": 14232,
+          "sha256": "f96597dbf709a03e3ecb991045a954d60c51bff9f238e8e25b90ba9b5f7e8778"
+        },
+        {
+          "path": "/usr/lib/python3.11/lib-dynload/_testbuffer.cpython-311-x86_64-linux-musl.so",
+          "size": 45168,
+          "sha256": "80826814c49e45ce9050668907ff371fff138869bc4f3d7f4e5ba254bd2bcf5d"
+        },
+        {
+          "path": "/usr/share/zoneinfo/Antarctica/Davis",
+          "size": 283,
+          "sha256": "5c1d76744ab443edd793304d4cd0bb1b57f31fe5b1c5cb48b99a88df3a7cca92"
+        },
+        {
+          "path": "/lib/modules/6.6.4-1-virt/kernel/net/sched/em_ipt.ko.gz",
+          "size": 7099,
+          "sha256": "80a16c5129d19fb874a8f657ad8be5efc00582e2293c222333d1b8c8e48edb1e"
+        },
+        {
+          "path": "/usr/lib/python3.11/distutils/command/install_lib.py",
+          "size": 8397,
+          "sha256": "f40a1f47e30ef6502d8f0c2eba40a9b5ea4e68910a3195b65478b2479854ec70"
+        },
+        {
+          "path": "/lib/modules/6.6.4-1-virt/kernel/drivers/misc/vmw_balloon.ko.gz",
+          "size": 16097,
+          "sha256": "b71379493811c09798d914f78803d6cbc45b068890faeb0bb9f94a97f3805e16"
+        },
+        {
+          "path": "/usr/lib/python3.11/site-packages/configobj-5.0.8.dist-info/LICENSE",
+          "size": 1736,
+          "sha256": "0d95e648469a711f5ec1e59e6d4492150ec65d968c1ea6c6d96154a92879997a"
+        },
+        {
+          "path": "/lib/modules/6.6.4-1-virt/kernel/net/ipv6/netfilter/ip6t_srh.ko.gz",
+          "size": 5559,
+          "sha256": "a103f02a14d81ae7738aa5bdf36f2f851b521bb9a79cfa40f9861d219a867771"
+        },
+        {
+          "path": "/usr/share/zoneinfo/Asia/Dacca",
+          "size": 323,
+          "sha256": "fb1ba527629586f2a9eab9592ccc9da70ee85d58ab93eae2107fb5f35c4f139e"
+        },
+        {
+          "path": "/usr/lib/python3.11/site-packages/cloudinit/config/__pycache__/cc_set_hostname.cpython-311.pyc",
+          "size": 6048,
+          "sha256": "f26972e490c50f73cbb9c40d7ca1b5995bbec83d59e2ed8f9ffc7a1e8eca073e"
+        },
+        {
+          "path": "/lib/modules/6.6.4-1-virt/kernel/crypto/blowfish_common.ko.gz",
+          "size": 7432,
+          "sha256": "29d15261ac190ed4abf1856a7d390f2165b050937d001de3a564a45935f21163"
+        },
+        {
+          "path": "/usr/share/zoneinfo/right/Atlantic/Azores",
+          "size": 4038,
+          "sha256": "e755a9b6106c6aad5edee7ddd5e12d5bc0ff9dd633cbf6b0df6e79fdf63bd374"
+        },
+        {
+          "path": "/lib/modules/6.6.4-1-virt/kernel/net/netfilter/nf_conntrack_sip.ko.gz",
+          "size": 21119,
+          "sha256": "603865706040f528d773e046b56ee26a9e186cccb46f628443b7f4d9f88e2b32"
+        },
+        {
+          "path": "/usr/lib/python3.11/email/__pycache__/base64mime.cpython-311.pyc",
+          "size": 4349,
+          "sha256": "23c8865e2830967d2b2ddec69d9ff3c995a351757b1df8d7aa2c2c11b7c44fb4"
+        },
+        {
+          "path": "/usr/share/zoneinfo/Pacific/Wake",
+          "size": 152,
+          "sha256": "53268a8a6b11f0b8e02fc67683ae48d074efaf7b4c66e036c1478107afd9a7d7"
+        },
+        {
+          "path": "/etc/crontabs/root",
+          "size": 283,
+          "sha256": "575d810a9fae5f2f0671c9b2c0ce973e46c7207fbe5cb8d1b0d1836a6a0470e3"
+        },
+        {
+          "path": "/usr/lib/python3.11/tempfile.py",
+          "size": 30109,
+          "sha256": "c9169b0ef905999b5d347544cfaa73c4f295777ac07a948aec1e4fdf3ce98a3b"
+        }
+      ]
+    }
   ]
 }

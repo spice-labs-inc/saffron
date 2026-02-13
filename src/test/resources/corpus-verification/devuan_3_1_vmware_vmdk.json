@@ -1,29 +1,448 @@
 {
   "imagePath": "/corpus/vmdk/modern/devuan-3.1-vmware.vmdk",
   "imageBasename": "devuan-3.1-vmware.vmdk",
-  "filesystemType": "ext2",
+  "filesystemCount": 5,
   "totalFiles": 108389,
-  "totalDirectories": 14046,
-  "sampleFiles": [
-    {"path": "/usr/share/ghostscript/9.27/lib/bj8ts06n.upp", "sha256": "cdafd54e1f176564709d428d1f1adc519ff9d40d08eb69600d68c06111a4368e", "size": 1530},
-    {"path": "/usr/share/icons/hicolor/scalable/apps/xfce4-battery-missing.svg", "sha256": "e38070ba9508d466a6f735869cfb1e7d65d93382d5076c9ab53c491c73c2397f", "size": 16137},
-    {"path": "/usr/share/icons/Adwaita/scalable/mimetypes/font-x-generic-symbolic.svg", "sha256": "aab48d60a24a5c3320cc38ca07d4d0952431f26f4e27f005b9d7c9848bad0b59", "size": 1167},
-    {"path": "/usr/share/desktop-base/grub-themes/cinnabar-grub/icons/archlinux.png", "sha256": "a4defe45691fa90b7bbd21d0d9e1e0e7389dfcbccac89bf07fb1769a83da886b", "size": 567},
-    {"path": "/usr/share/system-config-printer/scp-dbus-service.py", "sha256": "78166c9ddb5e0f485e677899c85ef75b67cd9e5eafcf1ce1555d21e10a664145", "size": 22647},
-    {"path": "/usr/lib/libreoffice/share/extensions/nlpsolver/help/bs/help.jar", "sha256": "2070cfb69220d21c2f6c43070352966673d8a734b5dce59a97ecd7c77f0afc17", "size": 4730},
-    {"path": "/usr/include/linux/scif_ioctl.h", "sha256": "a674fc71a2cf6b25626efc1cce865b215c3b03ee44e395b9c163ad5a4aac5e21", "size": 6382},
-    {"path": "/usr/src/linux-headers-4.19.0-14-amd64/include/config/probe/events.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/usr/share/man/man1/gvfsd-metadata.1.gz", "sha256": "e3f8eb4d961d43751924fbff0b4be290d64cdc1654f4a9c7ad4047e2f8520ea4", "size": 977},
-    {"path": "/usr/share/help/eo/atril/index.docbook", "sha256": "32388161eea153137180c377cfa900c985ef8d937c6b4c2a644ffda44561f2d0", "size": 38131},
-    {"path": "/usr/share/javascript/mathjax/unpacked/jax/output/HTML-CSS/blank.gif", "sha256": "4c9e52498dc6c0afe8657a9b95ef6417d33e15bd17fd4b4b6301ef908ffe7ea1", "size": 43},
-    {"path": "/usr/share/icons/Adwaita/24x24/status/audio-volume-high-symbolic.symbolic.png", "sha256": "b641b5e6902d6f94893c37485289c6a9c1999251f31ccbb0322669e400962abd", "size": 516},
-    {"path": "/usr/lib/aspell/en_GB-ize-wo_accents.multi", "sha256": "7d2cc7537e335f11f1531efa9917080741500e7b2cc1fcf0438740331fe48989", "size": 111},
-    {"path": "/usr/share/icons/Adwaita/48x48/actions/view-more-symbolic.symbolic.png", "sha256": "2ed4a46ed412386f8ba02702b05db4e44f2e15c2dd9e06ea482f854d500a4fa8", "size": 203},
-    {"path": "/usr/src/linux-headers-4.19.0-14-common/include/net/inet_common.h", "sha256": "12a1954b1cd54b15cc51e3a9de2092bac24ca9ebff2db55226b7fd2033eda1bb", "size": 2040},
-    {"path": "/usr/lib/libreoffice/share/extensions/nlpsolver/help/bs.done", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/usr/share/icons/Adwaita/64x64/status/network-wired-no-route-symbolic.symbolic.png", "sha256": "dcc4d8a7d26673d72a5541ba4d19e6cdf1914890d9de2ee201e268edf964be28", "size": 876},
-    {"path": "/usr/share/locale/he/LC_MESSAGES/quodlibet.mo", "sha256": "aede18c5c0eeb854f6bc3fdcbff9250bdc982dcfd4491457becd9e7b05ae89b3", "size": 126401},
-    {"path": "/lib/udev/hwdb.d/20-bluetooth-vendor-product.hwdb", "sha256": "c6011a9fc5e6890214b3241d9e50493f1e85b9de67bf86004c210af07fd9b8e1", "size": 64856},
-    {"path": "/usr/share/perl/5.28.1/unicore/lib/CWU/Y.pl", "sha256": "439979cb58c2529070dc30bc2173207cf0be67af4582b92d0cef3f5bb58bf92d", "size": 6553}
+  "totalDirectories": 14045,
+  "filesystems": [
+    {
+      "device": "/dev/devuan310-vg/home",
+      "fstype": "ext4",
+      "fileCount": 80,
+      "directoryCount": 34,
+      "sampleFiles": [
+        {
+          "path": "/devuan/.config/pulse/6264b3a603a9527b5edd3bd560541438-default-source",
+          "size": 1,
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        },
+        {
+          "path": "/devuan/.dbus/session-bus/a6f3e609d6d5290a7f22492260540d96-0",
+          "size": 467,
+          "sha256": "b0aafdb62b224fbd586065e52ad578c3f775b932978176c8f222f17b9f21a1ce"
+        },
+        {
+          "path": "/devuan/.config/pulse/07409025fa22427670bae63260546b56-card-database.tdb",
+          "size": 696,
+          "sha256": "4579a11c1145ee206796c2f5326d8ee86822c865cbb7a9503be153764526df1a"
+        },
+        {
+          "path": "/devuan/.config/xfce4/panel/launcher-12/16161212964.desktop",
+          "size": 296,
+          "sha256": "6345aad7586f584ef3ca9588b379f93534044d1c5bcfa35eb6c2791526027e86"
+        },
+        {
+          "path": "/devuan/.dbus/session-bus/07409025fa22427670bae63260546b56-0",
+          "size": 467,
+          "sha256": "945dd99ba9acac8e1a8ca7ba5bae6ab91d1e7ea0dcf054819858efad0f5de753"
+        },
+        {
+          "path": "/devuan/.config/pulse/a6f3e609d6d5290a7f22492260540d96-stream-volumes.tdb",
+          "size": 696,
+          "sha256": "4579a11c1145ee206796c2f5326d8ee86822c865cbb7a9503be153764526df1a"
+        },
+        {
+          "path": "/devuan/.config/pulse/dcfbf647e5905337ad8831b960546bbd-device-volumes.tdb",
+          "size": 8192,
+          "sha256": "3d65dfad549db5bb1536dd8b745a4ec7da8fa13ee51e8302fb0cf15201e0a209"
+        },
+        {
+          "path": "/devuan/.dbus/session-bus/48ee4174d6e964232600aa28605410b3-0",
+          "size": 467,
+          "sha256": "8563d99dafe4558fb7d527472deda20946f92900f32ef23df3f6bc5af424d7c4"
+        },
+        {
+          "path": "/devuan/.config/pulse/4188208a9661e0bb9a6df43a60546c22-default-sink",
+          "size": 1,
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        },
+        {
+          "path": "/devuan/.config/pulse/cookie",
+          "size": 256,
+          "sha256": "ecb893d244e6bcaf5007eb2a8599dbc36c99c38efa299fe4ec091f2f5c65779c"
+        },
+        {
+          "path": "/devuan/.config/pulse/07409025fa22427670bae63260546b56-stream-volumes.tdb",
+          "size": 696,
+          "sha256": "4579a11c1145ee206796c2f5326d8ee86822c865cbb7a9503be153764526df1a"
+        },
+        {
+          "path": "/devuan/.config/xfce4/desktop/icons.screen0-784x584.rc",
+          "size": 122,
+          "sha256": "c43d94adab155f690ff95b873979f3f1693f7b7708689128cd03a150467ee9d8"
+        },
+        {
+          "path": "/devuan/.config/pulse/dcfbf647e5905337ad8831b960546bbd-card-database.tdb",
+          "size": 696,
+          "sha256": "4579a11c1145ee206796c2f5326d8ee86822c865cbb7a9503be153764526df1a"
+        },
+        {
+          "path": "/devuan/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml",
+          "size": 10167,
+          "sha256": "46cce0f2ec9ca5069c23c0ea233541a8799faa1ff5a13d7e3f0659daa86fe97c"
+        },
+        {
+          "path": "/devuan/.config/pulse/6264b3a603a9527b5edd3bd560541438-stream-volumes.tdb",
+          "size": 696,
+          "sha256": "4579a11c1145ee206796c2f5326d8ee86822c865cbb7a9503be153764526df1a"
+        },
+        {
+          "path": "/devuan/.config/pulse/be7b280c565e6bea2b4ccc2c60546a5c-card-database.tdb",
+          "size": 696,
+          "sha256": "4579a11c1145ee206796c2f5326d8ee86822c865cbb7a9503be153764526df1a"
+        },
+        {
+          "path": "/devuan/.config/pulse/dcfbf647e5905337ad8831b960546bbd-default-sink",
+          "size": 1,
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        },
+        {
+          "path": "/devuan/.config/pulse/07409025fa22427670bae63260546b56-default-sink",
+          "size": 1,
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        },
+        {
+          "path": "/devuan/.config/pulse/a6f3e609d6d5290a7f22492260540d96-default-source",
+          "size": 1,
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        },
+        {
+          "path": "/devuan/.config/pulse/6264b3a603a9527b5edd3bd560541438-device-volumes.tdb",
+          "size": 12288,
+          "sha256": "cb1412ecc58d42794059cd97accdf41f0de692960ce9a4d71c79219283c7d817"
+        }
+      ]
+    },
+    {
+      "device": "/dev/devuan310-vg/root",
+      "fstype": "ext4",
+      "fileCount": 101924,
+      "directoryCount": 13770,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/icons/Adwaita/16x16/emotes/face-kiss-symbolic.symbolic.png",
+          "size": 315,
+          "sha256": "e268ba3e54d62be9b89eae2646142039755aa384616ab7a7fe4ed4493306fc20"
+        },
+        {
+          "path": "/usr/share/gimp/2.0/icons/Color/24x24/apps/gimp-paths.svg",
+          "size": 3757,
+          "sha256": "696a757d1b16b38d31c716cf588666476a131cbd6e110f9233c4dd7ceecd36fb"
+        },
+        {
+          "path": "/usr/share/locale/es/LC_MESSAGES/apt-listchanges.mo",
+          "size": 2016,
+          "sha256": "c5984adb56941b59d4f778a1780c250f4c681742bacea1a36247208e104ca1cc"
+        },
+        {
+          "path": "/etc/X11/Xreset",
+          "size": 709,
+          "sha256": "a6a17509c4d16c95018c14c199350527c2c358cf440e32331eb3fc2afc12aa62"
+        },
+        {
+          "path": "/usr/share/gimp/2.0/icons/Color/scalable/apps/gimp-tool-airbrush.svg",
+          "size": 14099,
+          "sha256": "65e88ffc2d55bf82c309e692086eb526803333cdee92de01259413e8147f5f78"
+        },
+        {
+          "path": "/usr/lib/python3.7/encodings/__pycache__/quopri_codec.cpython-37.pyc",
+          "size": 2425,
+          "sha256": "234416b2a965cb2da66a165fbc766c2955c276e9f0d9ae51d16070bff3b0447f"
+        },
+        {
+          "path": "/usr/lib/libreoffice/share/extensions/wiki-publisher/help/id/help.jar",
+          "size": 10289,
+          "sha256": "7b71c811ad37c01eee46814c67acefd25375fe0735bd02938cfde1ddde9d7389"
+        },
+        {
+          "path": "/usr/share/icons/Adwaita/cursors/grabbing",
+          "size": 69120,
+          "sha256": "30c41044efe69c7bba148abb96f337b569aa713a1b3721f53a8a076bea1f00d0"
+        },
+        {
+          "path": "/usr/share/hplip/__pycache__/testpage.cpython-37.pyc",
+          "size": 3465,
+          "sha256": "86a50e4d45169af542242f196b4d18d30d8751dfd1bd85934a512aebee768388"
+        },
+        {
+          "path": "/usr/src/linux-headers-4.19.0-14-common/arch/arm64/include/asm/mmu.h",
+          "size": 2893,
+          "sha256": "5e523eeff0af33cf7bac94ac2eafb30894f9375a2864bc76e062e67f8ba7fbfd"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/pyatspi/table.py",
+          "size": 15764,
+          "sha256": "f6e08c0d7dc52ff7b52c4663ddd349a6f20a1295d11c2b12e5488bdcda303af9"
+        },
+        {
+          "path": "/usr/share/gimp/2.0/brushes/Texture/Hatch-Pen-01.gbr",
+          "size": 16425,
+          "sha256": "d81e70d7b36f1d047007d4ca6c5b152629f6e58a8a2e46cd5e3999afaf826b0b"
+        },
+        {
+          "path": "/usr/share/cups/ppdc/imagemagick.defs",
+          "size": 3761,
+          "sha256": "4c9981595ec341d7ea606ef129d043024c5920860423e906527894486c12151b"
+        },
+        {
+          "path": "/usr/share/doc-base/libreoffice-help-en-us",
+          "size": 477751,
+          "sha256": "2a567a9090c4db62585dbccc4586b3754a2c13cb406da35f3a44e1315c20d6e4"
+        },
+        {
+          "path": "/usr/share/desktop-base/devuan-reference.desktop",
+          "size": 203,
+          "sha256": "c9ea53b945d38630122d34e3bf1b0a89f8dbaabf4c12c5d611bcc6a663f44ac7"
+        },
+        {
+          "path": "/usr/share/alsa/cards/FM801.conf",
+          "size": 1227,
+          "sha256": "022ca9b10d7cc8a32f60b0aff3960fdd9fb06a68a2cecb2a54da5426d64f1903"
+        },
+        {
+          "path": "/usr/share/ghostscript/9.27/Resource/Encoding/ExpertSubsetEncoding",
+          "size": 3358,
+          "sha256": "9c843a5c30685cf9ec8d73d73bc3b77298ee59bf57c110ad10a1a8ebcd8f654a"
+        },
+        {
+          "path": "/usr/bin/scp-dbus-service",
+          "size": 90,
+          "sha256": "7a48cba47432dafe807f1927b519fa60de383d2faa3b6d67c30ffd7cb695dfeb"
+        },
+        {
+          "path": "/usr/src/linux-headers-4.19.0-14-common/arch/powerpc/include/asm/nohash/32/pte-44x.h",
+          "size": 3797,
+          "sha256": "4dec2c752090c8864482f5e56fa0e88b5bb5ef40f1dc985e247ca86d74b0c929"
+        },
+        {
+          "path": "/usr/share/icons/gnome/16x16/actions/document-page-setup.png",
+          "size": 910,
+          "sha256": "e1c86d0c24bce79f1dcc7c438ad0eea67701c194b40cc06d175cb46b0c2e577f"
+        }
+      ]
+    },
+    {
+      "device": "/dev/devuan310-vg/tmp",
+      "fstype": "ext4",
+      "fileCount": 0,
+      "directoryCount": 4,
+      "sampleFiles": []
+    },
+    {
+      "device": "/dev/devuan310-vg/var",
+      "fstype": "ext4",
+      "fileCount": 6061,
+      "directoryCount": 232,
+      "sampleFiles": [
+        {
+          "path": "/cache/apparmor/ea9ed67a.0/usr.lib.libreoffice.program.oosplash",
+          "size": 25081,
+          "sha256": "2b70ed9f8c007a38271be0784f2ee84e3f062c99fa1c63faa87a0532087deed9"
+        },
+        {
+          "path": "/lib/dpkg/info/libchromaprint1:amd64.md5sums",
+          "size": 318,
+          "sha256": "1f362bf9f1accb0e487fa6e6b916b97fd8f046c2de57557385f6fdedd274ba3b"
+        },
+        {
+          "path": "/lib/dpkg/info/libhttpclient-java.md5sums",
+          "size": 1051,
+          "sha256": "e7257fb285f348744bdcad7b5938c042e7f55e97fa7e297e8ce84c9d372304b2"
+        },
+        {
+          "path": "/lib/dpkg/info/bash.postinst",
+          "size": 603,
+          "sha256": "3e8995ddc6c96c81021f3556dd8de4cbc8c64bb7f211181f9dfa72af548aa9da"
+        },
+        {
+          "path": "/lib/dpkg/info/libgtksourceview-3.0-1:amd64.triggers",
+          "size": 63,
+          "sha256": "23664dcc7d3ede4b91191104088ac3c4fed3f89b2cf0965a6d3aefbec5d3e289"
+        },
+        {
+          "path": "/lib/dpkg/info/libreoffice-gtk2.list",
+          "size": 442,
+          "sha256": "043a2611d07cbf1f85faa4a1249f0c96177cda2acb0f1e6066344caf51df8e30"
+        },
+        {
+          "path": "/lib/dpkg/info/libchromaprint1:amd64.triggers",
+          "size": 63,
+          "sha256": "23664dcc7d3ede4b91191104088ac3c4fed3f89b2cf0965a6d3aefbec5d3e289"
+        },
+        {
+          "path": "/lib/dpkg/info/apparmor.preinst",
+          "size": 1131,
+          "sha256": "12737f8d217ae9534775028363cc84b9f2db903f0ad994d0ac8fc419dfde7883"
+        },
+        {
+          "path": "/lib/dpkg/info/libnumbertext-data.md5sums",
+          "size": 3178,
+          "sha256": "531af943649f15db1a6d71033d572309102f75ee0861b90972c320fba8d03798"
+        },
+        {
+          "path": "/lib/dpkg/info/vim-tiny.md5sums",
+          "size": 739,
+          "sha256": "9fb03fdc0cec76ef126c9420f831ac8f63d09f1fd018950b3c8b55319003ac1b"
+        },
+        {
+          "path": "/lib/dpkg/info/libtumbler-1-0.md5sums",
+          "size": 313,
+          "sha256": "a95802b1418c64a82956cedf17a54010d7c61e56e20a6ac1d9df1ed8d77c6b99"
+        },
+        {
+          "path": "/lib/dpkg/info/libsoundtouch1:amd64.triggers",
+          "size": 67,
+          "sha256": "704f892af6bc2fac749e7b9d80dfed11ba81b549bf4ee30221087cea13e65903"
+        },
+        {
+          "path": "/lib/dpkg/info/libxv1:amd64.triggers",
+          "size": 60,
+          "sha256": "f2bec0f57ef529571abb4370d4e3cfa911ae3606a0d31559bca5980c0a1de91e"
+        },
+        {
+          "path": "/lib/dpkg/info/lsb-release.postinst",
+          "size": 304,
+          "sha256": "995e93c92544dd63abb34e7f5fce2fa78950e31f02472df506682a35a17f7f58"
+        },
+        {
+          "path": "/lib/dpkg/info/ifupdown.md5sums",
+          "size": 2017,
+          "sha256": "b714eb22fdf306c8a3cddfc9ff8f95011a4c0ab63134cd044744a08cd1325aff"
+        },
+        {
+          "path": "/lib/dpkg/info/libdotconf0:amd64.shlibs",
+          "size": 25,
+          "sha256": "e3c6a9ab8f81f252a1896dc1a6481228ef092428ea42e4784e021ad05d817526"
+        },
+        {
+          "path": "/lib/systemd/deb-systemd-helper-enabled/lvm2-lvmpolld.socket.dsh-also",
+          "size": 62,
+          "sha256": "36a68992675e4a07eb69b60ae7b3b93d8a525c5e2d8d4c22066ef8718ad7c0dd"
+        },
+        {
+          "path": "/lib/dpkg/info/fonts-crosextra-caladea.prerm",
+          "size": 464,
+          "sha256": "58d86c5d9ffcd14b4e0d81fcf6eae535400e42a224a34ccfc305d2e5fb82e1ce"
+        },
+        {
+          "path": "/lib/dpkg/info/libgpgmepp6:amd64.shlibs",
+          "size": 37,
+          "sha256": "9bf6016a74a8a7f60821241a3430677c61e7ef92d0e9f14dcd735cb198fc7af0"
+        },
+        {
+          "path": "/lib/dpkg/info/libgstreamer1.0-0:amd64.shlibs",
+          "size": 243,
+          "sha256": "d52fc182d916b7cf946c9b1470880167fbd894ce8f6b7813115e9e902702347b"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext2",
+      "fileCount": 324,
+      "directoryCount": 5,
+      "sampleFiles": [
+        {
+          "path": "/grub/i386-pc/hwmatch.mod",
+          "size": 46212,
+          "sha256": "fb3877852709ee6268fdfbbb311090f47fadcc47bc3ce8db129d1f883fee455d"
+        },
+        {
+          "path": "/grub/i386-pc/memdisk.mod",
+          "size": 2020,
+          "sha256": "b8521854441b5047cb9f9cfa614387d817f5acf5b499fb3388f4849c783e0940"
+        },
+        {
+          "path": "/grub/i386-pc/ufs1_be.mod",
+          "size": 5796,
+          "sha256": "7a2058765edd895013b72473b40ccc311b2d39fc2b1617a80503c0b5fe0f5d7e"
+        },
+        {
+          "path": "/grub/locale/pt_BR.mo",
+          "size": 87707,
+          "sha256": "8afb9d4993313f8fc174410c526c03a109dafc04854476eb3650e7b6ce06c896"
+        },
+        {
+          "path": "/grub/i386-pc/shift_test.mod",
+          "size": 2444,
+          "sha256": "b1a922370e071877274341b1815ced36d79c8aacf97132afdfd3b0696e436cc0"
+        },
+        {
+          "path": "/grub/i386-pc/pcidump.mod",
+          "size": 2480,
+          "sha256": "4437ef9d8a55aa0ab54dc2f045ecd3c542a2266176cddaa9ab6e20a94e379ce5"
+        },
+        {
+          "path": "/grub/i386-pc/search_label.mod",
+          "size": 3120,
+          "sha256": "995b313c3caa1296b712da81e84c045681619079a1f53dcfaddd8627e4b891c4"
+        },
+        {
+          "path": "/grub/i386-pc/lsmmap.mod",
+          "size": 1868,
+          "sha256": "d0de0aa656c12fcbb5b64337a305c0784669910f7b292e4d2428e4b5406e3314"
+        },
+        {
+          "path": "/grub/i386-pc/sleep_test.mod",
+          "size": 2284,
+          "sha256": "3a662e99baff05d5ce88bf9b2c0bb5be739ea8a870f332a98e24b853ee4b1961"
+        },
+        {
+          "path": "/grub/i386-pc/time.mod",
+          "size": 1504,
+          "sha256": "3ce4bd72f3a0d381a3aa971e7a102ebf1f2725aef2604cfd28efa0c9901de21a"
+        },
+        {
+          "path": "/grub/i386-pc/gcry_md5.mod",
+          "size": 3764,
+          "sha256": "4c4242043a57e0a4e793acaef48d6de809905077bbdfc306626983df7945240f"
+        },
+        {
+          "path": "/config-4.19.0-14-amd64",
+          "size": 206242,
+          "sha256": "a82bb2a0718f140272a5c60a8114b17c90bb189f2cbee7c5c380bbfc3c32edc2"
+        },
+        {
+          "path": "/grub/i386-pc/pci.mod",
+          "size": 1392,
+          "sha256": "13534c078bd047328464b9b65edb02bafcd737db3b5a4e90274daf98134c0639"
+        },
+        {
+          "path": "/grub/i386-pc/bitmap_scale.mod",
+          "size": 3796,
+          "sha256": "42628a31e4f5acf6afac33269590b75be1f21e52dd752517814a01cac57593a6"
+        },
+        {
+          "path": "/grub/i386-pc/part_gpt.mod",
+          "size": 2372,
+          "sha256": "4fd0e6cd206e8be8aee27f5381ebc0bff0062653da26376a80e67bca71e2f56a"
+        },
+        {
+          "path": "/grub/i386-pc/mdraid09_be.mod",
+          "size": 2020,
+          "sha256": "5209924eb70634ae5b8983bf027bc5023ace92809c5a2986c5d3be0115bc0256"
+        },
+        {
+          "path": "/grub/i386-pc/backtrace.mod",
+          "size": 1628,
+          "sha256": "bc3c04ce6f5d282017e8b0c92b6a2509aad010db5d6dad279e89de221701d803"
+        },
+        {
+          "path": "/grub/i386-pc/efiemu.mod",
+          "size": 24176,
+          "sha256": "b38455a5e0811e91ecbe6ab63efbe7e472d04ed8e2adb0ec1ca7cd26dc3818c0"
+        },
+        {
+          "path": "/grub/i386-pc/jpeg.mod",
+          "size": 6308,
+          "sha256": "6e88eac00eed7b42cd850bc72b61eb6818633c842a345b3c5c285713c36460a3"
+        },
+        {
+          "path": "/grub/i386-pc/macbless.mod",
+          "size": 3280,
+          "sha256": "91aea03ac1ab749ab5ba7e7e50f1d02f10a551e07035b99ee9f874c07698d250"
+        }
+      ]
+    }
   ]
 }

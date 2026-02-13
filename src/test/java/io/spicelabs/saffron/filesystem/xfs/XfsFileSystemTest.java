@@ -85,12 +85,20 @@ class XfsFileSystemTest {
                 assertThat(etc).isPresent();
                 assertThat(etc.get()).isInstanceOf(FileSystemEntry.Directory.class);
 
-                // Check a file
+                // Check a file (/etc/os-release is typically a symlink on CentOS)
                 Optional<FileSystemEntry> osRelease = fs.resolve("/etc/os-release");
                 if (osRelease.isPresent()) {
-                    assertThat(osRelease.get()).isInstanceOf(FileSystemEntry.RegularFile.class);
-                    FileSystemEntry.RegularFile file = (FileSystemEntry.RegularFile) osRelease.get();
-                    String content = new String(file.readAllBytes());
+                    String content;
+                    if (osRelease.get() instanceof FileSystemEntry.RegularFile file) {
+                        content = new String(file.readAllBytes());
+                    } else if (osRelease.get() instanceof FileSystemEntry.SymbolicLink link) {
+                        Optional<FileSystemEntry> resolved = link.resolve();
+                        assertThat(resolved).isPresent();
+                        assertThat(resolved.get()).isInstanceOf(FileSystemEntry.RegularFile.class);
+                        content = new String(((FileSystemEntry.RegularFile) resolved.get()).readAllBytes());
+                    } else {
+                        throw new AssertionError("Unexpected entry type: " + osRelease.get().getClass());
+                    }
                     assertThat(content).contains("CentOS");
                 }
             }

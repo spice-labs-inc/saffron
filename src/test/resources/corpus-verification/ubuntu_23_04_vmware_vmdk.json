@@ -1,29 +1,225 @@
 {
   "imagePath": "/corpus/vmdk/modern/ubuntu-23.04-vmware.vmdk",
   "imageBasename": "ubuntu-23.04-vmware.vmdk",
-  "filesystemType": "unknown",
+  "filesystemCount": 2,
   "totalFiles": 116365,
-  "totalDirectories": 14343,
-  "sampleFiles": [
-    {"path": "/usr/lib/modules/6.2.0-20-generic/kernel/drivers/rpmsg/rpmsg_core.ko", "sha256": "cfb4571b2dc92d19e753e8dfeac6e4a0de35c459a600f85845fb0e2bf2ba6cb4", "size": 44777},
-    {"path": "/usr/lib/python3/dist-packages/lazr/restfulclient/tests/test_oauth.py", "sha256": "8c78b32d99772b916c5b49d107d31b8fce4d0a5235e9293ab74c8cc261079490", "size": 5490},
-    {"path": "/usr/share/locale/it/LC_MESSAGES/libapt-pkg6.0.mo", "sha256": "52788ffe8159f088b35a4cdbe9c63ef4a66eda36823f3a6df5f6d99ccbe6823f", "size": 34064},
-    {"path": "/var/lib/swcatalog/icons/ubuntu-lunar-universe/64x64/openmotor_oMIconCycles.png", "sha256": "23a46ae2a58cd986d89450d803f7eb10543e5d595e06ad2e074adce59dee5776", "size": 4563},
-    {"path": "/usr/src/linux-headers-6.2.0-20-generic/include/config/BMI160_SPI", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/usr/src/linux-headers-6.2.0-20/include/uapi/linux/kcm.h", "sha256": "8a16ec6a2c5fb80e4f52d7362e30efc5c45e7c6c6d67e20d2da2e614d9a947e2", "size": 822},
-    {"path": "/usr/share/hplip/data/images/32x32/wireless.png", "sha256": "cad2d81d5fa60da47456a992f5fcfa1fa1bdca49bf52fa0f6e7f6b6f9d13f20b", "size": 1030},
-    {"path": "/usr/src/linux-headers-6.2.0-20/include/crypto/algapi.h", "sha256": "474014c5499856bfd038048ccc58c472b796595a546fb95b89ac9aacf3d8ffc9", "size": 8399},
-    {"path": "/usr/lib/modules/6.2.0-20-generic/kernel/drivers/comedi/drivers/ii_pci20kc.ko", "sha256": "37f475ebb05d190dfcbb8889fd45db6cfe6696aa531a303847a447d01788f55b", "size": 18217},
-    {"path": "/usr/share/groff/1.22.4/tmac/composite.tmac", "sha256": "ad2c4e55e23e32fc17986af5a95805084be9cadcda64f178d571a1c4bfe9ea29", "size": 805},
-    {"path": "/var/cache/fontconfig/d52a8644073d54c13679302ca1180695-le64.cache-6", "sha256": "8a82678dd4167f09164b9011c1968451f7ce47e1ea4da40619951ca7af797cab", "size": 87648},
-    {"path": "/usr/src/linux-headers-6.2.0-20/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh", "sha256": "672cdc8ae07912a31d1d5601e0795cc13cc8c0c8c126c659989247ed16178a55", "size": 1941},
-    {"path": "/usr/share/doc/linux-generic-hwe-22.04/copyright", "sha256": "852c222fc0a341d0001214719f0293bd693ecbf27a564e2256e4d65565229f3a", "size": 1598},
-    {"path": "/usr/src/linux-headers-6.2.0-20-generic/include/config/SND_SOC_SOF_ICELAKE", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/usr/lib/firmware/cirrus/cs35l41-dsp1-spk-cali-103c8981-l0.bin", "sha256": "52407d3133ececb9df0aa7e727f108ac26b59cc6bafd42b004b4c2fce7bcdce5", "size": 2012},
-    {"path": "/var/lib/dpkg/info/dmsetup.triggers", "sha256": "4e8ef9748954495865930583ef77061fb0a8dc74fc7176ddb5dcf3d3287a03fe", "size": 86},
-    {"path": "/usr/src/linux-headers-6.2.0-20/drivers/dma/fsl-dpaa2-qdma/Makefile", "sha256": "ada5668e3e4350c94d590b560a7b92dfebddfe427640f3236e6f5730c50a3e5b", "size": 135},
-    {"path": "/usr/share/doc/libnet-ssleay-perl/examples/cb-testi.pl", "sha256": "84a1eb28c0e0431f4b881a145c21ba7a72b835863a75861915fa5d0d0bab0702", "size": 548},
-    {"path": "/usr/share/icons/Adwaita/48x48/legacy/format-indent-more.png", "sha256": "1d4703255224614a76b2ce8b7edfa91b9ef5669851ce26dc625267a7d031c38d", "size": 1247},
-    {"path": "/usr/share/man/man1/ldappasswd.1.gz", "sha256": "894360915ef3403665a8e8c8b5ac2ac8dad4a1d434d607f5d216192cdfeb3aae", "size": 2308}
+  "totalDirectories": 14342,
+  "filesystems": [
+    {
+      "device": "/dev/sda2",
+      "fstype": "ext4",
+      "fileCount": 305,
+      "directoryCount": 5,
+      "sampleFiles": [
+        {
+          "path": "/grub/i386-pc/cmostest.mod",
+          "size": 1816,
+          "sha256": "834f9dc31fa090b06968a6fabc80ef7131bcf0cc6a8bb08c2789a15f869f4b8e"
+        },
+        {
+          "path": "/grub/i386-pc/gzio.mod",
+          "size": 8848,
+          "sha256": "b188a4e03b846ebcd72d6465459c8f5c96c59f61d24fd8c65ec874477a492445"
+        },
+        {
+          "path": "/grub/i386-pc/play.mod",
+          "size": 2448,
+          "sha256": "af5bb820ecc562d749b0ca61f901b08cbc5b3e8291785e9f165a732a0878b9f4"
+        },
+        {
+          "path": "/grub/i386-pc/partmap.lst",
+          "size": 111,
+          "sha256": "85a3d5f84d20723a27c1442b861be44fbf58a4525eefe2ccbb2b5f7ceb21e8be"
+        },
+        {
+          "path": "/grub/i386-pc/crc64.mod",
+          "size": 1572,
+          "sha256": "ae6065a833293c79b5dfb86a10430b02b6c1c2c6827bb565fc3d5cfc9c9284b1"
+        },
+        {
+          "path": "/grub/i386-pc/all_video.mod",
+          "size": 492,
+          "sha256": "dfaa89f5364aadf6b440d37385692472e21d6957254b20363f8436704afa77c8"
+        },
+        {
+          "path": "/grub/i386-pc/video_bochs.mod",
+          "size": 5588,
+          "sha256": "53e647394265d590c5f71868d4088496e9ba0a49047dc3cc8314d5c459d3acbb"
+        },
+        {
+          "path": "/grub/fonts/unicode.pf2",
+          "size": 2392304,
+          "sha256": "4fb7cc41052c130f489184b266d300d8a8a82f5e5b231ce6bf9178d5ae048e72"
+        },
+        {
+          "path": "/grub/i386-pc/memdisk.mod",
+          "size": 1988,
+          "sha256": "3b038a8cc094b7a6fb81f5bd0b8f2d4cba6109217d114dfb6342aefbda153aa8"
+        },
+        {
+          "path": "/grub/i386-pc/gcry_serpent.mod",
+          "size": 17028,
+          "sha256": "5e39951f6cebb0f62d916227d39a4d53b12c1d8c7faa62eecb8655cd889399e7"
+        },
+        {
+          "path": "/grub/i386-pc/efiemu64.o",
+          "size": 10208,
+          "sha256": "2da6e9493b93945c6e5ce22c0948f848dd879becb54a557c43f722714e212b53"
+        },
+        {
+          "path": "/grub/i386-pc/progress.mod",
+          "size": 2136,
+          "sha256": "c90e7a9af04e57db95e51d6a3e5a2de32beb605cec299be69b81d99c2ce261f7"
+        },
+        {
+          "path": "/grub/i386-pc/exfctest.mod",
+          "size": 1380,
+          "sha256": "1ec6112df11c6b4dc5f226ec1f48764b48fc23ed410bf079848a7f86949999ea"
+        },
+        {
+          "path": "/grub/i386-pc/gcry_sha256.mod",
+          "size": 4248,
+          "sha256": "7b4c4151770cff9d8b72a2f1887f151ca56614889c0b5d15f6ae5fd43aa51dfc"
+        },
+        {
+          "path": "/grub/i386-pc/ufs2.mod",
+          "size": 5428,
+          "sha256": "35ed5ba9e6e0ecf2cb663362538accb8c1c4dd2c169da96ac2dfa9c6e773e3ed"
+        },
+        {
+          "path": "/grub/i386-pc/gcry_tiger.mod",
+          "size": 12244,
+          "sha256": "d7ff76fbe60b4bc23cf93f343585c6bcb48436c5b0e1eb36c4928a085482ac48"
+        },
+        {
+          "path": "/grub/i386-pc/keystatus.mod",
+          "size": 1840,
+          "sha256": "3181ebf7e75f9c4cd32f33d8f2d6aa8cf0568faec1a91316342a8cc786d55a00"
+        },
+        {
+          "path": "/grub/i386-pc/archelp.mod",
+          "size": 2852,
+          "sha256": "729b15e1f2c7944e464b16de76e06f2425b7718e351a1f07f2e5d025d03d3f06"
+        },
+        {
+          "path": "/grub/i386-pc/help.mod",
+          "size": 2504,
+          "sha256": "3b6cdc8bb372e1935e2b1ed70f7330d6461b542bcc8eb3e6be60762426686f3f"
+        },
+        {
+          "path": "/grub/i386-pc/date.mod",
+          "size": 2116,
+          "sha256": "f1d54849e33ad6a6c80e502e6e59379c00f9bd0e1677d241d6879ae658be0702"
+        }
+      ]
+    },
+    {
+      "device": "/dev/ubuntu-vg/ubuntu-lv",
+      "fstype": "ext4",
+      "fileCount": 116060,
+      "directoryCount": 14337,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/icons/Yaru/16x16/legacy/epiphany-download.svg",
+          "size": 2916,
+          "sha256": "77a82abd5fd1f3f03145e8431f051baf3811da943c76a993042a14dde508604c"
+        },
+        {
+          "path": "/usr/share/icons/HighContrast/22x22/places/user-trash.png",
+          "size": 329,
+          "sha256": "37a764ff12b8a26826ebb700648eb671add275fd254068e04ea583ac6d8ed31b"
+        },
+        {
+          "path": "/usr/src/linux-headers-6.2.0-20/include/dt-bindings/power/imx8mq-power.h",
+          "size": 676,
+          "sha256": "c69eb9d71f72fc345a9fa1d6ea76abf749bc98687aef77e15389da5ed5cbf22d"
+        },
+        {
+          "path": "/usr/share/icons/HighContrast/256x256/devices/media-optical-cd-audio.png",
+          "size": 4831,
+          "sha256": "ff9ac364a2f8a0c83d9744ecf84ae85dd3ca473f54ee77b936874f1713ad8026"
+        },
+        {
+          "path": "/var/lib/dpkg/info/libkmod2:amd64.symbols",
+          "size": 3009,
+          "sha256": "48d7b02fa096b5634a7192e31d0c6f366af5fd3c6d5bcd31daac839b4929c559"
+        },
+        {
+          "path": "/usr/share/icons/HighContrast/256x256/status/network-transmit.png",
+          "size": 3016,
+          "sha256": "a62a61a3037615ebc05d3872a75507df1fda453d056248008e6f915f49ac76da"
+        },
+        {
+          "path": "/usr/share/man/man8/ip-netconf.8.gz",
+          "size": 494,
+          "sha256": "381392127646f0bf4d174d905ec99872b95c3e6f83934be0443577fd0e462cdf"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/pygments/styles/__pycache__/trac.cpython-311.pyc",
+          "size": 2345,
+          "sha256": "dd283744f0877f3c730d860b32e1144bef6da28bcc1bd3afb136b3ed562a81e7"
+        },
+        {
+          "path": "/usr/lib/tmpfiles.d/static-nodes-permissions.conf",
+          "size": 763,
+          "sha256": "39fd92d391779382c8fac3cad6ff107da859fd04c3d77b24d5e8c1b5151f8f6a"
+        },
+        {
+          "path": "/usr/share/icons/HighContrast/48x48/status/mail-attachment.png",
+          "size": 1106,
+          "sha256": "36998f9e6b12ed5640b67f5ee6d9cb53b942823cc30cc8a5fa40364d61348e84"
+        },
+        {
+          "path": "/usr/share/icons/Yaru/48x48@2x/devices/input-gaming.png",
+          "size": 2395,
+          "sha256": "184200ee69cd82823cb3928bfb5e9adc4583d103ba0dd1f81ef53d675ce33bef"
+        },
+        {
+          "path": "/usr/src/linux-headers-6.2.0-20/arch/s390/include/asm/cputime.h",
+          "size": 840,
+          "sha256": "9fccdae1a5b8cfae1cdd04161df282c301c5cef59481f256ed68377aba586ee7"
+        },
+        {
+          "path": "/usr/share/ghostscript/10.00.0/lib/gs_m.xpm",
+          "size": 1437,
+          "sha256": "7b255806a18b67ca77ae48958c53e672deaf1da5202588f76a92db43cd93e254"
+        },
+        {
+          "path": "/usr/share/doc/libgphoto2-6/camlibs/README.adc65",
+          "size": 2850,
+          "sha256": "7d1e42bec94b96c69f590c02476ac7fe4f187a0fe3657205e50a3b1d061d5868"
+        },
+        {
+          "path": "/usr/share/pixmaps/evolution-data-server/category_holiday_16.png",
+          "size": 629,
+          "sha256": "232e7c7b981500e90cbb499f773b111aec5bccd37986460e3174c3e4486ad679"
+        },
+        {
+          "path": "/usr/lib/firmware/ath11k/IPQ8074/hw2.0/q6_fw.b08",
+          "size": 486546,
+          "sha256": "f791ae82f3b09c68092ebae81fd517cd36633b74d92bd32e0ebc846f288472bb"
+        },
+        {
+          "path": "/usr/lib/modules/6.2.0-20-generic/kernel/drivers/net/ethernet/adi/adin1110.ko",
+          "size": 142241,
+          "sha256": "8b0d581679b10c088dae268ec2f1916326268b0302d254bd5ed59e8547345ab5"
+        },
+        {
+          "path": "/usr/share/i18n/charmaps/EUC-JISX0213.gz",
+          "size": 69860,
+          "sha256": "6b987b4fab80f45b87d55233ed438073e348daf45de807ed3ff77f09a901302f"
+        },
+        {
+          "path": "/usr/lib/firmware/radeon/kaveri_vce.bin",
+          "size": 101072,
+          "sha256": "fb768657d70c8674c1c48a284e5299ab2877ac2420957ea4b36c75f7f5997869"
+        },
+        {
+          "path": "/usr/share/help-langpack/en_GB/evolution/calendar-layout-general-formatting.page",
+          "size": 2541,
+          "sha256": "37cab206f816378997b9fece70a71120bbbf2ff69f35ced10fcee5f20334ac80"
+        }
+      ]
+    }
   ]
 }

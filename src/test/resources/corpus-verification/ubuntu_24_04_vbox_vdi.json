@@ -1,29 +1,225 @@
 {
   "imagePath": "/corpus/vdi/modern/ubuntu-24.04-vbox.vdi",
   "imageBasename": "ubuntu-24.04-vbox.vdi",
-  "filesystemType": "unknown",
+  "filesystemCount": 2,
   "totalFiles": 123428,
-  "totalDirectories": 14977,
-  "sampleFiles": [
-    {"path": "/usr/include/x86_64-linux-gnu/sys/epoll.h", "sha256": "02152dc3b0fe7a1c71ead5e13186ddd8b5184cd4dfe6a9463c6b161f555c2d1d", "size": 5300},
-    {"path": "/usr/lib/modules/6.8.0-31-generic/kernel/sound/pci/emu10k1/snd-emu10k1x.ko.zst", "sha256": "a8da07359efa5f7e725d409a9aed90daeb03ddcc3adc7ec60bffbe77618f7d42", "size": 19042},
-    {"path": "/usr/lib/x86_64-linux-gnu/espeak-ng-data/voices/mb/mb-de5-en", "sha256": "fcbf3863ac3b6bf117145a50699138de5a3426487eb2f69535300136aa6ff6f1", "size": 90},
-    {"path": "/var/snap/firefox/common/fontconfig/3f7329c5293ffd510edef78f73874cfd-le64.cache-7", "sha256": "e82e04bea9514b6e5126e907e7c85f3baeb638d60bcd0a007df1a182b1ac4ed6", "size": 3368},
-    {"path": "/usr/share/libwacom/isdv4-5218.tablet", "sha256": "483c7c3d86b114f44dbcdd436574f4730c513a6ad97f23ff19489da8725370dd", "size": 434},
-    {"path": "/usr/src/linux-headers-6.8.0-31/arch/m68k/include/asm/mcfslt.h", "sha256": "d79502b8b711a627a62256b7958f30e1b2ad6682548d49e3293c708b43573f33", "size": 1240},
-    {"path": "/usr/lib/python3/dist-packages/pygments/lexers/whiley.py", "sha256": "49b6dfb5a22d4a021d733cd3f2a395f261f59ba743dda33612f464e2295ae82a", "size": 4018},
-    {"path": "/usr/share/alsa/cards/Echo_Echo3G.conf", "sha256": "b6df2b1986dbc8cc543130f6fe07c58e8c0f96f360891081096df1d3b4bd865f", "size": 4399},
-    {"path": "/usr/share/icons/ubuntu-mono-dark/status/22/indicator-keyboard-Fa.svg", "sha256": "3fa840c3aa0b3a3600589e25f30c4fd1f7820ad24d73326a1df47c2f2ae620be", "size": 407},
-    {"path": "/usr/lib/python3/dist-packages/pygments/formatters/__pycache__/groff.cpython-312.pyc", "sha256": "f2a6f1f075aecb256978f22e977ab63d585a713d49a44bc74e869f2947ebeb4a", "size": 7197},
-    {"path": "/usr/lib/python3/dist-packages/chardet-5.2.0.dist-info/entry_points.txt", "sha256": "fdc76f61ce23c98ebc1987ec40002d84d3313beca875c1a4bcd0b5c4e12c2e62", "size": 59},
-    {"path": "/usr/share/zoneinfo/Asia/Yekaterinburg", "sha256": "37355cd8388f7b2c3415d307c123d0245f64dedbd676dac44d988de7ca72c4b9", "size": 1243},
-    {"path": "/usr/share/apport/symptoms/security.py", "sha256": "6e2b0f23208464bf61dde6156dd65a4904942cbda9aaa632e0c5ec8234674a2d", "size": 3170},
-    {"path": "/usr/share/bash-completion/completions/_svnadmin", "sha256": "22a6e6cba2779ab59765e91042cc968480b24f7e968cabb12a0ca201914695df", "size": 2308},
-    {"path": "/usr/share/lintian/overrides/python3.12", "sha256": "2b71837cf8137468d89efb25d496849ffba75d03ba8a96f5fa5fe910f9f6a62e", "size": 461},
-    {"path": "/var/lib/swcatalog/icons/ubuntu-noble-universe/48x48/berusky2_berusky2.png", "sha256": "2d000ee28052098ceedc42a1add65cdf2c74304a5276c6052140238cef98a33d", "size": 3626},
-    {"path": "/usr/share/icons/ubuntu-mono-light/status/22/indicator-keyboard-Ml-1.svg", "sha256": "bbaa4eadb7d9ac0af2b9fc3a236ebd2ee64d045add945cf94a8a349077d60f56", "size": 507},
-    {"path": "/usr/lib/modules/6.8.0-31-generic/kernel/drivers/regulator/mc13xxx-regulator-core.ko.zst", "sha256": "013bebda0e407e161e9ac49c8a57946ba801b669a0427a7db7ebf9f4e00b0055", "size": 4322},
-    {"path": "/usr/lib/aspell/en_AU-w_accents.multi", "sha256": "53747be66601a6f7f4346ed0909f33787f7674ae9c1d7dfeb9b19ea4cfd6395c", "size": 106},
-    {"path": "/usr/src/linux-headers-6.8.0-31-generic/include/config/SND_SOC_TPA6130A2", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0}
+  "totalDirectories": 14976,
+  "filesystems": [
+    {
+      "device": "/dev/sda2",
+      "fstype": "ext4",
+      "fileCount": 306,
+      "directoryCount": 5,
+      "sampleFiles": [
+        {
+          "path": "/grub/i386-pc/time.mod",
+          "size": 1456,
+          "sha256": "9488b1214d5505fed311d1338e038bc35adc86415b9dbefc8b8057acd749eb97"
+        },
+        {
+          "path": "/grub/i386-pc/gcry_md5.mod",
+          "size": 3668,
+          "sha256": "92c1058de947a9358a7c6054e572fabadf03faacd3c6e9c2c3fda975340bb92b"
+        },
+        {
+          "path": "/grub/i386-pc/raid5rec.mod",
+          "size": 1292,
+          "sha256": "64d3dac31f25b680803037538dfa2e6e62e37de3bdfba5b19d1fdfcc1e05c7b3"
+        },
+        {
+          "path": "/grub/i386-pc/ntldr.mod",
+          "size": 2504,
+          "sha256": "bbfe64faf40aa643c6e9ac6cb5a4bb693a5396abb8d7ac01f2eb0f580ad5b010"
+        },
+        {
+          "path": "/grub/i386-pc/part_gpt.mod",
+          "size": 2300,
+          "sha256": "3371e52b2b99f3efbf29c04d0c4669155c8b608ce830380689e3050320e093af"
+        },
+        {
+          "path": "/grub/i386-pc/core.img",
+          "size": 28006,
+          "sha256": "7fa5879478fa205f4a414a0d3b0759c53f3315a7edff7d9f739163b1c410102f"
+        },
+        {
+          "path": "/grub/i386-pc/cpio_be.mod",
+          "size": 2680,
+          "sha256": "ceedcd3a5e51fe36918339fcf81f1b2f8208f4e3ca9668ed1b982e555994efd5"
+        },
+        {
+          "path": "/grub/i386-pc/tftp.mod",
+          "size": 5312,
+          "sha256": "32f890b32a510c1be364f77be4b1dc520bdfa43a2adbb600db3bc769f2238e57"
+        },
+        {
+          "path": "/grub/i386-pc/gcry_sha256.mod",
+          "size": 4376,
+          "sha256": "b395d0fc43f3bb9def9c76bc9c5fa4e1859af9375584a21e797c79872d97b7d3"
+        },
+        {
+          "path": "/grub/i386-pc/mdraid09_be.mod",
+          "size": 1964,
+          "sha256": "b206728cada6f46f1f1a2838739d87a88c35c4b039ad77ca0aeed8634dcb35c0"
+        },
+        {
+          "path": "/grub/i386-pc/lvm.mod",
+          "size": 8484,
+          "sha256": "77a4f3fd528ef3703b83964ae2fc2c0b7d3813c2ef089cb0c1779d86c178c5db"
+        },
+        {
+          "path": "/grub/i386-pc/reboot.mod",
+          "size": 1640,
+          "sha256": "4acef31143b74ee6e5e3f5c4f628130c372b7921b3312911cb0ce66ac83b4b14"
+        },
+        {
+          "path": "/grub/i386-pc/legacycfg.mod",
+          "size": 30100,
+          "sha256": "24814ff7cc63d44f55b8c049de0ecfa60cff42260dbedf544540b9cf2d64dc6f"
+        },
+        {
+          "path": "/grub/i386-pc/zfs.mod",
+          "size": 40048,
+          "sha256": "5dc9137794f756129b7d34615083f945492901243e0560aea54452df73aa36e5"
+        },
+        {
+          "path": "/memtest86+ia32.efi",
+          "size": 143872,
+          "sha256": "3ce33fc7c3ccdf6a7885f9b3cdb98803d45dfe16bdf6ae374ce7366dc50e385f"
+        },
+        {
+          "path": "/grub/i386-pc/video_cirrus.mod",
+          "size": 6004,
+          "sha256": "d15e54ef2770716f3a5ed7587f20dd4bf0fbea0610df0eb5f9b556ed418be9ce"
+        },
+        {
+          "path": "/grub/i386-pc/plan9.mod",
+          "size": 6292,
+          "sha256": "57d9a498702d876efe4a7307c0d43deb1a0cfc4b9936963b61cad5b6b672a6c6"
+        },
+        {
+          "path": "/grub/i386-pc/sendkey.mod",
+          "size": 7012,
+          "sha256": "3e72cd83e093d7fd46cbf369ab610b06ccabe604ab7f20dfbdddc88e82af3f3b"
+        },
+        {
+          "path": "/grub/i386-pc/loopback.mod",
+          "size": 3084,
+          "sha256": "0841c527af71c2eb9dac5190a16169d377f194444730bbf6361b3ad35f279753"
+        },
+        {
+          "path": "/grub/i386-pc/configfile.mod",
+          "size": 2204,
+          "sha256": "dd1e601d913d45e0c8876ddb56011e6df626172f097dcb25c5a2dfcdaef39e25"
+        }
+      ]
+    },
+    {
+      "device": "/dev/ubuntu-vg/ubuntu-lv",
+      "fstype": "ext4",
+      "fileCount": 123122,
+      "directoryCount": 14971,
+      "sampleFiles": [
+        {
+          "path": "/var/lib/dpkg/info/libtry-tiny-perl.md5sums",
+          "size": 370,
+          "sha256": "412fac42660ba37c1208aa10b6306cd4641e873f55488212991e4183199625b6"
+        },
+        {
+          "path": "/usr/share/doc/libgnutls30t64/README.md.gz",
+          "size": 3005,
+          "sha256": "4c18af54e1ddddf397eefb36a5f1f2a7e8d81c7a140ff1d337d7138e88579078"
+        },
+        {
+          "path": "/var/lib/dpkg/info/libfreerdp3-3:amd64.md5sums",
+          "size": 152,
+          "sha256": "30c467dda5fac3baacf821a1ef60ae7f0c2af4910b4da0b0b64a29c40cc5b439"
+        },
+        {
+          "path": "/var/lib/dpkg/info/format",
+          "size": 2,
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+        },
+        {
+          "path": "/usr/share/man/man8/thermald.8.gz",
+          "size": 2393,
+          "sha256": "3c31dbabb4c346bc1fa938497d38ca475b6ab123410e175ce0e2e2cce08efa3c"
+        },
+        {
+          "path": "/usr/src/linux-headers-6.8.0-31/include/uapi/linux/netlink.h",
+          "size": 12459,
+          "sha256": "f2b9dec9eb74c84239d345a9bb3aceb187caeab761579b7b58e6834a5ec64070"
+        },
+        {
+          "path": "/usr/share/doc/lsof/examples/list_fields.awk",
+          "size": 5828,
+          "sha256": "9e34d688d8e2a7a712cb63b872e3145295c060ff6d701866d792fbab46f7b2b5"
+        },
+        {
+          "path": "/usr/share/doc/python3-xdg/copyright",
+          "size": 1183,
+          "sha256": "3a4fa2bb72365b791d87e64b054e302757e97b5284e0683ff189a4b53f553587"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/rich/diagnose.py",
+          "size": 924,
+          "sha256": "668a43d84a5656d9a62a9b606d74feb0e324009ec31ab312517522694d8667bf"
+        },
+        {
+          "path": "/usr/src/linux-headers-6.8.0-31/include/linux/of_iommu.h",
+          "size": 671,
+          "sha256": "865834f1e9bb99f5fe445173b60654cde296f44ece73a050ceca21a9c0f1fcef"
+        },
+        {
+          "path": "/usr/share/icons/Yaru/scalable/multimedia/skip-backwards-30-symbolic.svg",
+          "size": 4284,
+          "sha256": "c940e81969a5fc6cf4d7c4a7d1a261afb9405326ce00e317b933afc25a7d3b16"
+        },
+        {
+          "path": "/var/lib/swcatalog/icons/ubuntu-noble-universe/48x48/itinerary_org.kde.itinerary.png",
+          "size": 1818,
+          "sha256": "75e7931ed887e5d17f690fee2fdf2e983927b7fd3bc69841db12bbf8bb498f35"
+        },
+        {
+          "path": "/usr/share/mime/text/x-dsl.xml",
+          "size": 3399,
+          "sha256": "49a5de3a289a310d099750e147d408b375468e42840d42e07c70890cf049f12d"
+        },
+        {
+          "path": "/usr/share/doc/busybox-static/examples/udhcp/sample.script",
+          "size": 271,
+          "sha256": "d04bdaf64cde2319656b6d5accc80738ddd0c5c75e241a60ab6c2d90b2edc395"
+        },
+        {
+          "path": "/usr/lib/modules/6.8.0-31-generic/kernel/drivers/media/rc/keymaps/rc-genius-tvgo-a11mce.ko.zst",
+          "size": 2693,
+          "sha256": "ffe0e96cdfaa72575f103ab897cbc0bcc5f3aea9552b517b3d4758517cd50ecd"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/perl5/5.38/auto/Net/SSLeay/SSLeay.so",
+          "size": 575488,
+          "sha256": "bbf0c3e84fc6f6e4c76b3d4c0576094a7d8ac01b54d846ea70a80dc3ce78c37b"
+        },
+        {
+          "path": "/usr/share/python-babel-localedata/locale-data/en_IN.dat",
+          "size": 7090,
+          "sha256": "8223cc011a2e5efdc13f6e0f02ce5724cb542240c6e4a1531755bb36a7f1384d"
+        },
+        {
+          "path": "/usr/share/mime/application/vnd.stardivision.impress.xml",
+          "size": 3829,
+          "sha256": "6e38a857b4643f68a7792d2d8d040f9580daa4d5449b0a48c68b4132d6abeb20"
+        },
+        {
+          "path": "/usr/src/linux-headers-6.8.0-31/arch/parisc/include/asm/seccomp.h",
+          "size": 651,
+          "sha256": "b0a63658ef5872bcfb9a117837ce4de439d24c0c2c42ebada0687ba07838220a"
+        },
+        {
+          "path": "/usr/share/help/C/gnome-system-monitor/process-files.page",
+          "size": 1283,
+          "sha256": "5a1174fda39e5e19c6d3c8c18281aee75518f28623721997218fa8d8dd64a90e"
+        }
+      ]
+    }
   ]
 }

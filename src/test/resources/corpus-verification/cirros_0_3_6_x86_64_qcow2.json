@@ -1,29 +1,117 @@
 {
   "imagePath": "/corpus/qcow2/modern/cirros-0.3.6-x86_64.qcow2",
   "imageBasename": "cirros-0.3.6-x86_64.qcow2",
-  "filesystemType": "ext3",
+  "filesystemCount": 1,
   "totalFiles": 248,
-  "totalDirectories": 94,
-  "sampleFiles": [
-    {"path": "/etc/passwd", "sha256": "5b16d47f43b9258de3eb1b4beba104c0bcccd768a09d44b422b01a73e799eda0", "size": 586},
-    {"path": "/etc/init.d/S20urandom", "sha256": "4cca0e403bf60cdb86e138a2e955a69832917cda4fa994903ad11a5e41129a36", "size": 1365},
-    {"path": "/lib/modules/3.2.0-80-virtual/modules.seriomap", "sha256": "d1ae8ccb4eac8b7a59fd6053272c491483094c9f43edb8546a402eccac599be5", "size": 43},
-    {"path": "/sbin/wipefs", "sha256": "40d1853d0d4c591dc7d7210946dbec2f11af07cf3164d17754256fec204abb67", "size": 15304},
-    {"path": "/usr/bin/hexdump", "sha256": "94a08f1c7b74885aab9afd817a43888d6832068ae1ad5135f1e1845735e90b36", "size": 19504},
-    {"path": "/sbin/mkswap", "sha256": "1a6f594ad7ee5b4232a8c7866b1b36526de680cbb703ce9abda1b2fcc9223931", "size": 19576},
-    {"path": "/usr/share/screen/utf8encodings/04", "sha256": "fa0c1f1cc09614b88740b7796ccdbd457b3b76f052e7aedff4a4d4847adea2cb", "size": 24302},
-    {"path": "/lib/libgcc_s.so.1", "sha256": "87355ee124b26f9059aa5e4fef7019e265adcbf8d092d00c4170109acc835b89", "size": 72224},
-    {"path": "/usr/bin/flock", "sha256": "63c0e520374ce9c6d14328d2b483e397d934e97ae84f5df0029c529c24907aa0", "size": 9552},
-    {"path": "/lib/modules/3.2.0-80-virtual/kernel/drivers/pci/hotplug/acpiphp.ko", "sha256": "80a11a4627371730f97e4ad818f751de2ccbb5e487ee524747f153b000a2f345", "size": 46904},
-    {"path": "/usr/share/screen/utf8encodings/01", "sha256": "cda27362d0253dcd618812b20f52f7905e6f80fbcedf17b6a8290974592030a3", "size": 29808},
-    {"path": "/lib/modules/3.2.0-80-virtual/modules.devname", "sha256": "dc68824aae6638d62566b49cb75ae21a5f5a96bb92996336a0f80dcaf49fb4b6", "size": 52},
-    {"path": "/usr/bin/setarch", "sha256": "94f2b235f92e06c569b2680a7dff9585b5f4c1c24c02cb5ae9ba3d3f4854c23a", "size": 8776},
-    {"path": "/bin/lsblk", "sha256": "384d55a7aaf46293ec3c787b7ef1f698882f823793effb8b8c0abc51c3ba6e17", "size": 37408},
-    {"path": "/lib/libresolv-0.9.32.1.so", "sha256": "c02e4f8f86f528581fc672e3bdf52b90e72cc813b2b16773351935919dc33469", "size": 4960},
-    {"path": "/usr/lib/cloud-init/uncloud-init", "sha256": "bc5ecbccab54c31d3758ab1f25c346f06eec5b3e3417f56338b894ddebdcce14", "size": 31},
-    {"path": "/lib/modules/3.2.0-80-virtual/modules.pcimap", "sha256": "6dfc44685ca0e885a75b22868098c2e7ccf5afcd495e30220e2833ff197c21ba", "size": 4922},
-    {"path": "/usr/bin/tailf", "sha256": "108fd1de06adbc88a13f9bd220f540c8d0664c64d39f39d89660689a2cf7143e", "size": 12320},
-    {"path": "/usr/share/screen/utf8encodings/c7", "sha256": "eba7a967ed51282c25178965b01e0476a9c02ab4f7a5d15533d1a5a0fdbb3f43", "size": 52},
-    {"path": "/bin/lxc-is-container", "sha256": "f887c52e7dfb534602ed25650c52ae35bc625d9145c9f6b42767fdc0518826bc", "size": 179}
+  "totalDirectories": 93,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext3",
+      "fileCount": 248,
+      "directoryCount": 93,
+      "sampleFiles": [
+        {
+          "path": "/lib/modules/3.2.0-80-virtual/modules.alias.bin",
+          "size": 2553,
+          "sha256": "2146bcc17463ead5d833a92d6c40fec7d7c3e36626453f06cbbbefed44d35f75"
+        },
+        {
+          "path": "/etc/sudoers.d/90-cirros-user",
+          "size": 68,
+          "sha256": "9ec44366e32e3a7c5e4685d08dd6767d483b5feea821f5791b40e2d856c34dd7"
+        },
+        {
+          "path": "/usr/bin/sudo",
+          "size": 91384,
+          "sha256": "ae01e3027b9f84cbf14a42b8d286156f027dd15c88d09140cf7bd2d9630f68ab"
+        },
+        {
+          "path": "/etc/init.d/cirros-check-version",
+          "size": 182,
+          "sha256": "c1b1836f7b5bb8ec62a371c7d8b0166b6ae7fbdb50d093426c4cb376593b1484"
+        },
+        {
+          "path": "/usr/bin/script",
+          "size": 13880,
+          "sha256": "7c230640c86d1f192e2fc1fc071ac94d0fa227442d3862a0a2b35f4150a89d92"
+        },
+        {
+          "path": "/lib/libblkid.so.1.1.0",
+          "size": 140896,
+          "sha256": "a318e41e2704fc3fe7fcf222a945cbce54f8e50ee0ffc3a20bff1091cceb74a2"
+        },
+        {
+          "path": "/usr/share/terminfo/x/xterm",
+          "size": 3258,
+          "sha256": "08bf18a02c262c1169ee97bb5734bf2af434da28b1cef1c671f6523a7fbea68a"
+        },
+        {
+          "path": "/etc/passwd",
+          "size": 586,
+          "sha256": "5b16d47f43b9258de3eb1b4beba104c0bcccd768a09d44b422b01a73e799eda0"
+        },
+        {
+          "path": "/etc/ssl/misc/CA.sh",
+          "size": 5175,
+          "sha256": "e3498565c807f32574f11b10a29afa7462fb556b09de77d9bd631ec24b6ebba8"
+        },
+        {
+          "path": "/etc/inputrc",
+          "size": 1180,
+          "sha256": "8fa60adbfc6e58e2fd054c98a0b0d7ce6b1411f4e5d32a59c979ba5dce9248f2"
+        },
+        {
+          "path": "/usr/sbin/fdformat",
+          "size": 7888,
+          "sha256": "9674296cd0ac344992d61fc5392ff7078e5aaf93e11fa823ff44d74e179f0be3"
+        },
+        {
+          "path": "/etc/init.d/load-modules",
+          "size": 1397,
+          "sha256": "273a43daa9f0c4241ee37a64af286b895b52d54cd9fb7e51e3e36d13bd9f0ca7"
+        },
+        {
+          "path": "/usr/share/screen/utf8encodings/04",
+          "size": 24302,
+          "sha256": "fa0c1f1cc09614b88740b7796ccdbd457b3b76f052e7aedff4a4d4847adea2cb"
+        },
+        {
+          "path": "/etc/group",
+          "size": 224,
+          "sha256": "cf840dbdcaff010fe4c32c2fcdea189ff5e5e86296ed2a0ef2d6ad1ab00069ec"
+        },
+        {
+          "path": "/usr/bin/json2fstree",
+          "size": 7721,
+          "sha256": "9908a5dd5380774c57dd16ddcb430337b452ea11e139c18cbb7f8d247824e0c6"
+        },
+        {
+          "path": "/sbin/findfs",
+          "size": 5392,
+          "sha256": "b983c311ff43a474a14d7cbd3d28fa231eb9155fa548efdf561af5c3e5415d50"
+        },
+        {
+          "path": "/lib/cirros/ds/configdrive",
+          "size": 4534,
+          "sha256": "909d0e04e5ae2b99ab2fad7679034d31212118367ca0762f042562bb47b4d54d"
+        },
+        {
+          "path": "/lib/librt-0.9.32.1.so",
+          "size": 13504,
+          "sha256": "4308a5f5acc23848b66c04d4b84a1deffc0aa355a01fbbd865ce05408ddb0432"
+        },
+        {
+          "path": "/etc/protocols",
+          "size": 1191,
+          "sha256": "09d2389e19222535c39bb0b68f360b5b3a6d1b2190c283e442db0d41b0432a96"
+        },
+        {
+          "path": "/lib/modules/3.2.0-80-virtual/modules.symbols",
+          "size": 2844,
+          "sha256": "45206ab03e367b650f25c169a4d19bd8d42de858c097161034bcd5fdb3802006"
+        }
+      ]
+    }
   ]
 }

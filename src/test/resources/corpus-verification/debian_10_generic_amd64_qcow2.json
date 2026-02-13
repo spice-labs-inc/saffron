@@ -1,29 +1,135 @@
 {
   "imagePath": "/corpus/qcow2/modern/debian-10-generic-amd64.qcow2",
   "imageBasename": "debian-10-generic-amd64.qcow2",
-  "filesystemType": "ext4",
-  "totalFiles": 21486,
-  "totalDirectories": 2679,
-  "sampleFiles": [
-    {"path": "/var/lib/dpkg/info/libaudit-common.md5sums", "sha256": "788cd710dd6872c3eddaa95f9799d241a2fe97dd2c60e9a4851d4bc2b74d94be", "size": 307},
-    {"path": "/usr/share/zoneinfo/right/America/Mazatlan", "sha256": "534bb8a85faa07868b84e7c2d8a937dd17fcfe5a4670005ca27b09528a3a4ffa", "size": 1682},
-    {"path": "/usr/lib/modprobe.d/fbdev-blacklist.conf", "sha256": "e99b6166cf309aa1cbbd296d9fbf93af567148c7316c8d5d7a057cf3e85113ea", "size": 390},
-    {"path": "/usr/lib/x86_64-linux-gnu/libldap_r-2.4.so.2.10.10", "sha256": "2913e25d31fe351398cf4ea59163fa1ee32a394357b4c38685f23850adb4f1da", "size": 331088},
-    {"path": "/usr/lib/python3.7/encodings/__pycache__/iso8859_4.cpython-37.pyc", "sha256": "834a1627a659e08980350677f17b494636613fdc97a44806996f689cb9131f58", "size": 2410},
-    {"path": "/usr/lib/modules/4.19.0-27-amd64/kernel/drivers/scsi/device_handler/scsi_dh_hp_sw.ko", "sha256": "dfcf9abecdfc5ffa1c2d88f5b8cfa3875bc7596ece7d16f7cd8502ab6eb6c121", "size": 11547},
-    {"path": "/usr/share/vim/vim81/autoload/ada.vim", "sha256": "2803bad6b8ec6086a5bc209af4abb7a12667f6d8d5474b718fd1dcbcb81cd3bc", "size": 22567},
-    {"path": "/usr/share/ca-certificates/mozilla/Comodo_AAA_Services_root.crt", "sha256": "a5ddabd1602ae1c66ce11ad078e734cc473dcb8e9f573037832d8536ae3de90b", "size": 1517},
-    {"path": "/usr/share/locale/es/LC_MESSAGES/adduser.mo", "sha256": "637de1a9c0d5a62e5567fea43046668a94f04daa1f2a55299b716f2903c4f313", "size": 20848},
-    {"path": "/usr/lib/tc/pareto.dist", "sha256": "2f19eaa62f9076f0a7754df9fc5110cb73ccfc6a0ad82aa5355643a9f3a92e86", "size": 23729},
-    {"path": "/var/lib/dpkg/info/sudo.prerm", "sha256": "0867df44de542efd03970b04a4256f6aa3c6f333d3e86163a5e2d3a54c31da7b", "size": 1407},
-    {"path": "/usr/lib/grub/i386-pc/pbkdf2.mod", "sha256": "f8790f531a52b18f2ce6f64cda81eda28cdf9611e7b5f988280f17419cb9b522", "size": 1484},
-    {"path": "/usr/share/locale/ia/LC_MESSAGES/libc.mo", "sha256": "9a9e7ae8e11b7c86d0f51726e8cc49c5a9a0890be65f59a0ebee2611fac958e5", "size": 59106},
-    {"path": "/usr/share/doc-base/nano-faq", "sha256": "aa44326018b320d3d7197dfca9fe6aa9b6881a1c2d78ff231be7cc4ec9793e3a", "size": 335},
-    {"path": "/usr/share/doc/libgssapi-krb5-2/copyright", "sha256": "4a2d321ab57260e8de4b67bde8cff76c07d28be69c2d8b22dfc2bfa42f5c41b9", "size": 61825},
-    {"path": "/usr/share/zoneinfo/posix/Pacific/Noumea", "sha256": "13e18b4bb426c3739b34e37d6cdc00d488721a05865cdeca94af76246f55a4de", "size": 328},
-    {"path": "/usr/share/doc/util-linux/releases/v2.31-ReleaseNotes.gz", "sha256": "8c6d8d7e25abfe937eb19c16e1f4de24fc3018e25b99f550b9262c982267dde5", "size": 9777},
-    {"path": "/usr/lib/python3.7/encodings/__pycache__/cp1250.cpython-37.pyc", "sha256": "547770d396adf3822efa2b2cbd3a3c3a8df0a9381d6d06800c45526239f8dfee", "size": 2438},
-    {"path": "/usr/share/i18n/charmaps/IBM860.gz", "sha256": "da7fba7e218048897b8ed9368e24fc15b76521f95adb0a9f1146ef5010b5ed00", "size": 2976},
-    {"path": "/etc/init.d/chrony", "sha256": "1fa455af25963ab5a30094e049c766b5c003b24086837c894141bb046acdc556", "size": 2054}
+  "filesystemCount": 2,
+  "totalFiles": 21488,
+  "totalDirectories": 2681,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext4",
+      "fileCount": 21486,
+      "directoryCount": 2678,
+      "sampleFiles": [
+        {
+          "path": "/usr/lib/python3/dist-packages/oauthlib/oauth2/rfc6749/endpoints/__pycache__/revocation.cpython-37.pyc",
+          "size": 5298,
+          "sha256": "80ff15ea5a51aad89fd9d07819fd22ebe3663f8fb0b498f0df2ba85d65bf7a75"
+        },
+        {
+          "path": "/usr/lib/modules/4.19.0-27-amd64/kernel/drivers/net/hippi/rrunner.ko",
+          "size": 49643,
+          "sha256": "31b8a71b0a060597ad74c37946ede72e00641cfc11603e1f12f3f81e89606c91"
+        },
+        {
+          "path": "/usr/lib/modules/4.19.0-27-amd64/kernel/drivers/tty/synclink.ko",
+          "size": 138643,
+          "sha256": "710ebb9bf558938cca0a8fd2d202adf557ca3d37c55330026e712a31f4328f09"
+        },
+        {
+          "path": "/usr/lib/modules/4.19.0-27-amd64/kernel/drivers/input/keyboard/newtonkbd.ko",
+          "size": 11075,
+          "sha256": "32e9f3795c2f7393a8542167658db89ad6735f9025b6b1267a2fa7a2f3de8059"
+        },
+        {
+          "path": "/usr/share/i18n/charmaps/MSZ_7795.3.gz",
+          "size": 1559,
+          "sha256": "cc76e4c272b748830ceac413febb77e9abf6b8f12b203ee72f7c59324878299b"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/cryptography/hazmat/primitives/kdf/scrypt.py",
+          "size": 2155,
+          "sha256": "d81ac6c1bca4dd5bd8e2ccd0636101bd931a7fc0183d6957f386928fe4d72d79"
+        },
+        {
+          "path": "/usr/lib/python3.7/encodings/cp720.py",
+          "size": 13686,
+          "sha256": "395496001271b92efe5df07fc0ae7c3410d1dd2bdfebbd3e4d8e806c8166beb0"
+        },
+        {
+          "path": "/usr/share/i18n/locales/lb_LU",
+          "size": 4004,
+          "sha256": "21751950ff1e89b9ce51dca4410c86db0fa12d13d2da4a25a6e90b0d078c2e76"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/xtables/libebt_stp.so",
+          "size": 14464,
+          "sha256": "49f672d35787fc749555fe865d33d226bf7f18caf42dea92ba9d220a530a7e32"
+        },
+        {
+          "path": "/usr/share/locale/bg/LC_MESSAGES/psmisc.mo",
+          "size": 5266,
+          "sha256": "284cc2cd3974166d7d6fc52c077eec51ff8e6c7ec756513f478154acee442a6c"
+        },
+        {
+          "path": "/usr/lib/python3.7/asyncio/__pycache__/format_helpers.cpython-37.pyc",
+          "size": 2299,
+          "sha256": "c8399612a620de12bc4bd4b35690bae25452e047e262674d64daca9cc98bb42c"
+        },
+        {
+          "path": "/usr/share/man/ru/man1/apropos.1.gz",
+          "size": 3972,
+          "sha256": "5d0f6b38b1acca1fc7e6e9ab8cb1e2d110a76aa0b078d8a75dcafec15b45a6b6"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/cryptography/hazmat/primitives/kdf/concatkdf.py",
+          "size": 3981,
+          "sha256": "3126f869b17c8eb202835bfd352af441031f435af6dd10e85245345fcad0ae11"
+        },
+        {
+          "path": "/usr/share/vim/vim81/compiler/decada.vim",
+          "size": 1946,
+          "sha256": "ee65442b58bf2e03e399e283eea677ee8a05f6e0776a4141a75444d8d1cb6d92"
+        },
+        {
+          "path": "/var/lib/dpkg/info/libgpg-error0:amd64.list",
+          "size": 344,
+          "sha256": "33dfbe474da0918ea3c028e67183f7cb8beba57c1f2de68c8d635ae04d142ee1"
+        },
+        {
+          "path": "/usr/share/i18n/charmaps/EBCDIC-ES-A.gz",
+          "size": 2070,
+          "sha256": "d72808459f96ab3475057c94a2e5201a22429f1709245a095852dc168b53b114"
+        },
+        {
+          "path": "/usr/lib/modules/4.19.0-27-amd64/kernel/drivers/usb/host/ohci-hcd.ko",
+          "size": 111347,
+          "sha256": "ff1abf1707eaf93119940377213e04dd5b0acc03951d39be825e17f935a52b95"
+        },
+        {
+          "path": "/boot/grub/i386-pc/gcry_sha1.mod",
+          "size": 7952,
+          "sha256": "735b1fcd86a3b8034154ba187f478421e1e995811920c515cf9aa701d5109072"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/perl-base/unicore/lib/Dt/Sqr.pl",
+          "size": 607,
+          "sha256": "f30c639d1403109d826d98d9268a14cae1d017d5dd1d912f2d1b0fd830736c9b"
+        },
+        {
+          "path": "/usr/share/locale/hr/LC_MESSAGES/tar.mo",
+          "size": 61372,
+          "sha256": "5aeda1dafdb338f1085cbce8d23d5b563ec51122023e474147cb25fb133e9d25"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda15",
+      "fstype": "vfat",
+      "fileCount": 2,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 139264,
+          "sha256": "f9381daf23fda897983f3158807c298aa977a1978068f013d5cb852633eb1f7d"
+        },
+        {
+          "path": "/EFI/debian/grubx64.efi",
+          "size": 139264,
+          "sha256": "f9381daf23fda897983f3158807c298aa977a1978068f013d5cb852633eb1f7d"
+        }
+      ]
+    }
   ]
 }

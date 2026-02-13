@@ -27,17 +27,19 @@ import java.util.List;
 /**
  * Represents an XFS extent (BMBT record).
  *
- * <p>XFS extents are 128-bit packed records:
+ * <p>XFS extents are 128-bit packed records (from xfs_bmbt_disk_get_all):
  * <pre>
- * Bits 0-8:    extent flag (1 bit) + logical block offset high (8 bits)
- * Bits 9-72:   logical block offset low (43 bits) + block count (21 bits)
- * Bits 73-127: physical block number (52 bits)
+ * l0 (first 8 bytes, big-endian):
+ *   Bit 63:     extent flag (1=unwritten/preallocated)
+ *   Bits 62-9:  logical file block offset (54 bits)
+ *   Bits 8-0:   high 9 bits of physical start block
  *
- * Layout in 16 bytes (big-endian):
- * Byte 0:      [flag:1][logicalHi:7]
- * Bytes 1-6:   [logicalLo:43]
- * Bytes 6-8:   [blockCount:21]
- * Bytes 8-15:  [physicalBlock:52]
+ * l1 (second 8 bytes, big-endian):
+ *   Bits 63-21: low 43 bits of physical start block
+ *   Bits 20-0:  block count (21 bits)
+ *
+ * physical = (l0[8:0] << 43) | (l1 >> 21)   → 52 bits
+ * blockCount = l1 & 0x1FFFFF                 → 21 bits
  * </pre>
  *
  * The extent is "packed" meaning fields span byte boundaries.
@@ -73,26 +75,24 @@ public record XfsExtent(
 
     /**
      * Parses a single extent from the buffer at current position.
+     * Matches the Linux kernel's xfs_bmbt_disk_get_all() in libxfs/xfs_bmap_btree.c.
      */
     private static XfsExtent parseOne(ByteBuffer buf) {
-        // Read 16 bytes as two longs
-        long high = buf.getLong();
-        long low = buf.getLong();
+        // Read 16 bytes as two big-endian longs
+        long l0 = buf.getLong();
+        long l1 = buf.getLong();
 
-        // Unpack the fields
-        // Bit 127 (MSB of high): extent flag
-        boolean prealloc = (high & 0x8000000000000000L) != 0;
+        // Bit 63 of l0: extent flag (unwritten/preallocated)
+        boolean prealloc = (l0 & 0x8000000000000000L) != 0;
 
-        // Bits 73-126 (54 bits): logical offset
-        // high bits 0-53 contain: [flag:1][logical:53]
-        long logicalOffset = (high >>> 9) & 0x001FFFFFFFFFFFFFL;
+        // Bits 62-9 of l0: logical file block offset (54 bits)
+        long logicalOffset = (l0 & 0x7FFFFFFFFFFFFFFFL) >>> 9;
 
-        // Bits 52-72 (21 bits): block count
-        // Spread across high (low 9 bits) and low (high 12 bits)
-        int blockCount = (int) (((high & 0x1FF) << 12) | ((low >>> 52) & 0xFFF));
+        // Physical start block (52 bits): l0 bits 8-0 are high 9 bits, l1 bits 63-21 are low 43 bits
+        long physicalBlock = ((l0 & 0x1FFL) << 43) | (l1 >>> 21);
 
-        // Bits 0-51 (52 bits): physical block
-        long physicalBlock = low & 0x000FFFFFFFFFFFFFL;
+        // Block count (21 bits): l1 bits 20-0
+        int blockCount = (int) (l1 & 0x1FFFFFL);
 
         return new XfsExtent(prealloc, logicalOffset, physicalBlock, blockCount);
     }
@@ -110,20 +110,25 @@ public record XfsExtent(
         int level = buf.getShort(0) & 0xFFFF;
         int numrecs = buf.getShort(2) & 0xFFFF;
 
-        // Keys start at offset 4
-        // Pointers start after keys
+        // xfs_bmdr_block layout: level(2) + numrecs(2) + keys[maxrecs] + ptrs[maxrecs]
+        // Keys start at offset 4. Pointers start at 4 + maxrecs * 8.
+        // maxrecs = (dataForkSize - 4) / 16  (each record = key(8) + ptr(8))
+        // CRITICAL: ptrs are at maxrecs offset, NOT numrecs offset.
         List<BtreeKey> keys = new ArrayList<>();
         List<Long> pointers = new ArrayList<>();
 
         int keyOffset = 4;
-        int ptrOffset = 4 + numrecs * 8; // Each key is 8 bytes
+        int maxrecs = (dataFork.length - 4) / 16;
+        int ptrOffset = 4 + maxrecs * 8;
 
         for (int i = 0; i < numrecs; i++) {
+            if (keyOffset + i * 8 + 8 > dataFork.length) break;
             long startoff = buf.getLong(keyOffset + i * 8);
             keys.add(new BtreeKey(startoff));
         }
 
         for (int i = 0; i < numrecs; i++) {
+            if (ptrOffset + i * 8 + 8 > dataFork.length) break;
             long ptr = buf.getLong(ptrOffset + i * 8);
             pointers.add(ptr);
         }

@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  */
 class CloudImageDiagnosticTest {
 
-    private static final String CORPUS_BASE = "/home/dpp/tmp/vmreader/saffron/test-corpus";
+    private static final String CORPUS_BASE = Path.of("test-corpus").toAbsolutePath().toString();
 
     static boolean ubuntuCloudImageExists() {
         return Files.exists(Paths.get(CORPUS_BASE, "qcow2/cloud/ubuntu/ubuntu-24.04-server-cloudimg-amd64.qcow2"));

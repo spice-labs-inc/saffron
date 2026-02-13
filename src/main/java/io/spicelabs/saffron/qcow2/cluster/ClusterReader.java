@@ -18,11 +18,13 @@
 package io.spicelabs.saffron.qcow2.cluster;
 
 import io.spicelabs.saffron.DiskFormat;
+import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.common.SecurityUtils;
 import io.spicelabs.saffron.exception.CorruptedDiskException;
 import io.spicelabs.saffron.io.SafeMath;
 import io.spicelabs.saffron.qcow2.header.Qcow2Header;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -76,13 +78,14 @@ public class ClusterReader {
     private final int l2Bits;
     private final int l2Size;
     private final long[] l1Table;
+    private final @Nullable VirtualDisk backingDisk;
 
     // L2 cache (simple single-entry cache)
     private long cachedL2Index = -1;
     private long[] cachedL2Table;
 
     /**
-     * Creates a new cluster reader.
+     * Creates a new cluster reader without a backing disk.
      *
      * @param channel the channel to read from
      * @param header the parsed QCOW2 header
@@ -90,9 +93,28 @@ public class ClusterReader {
      */
     public ClusterReader(@NotNull SeekableByteChannel channel, @NotNull Qcow2Header header)
             throws IOException {
+        this(channel, header, null);
+    }
+
+    /**
+     * Creates a new cluster reader with an optional backing disk.
+     *
+     * <p>When a cluster is unallocated in this image, the read will be delegated
+     * to the backing disk instead of returning zeros. If the backing disk is null,
+     * unallocated clusters read as zeros (the default QCOW2 behavior).
+     *
+     * @param channel the channel to read from
+     * @param header the parsed QCOW2 header
+     * @param backingDisk the backing disk to read from for unallocated clusters, or null
+     * @throws IOException if an I/O error occurs during L1 table load
+     */
+    public ClusterReader(@NotNull SeekableByteChannel channel, @NotNull Qcow2Header header,
+                         @Nullable VirtualDisk backingDisk)
+            throws IOException {
         this.channel = channel;
         this.header = header;
         this.clusterSize = header.clusterSize();
+        this.backingDisk = backingDisk;
 
         // Calculate L2 parameters
         // Each L2 table entry is 8 bytes, so entries per cluster = clusterSize / 8
@@ -139,10 +161,26 @@ public class ClusterReader {
             // Look up physical location
             ClusterMapping mapping = lookupCluster(currentOffset);
 
-            if (mapping.isUnallocated() || mapping.isZero()) {
-                // Unallocated or zero cluster - return zeros
+            if (mapping.isZero()) {
+                // Explicitly zeroed cluster (v3 feature) - always return zeros
                 byte[] zeros = new byte[bytesInCluster];
                 result.put(zeros);
+            } else if (mapping.isUnallocated()) {
+                // Unallocated cluster - read from backing disk if available, else zeros
+                if (backingDisk != null && currentOffset < backingDisk.virtualSize()) {
+                    int backingLength = (int) Math.min(bytesInCluster,
+                            backingDisk.virtualSize() - currentOffset);
+                    ByteBuffer backingData = backingDisk.read(currentOffset, backingLength);
+                    result.put(backingData);
+                    // If backing disk is smaller, fill remaining with zeros
+                    int remaining2 = bytesInCluster - backingLength;
+                    if (remaining2 > 0) {
+                        result.put(new byte[remaining2]);
+                    }
+                } else {
+                    byte[] zeros = new byte[bytesInCluster];
+                    result.put(zeros);
+                }
             } else if (mapping.isCompressed()) {
                 // Decompress the cluster and extract the needed portion
                 ClusterMapping.Compressed compressed = (ClusterMapping.Compressed) mapping;

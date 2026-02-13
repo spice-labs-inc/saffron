@@ -25,14 +25,16 @@ import java.util.stream.Stream;
  */
 class NtfsDebugTest {
 
+    private static final String CORPUS_BASE = Path.of("test-corpus").toAbsolutePath().toString();
+
     private static final Path NTFS_IMAGE = Path.of(
-        "/home/dpp/tmp/vmreader/saffron/test-corpus/vhd/legacy/xp-mode/" +
+        CORPUS_BASE + "/vhd/legacy/xp-mode/" +
         "Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/" +
         "Windows NT Workstation 4.0 Hard Disk.vhd"
     );
 
     private static final Path XP_MODE_IMAGE = Path.of(
-        "/home/dpp/tmp/vmreader/saffron/test-corpus/vhd/legacy/xp-mode/" +
+        CORPUS_BASE + "/vhd/legacy/xp-mode/" +
         "Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/" +
         "Windows XP Mode.vhd"
     );

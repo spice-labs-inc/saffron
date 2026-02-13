@@ -177,24 +177,42 @@ public record XfsDirectoryEntry(
         // Check for data block magic
         int magic = buf.getInt(0);
         int headerSize;
-        if (magic == 0x58444233) { // "XDB3" (v5)
+        if (magic == 0x58444233     // XDB3 - v5 single-block directory
+                || magic == 0x58444433) { // XDD3 - v5 multi-block data block
+            // v5 header: xfs_dir3_data_hdr = xfs_dir3_blk_hdr(48) + bestfree[3](12) + pad(4) = 64
             headerSize = 64;
-        } else if (magic == 0x58443244) { // "XD2D" (v4 data block)
+        } else if (magic == 0x58443242     // XD2B - v4 single-block directory
+                || magic == 0x58443244) {  // XD2D - v4 multi-block data block
+            // v4 header: magic (4 bytes) + bestfree[3] (12 bytes) = 16
             headerSize = 16;
         } else {
             // Try parsing anyway, might be a different block type
             headerSize = 16;
         }
 
-        // Read bestfree entries to know where data ends
-        // For now, scan until we hit invalid entries
-
+        // Determine the end of the data entries area.
+        // Single-block dirs (XDB3/XD2B) have a tail + leaf entries at the block end.
+        // Multi-block data blocks (XDD3/XD2D) have no tail; entries fill the block.
         int offset = headerSize;
-        int maxOffset = blockSize - 16; // Leave room for tail
+        int maxOffset;
+        boolean isSingleBlock = (magic == 0x58444233 || magic == 0x58443242);
+        if (isSingleBlock) {
+            // Single-block dir: xfs_dir2_block_tail at blockSize-8 has count(4)+stale(4)
+            // Leaf entries (count * 8 bytes) precede the tail
+            int tailCount = buf.getInt(blockSize - 8);
+            if (tailCount > 0 && tailCount < blockSize / 8) {
+                maxOffset = blockSize - 8 - tailCount * 8;
+            } else {
+                maxOffset = blockSize - 8; // Just skip the tail itself
+            }
+        } else {
+            // Multi-block data block or unknown: entries can fill the entire block
+            maxOffset = blockSize;
+        }
 
         while (offset < maxOffset) {
-            // Check if we've hit unused space (freetag = 0xFFFF)
-            if (offset + 8 > block.length) break;
+            // Need room for at least freetag(2) or inode(8)+namelen(1)
+            if (offset + 9 > block.length) break;
 
             int freetag = buf.getShort(offset) & 0xFFFF;
             if (freetag == 0xFFFF) {
@@ -234,7 +252,10 @@ public record XfsDirectoryEntry(
             entries.add(new XfsDirectoryEntry(inode, name, fileType));
 
             // Move to next entry (8-byte aligned)
-            int entrySize = 8 + 1 + namelen + 1; // inode + namelen + name + filetype
+            // XFS data entry: inumber(8) + namelen(1) + name(N) + [ftype(1) if v5] + tag(2)
+            // Matches kernel XFS_DIR3_DATA_ENTSIZE(n) = roundup(12+n, 8) for v5
+            //         kernel XFS_DIR2_DATA_ENTSIZE(n) = roundup(11+n, 8) for v4
+            int entrySize = isV5 ? (12 + namelen) : (11 + namelen);
             offset += (entrySize + 7) & ~7; // Round up to 8-byte boundary
         }
 

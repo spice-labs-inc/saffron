@@ -29,7 +29,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.channels.SeekableByteChannel;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -191,6 +193,10 @@ public record Qcow2Header(
     /**
      * Reads and parses a QCOW2 header from an input stream.
      *
+     * <p>This overload cannot read the backing file name since an InputStream
+     * does not support seeking. Use {@link #read(SeekableByteChannel)} to also
+     * resolve the backing file name.
+     *
      * @param in the input stream positioned at the start of the file
      * @return the parsed header
      * @throws IOException if an I/O error occurs
@@ -199,6 +205,37 @@ public record Qcow2Header(
      * @throws CorruptedDiskException if the header is malformed
      */
     public static @NotNull Qcow2Header read(@NotNull InputStream in) throws IOException {
+        return readFromStream(in, null);
+    }
+
+    /**
+     * Reads and parses a QCOW2 header from a seekable byte channel.
+     *
+     * <p>This overload reads the backing file name (if present) by seeking to
+     * the backing file offset in the channel.
+     *
+     * @param channel the seekable channel positioned at the start of the file
+     * @return the parsed header with backing file name resolved
+     * @throws IOException if an I/O error occurs
+     * @throws InvalidMagicException if the magic number is wrong
+     * @throws UnsupportedVersionException if the version is not supported
+     * @throws CorruptedDiskException if the header is malformed
+     */
+    public static @NotNull Qcow2Header read(@NotNull SeekableByteChannel channel) throws IOException {
+        // Read the header fields via InputStream adapter, then resolve backing file via channel
+        channel.position(0);
+        // Read enough bytes for the header (V3 max is 104+ bytes, read 512 to be safe)
+        ByteBuffer headerBuf = ByteBuffer.allocate(512);
+        channel.position(0);
+        channel.read(headerBuf);
+        headerBuf.flip();
+        byte[] headerBytes = new byte[headerBuf.remaining()];
+        headerBuf.get(headerBytes);
+        return readFromStream(new java.io.ByteArrayInputStream(headerBytes), channel);
+    }
+
+    private static @NotNull Qcow2Header readFromStream(@NotNull InputStream in,
+                                                         @Nullable SeekableByteChannel channel) throws IOException {
         BinaryReader reader = new BinaryReader(in, ByteOrder.BIG_ENDIAN);
 
         // Read and verify magic
@@ -256,9 +293,30 @@ public record Qcow2Header(
         // Read backing file name if present
         String backingFile = null;
         if (backingFileOffset > 0 && backingFileSize > 0) {
-            // Backing file is stored separately in the file
-            // We'll read it later if needed; for now just note it exists
-            backingFile = null; // Will be populated by caller if needed
+            if (channel != null) {
+                // Validate backing file size (max 1023 per QCOW2 spec)
+                if (backingFileSize > 1023) {
+                    throw new CorruptedDiskException(
+                            "Backing file name too long: " + backingFileSize,
+                            8L, "header.backing_file_size", DiskFormat.QCOW2);
+                }
+                ByteBuffer backingBuf = ByteBuffer.allocate(backingFileSize);
+                channel.position(backingFileOffset);
+                int read = 0;
+                while (read < backingFileSize) {
+                    int n = channel.read(backingBuf);
+                    if (n < 0) {
+                        throw new CorruptedDiskException(
+                                "Truncated backing file name at offset " + backingFileOffset,
+                                backingFileOffset, "backing_file", DiskFormat.QCOW2);
+                    }
+                    read += n;
+                }
+                backingBuf.flip();
+                backingFile = new String(backingBuf.array(), 0, backingFileSize, StandardCharsets.UTF_8);
+            }
+            // If no channel provided (InputStream-only path), backingFile remains null
+            // but backingFileOffset/backingFileSize are still recorded in the header
         }
 
         return new Qcow2Header(

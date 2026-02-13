@@ -1,0 +1,117 @@
+{
+  "imagePath": "/corpus/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/Windows XP Mode.vhd",
+  "imageBasename": "Windows XP Mode.vhd",
+  "filesystemCount": 1,
+  "totalFiles": 8339,
+  "totalDirectories": 1054,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "ntfs",
+      "fileCount": 8339,
+      "directoryCount": 1054,
+      "sampleFiles": [
+        {
+          "path": "/WINDOWS/system32/mui/0427/xpsp1res.dll",
+          "size": 189952,
+          "sha256": "09c61ee29e440caeb60d7ed26313416c6e722d60b22e311b5066a163f644bd2d"
+        },
+        {
+          "path": "/WINDOWS/inf/mdmexp.inf",
+          "size": 31321,
+          "sha256": "70129f846667d6f801b4cdbe7b70fadbb897ca736f6a40ba20afa5daded5793d"
+        },
+        {
+          "path": "/WINDOWS/$hf_mig$/KB955069/update/updatebr.inf",
+          "size": 678,
+          "sha256": "2570ae8f348d691579caa48b5736bd7aa4564cbbcecafc661d5b42a60d342538"
+        },
+        {
+          "path": "/WINDOWS/system32/dpwsock.dll",
+          "size": 42768,
+          "sha256": "d51921ecb13dc6d46088a09e8b68891931b071a6d6985d64beb5f82527ee1f7e"
+        },
+        {
+          "path": "/WINDOWS/system32/kbdcz2.dll",
+          "size": 6656,
+          "sha256": "0f66f7cc58dcbba1ea11c2a64f1797ddf3acef4b0058a8ec641945a1d416ac09"
+        },
+        {
+          "path": "/I386/MQGENTR.DL_",
+          "size": 25926,
+          "sha256": "5806d69d644f8234ff36ede3300298b0ea274a24f59b47d2802ebc7d9ac9f3cf"
+        },
+        {
+          "path": "/WINDOWS/system32/secedit.exe",
+          "size": 18944,
+          "sha256": "873e4f5e5c14feb7d4c2f5080173014e1fb2717e8974dce3e491cef1e75a4a10"
+        },
+        {
+          "path": "/WINDOWS/inf/mdmsiil6.INF",
+          "size": 13934,
+          "sha256": "81057124f283449854c87cab43836324538dde2a411b0df1505fc280e08f689a"
+        },
+        {
+          "path": "/Program Files/Windows NT/Pinball/SOUND28.WAV",
+          "size": 8650,
+          "sha256": "75df525487b896b9b54e34280dedaab92de9db32645911efe49fc0d5d2e60c3a"
+        },
+        {
+          "path": "/WINDOWS/inf/mdmzyp.PNF",
+          "size": 80924,
+          "sha256": "5a0948d503786883da08708306010d2fb8b647985a15612b78f713080c7e7f90"
+        },
+        {
+          "path": "/WINDOWS/pchealth/helpctr/System/sysinfo/msinfo.htm",
+          "size": 2501,
+          "sha256": "77542d3fcdcf31a0b22eccabcc7abe6cfc4b5089dee70817758c04a5658e869e"
+        },
+        {
+          "path": "/WINDOWS/system32/oobe/setup/acterror.htm",
+          "size": 3815,
+          "sha256": "570c3cb3e9a9971e8c2f249d3fb971927abcb738fb781d4ff072df588668a57d"
+        },
+        {
+          "path": "/WINDOWS/pchealth/helpctr/OfflineCache/Professional_32#0409/0000025a.query",
+          "size": 1918,
+          "sha256": "354cc81de14bac6af5d44d595052c52507664f2ac0c752dfb972dafc458ddc79"
+        },
+        {
+          "path": "/WINDOWS/system32/ciadv.msc",
+          "size": 41762,
+          "sha256": "633d0b6ea76b5a01fd930b633f117ee9f60e69d7f95795e62e06780d7b4524e7"
+        },
+        {
+          "path": "/WINDOWS/system32/mui/041f/xpsp3res.dll",
+          "size": 592896,
+          "sha256": "2fe1d765d25fca16b7a12cbba682a7603f6f1ef466b1c28929a8f740c947d6de"
+        },
+        {
+          "path": "/WINDOWS/inf/mdmmct.inf",
+          "size": 36375,
+          "sha256": "f781b770d30c08f21aba927a9b514f3ec6e2370ac50a8d87dd7c928954f16a9e"
+        },
+        {
+          "path": "/I386/GENERIC.CO_",
+          "size": 2080,
+          "sha256": "a2f428eab46aece593126450e8fb07d7f0f0c05e6ca77e2ede0e4cfda91a1643"
+        },
+        {
+          "path": "/WINDOWS/pchealth/helpctr/OfflineCache/Professional_32#0409/00000211.query",
+          "size": 316,
+          "sha256": "16ae09aace60feca39fa37d49e4b48cbd1458af08d024b02858e304480b62668"
+        },
+        {
+          "path": "/WINDOWS/system32/dmcompos.dll",
+          "size": 61440,
+          "sha256": "0a6cfc9935b31b9557fa5532613da6a069d48744de406a432e015424343dcbe6"
+        },
+        {
+          "path": "/Documents and Settings/All Users/Start Menu/Programs/Accessories/Remote Desktop Connection.lnk",
+          "size": 1585,
+          "sha256": "0f216cc8d5c8b8d19be9a47619aa9b09b1ac02a500da10907e96bc360f91f5bb"
+        }
+      ]
+    }
+  ]
+}

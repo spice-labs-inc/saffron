@@ -42,6 +42,11 @@
         <url>https://github.com/spice-labs-inc/saffron</url>
     </scm>
 
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/spice-labs-inc/saffron/issues</url>
+    </issueManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
@@ -363,7 +368,7 @@
 
         <!-- Maven Central deployment -->
         <profile>
-            <id>ossrh</id>
+            <id>maven-central</id>
             <build>
                 <plugins>
                     <plugin>
@@ -394,6 +399,8 @@
                         <configuration>
                             <publishingServerId>central</publishingServerId>
                             <tokenAuth>true</tokenAuth>
+                            <autoPublish>true</autoPublish>
+                            <checksums>all</checksums>
                         </configuration>
                     </plugin>
                 </plugins>

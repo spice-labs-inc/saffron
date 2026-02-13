@@ -1,29 +1,117 @@
 {
   "imagePath": "/corpus/vmdk/legacy/windows-me.vmdk",
   "imageBasename": "windows-me.vmdk",
-  "filesystemType": "vfat",
+  "filesystemCount": 1,
   "totalFiles": 4980,
   "totalDirectories": 302,
-  "sampleFiles": [
-    {"path": "/WINDOWS/HELP/TOUR/WH_SUCON.HTM", "sha256": "21d2511adda1909d0409bf1e953934571201f4fbbc43ef6d7e038852befcb2be", "size": 4464},
-    {"path": "/WINDOWS/SYSTEM/DirectX/Dinput/ms56_2.png", "sha256": "d21f87d0ceca2ec2a93fb92215c93c4ae11076f206068cf4baa7202d7179db6e", "size": 862},
-    {"path": "/WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Music tracks I have not rated.wpl", "sha256": "0e879046c3a2c74b37c7e43906134a9dbacdd89f847074d4a4b85dab6b8d8ecf", "size": 783},
-    {"path": "/WINDOWS/MSAGENT/AGENTPSH.DLL", "sha256": "75e06ef7f4bb46d761921c61b3022540c5661eed29c9fad8fcac6aca84c421e5", "size": 36864},
-    {"path": "/WINDOWS/HELP/CPANEL.CHM", "sha256": "7105fa8b63e51ad6c1ebeac4cee5f5ae18f3fb5e3486cafdafddc551352f6f7d", "size": 32458},
-    {"path": "/WINDOWS/SYSTEM/OOBE/SETUP/MIGPAGE.HTM", "sha256": "78c3b673158ab4caf63f4b10284f6046ca619a2cda8b5f7574bc80cbe64a253f", "size": 2972},
-    {"path": "/WINDOWS/MEDIA/Robotz Menu Command.wav", "sha256": "4256890a27d25b2deb1fa9a9fd4afc9c579ff89f10ad17559f33b194c23d9630", "size": 13882},
-    {"path": "/WINDOWS/SYSTEM/DirectX/Dinput/ms34_01.png", "sha256": "3afea7013ed838c9db2716d24fef8ab48224f496cc994b16f87d8b991f3d8cee", "size": 5085},
-    {"path": "/WINDOWS/HELP/TOUR/WH_SYFRA.HTM", "sha256": "eee688432e34c83d4ebb32902ca964585557cb28f4acfe78b591bca6a7c6d3a1", "size": 786},
-    {"path": "/Program Files/Windows Media Player/Installer/migrate.dll", "sha256": "7c98d06b8e5546e0c478c23c3e11d1f6c8a81137f51ebe854e2226278ee95344", "size": 24576},
-    {"path": "/WINDOWS/MEDIA/Jungle Open.wav", "sha256": "d07671be45b3c2d7b7634a41ec8101b0ec65519d9ca50a16e1fb1fea4b6972a0", "size": 129540},
-    {"path": "/Program Files/Common Files/Adaptec Shared/CreatorAPI/Translator.dll", "sha256": "678fa3e96a0b611dfd555573b8f945d4fd8ff777d91629b07f6e386432a52ac1", "size": 90112},
-    {"path": "/WINDOWS/FONTS/SYMBOLF.FON", "sha256": "1c56632f2d286b86ac4294be7d36d6a73ae28bcbec5ee078b69f7f1f3f32ccad", "size": 80928},
-    {"path": "/WINDOWS/SYSTEM/OOBE/IMAGES/MSNIALOG.GIF", "sha256": "b3c4754e5f519f1f1ad8dd2b5363daf7a7037914613f0fc4b9d0a03eea89695c", "size": 1823},
-    {"path": "/WINDOWS/SYSTEM/LOGAGENT.EXE", "sha256": "d88f306671f0fffaa20d5d74a9dc8e368772d57d2aab1a136cf0564fc7e19258", "size": 81408},
-    {"path": "/Program Files/Plus!/PINBALL/SOUND20.WAV", "sha256": "d9967a5ec4104c9e470e02163e07e0f34b313578d302c9a849972f81f328ecfe", "size": 8650},
-    {"path": "/WINDOWS/HELP/MSNAUTH.CNT", "sha256": "ef55a8dd5484b1b341aa7d3358b2a03bcb7bfafcaeeb18356b8a327ebde725e7", "size": 173},
-    {"path": "/Program Files/Plus!/Themes/Nature Size NS.cur", "sha256": "022b9d84c0b777b8edb16be1587f8e629714a203d4e69cf0fa73b9d5571d0101", "size": 2238},
-    {"path": "/WINDOWS/WEB/wiastream.htt", "sha256": "57c2a9382bc12c668cd20a726b04d8dc281cefef53327ff5fd698a7eafd69ad2", "size": 20150},
-    {"path": "/WINDOWS/SYSTEM/LAPRXY.DLL", "sha256": "63139f2378f406094d8248f5b24a0cc1d79c3fa738db4549b0414c67a422f425", "size": 6656}
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "vfat",
+      "fileCount": 4980,
+      "directoryCount": 302,
+      "sampleFiles": [
+        {
+          "path": "/WINDOWS/SYSTEM/OOBE/SETUP/PRVCYMS.HTM",
+          "size": 4289,
+          "sha256": "0940bbce197bac2f2ad40e0e16823f9b47ade46659f101bc85a524a149df824c"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/DPLAYSVR.EXE",
+          "size": 40960,
+          "sha256": "097996391cc9526350fef83a619ff6e123a14bde4fe96dfdaa22dbdfb63c2d2f"
+        },
+        {
+          "path": "/WINDOWS/OPTIONS/INSTALL/WIN_19.CAB",
+          "size": 8192000,
+          "sha256": "f7bf63ecff837a4600c8c40fb002d123c8b6457675b14ad6e4344f643cc3895c"
+        },
+        {
+          "path": "/WINDOWS/HELP/AUDIOCDC.HLP",
+          "size": 12920,
+          "sha256": "75f24eef16a61d1e8125f685104c5a268feb7f943410714ccb21e2f88e317eaa"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/SYNCENG.DLL",
+          "size": 73728,
+          "sha256": "c4473aba0148643f12e2927308c007235ff07743f0c943df2ecd5dd12e0055c4"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/MSLTUS40.DLL",
+          "size": 209168,
+          "sha256": "4a18b302c357eb686189a73f2acc974d8b43ffb79e76a553dc2c99b63c1a9768"
+        },
+        {
+          "path": "/WINDOWS/INF/MDMIRDA.INF",
+          "size": 12958,
+          "sha256": "eb4b163c6e58bd346b20f6217c2dbc0755892876f12b0f20a1594df0916595eb"
+        },
+        {
+          "path": "/Program Files/Plus!/Themes/Mystery menu command.wav",
+          "size": 13314,
+          "sha256": "26d2054199b01be4d8162ef0f5347c75aa5833d47a35b4b4862c893880f78ea2"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/The Golden Era.scr",
+          "size": 38400,
+          "sha256": "8952e8681c98f0782f6a88de2848a5592a2aabf12a0b020199c958a586105399"
+        },
+        {
+          "path": "/WINDOWS/MEDIA/Utopia Windows Start.wav",
+          "size": 156644,
+          "sha256": "d19abee74467589f6fc3bc4528ac3166151f44ed90c5fe70e44f8d8477cd7ad4"
+        },
+        {
+          "path": "/WINDOWS/CURSORS/SIZE4_1.CUR",
+          "size": 766,
+          "sha256": "0dc8012e15be20b74d73110b1463fcb61c01a4b7e6c5e78bad3f3447a49b01a7"
+        },
+        {
+          "path": "/Program Files/Plus!/Themes/The 60's USA asterisk.wav",
+          "size": 24004,
+          "sha256": "587662017282ee3f586fc74c7b5fc4711f2fa39acc4baa62d074b0f221619b5e"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/OOBE/IMAGES/STATBACK.JPG",
+          "size": 41108,
+          "sha256": "fd9fac86131c6ef58b95a437fae2097a875a57fe6b704b198635611b44212d77"
+        },
+        {
+          "path": "/WINDOWS/HELP/WINPOPUP.CNT",
+          "size": 100,
+          "sha256": "922c8320d8b0f5d2a481c34ff84512d2682653a78503b14e6b4fbccfc3a807d6"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/ICMP.DLL",
+          "size": 9600,
+          "sha256": "db8191652509d651aa483b45585a1461ce72c2b7a229941b1ba7943082ea51e4"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/CatRoot/{F750E6C3-38EE-11D1-85E5-00C04FC295EE}/wse25897.cat",
+          "size": 7591,
+          "sha256": "9849b9b584079842f69c94b9ffa0520521f72edb4da317767039a268095dc34f"
+        },
+        {
+          "path": "/WINDOWS/Application Data/Microsoft/Media Player/CurrentDatabase_59R.wmdb",
+          "size": 720896,
+          "sha256": "1d312f35362232ba7b8dc5b0f188dbd36bbb26eb23d43b44a10ef475a90cecea"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/MSENCODE.DLL",
+          "size": 95744,
+          "sha256": "c9ed5d596007bc66f84d61b1bcaa997ff996b811513d53d1b903e2d2ce69f00e"
+        },
+        {
+          "path": "/WINDOWS/SYSTEM/MINI.CAB",
+          "size": 686680,
+          "sha256": "fcb5b7746b958ebed30dd0b0e127676e99fe7b7cc1ffbadf22771ccf956d2311"
+        },
+        {
+          "path": "/WINDOWS/PCHEALTH/HELPCTR/System/images/btn-forward_inactive.gif",
+          "size": 136,
+          "sha256": "466358f928c71651b1e2676679acdc5394f9844394707117d84c26d2c352ccbd"
+        }
+      ]
+    }
   ]
 }

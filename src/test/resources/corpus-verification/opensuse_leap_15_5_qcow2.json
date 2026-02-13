@@ -1,29 +1,145 @@
 {
   "imagePath": "/corpus/qcow2/modern/opensuse-leap-15.5.qcow2",
   "imageBasename": "opensuse-leap-15.5.qcow2",
-  "filesystemType": "unknown",
+  "filesystemCount": 2,
   "totalFiles": 21401,
-  "totalDirectories": 2768,
-  "sampleFiles": [
-    {"path": "/usr/lib64/gconv/ISO-2022-JP-3.so", "sha256": "dfaae87f31a2113f1eb8c8beda0cdfa756e11641eb266443a97fe438a81eedc0", "size": 28728},
-    {"path": "/usr/lib/python3.6/site-packages/salt/states/grafana_datasource.py", "sha256": "c3d0f6258a043cbfd4057762a8eedede7d40bbd12d7140877c0c5c0f5027683d", "size": 5436},
-    {"path": "/usr/lib/python3.6/site-packages/salt/cloud/clouds/proxmox.py", "sha256": "5c244809007cc91bc4d0adb2b5fc80f5f08c8a80eb13167c237c0266b6004111", "size": 40748},
-    {"path": "/usr/lib/python3.6/site-packages/pytz-2022.1-py3.6.egg-info/zip-safe", "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b", "size": 1},
-    {"path": "/usr/sbin/mkfs.ext4", "sha256": "be8711d421272ea147043a9ff41f6c8d42f51165e7e7f171c5f6c10dac366b84", "size": 135536},
-    {"path": "/usr/lib64/libsqlite3.so.0.8.6", "sha256": "3decdaaff54b84d72e4679c69c884bb80d54f51cff51dc390dc04a1872b7976a", "size": 1347272},
-    {"path": "/usr/share/licenses/sysconfig/COPYING", "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643", "size": 18092},
-    {"path": "/usr/lib64/python3.6/genericpath.py", "sha256": "fae1f627b5c8408c5f797f9f7170d90fee55faf178b6a65df934ae10e81deca9", "size": 4756},
-    {"path": "/usr/lib/dracut/modules.d/35network-legacy/parse-bridge.sh", "sha256": "c44eb6392d0146c9ee7526c34356e10fbf58b3896e5a24eb381d8789d83bf032", "size": 1178},
-    {"path": "/usr/lib/python3.6/site-packages/salt/modules/win_dacl.py", "sha256": "cd3c6468a27b07d6d10558a8c832f9c9746a5105541c8e7b9d2bb45b6d109079", "size": 33045},
-    {"path": "/usr/share/kbd/consolefonts/lat9w-08.psfu.gz", "sha256": "b91e1eea4e6e360b1e137c56166808162dc84a8021156395f6cb8964f0f49379", "size": 1787},
-    {"path": "/usr/lib/python3.6/site-packages/setuptools/command/__pycache__/egg_info.cpython-36.opt-1.pyc", "sha256": "00cc55ef51f3f979c371ea082e0575a0a870ef81a2fa687fc3fb3bd735989629", "size": 21500},
-    {"path": "/usr/lib64/libisccfg-9.16.50.so", "sha256": "4729722bd6bd5b98f4c01ffbee9e97c5883b622351be8553571fe9cd72543bf4", "size": 215272},
-    {"path": "/usr/lib/python3.6/site-packages/salt/engines/__pycache__/test.cpython-36.pyc", "sha256": "187c2eb7a0a86ccfa0297fc8c91a55bd6d6a0489eb5569f20539947446b61b91", "size": 982},
-    {"path": "/usr/lib/python3.6/site-packages/blinker-1.4-py3.6.egg-info/PKG-INFO", "sha256": "df876a158431b281f4aca0294bdbbf11da77c38ec9271aa2b0892e7a63da849f", "size": 3935},
-    {"path": "/usr/share/kbd/keymaps/i386/azerty/wangbe2.map.gz", "sha256": "eb6bd01d5d5bbd5799fdac13d8770639a338945254b4236e61b175a7998a2baa", "size": 1786},
-    {"path": "/usr/lib64/python3.6/ctypes/macholib/__pycache__/framework.cpython-36.pyc", "sha256": "b54bc816241e84599c8760ab8885a9ae4094d865a9f4746b8df10dcf55675284", "size": 2184},
-    {"path": "/usr/share/kbd/keymaps/i386/qwerty/pt-latin9.map.gz", "sha256": "92d7afb6cb9f5a5975bcb06ff25bb5cc77b3d658c30e0490274b5083c40aef0e", "size": 930},
-    {"path": "/usr/share/crypto-policies/back-ends/FUTURE/gnutls.config", "sha256": "df06876e4bf86a8f7571278f6d5e939c60e5f762027059546ca77986a2db159e", "size": 1710},
-    {"path": "/usr/lib64/python3.6/urllib/__pycache__/parse.cpython-36.opt-1.pyc", "sha256": "7f2ebc9b5fbfd7eee7f0e0ac5b72d3dce21522e10c50f06b03c72a2e664ff5ea", "size": 31329}
+  "totalDirectories": 2767,
+  "filesystems": [
+    {
+      "device": "/dev/sda2",
+      "fstype": "vfat",
+      "fileCount": 4,
+      "directoryCount": 2,
+      "sampleFiles": [
+        {
+          "path": "/EFI/BOOT/bootx64.efi",
+          "size": 965672,
+          "sha256": "a60d256c802849a0a5e23fe5298ddcf7f78445cc71f519b64573dcb61af0e6ff"
+        },
+        {
+          "path": "/EFI/BOOT/MokManager.efi",
+          "size": 852456,
+          "sha256": "76835854721ad33f1a3ac4184ddf05484a3958db5813e28516b16e0d59819a2e"
+        },
+        {
+          "path": "/EFI/BOOT/grub.cfg",
+          "size": 137,
+          "sha256": "7979ea5567064c41d51c798432e34de74a13bb50b83c4b8f2a9ebc6a67943410"
+        },
+        {
+          "path": "/EFI/BOOT/grub.efi",
+          "size": 1275904,
+          "sha256": "49e1bfbdd3cfc818b991f149c4cf1a60add38642a7cb3267adbb4cd3df9e06b7"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda3",
+      "fstype": "xfs",
+      "fileCount": 21397,
+      "directoryCount": 2765,
+      "sampleFiles": [
+        {
+          "path": "/usr/lib/python3.6/site-packages/pyasn1/codec/ber/__pycache__/eoo.cpython-36.opt-1.pyc",
+          "size": 745,
+          "sha256": "b6f1a91f7adf21db65a90233ef99789eb87ace5c1ee93bdb2759355d1a6d520d"
+        },
+        {
+          "path": "/usr/lib/python3.6/site-packages/cloudinit/cmd/cloud_id.py",
+          "size": 2821,
+          "sha256": "f161915baefa7b91d464d37c2c22b788ad9a786d728db0b674cfffe81bc1c0a0"
+        },
+        {
+          "path": "/usr/lib/python3.6/site-packages/babel/locale-data/sw_CD.dat",
+          "size": 2680,
+          "sha256": "c47426e4dfd8e65126b73fc20fa04dd841561a897eb1927dda1945719ee6cea1"
+        },
+        {
+          "path": "/usr/share/kbd/keymaps/xkb/pt-mac_sundeadkeys.map.gz",
+          "size": 3927,
+          "sha256": "090b3175de25190700e1ad4d9a140f2a584bb31a3bb5fac9586d95d71a1d56f0"
+        },
+        {
+          "path": "/usr/lib64/python3.6/lib2to3/fixes/__pycache__/fix_xrange.cpython-36.pyc",
+          "size": 2503,
+          "sha256": "d437848eba01bacba3adbd19df809ae4f8f86ef404dd844d714cfb0449ce21a9"
+        },
+        {
+          "path": "/usr/lib/python3.6/site-packages/salt/utils/dateutils.py",
+          "size": 2358,
+          "sha256": "f46f82c6d7cfafe866551045d82e39b7dbc48634dfb6db00d000cc02074528f2"
+        },
+        {
+          "path": "/usr/share/zoneinfo/posix/Europe/San_Marino",
+          "size": 2641,
+          "sha256": "d5ade82cc4a232949b87d43157c84b2c355b66a6ac87cf6250ed6ead80b5018f"
+        },
+        {
+          "path": "/usr/share/crypto-policies/FUTURE/opensslcnf.txt",
+          "size": 589,
+          "sha256": "433555a06614d2a259abc4c25287d86c7558c7aff6a7412b481d78d73277628c"
+        },
+        {
+          "path": "/usr/lib64/python3.6/__pycache__/_weakrefset.cpython-36.pyc",
+          "size": 7830,
+          "sha256": "e48f3dd9a33486741c3a35ef9d6f9ca9a41e6ec2806f566e2af1fd8231945310"
+        },
+        {
+          "path": "/usr/lib/python3.6/site-packages/salt/states/libcloud_storage.py",
+          "size": 5249,
+          "sha256": "0f582e8fd1578d249596d855f0e8f9a5752882685f992b709239c3e76f96ddca"
+        },
+        {
+          "path": "/usr/share/zoneinfo/Europe/Malta",
+          "size": 2620,
+          "sha256": "12129c6cf2f8efbeb9b56022439edcbac68ad9368842a64282d268119b3751dd"
+        },
+        {
+          "path": "/usr/lib64/python3.6/encodings/cp861.py",
+          "size": 34633,
+          "sha256": "701930d77a2177497586e99bc3fe60f2d4beffb645608f167c76874a72ff405e"
+        },
+        {
+          "path": "/usr/lib/python3.6/site-packages/babel/locale-data/bs_Cyrl_BA.dat",
+          "size": 608,
+          "sha256": "e3dffa904fe2193c3196489e059bf1b17bd53c052b4378656af83684c914cc54"
+        },
+        {
+          "path": "/usr/lib64/python3.6/site-packages/zmq/green/eventloop/__pycache__/ioloop.cpython-36.pyc",
+          "size": 184,
+          "sha256": "16d0fdf8f346e7dfd33e3bdba12fbd52ffa3c64b726d6aa0515dbbe64815f5b2"
+        },
+        {
+          "path": "/usr/share/licenses/jeos/dbus-1/COPYING",
+          "size": 29176,
+          "sha256": "0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1"
+        },
+        {
+          "path": "/usr/share/zoneinfo/posix/Asia/Atyrau",
+          "size": 977,
+          "sha256": "fd4f02394204f671bf1ca75d644d50d2c3eecf7accc1f8f099f9d50d8fef4a68"
+        },
+        {
+          "path": "/usr/lib64/python3.6/_compat_pickle.py",
+          "size": 8749,
+          "sha256": "71248216fb1cc2b9a0a1faa305daa8c680d9c637141cb2db283e407684209cab"
+        },
+        {
+          "path": "/usr/lib/python3.6/site-packages/utils/fake_libc_include/regex.h",
+          "size": 55,
+          "sha256": "365869669439c87775294c462f728f7510d951e86b29153d7c0ea6bf24e51ef6"
+        },
+        {
+          "path": "/usr/lib64/python3.6/__pycache__/copy.cpython-36.opt-2.pyc",
+          "size": 4765,
+          "sha256": "ee209d5618d1ab84ab02e93162403215b54834f59450aff2a26ecb984285cd92"
+        },
+        {
+          "path": "/usr/lib64/python3.6/_import_failed/__pycache__/_curses_panel.cpython-36.opt-1.pyc",
+          "size": 771,
+          "sha256": "c9e5e63c7e9ba41da660027a623f99237b6e3b2db8d05c76667b0c65bb2c4770"
+        }
+      ]
+    }
   ]
 }

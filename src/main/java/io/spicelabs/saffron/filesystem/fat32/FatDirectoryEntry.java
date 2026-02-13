@@ -99,6 +99,21 @@ public record FatDirectoryEntry(
      */
     public static @NotNull Optional<FatDirectoryEntry> parse(@NotNull ByteBuffer buffer,
                                                               @NotNull Optional<String> longName) {
+        return parse(buffer, longName, true);
+    }
+
+    /**
+     * Parses a standard directory entry from a buffer.
+     *
+     * @param buffer the buffer positioned at the entry
+     * @param longName optional long filename from preceding LFN entries
+     * @param isFat32 true if this is a FAT32 filesystem (offset 20 is cluster high);
+     *                false for FAT12/16 (offset 20 is reserved/EA index, must be ignored)
+     * @return the parsed entry, or empty if this is a free/end/LFN entry
+     */
+    public static @NotNull Optional<FatDirectoryEntry> parse(@NotNull ByteBuffer buffer,
+                                                              @NotNull Optional<String> longName,
+                                                              boolean isFat32) {
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         int startPos = buffer.position();
 
@@ -141,8 +156,8 @@ public record FatDirectoryEntry(
             name = shortName;
         }
 
-        // Skip volume labels
-        if ((attr & ATTR_VOLUME_ID) != 0 && (attr & ATTR_DIRECTORY) == 0) {
+        // Skip volume labels (any entry with VOLUME_ID set; LFN entries already handled above)
+        if ((attr & ATTR_VOLUME_ID) != 0) {
             return Optional.empty();
         }
 
@@ -159,7 +174,8 @@ public record FatDirectoryEntry(
         Optional<Instant> accessTime = parseDateTime(accessDateRaw, 0, 0);
 
         // Parse cluster number
-        int clusterHigh = buffer.getShort(startPos + 20) & 0xFFFF;
+        // On FAT12/16, offset 20 is reserved (OS/2 uses it for EA index) — must be ignored
+        int clusterHigh = isFat32 ? (buffer.getShort(startPos + 20) & 0xFFFF) : 0;
         int clusterLow = buffer.getShort(startPos + 26) & 0xFFFF;
         int firstCluster = (clusterHigh << 16) | clusterLow;
 

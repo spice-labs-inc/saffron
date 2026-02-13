@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.*;
  */
 class Ext4FileSystemTest {
 
-    private static final String CORPUS_BASE = "/home/dpp/tmp/vmreader/saffron/test-corpus";
+    private static final String CORPUS_BASE = Path.of("test-corpus").toAbsolutePath().toString();
 
     static boolean corpusExists() {
         return Files.isDirectory(Paths.get(CORPUS_BASE));

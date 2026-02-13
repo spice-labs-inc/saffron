@@ -115,7 +115,7 @@ public record MftRecord(
         int usedSize = buffer.getInt(startPos + 24);
 
         // Apply fixup (update sequence)
-        if (!applyFixup(buffer, startPos, updateSeqOffset, updateSeqSize, recordSize)) {
+        if (!applyFixup(buffer, startPos, updateSeqOffset, updateSeqSize, recordSize, usedSize)) {
             return Optional.empty();
         }
 
@@ -152,7 +152,8 @@ public record MftRecord(
      * Applies the update sequence fixup to correct sector end markers.
      */
     private static boolean applyFixup(ByteBuffer buffer, int startPos,
-                                       int updateSeqOffset, int updateSeqSize, int recordSize) {
+                                       int updateSeqOffset, int updateSeqSize,
+                                       int recordSize, int usedSize) {
         if (updateSeqSize < 2) {
             return true; // No fixup needed
         }
@@ -173,11 +174,16 @@ public record MftRecord(
             }
 
             short actualValue = buffer.getShort(sectorEndOffset);
-            if (actualValue != updateSeqNum) {
-                return false; // Fixup mismatch
+
+            // Only verify fixup for sectors that contain used data.
+            // Sectors beyond usedSize may not have been written with the
+            // current update sequence (common on NTFS v1.2 / Windows NT 4.0).
+            int sectorStart = (i - 1) * sectorSize;
+            if (sectorStart < usedSize && actualValue != updateSeqNum) {
+                return false; // Fixup mismatch in used portion
             }
 
-            // Replace with original value
+            // Apply replacement regardless (safe for both cases)
             short originalValue = buffer.getShort(seqArrayOffset + i * 2);
             buffer.putShort(sectorEndOffset, originalValue);
         }

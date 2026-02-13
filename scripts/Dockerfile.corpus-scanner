@@ -1,0 +1,18 @@
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LIBGUESTFS_BACKEND=direct
+
+RUN apt-get update && apt-get install -y \
+    libguestfs-tools \
+    linux-image-generic \
+    qemu-utils \
+    jq \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY gather-corpus-data-docker.sh /usr/local/bin/gather-corpus-data.sh
+RUN chmod +x /usr/local/bin/gather-corpus-data.sh
+
+WORKDIR /corpus
+
+ENTRYPOINT ["/usr/local/bin/gather-corpus-data.sh"]

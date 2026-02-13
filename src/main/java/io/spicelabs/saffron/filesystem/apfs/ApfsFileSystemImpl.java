@@ -5,6 +5,7 @@
 package io.spicelabs.saffron.filesystem.apfs;
 
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
@@ -39,6 +40,9 @@ public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
 
     /** Maximum file size that can be read into memory (256 MB) */
     private static final long MAX_READABLE_SIZE = 256 * 1024 * 1024;
+
+    /** Maximum depth for following symlink chains before giving up */
+    private static final int MAX_SYMLINK_DEPTH = 40;
 
     /** Root directory inode number */
     private static final long ROOT_INODE = 2;
@@ -222,23 +226,40 @@ public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
         if (start.isEmpty()) {
             return Stream.empty();
         }
-        return walkEntry(start.get(), 0, maxDepth);
+        Set<Long> visited = new HashSet<>();
+        return walkEntry(start.get(), 0, maxDepth, visited);
     }
 
-    private Stream<FileSystemEntry> walkEntry(FileSystemEntry entry, int depth, int maxDepth) {
+    private Stream<FileSystemEntry> walkEntry(FileSystemEntry entry, int depth, int maxDepth,
+                                               Set<Long> visited) {
         if (depth > maxDepth) {
             return Stream.empty();
         }
 
         Stream<FileSystemEntry> self = Stream.of(entry);
 
-        if (entry instanceof FileSystemEntry.Directory dir && depth < maxDepth) {
+        if (entry instanceof ApfsDirectory dir && depth < maxDepth) {
+            if (!visited.add(dir.oid)) {
+                // Already visited this directory — cycle detected, skip children
+                return self;
+            }
             try {
                 Stream<FileSystemEntry> children = StreamSupport.stream(
                         Spliterators.spliteratorUnknownSize(
                                 new DirectoryIterator(dir), Spliterator.ORDERED
                         ), false
-                ).flatMap(child -> walkEntry(child, depth + 1, maxDepth));
+                ).flatMap(child -> walkEntry(child, depth + 1, maxDepth, visited));
+                return Stream.concat(self, children);
+            } catch (Exception e) {
+                return self;
+            }
+        } else if (entry instanceof FileSystemEntry.Directory dir && depth < maxDepth) {
+            try {
+                Stream<FileSystemEntry> children = StreamSupport.stream(
+                        Spliterators.spliteratorUnknownSize(
+                                new DirectoryIterator(dir), Spliterator.ORDERED
+                        ), false
+                ).flatMap(child -> walkEntry(child, depth + 1, maxDepth, visited));
                 return Stream.concat(self, children);
             } catch (Exception e) {
                 return self;
@@ -376,7 +397,7 @@ public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
      */
     private byte[] readFileData(long privateId, long fileSize) throws IOException {
         if (fileSize > MAX_READABLE_SIZE) {
-            throw new IOException("File too large to read: " + fileSize + " bytes");
+            throw new ResourceLimitException("File too large to read into memory: " + fileSize + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, fileSize);
         }
         if (fileSize == 0) {
             return new byte[0];
@@ -425,6 +446,113 @@ public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
         }
 
         return data;
+    }
+
+    /**
+     * Reads a specific extended attribute (xattr) for an inode.
+     *
+     * @param inodeOid the inode OID to read xattrs from
+     * @param xattrName the name of the xattr to find
+     * @return the xattr record, or null if not found
+     */
+    private ApfsXattr readXattr(long inodeOid, String xattrName) throws IOException {
+        BiFunction<Long, Long, Long> resolver = volumeOmap.resolver();
+
+        List<ApfsBTreeReader.KVEntry> entries = fsBtreeReader.collectPrefix(
+                fsTreeRootBlock,
+                (key, unused) -> ApfsXattr.isXattrForOidAndName(key, inodeOid, xattrName),
+                resolver
+        );
+
+        if (entries.isEmpty()) return null;
+
+        ApfsBTreeReader.KVEntry entry = entries.get(0);
+        return ApfsXattr.parse(entry.key(), entry.val());
+    }
+
+    /**
+     * Reads xattr data, handling both embedded and data-stream (resource fork) xattrs.
+     * For data-stream xattrs, the xattr value contains a dstream record with the data
+     * stored in file extent records.
+     */
+    private byte[] readXattrData(ApfsXattr xattr) throws IOException {
+        if (xattr.isEmbedded()) {
+            return xattr.data();
+        }
+        if (xattr.isDataStream()) {
+            // The xattr data contains a dstream record:
+            // uint64 size, uint64 alloced_size, uint64 default_crypto_id, ...
+            // Then the actual data is stored in file extent records keyed by the xattr's inode OID
+            // with the dstream. For resource forks, the private_id is the inode OID.
+            byte[] dstreamData = xattr.data();
+            if (dstreamData.length < 8) {
+                return new byte[0];
+            }
+            ByteBuffer dsBuf = ByteBuffer.wrap(dstreamData);
+            dsBuf.order(java.nio.ByteOrder.LITTLE_ENDIAN);
+            long streamSize = dsBuf.getLong(0);
+            // Read the resource fork data from file extents using the inode OID as the private_id
+            return readFileData(xattr.inodeOid(), streamSize);
+        }
+        return xattr.data();
+    }
+
+    /**
+     * Reads file data for a compressed file, handling decmpfs decompression.
+     *
+     * @param inode the inode record for the file
+     * @return the decompressed file data
+     * @throws IOException if decompression fails or the compression type is unsupported
+     */
+    private byte[] readCompressedFileData(ApfsInodeRecord inode) throws IOException {
+        // Read the com.apple.decmpfs xattr
+        ApfsXattr decmpfsXattr = readXattr(inode.oid(), "com.apple.decmpfs");
+        if (decmpfsXattr == null) {
+            // No decmpfs xattr found — fall back to regular read
+            long size = inode.dataStreamSize() > 0 ? inode.dataStreamSize() : inode.uncompressedSize();
+            return readFileData(inode.privateId(), size);
+        }
+
+        // Get the xattr data (always embedded for decmpfs header)
+        byte[] xattrData = decmpfsXattr.data();
+
+        // Parse the decmpfs header
+        ApfsDecmpfs.DecmpfsHeader header = ApfsDecmpfs.parseHeader(xattrData);
+        if (header == null) {
+            // Invalid header — fall back to regular read
+            long size = inode.dataStreamSize() > 0 ? inode.dataStreamSize() : inode.uncompressedSize();
+            return readFileData(inode.privateId(), size);
+        }
+
+        if (header.uncompressedSize() > MAX_READABLE_SIZE) {
+            throw new ResourceLimitException(
+                    "Compressed file too large to decompress into memory: " + header.uncompressedSize()
+                            + " bytes (limit: 256 MB).",
+                    "allocation_size", MAX_READABLE_SIZE, header.uncompressedSize());
+        }
+
+        if (!ApfsDecmpfs.isSupported(header.compressionType())) {
+            throw new IOException("Unsupported decmpfs compression type: " + header.compressionType());
+        }
+
+        // For resource fork types, read the resource fork data
+        byte[] resourceForkData = null;
+        if (header.compressionType() == ApfsDecmpfs.TYPE_ZLIB_RESOURCE_FORK) {
+            // Resource fork data is stored in file extent records for this file
+            // The compressed data size is in the file extents (dataStreamSize)
+            long rfSize = inode.dataStreamSize();
+            if (rfSize > 0) {
+                resourceForkData = readFileData(inode.privateId(), rfSize);
+            } else {
+                // Try reading the resource fork via the com.apple.ResourceFork xattr
+                ApfsXattr rfXattr = readXattr(inode.oid(), "com.apple.ResourceFork");
+                if (rfXattr != null) {
+                    resourceForkData = readXattrData(rfXattr);
+                }
+            }
+        }
+
+        return ApfsDecmpfs.decompress(header, xattrData, resourceForkData);
     }
 
     private FileSystemEntry createEntry(ApfsInodeRecord inode, String name, String path) {
@@ -545,6 +673,11 @@ public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
 
         @Override
         public long size() {
+            // For compressed files, the uncompressedSize field in the inode stores the
+            // original (decompressed) file size.
+            if (inode.isCompressed() && inode.uncompressedSize() > 0) {
+                return inode.uncompressedSize();
+            }
             return inode.dataStreamSize() > 0 ? inode.dataStreamSize() : inode.uncompressedSize();
         }
 
@@ -563,11 +696,17 @@ public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
             attrs.put("mode", inode.mode());
             attrs.put("uid", inode.uid());
             attrs.put("gid", inode.gid());
+            if (inode.isCompressed()) {
+                attrs.put("compressed", true);
+            }
             return Collections.unmodifiableMap(attrs);
         }
 
         @Override
         public byte[] readAllBytes() throws IOException {
+            if (inode.isCompressed()) {
+                return readCompressedFileData(inode);
+            }
             return readFileData(inode.privateId(), size());
         }
 
@@ -623,13 +762,26 @@ public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
 
         @Override
         public @NotNull Optional<FileSystemEntry> resolve() throws IOException {
-            String targetPath = target();
-            if (targetPath.startsWith("/")) {
-                return ApfsFileSystemImpl.this.resolve(targetPath);
+            return resolveWithDepth(MAX_SYMLINK_DEPTH);
+        }
+
+        private @NotNull Optional<FileSystemEntry> resolveWithDepth(int remaining) throws IOException {
+            if (remaining <= 0) {
+                throw new IOException("Symlink depth exceeded while resolving: " + path);
             }
-            String parentPath = path.substring(0, path.lastIndexOf('/'));
-            if (parentPath.isEmpty()) parentPath = "/";
-            return ApfsFileSystemImpl.this.resolve(parentPath + "/" + targetPath);
+            String targetPath = target();
+            Optional<FileSystemEntry> resolved;
+            if (targetPath.startsWith("/")) {
+                resolved = ApfsFileSystemImpl.this.resolve(targetPath);
+            } else {
+                String parentPath = path.substring(0, path.lastIndexOf('/'));
+                if (parentPath.isEmpty()) parentPath = "/";
+                resolved = ApfsFileSystemImpl.this.resolve(parentPath + "/" + targetPath);
+            }
+            if (resolved.isPresent() && resolved.get() instanceof ApfsSymlink nextLink) {
+                return nextLink.resolveWithDepth(remaining - 1);
+            }
+            return resolved;
         }
     }
 

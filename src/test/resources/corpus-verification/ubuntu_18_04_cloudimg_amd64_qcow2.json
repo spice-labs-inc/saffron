@@ -1,29 +1,160 @@
 {
   "imagePath": "/corpus/qcow2/modern/ubuntu-18.04-cloudimg-amd64.qcow2",
   "imageBasename": "ubuntu-18.04-cloudimg-amd64.qcow2",
-  "filesystemType": "ext4",
+  "filesystemCount": 2,
   "totalFiles": 53457,
-  "totalDirectories": 10142,
-  "sampleFiles": [
-    {"path": "/usr/share/zoneinfo/right/America/Jujuy", "sha256": "f9b3f77caa862cee71a893e64fe1e4dbb24eda9ceff5875ae5b744638810aa14", "size": 1616},
-    {"path": "/usr/src/linux-headers-4.15.0-212/sound/hda/Kconfig", "sha256": "0bc3e0be417dd4ef888aaaa31b2c05b2f68fad21c5b474c808f8026d0f4210a7", "size": 697},
-    {"path": "/usr/share/doc/libdebconfclient0/copyright", "sha256": "1f48252e8bd71085c67fe1f5468c67da1d2d7cc34cd8a7e9d90b9ad2df080e8e", "size": 1978},
-    {"path": "/lib/modules/4.15.0-212-generic/kernel/net/sunrpc/sunrpc.ko", "sha256": "5f72c3a6f4937303a7beb0e99b621585955acbeac017bbcee12d0e4702329ef7", "size": 592305},
-    {"path": "/lib/systemd/system/dm-event.service", "sha256": "22420e24c9cf0d6e65fff3d0d35540cb7c3aee31451678a52553aded829a3f8d", "size": 341},
-    {"path": "/var/lib/dpkg/info/libirs160:amd64.triggers", "sha256": "b61478d3caf10aab72c147c59c33b8dfd68cea250408f809789de6f6250de506", "size": 74},
-    {"path": "/usr/share/man/it/man1/su.1.gz", "sha256": "5501341266c26ffa3ecfe604a7163f84a19791d3dc0f19a8ee2c16bf3c5cbef3", "size": 3305},
-    {"path": "/usr/src/linux-headers-4.15.0-212-generic/include/config/tcp/cong/veno.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/usr/src/linux-headers-4.15.0-212-generic/include/config/sxgbe/eth.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/usr/share/doc/apport/NEWS.gz", "sha256": "46475390011e6e216fa2bf7fa25149d1b0723317d02e866986f854c36e40b17e", "size": 45227},
-    {"path": "/usr/share/terminfo/z/z39-a", "sha256": "03773f1ab93379c10f167f03686255ee8a199b740778c45a0f6d26a0922fc13c", "size": 1124},
-    {"path": "/usr/share/terminfo/t/tab132", "sha256": "05a1b1beeff9ab17893e4df95c9aec2168cd5d7220effeaeed01c761cd0ce5cc", "size": 1104},
-    {"path": "/usr/share/bash-completion/completions/hostnamectl", "sha256": "24b410b21445404cc53f3edab5031de60ce9c28958d173342c1b91f48e954031", "size": 2278},
-    {"path": "/usr/share/X11/locale/el_GR.UTF-8/XLC_LOCALE", "sha256": "9fae053b229a02427a3eb0e854b29f1b4f47b6f9141099a8064de25f3ebde42a", "size": 48},
-    {"path": "/var/lib/dpkg/info/libnghttp2-14:amd64.shlibs", "sha256": "79f5b8b23f0a5bfb09f4cce8ab16a755f342bcccddc0371d101450d545a4cf27", "size": 28},
-    {"path": "/usr/src/linux-headers-4.15.0-212-generic/include/config/input/pcf50633/pmu.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/usr/src/linux-headers-4.15.0-212-generic/include/config/snd/soc/intel/bdw/rt5677/mach.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/usr/share/doc/git/RelNotes/2.4.9.txt", "sha256": "d2a6e72f00c73b5d343ff226b82b2c9afb5b64a4f9cd03aab04836ff1cc4ab84", "size": 284},
-    {"path": "/usr/src/linux-headers-4.15.0-212-generic/include/config/rtc/drv/s5m.h", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "size": 0},
-    {"path": "/usr/src/linux-headers-4.15.0-212/drivers/crypto/stm32/Kconfig", "sha256": "76b0dfcb6d9b8a34c1fcf28b6eb777d065f143327d400e8218b71655ff2a391d", "size": 569}
+  "totalDirectories": 10141,
+  "filesystems": [
+    {
+      "device": "/dev/sda1",
+      "fstype": "ext4",
+      "fileCount": 53450,
+      "directoryCount": 10138,
+      "sampleFiles": [
+        {
+          "path": "/usr/src/linux-headers-4.15.0-212/include/linux/platform_data/efm32-uart.h",
+          "size": 393,
+          "sha256": "f9c465c577825ce91ee5a4ac145ac42867eac7d36a7dd4f622a60d4738754720"
+        },
+        {
+          "path": "/usr/share/man/man5/mailcap.order.5.gz",
+          "size": 1226,
+          "sha256": "5c527a5a167cd02d69b06922c3c7209594e719f66cab3b6e8cf9b4580d73e46a"
+        },
+        {
+          "path": "/usr/src/linux-headers-4.15.0-212/arch/ia64/include/uapi/asm/rse.h",
+          "size": 1750,
+          "sha256": "25abf161212e01b8cdc9e2e482b5ebf9b6a03da18c9c2fd8d6615e1122a3e169"
+        },
+        {
+          "path": "/usr/share/X11/xkb/symbols/nokia_vndr/rx-44",
+          "size": 15166,
+          "sha256": "608b189d1c160af55a55a47046eabf83e69bf63a679b586455b5352cef0a15f1"
+        },
+        {
+          "path": "/usr/src/linux-headers-4.15.0-212/include/video/da8xx-fb.h",
+          "size": 2035,
+          "sha256": "d0634d1468088497bbb36d9fdaa5d4bb7f129fd0fc3abcfda336fb2ab1155b5e"
+        },
+        {
+          "path": "/usr/src/linux-headers-4.15.0-212/tools/testing/selftests/Makefile",
+          "size": 5711,
+          "sha256": "e68e096c240648929ac6e5b13f6f13aedc40e22e1b4088f6ced9187b28a3febe"
+        },
+        {
+          "path": "/usr/share/man/pl/man8/groupmems.8.gz",
+          "size": 1856,
+          "sha256": "5d866659c3e9193237a2421170bdd27ed29971b996a401575def372437d17b07"
+        },
+        {
+          "path": "/usr/src/linux-headers-4.15.0-212/include/linux/vme.h",
+          "size": 5794,
+          "sha256": "78b94883861dc4637f6353976e1d21b74a9ed5c316128466d4ac63effb43b482"
+        },
+        {
+          "path": "/usr/share/man/man8/chmem.8.gz",
+          "size": 1729,
+          "sha256": "06f2cab2e271bbc08cbb9b64def1818ff313b1d3614d78096c49b6e1853d050c"
+        },
+        {
+          "path": "/usr/lib/python3/dist-packages/jwt/utils.py",
+          "size": 4121,
+          "sha256": "edd3f0336973c23e3dae4c76add90c5207017458e114589d344e3ef8d97a1572"
+        },
+        {
+          "path": "/lib/modules/4.15.0-212-generic/kernel/drivers/net/ethernet/dec/tulip/winbond-840.ko",
+          "size": 52881,
+          "sha256": "04f5254ef1a3f9cb3403e88e0854e051833824babf21fe772fcce60336d8ae26"
+        },
+        {
+          "path": "/var/lib/systemd/deb-systemd-helper-enabled/acpid.socket.dsh-also",
+          "size": 54,
+          "sha256": "4557e9353190c535a6dadb9ae1519910f57822d1fd3b504167401363063d87bf"
+        },
+        {
+          "path": "/usr/src/linux-headers-4.15.0-212/arch/cris/include/arch-v32/arch/hwregs/ata_defs.h",
+          "size": 6473,
+          "sha256": "984af2da947a199e667e9f7f9a6a0923e71abc2144fdc4ad3c8769d69f8aec35"
+        },
+        {
+          "path": "/usr/share/doc/iptables/html/packet-filtering-HOWTO-7.html",
+          "size": 35542,
+          "sha256": "3d310b324f71d75c9fbe6fddb73be0e2ca77c6e469d8a8ad498efb89c50ee8ca"
+        },
+        {
+          "path": "/lib/modules/4.15.0-212-generic/kernel/net/sched/em_ipset.ko",
+          "size": 8033,
+          "sha256": "3d193559dc351481b1d2a9c98f3c6940bb15d5efa670e88688fefe488caa2b86"
+        },
+        {
+          "path": "/usr/src/linux-headers-4.15.0-212/arch/m68k/mac/Makefile",
+          "size": 142,
+          "sha256": "c19c6f50c06d0d2c543ae95b35c4bb5014d3e7f3ca6830fe3f84ddf8dee74a24"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/gconv/IBM1133.so",
+          "size": 10312,
+          "sha256": "d07c6de899fd5278b71e0a2fe019506948c7ba7417bd30131ad985ce507378e8"
+        },
+        {
+          "path": "/usr/src/linux-headers-4.15.0-212/scripts/selinux/mdp/mdp.c",
+          "size": 4545,
+          "sha256": "af7941589233cbd05662532b5f6750df4814f31d3e330517fdfef16f6323b0ee"
+        },
+        {
+          "path": "/lib/modules/4.15.0-212-generic/kernel/net/netfilter/nf_conntrack.ko",
+          "size": 222617,
+          "sha256": "2944591010fb67d2e61828d90fed31f4dd8afc3f7543003bc4855d75c7981974"
+        },
+        {
+          "path": "/usr/share/doc/nano/nano.html",
+          "size": 76590,
+          "sha256": "f9080e53751e2ee0e4128ad717946ad95073e9c3173832465bf469f4fd8695fb"
+        }
+      ]
+    },
+    {
+      "device": "/dev/sda15",
+      "fstype": "vfat",
+      "fileCount": 7,
+      "directoryCount": 3,
+      "sampleFiles": [
+        {
+          "path": "/EFI/ubuntu/shimx64.efi",
+          "size": 955656,
+          "sha256": "f037d2f20ce5d739c95fa71435410f1d71876868b7e635adb23cdb66fcf4619a"
+        },
+        {
+          "path": "/EFI/ubuntu/BOOTX64.CSV",
+          "size": 108,
+          "sha256": "6add06de471015ad4460964f30fb115e7fdc286da6a527d0643fc7815b728fbf"
+        },
+        {
+          "path": "/EFI/ubuntu/grub.cfg",
+          "size": 117,
+          "sha256": "886fe04ce8fa415a4dcc4186da09d357d22ef7c8efdc8261eafa79098ad1e2fc"
+        },
+        {
+          "path": "/EFI/BOOT/BOOTX64.EFI",
+          "size": 955656,
+          "sha256": "f037d2f20ce5d739c95fa71435410f1d71876868b7e635adb23cdb66fcf4619a"
+        },
+        {
+          "path": "/EFI/BOOT/fbx64.efi",
+          "size": 85672,
+          "sha256": "bfd97f8495e9257b6d4d25c9e9fbe09aca33a0690a868e3e5d6725670e26894c"
+        },
+        {
+          "path": "/EFI/ubuntu/mmx64.efi",
+          "size": 856232,
+          "sha256": "cfd7d16822d7728f08fc47861a10434cf4c8525ab9a0f924883e1a098e1576bf"
+        },
+        {
+          "path": "/EFI/ubuntu/grubx64.efi",
+          "size": 2594696,
+          "sha256": "d82d33cd47a15c5003144fe965d0dc6145f72116e9fb30cb7e8845fb6b5cdb71"
+        }
+      ]
+    }
   ]
 }

@@ -73,8 +73,17 @@ public record NtfsAttribute(
         @NotNull List<DataRun> dataRuns,
         long allocatedSize,
         long dataSize,
-        long initializedSize
+        long initializedSize,
+        int compressionUnitSize
 ) {
+
+    /** Flag indicating the attribute is compressed */
+    public static final int FLAG_COMPRESSED = 0x0001;
+
+    /** Returns true if this attribute is compressed */
+    public boolean isCompressed() {
+        return (flags & FLAG_COMPRESSED) != 0 && compressionUnitSize > 0;
+    }
 
     // Attribute types
     public static final int TYPE_STANDARD_INFORMATION = 0x10;
@@ -136,7 +145,7 @@ public record NtfsAttribute(
             return Optional.of(new NtfsAttribute(
                     type, totalLength, true, name, flags,
                     residentData,
-                    0, 0, List.of(), 0, residentData.length, residentData.length
+                    0, 0, List.of(), 0, residentData.length, residentData.length, 0
             ));
         } else {
             // Non-resident attribute
@@ -147,6 +156,7 @@ public record NtfsAttribute(
             long startVcn = buf.getLong(16);
             long endVcn = buf.getLong(24);
             int dataRunsOffset = buf.getShort(32) & 0xFFFF;
+            int compressionUnitLog = buf.getShort(34) & 0xFFFF;
             long allocatedSize = buf.getLong(40);
             long dataSize = buf.getLong(48);
             long initializedSize = buf.getLong(56);
@@ -157,7 +167,8 @@ public record NtfsAttribute(
             return Optional.of(new NtfsAttribute(
                     type, totalLength, false, name, flags,
                     new byte[0],
-                    startVcn, endVcn, dataRuns, allocatedSize, dataSize, initializedSize
+                    startVcn, endVcn, dataRuns, allocatedSize, dataSize, initializedSize,
+                    compressionUnitLog > 0 ? (1 << compressionUnitLog) : 0
             ));
         }
     }

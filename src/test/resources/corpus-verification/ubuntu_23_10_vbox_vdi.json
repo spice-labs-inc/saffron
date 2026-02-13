@@ -1,29 +1,225 @@
 {
   "imagePath": "/corpus/vdi/modern/ubuntu-23.10-vbox.vdi",
   "imageBasename": "ubuntu-23.10-vbox.vdi",
-  "filesystemType": "unknown",
+  "filesystemCount": 2,
   "totalFiles": 122304,
-  "totalDirectories": 14920,
-  "sampleFiles": [
-    {"path": "/usr/lib/firmware/radeon/BONAIRE_mec.bin.zst", "sha256": "df40bbcd786d2c0660fcce6945c0b72cafbace668c401e5c3cb5d4e2b42418f0", "size": 8509},
-    {"path": "/usr/share/doc/libpcre2-8-0/changelog.Debian.gz", "sha256": "47098ff7919792451c1c0eef05b1dc1c8018c58c263d215240736983161bf71e", "size": 1409},
-    {"path": "/usr/src/linux-headers-6.5.0-14/arch/sh/kernel/Makefile", "sha256": "86557e72beaa695c239b8ee0653df2e958602d9e92b21a79a8b0b87f53817adc", "size": 1534},
-    {"path": "/boot/grub/i386-pc/lsapm.mod", "sha256": "2019a3536b63e9238497e7c1c5748fcc8e196a11d6205f1fff186397229e7e8c", "size": 2236},
-    {"path": "/var/lib/dpkg/info/gstreamer1.0-plugins-base:amd64.list", "sha256": "15764aab38710f3a79ca341183b54aab371f855e906350f2a13ed32d4b8038f1", "size": 1848},
-    {"path": "/usr/share/doc/libbrotli1/copyright", "sha256": "24a64e5bb83d0960d1835696a1e23c0896ad6055b0ca47c66ab0eb9a766324b1", "size": 1354},
-    {"path": "/opt/VBoxGuestAdditions-7.0.6/src/vboxguest-7.0.6/vboxsf/include/iprt/errcore.h", "sha256": "cfb476fb8b083dac6a2a79c3bae936ad2dcd9794e0530d729460d1c6cdc08f91", "size": 33693},
-    {"path": "/usr/lib/python3/dist-packages/pygments/lexers/__pycache__/math.cpython-311.pyc", "sha256": "330aeb292c73961e016974e921d1bf1da6276729f90916e0832469677311a3d1", "size": 1185},
-    {"path": "/usr/bin/zipgrep", "sha256": "d3da1cedec94b40ce31b1a9ffdb5f7b2d2d6ff0c2bd8bd72f044913181f3928d", "size": 2959},
-    {"path": "/usr/share/locale/ar/LC_MESSAGES/libapt-pkg6.0.mo", "sha256": "45862154308a8ecab92e76ba87a805716e9c92311e6fa1069ff860cf8e11e65b", "size": 5131},
-    {"path": "/usr/share/icons/Adwaita/16x16/actions/zoom-in-symbolic.symbolic.png", "sha256": "d21e630a25ef29e27ffe25cdcd0dc69ea0fb1625afd59327dd1652e21d3d35f0", "size": 143},
-    {"path": "/usr/include/linux/pr.h", "sha256": "164cc599528a82a8c937332e9de36c920d541e967415d5f37f0e03d6bfa1bdcf", "size": 1630},
-    {"path": "/usr/share/perl/5.36.0/ExtUtils/testlib.pm", "sha256": "db553d541d4c48739dfd87d928205c56299d9e738b1cd346da9630cec8ef3f1f", "size": 911},
-    {"path": "/var/lib/swcatalog/icons/ubuntu-mantic-universe/48x48/firewall-config_firewall-config.png", "sha256": "c801f052d34da74a1b06a57782edce11f1c073b000dcb291b311907b33554c87", "size": 3017},
-    {"path": "/var/lib/dpkg/info/libgl1:amd64.list", "sha256": "ccdc1d6d66757a93e8c069aed08c044ef1b52674d1f5515e41e22f643e8610e0", "size": 310},
-    {"path": "/usr/lib/python3/dist-packages/wadllib/__init__.py", "sha256": "3b386dba8d3f4d5ac8cd869c608aec2394089695ba3ead912e344d81492b2af5", "size": 1108},
-    {"path": "/usr/share/evince/icons/hicolor/scalable/actions/annotations-squiggly-symbolic.svg", "sha256": "23f4cc0c92e358775c851012c7d1751c0cd2731dc2a33123538b73c9bade2bb2", "size": 2025},
-    {"path": "/usr/share/man/man1/hex2hcd.1.gz", "sha256": "a9b170f43767d913129836f04a290500e77a4a5eacf1955f2e00c092e4f3b7c1", "size": 261},
-    {"path": "/usr/lib/modules/6.5.0-14-generic/kernel/fs/quota/quota_v1.ko.zst", "sha256": "7d88d34d9d6d31563e78716f678495370a6428213779eecb4a6d217438f47835", "size": 4851},
-    {"path": "/usr/share/icons/Yaru/24x24/legacy/draw-polygon.svg", "sha256": "1585b5ca36732cb69c30fb2208c53e8ab61f555befa6ebabfe1651d3ef0dc234", "size": 6192}
+  "totalDirectories": 14919,
+  "filesystems": [
+    {
+      "device": "/dev/sda2",
+      "fstype": "ext4",
+      "fileCount": 306,
+      "directoryCount": 5,
+      "sampleFiles": [
+        {
+          "path": "/grub/i386-pc/gzio.mod",
+          "size": 8752,
+          "sha256": "ab4b8e1acdfd78207a115c10f73499366d6c58cef9a5723c2f73f21165731442"
+        },
+        {
+          "path": "/grub/i386-pc/terminfo.mod",
+          "size": 12356,
+          "sha256": "b1ecb00ecc091baf667c453177e75ef2b6e2b53f435252b5059eede4ee8013ab"
+        },
+        {
+          "path": "/grub/i386-pc/testspeed.mod",
+          "size": 2264,
+          "sha256": "c5ad99ef20515eee637cfc1a49dc09771b93d6bd0720cf3b76675db9271a98d8"
+        },
+        {
+          "path": "/grub/i386-pc/zstd.mod",
+          "size": 45964,
+          "sha256": "7c6fd14cfeb5c5447221b1f7c431dfe5f613cb37ad6712d42822c574118432c0"
+        },
+        {
+          "path": "/grub/i386-pc/random.mod",
+          "size": 3696,
+          "sha256": "eb89ef47bfa4b565abd770a104c93b03abe114745aae30a96b18dd0e52b9ffd3"
+        },
+        {
+          "path": "/grub/i386-pc/ntfscomp.mod",
+          "size": 4260,
+          "sha256": "84389d6153af0edcf68b54abbe19142d144dcabf02d73c2d06eaaeffa8341172"
+        },
+        {
+          "path": "/grub/i386-pc/crc64.mod",
+          "size": 1572,
+          "sha256": "d49751ff22fefe2dc56ad63b85e306948ec77bc527dc57f2cd37074f6fdaee2e"
+        },
+        {
+          "path": "/grub/i386-pc/disk.mod",
+          "size": 2332,
+          "sha256": "4ecd1f58a4faa28f796b3943757443a1fc95da01802ad6381020825d23c99bfe"
+        },
+        {
+          "path": "/grub/i386-pc/boot.img",
+          "size": 512,
+          "sha256": "7720690bdaf25fd7e3ade7e01b8d0de91e0991653e2a6900011ab23daf6e6032"
+        },
+        {
+          "path": "/grub/i386-pc/hello.mod",
+          "size": 1140,
+          "sha256": "80ee23a284ac3e174543cf2cdf1ad08189f97534bb888bf77038c1cbd68afa72"
+        },
+        {
+          "path": "/grub/grubenv",
+          "size": 1024,
+          "sha256": "f64122858064885ef0733e42c6a3d2d3fd642671f714db0d974b880c0f087430"
+        },
+        {
+          "path": "/grub/i386-pc/xnu.mod",
+          "size": 27436,
+          "sha256": "e201f4d58e6eb2fbb3e7d69d67a27cc580c95f5ec2dfb4c223b7d553c4325293"
+        },
+        {
+          "path": "/grub/i386-pc/command.lst",
+          "size": 3931,
+          "sha256": "db238f7f867e9111c4909fa1620257fa6d1c13f6268ad7c1b8112cf709fe4513"
+        },
+        {
+          "path": "/grub/i386-pc/minix_be.mod",
+          "size": 3764,
+          "sha256": "dcc2aa56c0c20fec57926fbdfb65088769019da5a10f9d32cfbfc2f1cb06969f"
+        },
+        {
+          "path": "/grub/i386-pc/multiboot2.mod",
+          "size": 16036,
+          "sha256": "130212fb2d2e58ba63bcb59b2c25f8a1e1b8d38961ec1ff954c5d2e7a00c575a"
+        },
+        {
+          "path": "/grub/i386-pc/echo.mod",
+          "size": 1896,
+          "sha256": "559369bbc092b71bad4f041554dd03df1632ab24aa819898bf88e9f0c7dc5f58"
+        },
+        {
+          "path": "/grub/i386-pc/mmap.mod",
+          "size": 8544,
+          "sha256": "e292100eaecfa61ceacc1e0b534fecabfa5ec74796898a8b72b2b37cee8623bb"
+        },
+        {
+          "path": "/grub/i386-pc/plainmount.mod",
+          "size": 7252,
+          "sha256": "bea4d3557bac31e76552e738795aacf00269f7880ce6a1911f7ce31edc99327c"
+        },
+        {
+          "path": "/grub/i386-pc/pxechain.mod",
+          "size": 2616,
+          "sha256": "2d7c48ef4587515df3a4763bfcfe47d23d072079a63a6d1f21901f3a0482f64f"
+        },
+        {
+          "path": "/grub/i386-pc/test.mod",
+          "size": 5000,
+          "sha256": "0db44847749554f7baf1f5769c2322115989a2fd45b3f20eff7426e55834d064"
+        }
+      ]
+    },
+    {
+      "device": "/dev/ubuntu-vg/ubuntu-lv",
+      "fstype": "ext4",
+      "fileCount": 121998,
+      "directoryCount": 14914,
+      "sampleFiles": [
+        {
+          "path": "/usr/share/icons/Yaru-magenta/24x24@2x/actions/folder-new.png",
+          "size": 2071,
+          "sha256": "c873446cd80b0c878278037a373397f6cb0b461b0508a65e258b06ca64a90603"
+        },
+        {
+          "path": "/usr/src/linux-headers-6.5.0-14/arch/sh/include/asm/mmu_context.h",
+          "size": 4167,
+          "sha256": "cf6440e871ae26d056bf2e4e5f36475c2b8d8c03fa43c4d80ce8d1b1ac52d55e"
+        },
+        {
+          "path": "/var/lib/dpkg/info/libmediaart-2.0-0:amd64.md5sums",
+          "size": 248,
+          "sha256": "66482f708b67ebdb65b39da6f08650e4359c01d285db02bb79c9b6fe37adf6f4"
+        },
+        {
+          "path": "/usr/share/themes/Yaru-prussiangreen-dark/gtk-2.0/assets/border.png",
+          "size": 82,
+          "sha256": "f53b90abda9d591e651a37b93b238604cf102ebd2c0e6afcecc0ea6b80ba93fe"
+        },
+        {
+          "path": "/var/lib/swcatalog/icons/ubuntu-mantic-universe/64x64/pinot_pinot.png",
+          "size": 4042,
+          "sha256": "f7825308e22080e350a85877f1ee5843d7c5c321baf9bf3526bea173c3ea5a79"
+        },
+        {
+          "path": "/usr/share/themes/Yaru-olive-dark/gtk-2.0/assets/scale-slider-insensitive.png",
+          "size": 477,
+          "sha256": "f129f6c20d08203bf569a9c0502b04727b208fa88fa52be5510f29dee8f150c1"
+        },
+        {
+          "path": "/usr/src/linux-headers-6.5.0-14/arch/powerpc/include/asm/icswx.h",
+          "size": 5090,
+          "sha256": "4c5f2f088602747d2d8abd8f09ae0246c523244951c3f46e9cfaaaeb00b93cd3"
+        },
+        {
+          "path": "/var/lib/dpkg/info/nano.conffiles",
+          "size": 12,
+          "sha256": "2bc68fcbf7aed0a4facc0058b86d8dfaed1697ebd24cb97c67b33f7c679928f7"
+        },
+        {
+          "path": "/usr/src/linux-headers-6.5.0-14/include/linux/sched/user.h",
+          "size": 1564,
+          "sha256": "32a2fd352a2c29950127e2cde66e281e56c55e688afc01d49eb2fde8f4803c72"
+        },
+        {
+          "path": "/usr/src/linux-headers-6.5.0-14/arch/arm/boot/dts/hpe/Makefile",
+          "size": 91,
+          "sha256": "809c3fd385c869659f817729e0640aa8a64ea14313ea0764a250dba545b25977"
+        },
+        {
+          "path": "/usr/share/doc/gettext-base/changelog.Debian.gz",
+          "size": 2992,
+          "sha256": "b8ea228ba2454d15439a3c7cddf23a5a9840f5c598ea260887195bc832d11d0b"
+        },
+        {
+          "path": "/var/lib/swcatalog/icons/ubuntu-mantic-universe/48x48/plasma-widgets-addons_fifteenpuzzle.png",
+          "size": 2394,
+          "sha256": "7fe631dbca0e454f5ba75283e51f6b29a752e2be87bd5c1ffbe7fa2a940cbf7b"
+        },
+        {
+          "path": "/usr/share/themes/Yaru-bark-dark/gtk-2.0/assets/scrollbar-vert-trough.png",
+          "size": 126,
+          "sha256": "248eafadbe9e4344c586d328ec55bfc826e6bd617de1583c86a48ff1b22f62b5"
+        },
+        {
+          "path": "/usr/share/doc/gnome-control-center-faces/changelog.Debian.gz",
+          "size": 19688,
+          "sha256": "9d72c9d5c002d0df555f511f4c8e13948cb1088bf14e510fb6cf943657a94e38"
+        },
+        {
+          "path": "/usr/share/man/man2/gettid.2.gz",
+          "size": 1055,
+          "sha256": "00bc464337dd8ad45229b619e5cb018aaac2f3e7af16af118e2d2a9f35c66243"
+        },
+        {
+          "path": "/usr/lib/python3.11/encodings/iso8859_4.py",
+          "size": 13376,
+          "sha256": "87bd130daa0eaef3e4cb465e10cffb2bcd194ff74097e0c186b4b8eb7be41ac5"
+        },
+        {
+          "path": "/usr/share/zoneinfo/America/Los_Angeles",
+          "size": 2852,
+          "sha256": "68977bb9ad6d186fefc6c7abd36010a66e30008dcb2d376087a41c49861e7268"
+        },
+        {
+          "path": "/usr/share/icons/HighContrast/24x24/apps/configuration-editor.png",
+          "size": 387,
+          "sha256": "98e7bbe56bc241b57ac062939586cc6afa7c6d68fafde8b8545f8b1e2eae8a9b"
+        },
+        {
+          "path": "/usr/share/icons/Yaru/scalable/status/battery-level-10-charging-symbolic.svg",
+          "size": 1373,
+          "sha256": "16ed9ba8fedcb94376d94ae3395613099c43264c25006c7e825f75274297f0e4"
+        },
+        {
+          "path": "/usr/share/icons/Yaru/8x8@2x/emblems/emblem-people.png",
+          "size": 446,
+          "sha256": "aca41c845b3cda4c09a64b5232555426270521f7d3433666586c0777f8268bc7"
+        }
+      ]
+    }
   ]
 }

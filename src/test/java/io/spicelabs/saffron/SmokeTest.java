@@ -27,7 +27,7 @@ class SmokeTest {
 
     @Test
     void diskFormatEnumExists() {
-        assertThat(DiskFormat.values()).hasSize(5);
+        assertThat(DiskFormat.values()).hasSize(8);
         assertThat(DiskFormat.QCOW2.mimeType()).isEqualTo("application/x-qcow2");
         assertThat(DiskFormat.VMDK.extension()).isEqualTo(".vmdk");
         assertThat(DiskFormat.VHD.magic()).isEqualTo("conectix".getBytes());
@@ -202,7 +202,7 @@ class SmokeTest {
 
     @Test
     void fileSystemTypeEnumExists() {
-        assertThat(FileSystem.FileSystemType.values()).hasSize(6);
+        assertThat(FileSystem.FileSystemType.values()).hasSize(9);
         assertThat(FileSystem.FileSystemType.EXT4.getName()).isEqualTo("ext4");
         assertThat(FileSystem.FileSystemType.NTFS.getDescription()).contains("NTFS");
     }

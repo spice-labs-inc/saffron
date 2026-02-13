@@ -35,8 +35,8 @@ import static org.assertj.core.api.Assertions.*;
 class BtrfsFileSystemTest {
 
     // Fedora cloud images use Btrfs by default
-    private static final Path FEDORA_IMAGE = Path.of("test-corpus/qcow2/modern/fedora-cloud-41.qcow2");
-    private static final Path FEDORA_IMAGE_ALT = Path.of("test-corpus/qcow2/modern/Fedora-Cloud-Base-Generic-41.qcow2");
+    private static final Path FEDORA_IMAGE = Path.of("test-corpus/qcow2/modern/Fedora-Cloud-Base-Generic-42-1.1.x86_64.qcow2");
+    private static final Path FEDORA_IMAGE_ALT = Path.of("test-corpus/qcow2/cloud/fedora/fedora-40-cloud-base-amd64.qcow2");
 
     // Allow custom image via environment variable
     private static final String BTRFS_TEST_IMAGE_ENV = System.getenv("BTRFS_TEST_IMAGE");
