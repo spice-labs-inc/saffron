@@ -37,7 +37,7 @@ import java.util.Set;
  * filesystem and contains critical filesystem metadata.
  *
  * <p>Superblock structure (selected fields):
- * <pre>
+ * <pre>{@code
  * Offset  Size  Description
  * 0       4     s_inodes_count
  * 4       4     s_blocks_count_lo
@@ -53,7 +53,7 @@ import java.util.Set;
  * 136     64    s_last_mounted
  * 200     4     s_mkfs_time
  * 204     4     s_wtime (last write time)
- * </pre>
+ * }</pre>
  */
 public record Ext4Superblock(
         long inodeCount,

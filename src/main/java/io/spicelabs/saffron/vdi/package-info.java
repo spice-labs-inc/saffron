@@ -19,7 +19,7 @@
  *
  * <h2>File structure:</h2>
  * <ol>
- *   <li>Text preamble ("<<< Oracle VM VirtualBox Disk Image >>>")</li>
+ *   <li>Text preamble ("&lt;&lt;&lt; Oracle VM VirtualBox Disk Image &gt;&gt;&gt;")</li>
  *   <li>Header (starting at offset 0x40)</li>
  *   <li>Block Allocation Map (BAM)</li>
  *   <li>Data blocks</li>

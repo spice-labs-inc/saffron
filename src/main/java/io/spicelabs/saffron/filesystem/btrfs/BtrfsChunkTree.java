@@ -167,7 +167,7 @@ public class BtrfsChunkTree {
      * Reads data at a logical address.
      *
      * @param logicalAddr the logical address to read from
-     * @param buf the buffer to read into
+     * @param length the number of bytes to read
      * @throws IOException if an I/O error occurs
      */
     public ByteBuffer readLogical(long logicalAddr, int length) throws IOException {

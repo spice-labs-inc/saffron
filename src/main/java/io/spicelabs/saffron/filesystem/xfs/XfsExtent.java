@@ -28,7 +28,7 @@ import java.util.List;
  * Represents an XFS extent (BMBT record).
  *
  * <p>XFS extents are 128-bit packed records (from xfs_bmbt_disk_get_all):
- * <pre>
+ * <pre>{@code
  * l0 (first 8 bytes, big-endian):
  *   Bit 63:     extent flag (1=unwritten/preallocated)
  *   Bits 62-9:  logical file block offset (54 bits)
@@ -40,7 +40,7 @@ import java.util.List;
  *
  * physical = (l0[8:0] << 43) | (l1 >> 21)   → 52 bits
  * blockCount = l1 & 0x1FFFFF                 → 21 bits
- * </pre>
+ * }</pre>
  *
  * The extent is "packed" meaning fields span byte boundaries.
  */

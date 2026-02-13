@@ -66,6 +66,7 @@ public record CorpusImage(
             case "vhd" -> DiskFormat.VHD;
             case "vhdx" -> DiskFormat.VHDX;
             case "vdi" -> DiskFormat.VDI;
+            case "raw", "dmg", "img" -> DiskFormat.RAW;
             default -> throw new IllegalStateException("Unknown format: " + format);
         };
     }

@@ -33,7 +33,7 @@ import java.util.UUID;
  * Represents a VDI (VirtualBox Disk Image) header.
  *
  * <p>VDI is Oracle VirtualBox's native disk image format. The file structure is:
- * <pre>
+ * <pre>{@code
  * Offset  Size    Description
  * 0x00    64      Text description "<<< Oracle VM VirtualBox Disk Image >>>\n"
  * 0x40    4       Signature (0x7f10dabe)
@@ -58,7 +58,7 @@ import java.util.UUID;
  * 0x198   16      UUID of last snapshot
  * 0x1A8   16      UUID of link
  * 0x1B8   16      UUID of parent
- * </pre>
+ * }</pre>
  */
 public record VdiHeader(
         int versionMajor,
