@@ -18,8 +18,12 @@
 
 set -euo pipefail
 
+# Resolve project root from script location
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 # Configuration
-CORPUS_DIR="${CORPUS_DIR:-./test-corpus}"
+CORPUS_DIR="${CORPUS_DIR:-$PROJECT_ROOT/test-corpus}"
 MANIFEST_FILE="$CORPUS_DIR/manifest.json"
 SIGNATURE_FILE="$MANIFEST_FILE.sig"
 KEY_ID=""

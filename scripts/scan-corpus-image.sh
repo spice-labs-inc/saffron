@@ -28,8 +28,12 @@
 
 set -euo pipefail
 
+# Resolve project root from script location
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 # Configuration
-OUTPUT_DIR="${OUTPUT_DIR:-./test-corpus/scan-reports}"
+OUTPUT_DIR="${OUTPUT_DIR:-$PROJECT_ROOT/test-corpus/scan-reports}"
 MOUNT_SCAN=false
 YARA_RULES=""
 QUARANTINE_DAYS=7

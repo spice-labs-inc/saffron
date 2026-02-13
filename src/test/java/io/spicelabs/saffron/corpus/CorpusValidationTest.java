@@ -8,6 +8,7 @@ import io.spicelabs.saffron.DiskFormat;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledIf;
 
 import java.io.BufferedInputStream;
@@ -111,6 +112,8 @@ class CorpusValidationTest {
     }
 
     @Test
+    @DisabledIfEnvironmentVariable(named = "CI", matches = "true",
+        disabledReason = "CI downloads only a stratified 5% sample of corpus images")
     void corpus_allImageFilesExist() {
         List<String> missing = new ArrayList<>();
         for (CorpusImage image : manifest.images()) {

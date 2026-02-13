@@ -3,9 +3,12 @@
 # that weren't properly handled by the main acquisition script
 
 set -e
-cd "$(dirname "$0")/.."
 
-CORPUS_DIR="./test-corpus"
+# Resolve project root from script location
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+CORPUS_DIR="$PROJECT_ROOT/test-corpus"
 MANIFEST_FILE="$CORPUS_DIR/manifest.json"
 
 # Mapping of extracted filenames to target names and metadata

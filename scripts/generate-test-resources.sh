@@ -17,7 +17,11 @@
 
 set -euo pipefail
 
-OUTPUT_DIR="${OUTPUT_DIR:-src/test/resources}"
+# Resolve project root from script location
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+OUTPUT_DIR="${OUTPUT_DIR:-$PROJECT_ROOT/src/test/resources}"
 WITH_QEMU=false
 
 log_info() { echo "[INFO] $*"; }

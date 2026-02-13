@@ -4,8 +4,9 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-CORPUS_DIR="${1:-/home/dpp/tmp/vmreader/saffron/test-corpus}"
-OUTPUT_DIR="${2:-/home/dpp/tmp/vmreader/saffron/test-corpus-data}"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+CORPUS_DIR="${1:-$PROJECT_ROOT/test-corpus}"
+OUTPUT_DIR="${2:-$PROJECT_ROOT/test-corpus-data}"
 
 mkdir -p "$OUTPUT_DIR"
 

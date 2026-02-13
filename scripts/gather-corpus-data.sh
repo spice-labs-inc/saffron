@@ -3,7 +3,9 @@
 
 set -e
 
-OUTPUT_DIR="/home/dpp/tmp/vmreader/saffron/test-corpus-data"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+OUTPUT_DIR="$PROJECT_ROOT/test-corpus-data"
 mkdir -p "$OUTPUT_DIR"
 
 gather_image_data() {

@@ -23,6 +23,8 @@ jobs:
         run: mvn --batch-mode --update-snapshots -DskipTests install
 
       - name: Test with Maven
+        env:
+          SAFFRON_CORPUS_SEED: ${{ github.run_id }}
         run: mvn --batch-mode --update-snapshots verify
 
       - name: Upload coverage to Codecov
