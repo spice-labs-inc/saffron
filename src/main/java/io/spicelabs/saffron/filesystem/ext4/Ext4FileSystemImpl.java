@@ -690,6 +690,9 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
 
         @Override
         public int read(byte[] buf, int off, int len) throws IOException {
+            if (len == 0) {
+                return 0;
+            }
             if (bytesRead >= fileSize) {
                 return -1;
             }
