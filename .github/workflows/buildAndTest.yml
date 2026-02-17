@@ -25,7 +25,7 @@ jobs:
       - name: Test with Maven
         env:
           SAFFRON_CORPUS_SEED: ${{ github.run_id }}
-        run: mvn --batch-mode --update-snapshots verify
+        run: mvn --batch-mode --update-snapshots -Pci verify
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
