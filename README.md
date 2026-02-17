@@ -300,4 +300,4 @@ Maintained by [Spice Labs](https://github.com/spice-labs-inc).
 
 ## License
 
-Dual-licensed under [Apache License 2.0](LICENSE-APACHE) and [MIT License](LICENSE-MIT).
+Licensed under the [Apache License 2.0](LICENSE-APACHE).

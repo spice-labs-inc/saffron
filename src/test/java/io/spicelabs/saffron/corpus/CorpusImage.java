@@ -1,6 +1,6 @@
 /*
  * Copyright 2026 Spice Labs, Inc.
- * SPDX-License-Identifier: Apache-2.0 OR MIT
+ * SPDX-License-Identifier: Apache-2.0
  */
 package io.spicelabs.saffron.corpus;
 
@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Represents a single image entry in the test corpus manifest.
@@ -57,17 +58,18 @@ public record CorpusImage(
 ) {
 
     /**
-     * Returns the DiskFormat enum for this image.
+     * Returns the DiskFormat enum for this image, or empty if the format is not
+     * supported by Saffron (e.g., "iso", "ova").
      */
-    public @NotNull DiskFormat diskFormat() {
+    public @NotNull Optional<DiskFormat> diskFormat() {
         return switch (format.toLowerCase()) {
-            case "vmdk" -> DiskFormat.VMDK;
-            case "qcow2" -> DiskFormat.QCOW2;
-            case "vhd" -> DiskFormat.VHD;
-            case "vhdx" -> DiskFormat.VHDX;
-            case "vdi" -> DiskFormat.VDI;
-            case "raw", "dmg", "img" -> DiskFormat.RAW;
-            default -> throw new IllegalStateException("Unknown format: " + format);
+            case "vmdk" -> Optional.of(DiskFormat.VMDK);
+            case "qcow2" -> Optional.of(DiskFormat.QCOW2);
+            case "vhd" -> Optional.of(DiskFormat.VHD);
+            case "vhdx" -> Optional.of(DiskFormat.VHDX);
+            case "vdi" -> Optional.of(DiskFormat.VDI);
+            case "raw", "dmg", "img" -> Optional.of(DiskFormat.RAW);
+            default -> Optional.empty();
         };
     }
 

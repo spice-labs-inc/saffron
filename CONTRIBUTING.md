@@ -323,4 +323,4 @@ Releases are managed by maintainers. The process is:
 
 ## License
 
-By contributing, you agree that your contributions will be dual-licensed under the [Apache License 2.0](LICENSE-APACHE) and [MIT License](LICENSE-MIT).
+By contributing, you agree that your contributions will be licensed under the [Apache License 2.0](LICENSE-APACHE).

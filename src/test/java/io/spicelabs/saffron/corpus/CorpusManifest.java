@@ -1,6 +1,6 @@
 /*
  * Copyright 2026 Spice Labs, Inc.
- * SPDX-License-Identifier: Apache-2.0 OR MIT
+ * SPDX-License-Identifier: Apache-2.0
  */
 package io.spicelabs.saffron.corpus;
 
@@ -229,7 +229,7 @@ public final class CorpusManifest {
      */
     public @NotNull Stream<CorpusImage> imagesByFormat(@NotNull DiskFormat format) {
         return images.stream()
-                .filter(img -> img.diskFormat() == format);
+                .filter(img -> img.diskFormat().filter(f -> f == format).isPresent());
     }
 
     /**
@@ -277,7 +277,8 @@ public final class CorpusManifest {
      */
     public @NotNull Map<DiskFormat, Long> countByFormat() {
         return images.stream()
-                .collect(Collectors.groupingBy(CorpusImage::diskFormat, Collectors.counting()));
+                .filter(img -> img.diskFormat().isPresent())
+                .collect(Collectors.groupingBy(img -> img.diskFormat().orElseThrow(), Collectors.counting()));
     }
 
     /**
