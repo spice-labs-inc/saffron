@@ -1,0 +1,95 @@
+name: Survey Published Release Artifacts
+
+on:
+  workflow_run:
+    workflows: ["Publish Saffron"]
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to survey (e.g., v1.2.3 or 1.2.3)'
+        required: true
+        type: string
+
+jobs:
+  survey:
+    name: Survey Published Artifacts
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            INPUT_VERSION="${{ inputs.version }}"
+            if [[ "$INPUT_VERSION" =~ ^v?([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+              VERSION="${BASH_REMATCH[1]}"
+              TAG_NAME="v$VERSION"
+            else
+              echo "Invalid version format: $INPUT_VERSION"
+              exit 1
+            fi
+          else
+            TAG_NAME="${{ github.event.workflow_run.head_branch }}"
+            if [[ "$TAG_NAME" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+              VERSION="${BASH_REMATCH[1]}"
+            else
+              echo "Not a version tag, skipping survey"
+              exit 0
+            fi
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Create artifacts directory
+        run: mkdir -p artifacts/{maven,release}
+
+      - name: Download all Maven artifacts from GitHub Packages
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          BASE_URL="https://maven.pkg.github.com/${{ github.repository }}/io/spicelabs/saffron/$VERSION"
+
+          for artifact in \
+            "saffron-$VERSION.jar" \
+            "saffron-$VERSION-sources.jar" \
+            "saffron-$VERSION-javadoc.jar" \
+            "saffron-$VERSION.pom" \
+            "saffron-$VERSION.pom.asc" \
+            "saffron-$VERSION.jar.asc" \
+            "saffron-$VERSION-sources.jar.asc" \
+            "saffron-$VERSION-javadoc.jar.asc"
+          do
+            echo "Downloading $artifact..."
+            curl -fL -o "artifacts/maven/$artifact" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/octet-stream" \
+              "$BASE_URL/$artifact" || echo "  (not found, skipping)"
+          done
+
+      - name: Download all files from GitHub Release
+        run: |
+          gh release download ${{ steps.version.outputs.tag }} \
+            --repo ${{ github.repository }} \
+            --dir artifacts/release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: List all artifacts
+        run: |
+          echo "=== Artifacts to be surveyed ==="
+          find artifacts -type f -exec ls -lh {} \;
+          echo ""
+          echo "=== Total size ==="
+          du -sh artifacts
+
+      - name: Survey artifacts with Spice Labs Surveyor
+        uses: spice-labs-inc/action-spice-labs-surveyor@v4
+        with:
+          spice_pass: "${{ secrets.SPICE_PASS }}"
+          input: "./artifacts"
+          tag: "${{ github.event.repository.name }}"
