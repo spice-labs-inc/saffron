@@ -37,6 +37,9 @@ jobs:
           server-id: github
           server-username: ${{ secrets.GH_USERNAME_SG }}
           server-password: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Write settings.xml for GitHub + Maven Central
         run: |
@@ -65,8 +68,6 @@ jobs:
       - name: Import GPG Key
         run: |
           echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
-        env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Set Release Version
         run: |
