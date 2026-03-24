@@ -186,7 +186,7 @@ public record LvmMetadata(
     /**
      * Parses the LVM metadata text format.
      */
-    private static Optional<LvmMetadata> parseMetadataText(String text) {
+    static Optional<LvmMetadata> parseMetadataText(String text) {
         try {
             // Remove comments and normalize whitespace
             text = text.replaceAll("#[^\n]*", "");
