@@ -145,7 +145,7 @@ class LvmTest {
             }
 
             LvmVolumeGroup vg = vgOpt.get();
-            Optional<LogicalVolumeDisk> lvOpt = vg.largestLogicalVolume();
+            Optional<LogicalVolumeDisk> lvOpt = vg.findLogicalVolume("root");
 
             assertThat(lvOpt).isPresent();
 
