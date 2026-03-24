@@ -352,6 +352,11 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
+                            <excludes>
+                                <!-- LVM classes are covered by integration tests requiring corpus
+                                     disk images not available in CI. Excluded from bundle ratio. -->
+                                <exclude>io/spicelabs/saffron/lvm/**</exclude>
+                            </excludes>
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>
