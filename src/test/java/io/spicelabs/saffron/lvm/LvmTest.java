@@ -48,37 +48,7 @@ class LvmTest {
     private static final Path VDI_TEST_FILE = Path.of("test-corpus/vdi/modern/ubuntu-22.04-vbox.vdi");
     private static final Path DEBIAN_TEST_FILE = Path.of("test-corpus/vdi/modern/debian-12-vbox.vdi");
     private static final Path TEST_RAW = Paths.get("src/test/resources/raw/minimal.raw");
-
-    /** Metadata with small extents (1 sector = 512 bytes) so reads map safely into minimal.raw */
-    private static final String UNIT_TEST_METADATA = """
-            vg_unit_test {
-                id = "unit-test-vg-uuid-1234"
-                extent_size = 1
-
-                physical_volumes {
-                    pv0 {
-                        id = "unit-test-pv-uuid-1234"
-                        dev_size = 2048
-                        pe_start = 0
-                        pe_count = 2048
-                    }
-                }
-
-                logical_volumes {
-                    root {
-                        id = "unit-test-lv-uuid-1234"
-                        segment1 {
-                            start_extent = 0
-                            extent_count = 1
-                            type = "striped"
-                            stripes = [
-                                "pv0", 0
-                            ]
-                        }
-                    }
-                }
-            }
-            """;
+    private static final Path TEST_LVM = Paths.get("src/test/resources/lvm/minimal-lvm.raw");
 
     private static final String SAMPLE_METADATA = """
             vg_test {
@@ -121,6 +91,37 @@ class LvmTest {
             }
             """;
 
+    /** Metadata with 1-sector extents so reads map safely into minimal.raw */
+    private static final String UNIT_TEST_METADATA = """
+            vg_unit_test {
+                id = "unit-test-vg-uuid-1234"
+                extent_size = 1
+
+                physical_volumes {
+                    pv0 {
+                        id = "unit-test-pv-uuid-1234"
+                        dev_size = 2048
+                        pe_start = 0
+                        pe_count = 2048
+                    }
+                }
+
+                logical_volumes {
+                    root {
+                        id = "unit-test-lv-uuid-1234"
+                        segment1 {
+                            start_extent = 0
+                            extent_count = 1
+                            type = "striped"
+                            stripes = [
+                                "pv0", 0
+                            ]
+                        }
+                    }
+                }
+            }
+            """;
+
     static boolean testFileExists() {
         return Files.exists(VDI_TEST_FILE) || Files.exists(DEBIAN_TEST_FILE);
     }
@@ -129,8 +130,12 @@ class LvmTest {
         return Files.exists(TEST_RAW);
     }
 
+    static boolean testLvmExists() {
+        return Files.exists(TEST_LVM);
+    }
+
     // -------------------------------------------------------------------------
-    // LvmMetadata parsing tests (no corpus files required)
+    // LvmMetadata parsing tests (no disk required)
     // -------------------------------------------------------------------------
 
     @Test
@@ -149,11 +154,8 @@ class LvmTest {
 
     @Test
     void testLvmMetadataExtentSizeBytes() {
-        Optional<LvmMetadata> metadataOpt = LvmMetadata.parseMetadataText(SAMPLE_METADATA);
-        assertThat(metadataOpt).isPresent();
-
-        // extentSizeBytes = extentSize (sectors) * 512
-        assertThat(metadataOpt.get().extentSizeBytes()).isEqualTo(8192L * 512L);
+        LvmMetadata metadata = LvmMetadata.parseMetadataText(SAMPLE_METADATA).orElseThrow();
+        assertThat(metadata.extentSizeBytes()).isEqualTo(8192L * 512L);
     }
 
     @Test
@@ -199,18 +201,14 @@ class LvmTest {
     void testLvmMetadataLogicalVolumeSizeInExtents() {
         LvmMetadata metadata = LvmMetadata.parseMetadataText(SAMPLE_METADATA).orElseThrow();
 
-        LvmMetadata.LogicalVolume rootLv = metadata.findLogicalVolume("root").orElseThrow();
-        assertThat(rootLv.sizeInExtents()).isEqualTo(100L);
-
-        LvmMetadata.LogicalVolume homeLv = metadata.findLogicalVolume("home").orElseThrow();
-        assertThat(homeLv.sizeInExtents()).isEqualTo(50L);
+        assertThat(metadata.findLogicalVolume("root").orElseThrow().sizeInExtents()).isEqualTo(100L);
+        assertThat(metadata.findLogicalVolume("home").orElseThrow().sizeInExtents()).isEqualTo(50L);
     }
 
     @Test
     void testLvmMetadataSegmentFields() {
         LvmMetadata metadata = LvmMetadata.parseMetadataText(SAMPLE_METADATA).orElseThrow();
-        LvmMetadata.LogicalVolume rootLv = metadata.findLogicalVolume("root").orElseThrow();
-        LvmMetadata.Segment segment = rootLv.segments().get(0);
+        LvmMetadata.Segment segment = metadata.findLogicalVolume("root").orElseThrow().segments().get(0);
 
         assertThat(segment.startExtent()).isEqualTo(0L);
         assertThat(segment.extentCount()).isEqualTo(100L);
@@ -221,8 +219,8 @@ class LvmTest {
     @Test
     void testLvmMetadataStripeFields() {
         LvmMetadata metadata = LvmMetadata.parseMetadataText(SAMPLE_METADATA).orElseThrow();
-        LvmMetadata.LogicalVolume rootLv = metadata.findLogicalVolume("root").orElseThrow();
-        LvmMetadata.Stripe stripe = rootLv.segments().get(0).stripes().get(0);
+        LvmMetadata.Stripe stripe = metadata.findLogicalVolume("root").orElseThrow()
+                .segments().get(0).stripes().get(0);
 
         assertThat(stripe.pvName()).isEqualTo("pv0");
         assertThat(stripe.startExtent()).isEqualTo(0L);
@@ -288,15 +286,14 @@ class LvmTest {
     }
 
     // -------------------------------------------------------------------------
-    // LvmLabel disk tests (uses minimal.raw from test resources)
+    // LvmLabel disk tests (uses minimal.raw — non-LVM disk)
     // -------------------------------------------------------------------------
 
     @Test
     @EnabledIf("testRawExists")
     void testLvmLabelTryParseOnNonLvmDisk() throws IOException {
         try (VirtualDisk disk = DiskReader.open(TEST_RAW)) {
-            Optional<LvmLabel> label = LvmLabel.tryParse(disk, 0);
-            assertThat(label).isEmpty();
+            assertThat(LvmLabel.tryParse(disk, 0)).isEmpty();
         }
     }
 
@@ -308,21 +305,137 @@ class LvmTest {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // LvmVolumeGroup detection tests (uses minimal.raw from test resources)
-    // -------------------------------------------------------------------------
-
     @Test
     @EnabledIf("testRawExists")
     void testLvmVolumeGroupDetectOnNonLvmDisk() throws IOException {
         try (VirtualDisk disk = DiskReader.open(TEST_RAW)) {
-            Optional<LvmVolumeGroup> vg = LvmVolumeGroup.detect(disk);
-            assertThat(vg).isEmpty();
+            assertThat(LvmVolumeGroup.detect(disk)).isEmpty();
         }
     }
 
     // -------------------------------------------------------------------------
-    // DiskRegion tests (uses minimal.raw from test resources)
+    // LvmLabel disk tests (uses minimal-lvm.raw — synthetic LVM disk)
+    // -------------------------------------------------------------------------
+
+    @Test
+    @EnabledIf("testLvmExists")
+    void testLvmLabelTryParseOnLvmDisk() throws IOException {
+        try (VirtualDisk disk = DiskReader.open(TEST_LVM)) {
+            Optional<LvmLabel> labelOpt = LvmLabel.tryParse(disk, 0);
+            assertThat(labelOpt).isPresent();
+
+            LvmLabel label = labelOpt.get();
+            assertThat(label.sectorNumber()).isEqualTo(1L);
+            assertThat(label.pvUuid()).isNotEmpty();
+            assertThat(label.deviceSize()).isEqualTo(65536L);
+            assertThat(label.metadataOffset()).isEqualTo(4096L);
+            assertThat(label.metadataSize()).isEqualTo(4096L);
+            assertThat(LvmLabel.isLvmPartition(disk, 0)).isTrue();
+        }
+    }
+
+    @Test
+    @EnabledIf("testLvmExists")
+    void testLvmVolumeGroupDetectOnLvmDisk() throws IOException {
+        try (VirtualDisk disk = DiskReader.open(TEST_LVM)) {
+            Optional<LvmVolumeGroup> vgOpt = LvmVolumeGroup.detect(disk);
+            assertThat(vgOpt).isPresent();
+
+            LvmVolumeGroup vg = vgOpt.get();
+            assertThat(vg.name()).isEqualTo("vg_minimal");
+            assertThat(vg.uuid()).isEqualTo("aaaa1111-2222-3333-4444-555566667777");
+            assertThat(vg.pvUuid()).isNotEmpty();
+            assertThat(vg.logicalVolumeCount()).isEqualTo(1);
+            assertThat(vg.physicalVolumeCount()).isEqualTo(1);
+            assertThat(vg.extentSizeBytes()).isEqualTo(512L);
+            assertThat(vg.logicalVolumes()).hasSize(1);
+            assertThat(vg.metadata()).isNotNull();
+            assertThat(vg.label()).isNotNull();
+            assertThat(vg.toString()).contains("vg_minimal");
+        }
+    }
+
+    @Test
+    @EnabledIf("testLvmExists")
+    void testLvmVolumeGroupFindLogicalVolume() throws IOException {
+        try (VirtualDisk disk = DiskReader.open(TEST_LVM)) {
+            LvmVolumeGroup vg = LvmVolumeGroup.detect(disk).orElseThrow();
+
+            assertThat(vg.findLogicalVolume("root")).isPresent();
+            assertThat(vg.findLogicalVolume("nonexistent")).isEmpty();
+        }
+    }
+
+    @Test
+    @EnabledIf("testLvmExists")
+    void testLvmVolumeGroupLargestLogicalVolume() throws IOException {
+        try (VirtualDisk disk = DiskReader.open(TEST_LVM)) {
+            LvmVolumeGroup vg = LvmVolumeGroup.detect(disk).orElseThrow();
+            assertThat(vg.largestLogicalVolume()).isPresent();
+            assertThat(vg.largestLogicalVolume().orElseThrow().name()).isEqualTo("root");
+        }
+    }
+
+    @Test
+    @EnabledIf("testLvmExists")
+    void testLogicalVolumeDiskFromLvmDisk() throws IOException {
+        try (VirtualDisk disk = DiskReader.open(TEST_LVM)) {
+            LvmVolumeGroup vg = LvmVolumeGroup.detect(disk).orElseThrow();
+            LogicalVolumeDisk lv = vg.findLogicalVolume("root").orElseThrow();
+
+            assertThat(lv.name()).isEqualTo("root");
+            assertThat(lv.uuid()).isEqualTo("cccc1111-2222-3333-4444-555566667777");
+            assertThat(lv.volumeGroupName()).isEqualTo("vg_minimal");
+            assertThat(lv.extentSizeBytes()).isEqualTo(512L);
+            assertThat(lv.segmentCount()).isEqualTo(1);
+            assertThat(lv.size()).isEqualTo(4 * 512L); // 4 extents * 512 bytes
+            assertThat(lv.toString()).contains("vg_minimal").contains("root");
+        }
+    }
+
+    @Test
+    @EnabledIf("testLvmExists")
+    void testLogicalVolumeDiskRead() throws IOException {
+        try (VirtualDisk disk = DiskReader.open(TEST_LVM)) {
+            LvmVolumeGroup vg = LvmVolumeGroup.detect(disk).orElseThrow();
+            LogicalVolumeDisk lv = vg.findLogicalVolume("root").orElseThrow();
+
+            // LV data was written as i % 256 starting at physical offset 8192
+            ByteBuffer buf = lv.read(0, 4);
+            assertThat(buf).isNotNull();
+            assertThat(buf.capacity()).isEqualTo(4);
+            assertThat(buf.get(0) & 0xFF).isEqualTo(0);
+            assertThat(buf.get(1) & 0xFF).isEqualTo(1);
+            assertThat(buf.get(2) & 0xFF).isEqualTo(2);
+            assertThat(buf.get(3) & 0xFF).isEqualTo(3);
+        }
+    }
+
+    @Test
+    @EnabledIf("testLvmExists")
+    void testLogicalVolumeDiskReadNegativeOffsetThrows() throws IOException {
+        try (VirtualDisk disk = DiskReader.open(TEST_LVM)) {
+            LogicalVolumeDisk lv = LvmVolumeGroup.detect(disk).orElseThrow()
+                    .findLogicalVolume("root").orElseThrow();
+            assertThatThrownBy(() -> lv.read(-1, 4))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    @EnabledIf("testLvmExists")
+    void testLogicalVolumeDiskReadBeyondSizeThrows() throws IOException {
+        try (VirtualDisk disk = DiskReader.open(TEST_LVM)) {
+            LogicalVolumeDisk lv = LvmVolumeGroup.detect(disk).orElseThrow()
+                    .findLogicalVolume("root").orElseThrow();
+            // LV is 4*512=2048 bytes; reading 2049 from offset 0 exceeds size
+            assertThatThrownBy(() -> lv.read(0, 2049))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // DiskRegion tests (uses minimal.raw)
     // -------------------------------------------------------------------------
 
     @Test
@@ -330,12 +443,8 @@ class LvmTest {
     void testDiskRegionFromDisk() throws IOException {
         try (VirtualDisk disk = DiskReader.open(TEST_RAW)) {
             DiskRegion region = DiskRegion.fromDisk(disk);
-
             assertThat(region.size()).isEqualTo(disk.virtualSize());
-
-            ByteBuffer buf = region.read(0, 4);
-            assertThat(buf).isNotNull();
-            assertThat(buf.capacity()).isEqualTo(4);
+            assertThat(region.read(0, 4).capacity()).isEqualTo(4);
         }
     }
 
@@ -344,12 +453,8 @@ class LvmTest {
     void testDiskRegionFromPartition() throws IOException {
         try (VirtualDisk disk = DiskReader.open(TEST_RAW)) {
             DiskRegion region = DiskRegion.fromPartition(disk, 0, 512);
-
             assertThat(region.size()).isEqualTo(512);
-
-            ByteBuffer buf = region.read(0, 4);
-            assertThat(buf).isNotNull();
-            assertThat(buf.capacity()).isEqualTo(4);
+            assertThat(region.read(0, 4).capacity()).isEqualTo(4);
         }
     }
 
@@ -357,82 +462,13 @@ class LvmTest {
     @EnabledIf("testRawExists")
     void testDiskRegionFromPartitionZeroSizeUsesRemaining() throws IOException {
         try (VirtualDisk disk = DiskReader.open(TEST_RAW)) {
-            // partitionSize=0 means "use remaining disk space"
             DiskRegion region = DiskRegion.fromPartition(disk, 0, 0);
             assertThat(region.size()).isEqualTo(disk.virtualSize());
         }
     }
 
     // -------------------------------------------------------------------------
-    // LogicalVolumeDisk tests (uses minimal.raw + synthetic unit-test metadata)
-    // -------------------------------------------------------------------------
-
-    @Test
-    @EnabledIf("testRawExists")
-    void testLogicalVolumeDiskBasicProperties() throws IOException {
-        LvmMetadata metadata = LvmMetadata.parseMetadataText(UNIT_TEST_METADATA).orElseThrow();
-        LvmMetadata.LogicalVolume lv = metadata.findLogicalVolume("root").orElseThrow();
-
-        try (VirtualDisk disk = DiskReader.open(TEST_RAW)) {
-            LogicalVolumeDisk lvDisk = new LogicalVolumeDisk(disk, 0, metadata, lv);
-
-            assertThat(lvDisk.name()).isEqualTo("root");
-            assertThat(lvDisk.uuid()).isEqualTo("unit-test-lv-uuid-1234");
-            assertThat(lvDisk.volumeGroupName()).isEqualTo("vg_unit_test");
-            assertThat(lvDisk.extentSizeBytes()).isEqualTo(512L); // extent_size=1 sector
-            assertThat(lvDisk.segmentCount()).isEqualTo(1);
-            assertThat(lvDisk.size()).isEqualTo(512L); // 1 extent * 512 bytes
-            assertThat(lvDisk.toString()).contains("vg_unit_test").contains("root");
-        }
-    }
-
-    @Test
-    @EnabledIf("testRawExists")
-    void testLogicalVolumeDiskRead() throws IOException {
-        LvmMetadata metadata = LvmMetadata.parseMetadataText(UNIT_TEST_METADATA).orElseThrow();
-        LvmMetadata.LogicalVolume lv = metadata.findLogicalVolume("root").orElseThrow();
-
-        try (VirtualDisk disk = DiskReader.open(TEST_RAW)) {
-            LogicalVolumeDisk lvDisk = new LogicalVolumeDisk(disk, 0, metadata, lv);
-
-            // pe_start=0, stripe startExtent=0 → maps to physical offset 0 in minimal.raw
-            ByteBuffer buf = lvDisk.read(0, 4);
-            assertThat(buf).isNotNull();
-            assertThat(buf.capacity()).isEqualTo(4);
-        }
-    }
-
-    @Test
-    @EnabledIf("testRawExists")
-    void testLogicalVolumeDiskReadNegativeOffsetThrows() throws IOException {
-        LvmMetadata metadata = LvmMetadata.parseMetadataText(UNIT_TEST_METADATA).orElseThrow();
-        LvmMetadata.LogicalVolume lv = metadata.findLogicalVolume("root").orElseThrow();
-
-        try (VirtualDisk disk = DiskReader.open(TEST_RAW)) {
-            LogicalVolumeDisk lvDisk = new LogicalVolumeDisk(disk, 0, metadata, lv);
-
-            assertThatThrownBy(() -> lvDisk.read(-1, 4))
-                    .isInstanceOf(IllegalArgumentException.class);
-        }
-    }
-
-    @Test
-    @EnabledIf("testRawExists")
-    void testLogicalVolumeDiskReadBeyondSizeThrows() throws IOException {
-        LvmMetadata metadata = LvmMetadata.parseMetadataText(UNIT_TEST_METADATA).orElseThrow();
-        LvmMetadata.LogicalVolume lv = metadata.findLogicalVolume("root").orElseThrow();
-
-        try (VirtualDisk disk = DiskReader.open(TEST_RAW)) {
-            LogicalVolumeDisk lvDisk = new LogicalVolumeDisk(disk, 0, metadata, lv);
-
-            // LV is 512 bytes; reading 513 bytes from offset 0 exceeds size
-            assertThatThrownBy(() -> lvDisk.read(0, 513))
-                    .isInstanceOf(IllegalArgumentException.class);
-        }
-    }
-
-    // -------------------------------------------------------------------------
-    // Corpus-dependent tests (skipped when test files are absent)
+    // Corpus-dependent tests (skipped when corpus files are absent)
     // -------------------------------------------------------------------------
 
     @Test
@@ -449,24 +485,13 @@ class LvmTest {
             if (vgOpt.isPresent()) {
                 LvmVolumeGroup vg = vgOpt.get();
                 System.out.println("Found LVM Volume Group: " + vg.name());
-                System.out.println("  VG UUID: " + vg.uuid());
-                System.out.println("  PV UUID: " + vg.pvUuid());
-                System.out.println("  Extent size: " + vg.extentSizeBytes() + " bytes");
-                System.out.println("  Logical volumes: " + vg.logicalVolumeCount());
-
                 assertThat(vg.name()).isNotEmpty();
                 assertThat(vg.logicalVolumeCount()).isGreaterThan(0);
 
                 for (LogicalVolumeDisk lv : vg.logicalVolumes()) {
-                    System.out.println("  LV: " + lv.name());
-                    System.out.println("    Size: " + lv.size() + " bytes");
-                    System.out.println("    Segments: " + lv.segmentCount());
-
+                    System.out.println("  LV: " + lv.name() + " size: " + lv.size());
                     Optional<FilesystemInfo> fsInfo = FilesystemDetector.detect(lv);
-                    if (fsInfo.isPresent()) {
-                        System.out.println("    Filesystem: " + fsInfo.get().type());
-                        System.out.println("    FS Total size: " + fsInfo.get().totalSize());
-                    }
+                    fsInfo.ifPresent(i -> System.out.println("    FS: " + i.type()));
                 }
             } else {
                 System.out.println("No LVM detected - image may not have LVM partition");
@@ -489,30 +514,19 @@ class LvmTest {
 
             LvmVolumeGroup vg = vgOpt.get();
             Optional<LogicalVolumeDisk> lvOpt = vg.findLogicalVolume("root");
-
             assertThat(lvOpt).isPresent();
 
             LogicalVolumeDisk lv = lvOpt.get();
-            System.out.println("Mounting filesystem from LV: " + lv.name());
-
             Optional<FilesystemInfo> fsInfo = FilesystemDetector.detect(lv);
             assertThat(fsInfo).isPresent();
 
             if (fsInfo.get().type() == FileSystem.FileSystemType.EXT4) {
                 FileSystem fs = Ext4FileSystemImpl.mount(lv);
-                System.out.println("Mounted ext4 filesystem");
-                System.out.println("  Total size: " + fs.totalSize());
-                System.out.println("  Used size: " + fs.usedSize());
-                System.out.println("  Label: " + fs.label().orElse("(none)"));
+                System.out.println("Mounted ext4: total=" + fs.totalSize() + " used=" + fs.usedSize());
 
                 FileSystemEntry.Directory root = fs.root();
-                System.out.println("Root directory contents:");
                 try (Stream<FileSystemEntry> entries = root.list()) {
-                    entries.limit(20).forEach(entry -> {
-                        String type = entry instanceof FileSystemEntry.Directory ? "dir" :
-                                entry instanceof FileSystemEntry.SymbolicLink ? "link" : "file";
-                        System.out.println("  " + type + " " + entry.name() + " (" + entry.size() + " bytes)");
-                    });
+                    entries.limit(20).forEach(e -> System.out.println("  " + e.name()));
                 }
 
                 assertThat(fs.resolve("/etc")).isPresent();
@@ -531,18 +545,11 @@ class LvmTest {
             List<FileSystemMount.LvmFilesystemLocation> lvmFilesystems =
                     FileSystemMount.findLvmFilesystems(disk);
 
-            System.out.println("Found " + lvmFilesystems.size() + " LVM filesystems:");
-            for (FileSystemMount.LvmFilesystemLocation loc : lvmFilesystems) {
-                System.out.println("  LV: " + loc.logicalVolume().name());
-                System.out.println("    Type: " + loc.info().type());
-                System.out.println("    Size: " + loc.info().totalSize());
-            }
+            System.out.println("Found " + lvmFilesystems.size() + " LVM filesystems");
 
             if (!lvmFilesystems.isEmpty()) {
-                FileSystemMount.LvmFilesystemLocation location = lvmFilesystems.get(0);
-                FileSystem fs = FileSystemMount.mount(location);
-                System.out.println("Successfully mounted filesystem from LVM!");
-                System.out.println("  Type: " + (fs instanceof FileSystem.Ext4FileSystem ? "ext4" : "other"));
+                FileSystem fs = FileSystemMount.mount(lvmFilesystems.get(0));
+                System.out.println("Mounted: " + (fs instanceof FileSystem.Ext4FileSystem ? "ext4" : "other"));
             }
         }
     }
