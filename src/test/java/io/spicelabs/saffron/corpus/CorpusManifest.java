@@ -39,6 +39,13 @@ public final class CorpusManifest {
     }
 
     /**
+     * Creates an empty manifest for testing or when manifest is not available.
+     */
+    public static CorpusManifest empty() {
+        return new CorpusManifest("1.0", "", "Empty corpus", List.of());
+    }
+
+    /**
      * Loads the corpus manifest from a path.
      *
      * @param corpusPath path to the corpus directory (containing manifest.json)
@@ -49,7 +56,7 @@ public final class CorpusManifest {
         Path manifestPath = corpusPath.resolve("manifest.json");
         if (!Files.exists(manifestPath)) {
             // Return empty manifest if not found
-            return new CorpusManifest("1.0", "", "Empty corpus", List.of());
+            return empty();
         }
 
         String content = Files.readString(manifestPath, StandardCharsets.UTF_8);

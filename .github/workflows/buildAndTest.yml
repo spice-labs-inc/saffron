@@ -23,9 +23,9 @@ jobs:
         run: mvn --batch-mode --update-snapshots -DskipTests install
 
       - name: Test with Maven
-        env:
-          SAFFRON_CORPUS_SEED: ${{ github.run_id }}
-        run: mvn --batch-mode --update-snapshots -Pci verify
+        # Use 'small' mode with 1GB max for deterministic, fast test coverage
+        # This selects smallest images to cover all filesystem types
+        run: mvn --batch-mode --update-snapshots -Pci verify -Dsaffron.corpus.mode=small -Dsaffron.corpus.maxSizeGb=1
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4

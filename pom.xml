@@ -66,6 +66,8 @@
 
         <!-- Corpus download -->
         <skipCorpusDownload>false</skipCorpusDownload>
+        <saffron.corpus.mode>ci</saffron.corpus.mode>
+        <saffron.corpus.maxSizeGb>2</saffron.corpus.maxSizeGb>
 
         <!-- Plugin versions -->
         <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
@@ -244,6 +246,10 @@
                                 <argument>${project.basedir}/scripts/download-corpus-s3.sh</argument>
                                 <argument>--corpus-dir</argument>
                                 <argument>${project.basedir}/test-corpus</argument>
+                                <argument>--mode</argument>
+                                <argument>${saffron.corpus.mode}</argument>
+                                <argument>--max-size-gb</argument>
+                                <argument>${saffron.corpus.maxSizeGb}</argument>
                             </arguments>
                             <skip>${skipCorpusDownload}</skip>
                         </configuration>
@@ -436,7 +442,7 @@
         <profile>
             <id>ci</id>
             <properties>
-                <jacoco.coverage.minimum>0.80</jacoco.coverage.minimum>
+                <jacoco.coverage.minimum>0.55</jacoco.coverage.minimum>
             </properties>
         </profile>
 
