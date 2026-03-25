@@ -8,11 +8,25 @@ jobs:
   publish_jars:
     name: Publish JAR Artifacts
     runs-on: ubuntu-24.04
-
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
     outputs:
       version: ${{ steps.version.outputs.version }}
+      thread-ts: ${{ steps.release-notification.outputs.thread-ts }}
+      channel-id: ${{ steps.release-notification.outputs.channel-id }}
 
     steps:
+      - name: Notify release
+        id: release-notification
+        uses: spice-labs-inc/action-release-notification@v3.3
+        with:
+          type: release
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          username-mapping: ${{ vars.GH_SLACK_USERNAME_MAPPING }}
+          github-token: ${{ github.token }}
+
       - name: Checkout Code
         uses: actions/checkout@v4
 
@@ -37,6 +51,9 @@ jobs:
           server-id: github
           server-username: ${{ secrets.GH_USERNAME_SG }}
           server-password: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
+          gpg-private-key: ${{ secrets.MAVEN_CENTRAL_GPG_PRIVATE_KEY }}
+          gpg-passphrase: ${{ secrets.MAVEN_CENTRAL_GPG_PASSPHRASE }}
 
       - name: Write settings.xml for GitHub + Maven Central
         run: |
@@ -64,26 +81,23 @@ jobs:
 
       - name: Import GPG Key
         run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
-        env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          echo "${{ secrets.MAVEN_CENTRAL_GPG_PRIVATE_KEY }}" | gpg --batch --import
 
       - name: Set Release Version
         run: |
           mvn versions:set -DnewVersion=${{ steps.version.outputs.version }} -DgenerateBackupPoms=false
 
-      - name: Build and Verify
-        run: mvn --batch-mode clean verify -DskipTests
-
-      - name: Publish to GitHub Packages
-        run: mvn --batch-mode deploy -DskipTests -Pgithub
+      - name: Build and publish to GitHub Packages
+        run: mvn --batch-mode clean deploy -P github
         env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GPG_PASSPHRASE: ${{ secrets.MAVEN_CENTRAL_GPG_PASSPHRASE }}
 
-      - name: Publish to Maven Central
-        run: mvn --batch-mode deploy -DskipTests -Pmaven-central
+      - name: Build and publish to Maven Central
+        run: mvn --batch-mode clean deploy -P maven-central
         env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GPG_PASSPHRASE: ${{ secrets.MAVEN_CENTRAL_GPG_PASSPHRASE }}
 
       - name: Upload JAR to Release
         uses: softprops/action-gh-release@v2
@@ -92,5 +106,33 @@ jobs:
             target/saffron-${{ steps.version.outputs.version }}.jar
             target/saffron-${{ steps.version.outputs.version }}-sources.jar
             target/saffron-${{ steps.version.outputs.version }}-javadoc.jar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  notify:
+    needs: [publish_jars]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check deployment status
+        id: deployment-status
+        shell: bash
+        run: |
+          JAR_STATUS="${{ needs.publish_jars.result }}"
+
+          if [ "$JAR_STATUS" == "success" ]; then
+            echo "overall_status=success" >> $GITHUB_OUTPUT
+            echo "message=✅ All components deployed successfully!" >> $GITHUB_OUTPUT
+          else
+            echo "overall_status=failure" >> $GITHUB_OUTPUT
+            echo "message=❌ JAR publishing failed." >> $GITHUB_OUTPUT
+          fi
+
+      - name: Notify deployment result
+        uses: spice-labs-inc/action-release-notification@v3.3
+        with:
+          type: ${{ steps.deployment-status.outputs.overall_status == 'success' && 'deployment-success' || 'deployment-failure' }}
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          username-mapping: ${{ vars.GH_SLACK_USERNAME_MAPPING }}
+          github-token: ${{ github.token }}
+          environment: production
+          thread-ts: ${{ needs.publish_jars.outputs.thread-ts }}
+          channel-id: ${{ needs.publish_jars.outputs.channel-id }}

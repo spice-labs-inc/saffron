@@ -424,7 +424,7 @@
                         <configuration>
                             <publishingServerId>central</publishingServerId>
                             <tokenAuth>true</tokenAuth>
-                            <autoPublish>true</autoPublish>
+                            <autoPublish>false</autoPublish>
                             <checksums>all</checksums>
                         </configuration>
                     </plugin>
@@ -436,7 +436,7 @@
         <profile>
             <id>ci</id>
             <properties>
-                <jacoco.coverage.minimum>0.40</jacoco.coverage.minimum>
+                <jacoco.coverage.minimum>0.80</jacoco.coverage.minimum>
             </properties>
         </profile>
 
