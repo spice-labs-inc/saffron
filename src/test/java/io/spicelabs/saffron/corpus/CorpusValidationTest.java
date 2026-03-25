@@ -112,8 +112,7 @@ class CorpusValidationTest {
     }
 
     @Test
-    @DisabledIfEnvironmentVariable(named = "CI", matches = "true",
-        disabledReason = "CI downloads only a stratified 5% sample of corpus images")
+    @EnabledIf("io.spicelabs.saffron.corpus.TestCorpusUtils#isFullCorpusAvailable")
     void corpus_allImageFilesExist() {
         List<String> missing = new ArrayList<>();
         for (CorpusImage image : manifest.images()) {

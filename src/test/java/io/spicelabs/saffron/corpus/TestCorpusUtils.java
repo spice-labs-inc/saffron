@@ -121,6 +121,26 @@ public final class TestCorpusUtils {
     }
 
     /**
+     * Checks if the full corpus is available (most images from manifest exist on disk).
+     * Used to skip tests that require the full corpus in CI mode.
+     *
+     * @return true if at least 90% of manifest images exist on disk
+     */
+    public static boolean isFullCorpusAvailable() {
+        CorpusManifest manifest = manifest();
+        if (manifest.totalImages() == 0) {
+            return false;
+        }
+
+        long existingCount = manifest.images().stream()
+                .filter(img -> Files.exists(CORPUS_DIR.resolve(img.path())))
+                .count();
+
+        // Consider "full corpus" if at least 90% of images exist
+        return existingCount >= manifest.totalImages() * 9L / 10L;
+    }
+
+    /**
      * Finds the first available image with the specified filesystem type.
      *
      * @param filesystem the filesystem type (case-insensitive)
