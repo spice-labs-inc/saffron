@@ -6,6 +6,8 @@ package io.spicelabs.saffron.filesystem.btrfs;
 
 import io.spicelabs.saffron.DiskReader;
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.corpus.RequiresImage;
+import io.spicelabs.saffron.corpus.TestCorpusUtils;
 import io.spicelabs.saffron.filesystem.FilesystemDetector;
 import io.spicelabs.saffron.filesystem.FilesystemInfo;
 import io.spicelabs.saffron.fs.FileSystem;
@@ -13,10 +15,8 @@ import io.spicelabs.saffron.lvm.DiskRegion;
 import io.spicelabs.saffron.partition.Partition;
 import io.spicelabs.saffron.partition.PartitionTable;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIf;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -25,37 +25,25 @@ import static org.assertj.core.api.Assertions.*;
 /**
  * Tests for Btrfs superblock parsing.
  *
- * <p>These tests require Btrfs disk images. Fedora cloud images use Btrfs by default.
- * Download from: https://fedoraproject.org/cloud/download
- *
- * <p>Place images in test-corpus/qcow2/modern/ or set BTRFS_TEST_IMAGE environment variable.
+ * <p>These tests use filesystem-aware discovery to find any available Btrfs image
+ * rather than requiring specific Fedora images. This ensures tests work with CI sampling.
  */
 class BtrfsSuperblockTest {
 
-    // Fedora cloud images use Btrfs by default
-    private static final Path FEDORA_IMAGE = Path.of("test-corpus/qcow2/modern/Fedora-Cloud-Base-Generic-42-1.1.x86_64.qcow2");
-    private static final Path FEDORA_IMAGE_ALT = Path.of("test-corpus/qcow2/cloud/fedora/fedora-40-cloud-base-amd64.qcow2");
-
-    // Allow custom image via environment variable
-    private static final String BTRFS_TEST_IMAGE_ENV = System.getenv("BTRFS_TEST_IMAGE");
-
+    /**
+     * Condition method for @EnabledIf - used by other tests that need Btrfs.
+     */
     static boolean hasBtrfsTestImage() {
-        if (BTRFS_TEST_IMAGE_ENV != null && Files.exists(Path.of(BTRFS_TEST_IMAGE_ENV))) {
-            return true;
-        }
-        return Files.exists(FEDORA_IMAGE) || Files.exists(FEDORA_IMAGE_ALT);
+        return TestCorpusUtils.hasFilesystem("btrfs");
     }
 
     private static Path getBtrfsTestImage() {
-        if (BTRFS_TEST_IMAGE_ENV != null && Files.exists(Path.of(BTRFS_TEST_IMAGE_ENV))) {
-            return Path.of(BTRFS_TEST_IMAGE_ENV);
-        }
-        if (Files.exists(FEDORA_IMAGE)) return FEDORA_IMAGE;
-        return FEDORA_IMAGE_ALT;
+        return TestCorpusUtils.findBestTestImage("btrfs")
+                .orElseThrow(() -> new AssertionError("No Btrfs image found"));
     }
 
     @Test
-    @EnabledIf("hasBtrfsTestImage")
+    @RequiresImage(filesystem = "btrfs")
     void parseBtrfsSuperblock() throws Exception {
         Path imagePath = getBtrfsTestImage();
         System.out.println("Testing with: " + imagePath);

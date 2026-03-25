@@ -6,29 +6,45 @@ package io.spicelabs.saffron.filesystem.xfs;
 
 import io.spicelabs.saffron.DiskReader;
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.corpus.RequiresImage;
+import io.spicelabs.saffron.corpus.TestCorpusUtils;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemMount;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIf;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ * Diagnostic tests for Amazon Linux XFS filesystem.
+ *
+ * <p>These tests are specifically designed to diagnose XFS implementation issues
+ * with Amazon Linux images. They use filesystem-aware discovery to find any
+ * XFS image when Amazon Linux is not available.
+ */
 class AmazonLinuxDiagnosticTest {
 
-    private static final Path IMAGE = Path.of("test-corpus/qcow2/modern/amazonlinux-2023-kvm.qcow2");
-
-    static boolean hasImage() {
-        return Files.exists(IMAGE);
+    /**
+     * Condition method - prefer Amazon Linux, but accept any XFS image.
+     */
+    static boolean hasXfsImage() {
+        return TestCorpusUtils.hasFilesystem("xfs");
     }
 
     @Test
-    @EnabledIf("hasImage")
-    void diagnoseAmazonLinux2023() throws Exception {
-        try (VirtualDisk disk = DiskReader.open(IMAGE)) {
+    @RequiresImage(filesystem = "xfs")
+    void diagnoseXfsFilesystem() throws Exception {
+        // Try to find Amazon Linux specifically, fall back to any XFS image
+        Path imagePath = TestCorpusUtils.findImageWithFilesystemAndFormat("xfs", "qcow2")
+                .filter(p -> p.toString().contains("amazon"))
+                .orElseGet(() -> TestCorpusUtils.findBestTestImage("xfs")
+                        .orElseThrow(() -> new AssertionError("No XFS image found")));
+
+        System.out.println("Running XFS diagnostics with: " + imagePath);
+
+        try (VirtualDisk disk = DiskReader.open(imagePath)) {
             List<FileSystem> allFs = FileSystemMount.mountAll(disk);
 
             for (FileSystem fs : allFs) {
@@ -38,7 +54,7 @@ class AmazonLinuxDiagnosticTest {
                 // Find root inode from . entry
                 var rootDir = xfs.root();
                 // Get root inode number from readDirectoryEntries
-                // We need to find the . entry in root
+                // We need to find the . entry in root directory
                 // Use resolve to navigate
                 for (String checkPath : new String[]{"/usr/share/man/man1", "/usr/bin", "/usr/lib64"}) {
                     var resolved = xfs.resolve(checkPath);

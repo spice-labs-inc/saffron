@@ -166,11 +166,39 @@ build_ci_list() {
         done < "$temp_dir/fs_$fs" | sort | head -n "$select_n" | cut -d' ' -f2- >> "$temp_dir/fs_samples"
     done
 
-    # Step 4: Combine all, remove duplicates, output
+    # Step 4: Guarantee filesystem coverage - ensure critical filesystems are represented
+    # This ensures tests can find at least one image per filesystem type
+    local required_filesystems=("ext4" "xfs" "btrfs" "ntfs" "fat32" "fat16")
+    for fs in "${required_filesystems[@]}"; do
+        # Check if this filesystem is already in our selection
+        local has_fs=false
+        while IFS= read -r path; do
+            [[ -z "$path" ]] && continue
+            local img_fs
+            img_fs=$(jq -r --arg p "$path" '.images[] | select(.path == $p) | .filesystem' "$MANIFEST")
+            if [[ "$img_fs" == "$fs" ]]; then
+                has_fs=true
+                break
+            fi
+        done < <(cat "$temp_dir/anchors" "$temp_dir/format_samples" "$temp_dir/fs_samples" 2>/dev/null | sort -u)
+
+        if [[ "$has_fs" == "false" ]]; then
+            # Add the first available image with this filesystem
+            local first_img
+            first_img=$(jq -r --arg f "$fs" '.images[] | select(.filesystem == $f) | .path' "$MANIFEST" | head -1)
+            if [[ -n "$first_img" ]]; then
+                echo "$first_img" >> "$temp_dir/fs_coverage"
+                echo "  [filesystem coverage] Adding $fs image: $first_img" >&2
+            fi
+        fi
+    done
+
+    # Step 5: Combine all, remove duplicates, output
     {
         cat "$temp_dir/anchors" 2>/dev/null || true
         cat "$temp_dir/format_samples" 2>/dev/null || true
         cat "$temp_dir/fs_samples" 2>/dev/null || true
+        cat "$temp_dir/fs_coverage" 2>/dev/null || true
     } | sort -u
 
     rm -rf "$temp_dir"
