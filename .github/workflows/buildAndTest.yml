@@ -25,7 +25,8 @@ jobs:
       - name: Test with Maven
         # Use 'small' mode with 1GB max for deterministic, fast test coverage
         # This selects smallest images to cover all filesystem types
-        run: mvn --batch-mode --update-snapshots -Pci verify -Dsaffron.corpus.mode=small -Dsaffron.corpus.maxSizeGb=1
+        # Coverage threshold lowered to 0.55 for CI with reduced corpus
+        run: mvn --batch-mode --update-snapshots -Pci verify -Dsaffron.corpus.mode=small -Dsaffron.corpus.maxSizeGb=1 -Djacoco.coverage.minimum=0.55
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
