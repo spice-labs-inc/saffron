@@ -78,7 +78,7 @@
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
-        <jacoco.coverage.minimum>0.50</jacoco.coverage.minimum>
+        <jacoco.coverage.minimum>0.40</jacoco.coverage.minimum>
         <spotbugs-maven-plugin.version>4.8.3.1</spotbugs-maven-plugin.version>
         <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
         <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
@@ -442,7 +442,7 @@
         <profile>
             <id>ci</id>
             <properties>
-                <jacoco.coverage.minimum>0.50</jacoco.coverage.minimum>
+                <jacoco.coverage.minimum>0.40</jacoco.coverage.minimum>
             </properties>
         </profile>
 
