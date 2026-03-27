@@ -1,15 +1,19 @@
 {
   "imagePath": "/corpus/qcow2/modern/oracle-linux-9-amd64.qcow2",
   "imageBasename": "oracle-linux-9-amd64.qcow2",
-  "filesystemCount": 2,
+  "filesystemCount": 3,
   "totalFiles": 22960,
-  "totalDirectories": 4817,
+  "totalDirectories": 4819,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "xfs",
       "fileCount": 341,
-      "directoryCount": 9,
+      "directoryCount": 10,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub2/i386-pc/cbfs.mod",
@@ -117,7 +121,19 @@
       "device": "/dev/vg_main/lv_root",
       "fstype": "xfs",
       "fileCount": 22619,
-      "directoryCount": 4808,
+      "directoryCount": 4809,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/redhat-release",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/gettext-0.21/its/glade1.its",
@@ -220,6 +236,17 @@
           "sha256": "1da6f6022ce14b9877f4f5929aafa5d4f1cb88b8a87e5c3eeb3d6f0371a7beb9"
         }
       ]
+    },
+    {
+      "device": "/dev/vg_main/lv_swap",
+      "fstype": "swap",
+      "fileCount": 0,
+      "directoryCount": 0,
+      "purpose": "swap",
+      "isMountable": false,
+      "mountPoint": null,
+      "expectedPaths": [],
+      "sampleFiles": []
     }
   ]
 }

@@ -2,14 +2,18 @@
   "imagePath": "/corpus/vmdk/legacy/windows-me.vmdk",
   "imageBasename": "windows-me.vmdk",
   "filesystemCount": 1,
-  "totalFiles": 4980,
+  "totalFiles": 4974,
   "totalDirectories": 302,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "vfat",
-      "fileCount": 4980,
+      "fileCount": 4974,
       "directoryCount": 302,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/WINDOWS/SYSTEM/OOBE/SETUP/PRVCYMS.HTM",

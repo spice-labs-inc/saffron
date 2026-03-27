@@ -3,13 +3,25 @@
   "imageBasename": "ubuntu-22.04-cloudimg-amd64.qcow2",
   "filesystemCount": 2,
   "totalFiles": 61368,
-  "totalDirectories": 7770,
+  "totalDirectories": 7772,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "ext4",
       "fileCount": 61360,
-      "directoryCount": 7767,
+      "directoryCount": 7768,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/debian_version",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/man/man8/sg_rtpg.8.gz",
@@ -117,7 +129,14 @@
       "device": "/dev/sda15",
       "fstype": "vfat",
       "fileCount": 8,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/ubuntu/shimx64.efi",

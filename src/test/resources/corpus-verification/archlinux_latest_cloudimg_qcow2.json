@@ -3,13 +3,20 @@
   "imageBasename": "archlinux-latest-cloudimg.qcow2",
   "filesystemCount": 5,
   "totalFiles": 38045,
-  "totalDirectories": 3008,
+  "totalDirectories": 3013,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "vfat",
       "fileCount": 1,
-      "directoryCount": 2,
+      "directoryCount": 3,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/BOOT/BOOTX64.EFI",
@@ -22,7 +29,18 @@
       "device": "/dev/sda3",
       "fstype": "btrfs",
       "fileCount": 38043,
-      "directoryCount": 3006,
+      "directoryCount": 3007,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/include/glib-2.0/gio/gunixconnection.h",
@@ -130,21 +148,33 @@
       "device": "btrfsvol:/dev/sda3/swap",
       "fstype": "btrfs",
       "fileCount": 1,
-      "directoryCount": 0,
+      "directoryCount": 1,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": []
     },
     {
       "device": "btrfsvol:/dev/sda3/var/lib/machines",
       "fstype": "btrfs",
       "fileCount": 0,
-      "directoryCount": 0,
+      "directoryCount": 1,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": []
     },
     {
       "device": "btrfsvol:/dev/sda3/var/lib/portables",
       "fstype": "btrfs",
       "fileCount": 0,
-      "directoryCount": 0,
+      "directoryCount": 1,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": []
     }
   ]

@@ -3,13 +3,17 @@
   "imageBasename": "Windows NT Workstation 4.0 Hard Disk.vhd",
   "filesystemCount": 1,
   "totalFiles": 2245,
-  "totalDirectories": 114,
+  "totalDirectories": 115,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "ntfs",
       "fileCount": 2245,
-      "directoryCount": 114,
+      "directoryCount": 115,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/WINNT/Cursors/wagtail.ani",

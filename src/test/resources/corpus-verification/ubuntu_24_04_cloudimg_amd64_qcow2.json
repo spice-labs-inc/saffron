@@ -3,13 +3,25 @@
   "imageBasename": "ubuntu-24.04-cloudimg-amd64.qcow2",
   "filesystemCount": 3,
   "totalFiles": 69894,
-  "totalDirectories": 9172,
+  "totalDirectories": 9175,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "ext4",
       "fileCount": 69307,
-      "directoryCount": 9162,
+      "directoryCount": 9163,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/debian_version",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/lib/python3/dist-packages/twisted/internet/__pycache__/inotify.cpython-312.pyc",
@@ -117,7 +129,14 @@
       "device": "/dev/sda15",
       "fstype": "vfat",
       "fileCount": 8,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/ubuntu/shimx64.efi",
@@ -165,7 +184,11 @@
       "device": "/dev/sda16",
       "fstype": "ext4",
       "fileCount": 579,
-      "directoryCount": 7,
+      "directoryCount": 8,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub/x86_64-efi/syslinuxcfg.mod",

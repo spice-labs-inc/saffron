@@ -3,13 +3,24 @@
   "imageBasename": "alpine-3.19-cloud-amd64.qcow2",
   "filesystemCount": 1,
   "totalFiles": 5342,
-  "totalDirectories": 680,
+  "totalDirectories": 681,
   "filesystems": [
     {
       "device": "/dev/sda",
       "fstype": "ext4",
       "fileCount": 5342,
-      "directoryCount": 680,
+      "directoryCount": 681,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/lib/python3.11/site-packages/yaml/serializer.py",

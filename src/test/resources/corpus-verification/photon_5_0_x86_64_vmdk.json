@@ -3,13 +3,24 @@
   "imageBasename": "photon-5.0-x86_64.vmdk",
   "filesystemCount": 2,
   "totalFiles": 13779,
-  "totalDirectories": 1426,
+  "totalDirectories": 1428,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "ext4",
       "fileCount": 13772,
-      "directoryCount": 1418,
+      "directoryCount": 1419,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/man/man8/pam_xauth.8.gz",
@@ -117,7 +128,14 @@
       "device": "/dev/sda3",
       "fstype": "vfat",
       "fileCount": 7,
-      "directoryCount": 8,
+      "directoryCount": 9,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/boot/grub2/grub.cfg",

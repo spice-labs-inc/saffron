@@ -3,13 +3,20 @@
   "imageBasename": "flatcar-stable.qcow2",
   "filesystemCount": 4,
   "totalFiles": 26667,
-  "totalDirectories": 2115,
+  "totalDirectories": 2119,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "vfat",
       "fileCount": 458,
-      "directoryCount": 10,
+      "directoryCount": 11,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/flatcar/grub/i386-pc/crypto.lst",
@@ -117,7 +124,11 @@
       "device": "/dev/sda3",
       "fstype": "btrfs",
       "fileCount": 26205,
-      "directoryCount": 2100,
+      "directoryCount": 2101,
+      "purpose": "unknown",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/bin/etcdctl",
@@ -225,7 +236,11 @@
       "device": "/dev/sda6",
       "fstype": "btrfs",
       "fileCount": 4,
-      "directoryCount": 1,
+      "directoryCount": 2,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/sysext/oem-qemu-4459.2.3.raw",
@@ -248,7 +263,11 @@
       "device": "/dev/sda9",
       "fstype": "ext4",
       "fileCount": 0,
-      "directoryCount": 4,
+      "directoryCount": 5,
+      "purpose": "unknown",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": []
     }
   ]

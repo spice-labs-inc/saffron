@@ -4,6 +4,7 @@
  */
 package io.spicelabs.saffron.corpus;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,21 +14,21 @@ import java.util.List;
  * the Docker corpus scanner (tools/corpus-scanner/). They are used by all
  * corpus verification test classes.
  */
-final class CorpusTestData {
+public final class CorpusTestData {
 
     private CorpusTestData() {}
 
-    static class CorpusImageData {
-        String imagePath;
-        String imageBasename;
-        int filesystemCount;
-        int totalFiles;
-        int totalDirectories;
-        List<FilesystemData> filesystems;
-        String error;
+    public static class CorpusImageData {
+        public String imagePath;
+        public String imageBasename;
+        public int filesystemCount;
+        public int totalFiles;
+        public int totalDirectories;
+        public List<FilesystemData> filesystems;
+        public String error;
 
         /** Returns the fstype of the first filesystem, or null. */
-        String firstFilesystemType() {
+        public String firstFilesystemType() {
             if (filesystems != null && !filesystems.isEmpty()) {
                 return filesystems.get(0).fstype;
             }
@@ -35,17 +36,103 @@ final class CorpusTestData {
         }
     }
 
-    static class FilesystemData {
-        String device;
-        String fstype;
-        int fileCount;
-        int directoryCount;
-        List<SampleFile> sampleFiles;
+    public static class FilesystemData {
+        public String device;
+        public String fstype;
+        public int fileCount;
+        public int directoryCount;
+        public List<SampleFile> sampleFiles;
+
+        // Phase 2: Per-filesystem classification fields (may be null for old JSON)
+        public String purpose;           // "root", "boot", "home", "var", "opt", "data", "swap", "encrypted", "unknown"
+        public Boolean isMountable;      // null for old JSON - defaults to true for non-swap
+        public String mountPoint;        // expected mount point: "/", "/boot/efi", "/home", etc.
+        public List<String> expectedPaths;  // paths that must exist on this filesystem
+
+        /**
+         * Returns true if this filesystem is mountable.
+         * Handles backward compatibility with old JSON that lacks this field.
+         */
+        public boolean isMountable() {
+            if (isMountable != null) {
+                return isMountable;
+            }
+            // Infer from fstype for old JSON without this field
+            return !"swap".equalsIgnoreCase(fstype) && !"crypto_luks".equalsIgnoreCase(fstype);
+        }
+
+        /**
+         * Returns the purpose of this filesystem.
+         * Handles backward compatibility with old JSON that lacks this field.
+         */
+        public String getPurpose() {
+            if (purpose != null) {
+                return purpose;
+            }
+            // Infer from fstype for old JSON
+            if ("swap".equalsIgnoreCase(fstype)) {
+                return "swap";
+            }
+            if ("vfat".equalsIgnoreCase(fstype) || "fat32".equalsIgnoreCase(fstype)) {
+                return "boot";
+            }
+            return "unknown";
+        }
+
+        /**
+         * Returns true if this is a root filesystem.
+         */
+        public boolean isRootFilesystem() {
+            return "root".equals(getPurpose()) || "/".equals(mountPoint);
+        }
+
+        /**
+         * Returns true if this is a boot filesystem.
+         */
+        public boolean isBootFilesystem() {
+            return "boot".equals(getPurpose());
+        }
+
+        /**
+         * Returns the expected mount point.
+         * Handles backward compatibility with old JSON that lacks this field.
+         */
+        public String getMountPoint() {
+            if (mountPoint != null) {
+                return mountPoint;
+            }
+            // Infer from purpose for old JSON
+            return switch (getPurpose()) {
+                case "root" -> "/";
+                case "boot" -> "/boot/efi";
+                case "home" -> "/home";
+                case "var" -> "/var";
+                case "opt" -> "/opt";
+                default -> null;
+            };
+        }
+
+        /**
+         * Returns the list of expected paths that must exist on this filesystem.
+         * Handles backward compatibility with old JSON that lacks this field.
+         */
+        public List<String> getExpectedPaths() {
+            if (expectedPaths != null) {
+                return expectedPaths;
+            }
+            // Return default paths based on purpose for old JSON
+            return switch (getPurpose()) {
+                case "root" -> List.of("/etc", "/bin", "/usr", "/lib");
+                case "boot" -> List.of("/EFI");
+                case "var" -> List.of("/var/log", "/var/lib");
+                default -> Collections.emptyList();
+            };
+        }
     }
 
-    static class SampleFile {
-        String path;
-        String sha256;
-        long size;
+    public static class SampleFile {
+        public String path;
+        public String sha256;
+        public long size;
     }
 }

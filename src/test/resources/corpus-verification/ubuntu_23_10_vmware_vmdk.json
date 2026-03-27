@@ -3,13 +3,17 @@
   "imageBasename": "ubuntu-23.10-vmware.vmdk",
   "filesystemCount": 2,
   "totalFiles": 117034,
-  "totalDirectories": 14475,
+  "totalDirectories": 14477,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "ext4",
       "fileCount": 306,
-      "directoryCount": 5,
+      "directoryCount": 6,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub/i386-pc/aout.mod",
@@ -117,7 +121,19 @@
       "device": "/dev/ubuntu-vg/ubuntu-lv",
       "fstype": "ext4",
       "fileCount": 116728,
-      "directoryCount": 14470,
+      "directoryCount": 14471,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/debian_version",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/var/lib/dpkg/info/samba-libs:amd64.symbols",

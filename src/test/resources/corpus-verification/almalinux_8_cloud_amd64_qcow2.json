@@ -3,13 +3,20 @@
   "imageBasename": "almalinux-8-cloud-amd64.qcow2",
   "filesystemCount": 3,
   "totalFiles": 32023,
-  "totalDirectories": 5859,
+  "totalDirectories": 5862,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "vfat",
       "fileCount": 8,
-      "directoryCount": 4,
+      "directoryCount": 5,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/almalinux/mmx64.efi",
@@ -57,7 +64,11 @@
       "device": "/dev/sda3",
       "fstype": "xfs",
       "fileCount": 297,
-      "directoryCount": 7,
+      "directoryCount": 8,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub2/i386-pc/verifiers.mod",
@@ -165,7 +176,19 @@
       "device": "/dev/sda4",
       "fstype": "xfs",
       "fileCount": 31718,
-      "directoryCount": 5848,
+      "directoryCount": 5849,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/redhat-release",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/man/man8/pam_warn.8.gz",

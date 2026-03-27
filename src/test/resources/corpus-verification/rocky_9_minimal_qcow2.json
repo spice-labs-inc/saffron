@@ -3,13 +3,20 @@
   "imageBasename": "rocky-9-minimal.qcow2",
   "filesystemCount": 3,
   "totalFiles": 29516,
-  "totalDirectories": 5088,
+  "totalDirectories": 5091,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "vfat",
       "fileCount": 12,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/rocky/mmx64.efi",
@@ -77,7 +84,11 @@
       "device": "/dev/sda3",
       "fstype": "xfs",
       "fileCount": 351,
-      "directoryCount": 8,
+      "directoryCount": 9,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub2/locale/es.mo",
@@ -185,7 +196,19 @@
       "device": "/dev/sda4",
       "fstype": "xfs",
       "fileCount": 29153,
-      "directoryCount": 5077,
+      "directoryCount": 5078,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/redhat-release",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/lib/python3.9/site-packages/sos/cleaner/parsers/__pycache__/ip_parser.cpython-39.opt-1.pyc",

@@ -3,13 +3,25 @@
   "imageBasename": "centos-stream-9-cloud.qcow2",
   "filesystemCount": 1,
   "totalFiles": 27984,
-  "totalDirectories": 5066,
+  "totalDirectories": 5067,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "xfs",
       "fileCount": 27984,
-      "directoryCount": 5066,
+      "directoryCount": 5067,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/redhat-release",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/dbus-1/interfaces/org.freedesktop.locale1.xml",

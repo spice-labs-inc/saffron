@@ -1,15 +1,19 @@
 {
   "imagePath": "/corpus/vdi/modern/debian-12-vbox.vdi",
   "imageBasename": "debian-12-vbox.vdi",
-  "filesystemCount": 5,
+  "filesystemCount": 6,
   "totalFiles": 27293,
-  "totalDirectories": 3596,
+  "totalDirectories": 3601,
   "filesystems": [
     {
       "device": "/dev/debian12-vg/home",
       "fstype": "ext4",
       "fileCount": 5,
-      "directoryCount": 2,
+      "directoryCount": 3,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/debian/.bashrc",
@@ -37,7 +41,19 @@
       "device": "/dev/debian12-vg/root",
       "fstype": "ext4",
       "fileCount": 25112,
-      "directoryCount": 3377,
+      "directoryCount": 3378,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/debian_version",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/groff/1.22.4/tmac/pspic.tmac",
@@ -145,14 +161,22 @@
       "device": "/dev/debian12-vg/tmp",
       "fstype": "ext4",
       "fileCount": 0,
-      "directoryCount": 8,
+      "directoryCount": 9,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": []
     },
     {
       "device": "/dev/debian12-vg/var",
       "fstype": "ext4",
       "fileCount": 1839,
-      "directoryCount": 204,
+      "directoryCount": 205,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/lib/dpkg/info/debian-archive-keyring.prerm",
@@ -260,7 +284,11 @@
       "device": "/dev/sda1",
       "fstype": "ext2",
       "fileCount": 337,
-      "directoryCount": 5,
+      "directoryCount": 6,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub/i386-pc/cbtable.mod",
@@ -363,6 +391,17 @@
           "sha256": "eddf59a51f65ea0504d9701a2c904d8cbe63b29354aad6bc61561f0e4a55d51f"
         }
       ]
+    },
+    {
+      "device": "/dev/debian12-vg/swap_1",
+      "fstype": "swap",
+      "fileCount": 0,
+      "directoryCount": 0,
+      "purpose": "swap",
+      "isMountable": false,
+      "mountPoint": null,
+      "expectedPaths": [],
+      "sampleFiles": []
     }
   ]
 }

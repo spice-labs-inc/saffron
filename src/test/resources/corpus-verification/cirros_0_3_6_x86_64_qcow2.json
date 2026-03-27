@@ -3,13 +3,24 @@
   "imageBasename": "cirros-0.3.6-x86_64.qcow2",
   "filesystemCount": 1,
   "totalFiles": 248,
-  "totalDirectories": 93,
+  "totalDirectories": 94,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "ext3",
       "fileCount": 248,
-      "directoryCount": 93,
+      "directoryCount": 94,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/lib/modules/3.2.0-80-virtual/modules.alias.bin",

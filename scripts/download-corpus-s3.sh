@@ -515,6 +515,9 @@ fi
 DOWNLOADED=0
 FAILED=0
 TOTAL_BYTES=0
+MAX_RETRIES_PER_FILE=4
+
+declare -A FILE_FAILURES
 
 while IFS= read -r image_path; do
     [[ -z "$image_path" ]] && continue
@@ -523,19 +526,43 @@ while IFS= read -r image_path; do
     encoded_path=$(url_encode "$image_path")
     url="$S3_BASE_URL/$encoded_path"
     mkdir -p "$(dirname "$local_path")"
-    echo "  Downloading $image_path ..."
 
-    if ! curl -fsSL --retry 3 --retry-delay 2 -o "$local_path.tmp" "$url"; then
-        echo "  WARNING: Failed to download $image_path" >&2
-        rm -f "$local_path.tmp"
-        FAILED=$((FAILED + 1))
-        continue
-    fi
+    # Track retries for this specific file
+    FILE_FAILURES[$image_path]=0
+    success=false
 
-    mv "$local_path.tmp" "$local_path"
-    file_size=$(stat -c%s "$local_path" 2>/dev/null || stat -f%z "$local_path" 2>/dev/null || echo 0)
-    TOTAL_BYTES=$((TOTAL_BYTES + file_size))
-    DOWNLOADED=$((DOWNLOADED + 1))
+    for attempt in $(seq 1 $MAX_RETRIES_PER_FILE); do
+        echo "  Downloading $image_path (attempt $attempt/$MAX_RETRIES_PER_FILE)..."
+
+        # Check if partial file exists for resume
+        if [[ -f "$local_path.tmp" ]]; then
+            tmp_size=$(stat -c%s "$local_path.tmp" 2>/dev/null || stat -f%z "$local_path.tmp" 2>/dev/null || echo 0)
+            echo "    Resuming from $(numfmt --to=iec $tmp_size)..."
+        fi
+
+        if curl -fsSL -C - --retry 3 --retry-delay 5 --connect-timeout 30 --max-time 3600 -o "$local_path.tmp" "$url"; then
+            mv "$local_path.tmp" "$local_path"
+            file_size=$(stat -c%s "$local_path" 2>/dev/null || stat -f%z "$local_path" 2>/dev/null || echo 0)
+            TOTAL_BYTES=$((TOTAL_BYTES + file_size))
+            DOWNLOADED=$((DOWNLOADED + 1))
+            echo "  ✓ Downloaded $image_path ($(numfmt --to=iec $file_size))"
+            success=true
+            break
+        else
+            FILE_FAILURES[$image_path]=$((${FILE_FAILURES[$image_path]} + 1))
+            echo "  ✗ Attempt $attempt failed for $image_path" >&2
+
+            if [[ ${FILE_FAILURES[$image_path]} -ge $MAX_RETRIES_PER_FILE ]]; then
+                echo "  ERROR: $image_path failed after $MAX_RETRIES_PER_FILE attempts" >&2
+                rm -f "$local_path.tmp"
+                FAILED=$((FAILED + 1))
+                break
+            fi
+
+            # Exponential backoff: 5s, 10s, 20s
+            sleep $((5 * (2 ** (attempt - 1))))
+        fi
+    done
 
 done <<< "$MISSING_LIST"
 
@@ -560,5 +587,10 @@ echo "  Failed:     $FAILED"
 echo "  Total size: $SIZE_STR (downloaded this run)"
 echo ""
 
-# Always exit 0 — tests gracefully handle missing images
+# Exit with error if any downloads failed
+if [[ $FAILED -gt 0 ]]; then
+    echo "ERROR: $FAILED image(s) failed to download after $MAX_RETRIES_PER_FILE attempts" >&2
+    exit 1
+fi
+
 exit 0

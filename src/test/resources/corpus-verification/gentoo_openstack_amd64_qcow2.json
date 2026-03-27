@@ -3,13 +3,20 @@
   "imageBasename": "gentoo-openstack-amd64.qcow2",
   "filesystemCount": 2,
   "totalFiles": 73503,
-  "totalDirectories": 4768,
+  "totalDirectories": 4770,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "vfat",
       "fileCount": 1,
-      "directoryCount": 2,
+      "directoryCount": 3,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/BOOT/BOOTX64.EFI",
@@ -22,7 +29,18 @@
       "device": "/dev/sda3",
       "fstype": "ext4",
       "fileCount": 73502,
-      "directoryCount": 4766,
+      "directoryCount": 4767,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/etc/init.d/local",

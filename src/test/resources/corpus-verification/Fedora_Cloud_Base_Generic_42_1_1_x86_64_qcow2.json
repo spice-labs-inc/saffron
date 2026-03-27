@@ -3,13 +3,20 @@
   "imageBasename": "Fedora-Cloud-Base-Generic-42-1.1.x86_64.qcow2",
   "filesystemCount": 6,
   "totalFiles": 51276,
-  "totalDirectories": 10804,
+  "totalDirectories": 10810,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "vfat",
       "fileCount": 17,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/BOOT/grub.cfg",
@@ -102,7 +109,11 @@
       "device": "/dev/sda3",
       "fstype": "ext4",
       "fileCount": 643,
-      "directoryCount": 10,
+      "directoryCount": 11,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub2/x86_64-efi/nativedisk.mod",
@@ -210,7 +221,14 @@
       "device": "/dev/sda4",
       "fstype": "btrfs",
       "fileCount": 25308,
-      "directoryCount": 5397,
+      "directoryCount": 5398,
+      "purpose": "var",
+      "isMountable": true,
+      "mountPoint": "/var",
+      "expectedPaths": [
+        "/var/log",
+        "/var/lib"
+      ],
       "sampleFiles": [
         {
           "path": "/root/usr/share/licenses/libbrotli/LICENSE",
@@ -318,14 +336,30 @@
       "device": "btrfsvol:/dev/sda4/home",
       "fstype": "btrfs",
       "fileCount": 0,
-      "directoryCount": 0,
+      "directoryCount": 1,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": []
     },
     {
       "device": "btrfsvol:/dev/sda4/root",
       "fstype": "btrfs",
       "fileCount": 24001,
-      "directoryCount": 4873,
+      "directoryCount": 4874,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/redhat-release",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/lib/dracut/ossl-config",
@@ -433,7 +467,11 @@
       "device": "btrfsvol:/dev/sda4/var",
       "fstype": "btrfs",
       "fileCount": 1307,
-      "directoryCount": 521,
+      "directoryCount": 522,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/lib/selinux/targeted/active/modules/100/dhcp/lang_ext",

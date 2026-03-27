@@ -3,13 +3,17 @@
   "imageBasename": "hfsplus-test.dmg",
   "filesystemCount": 1,
   "totalFiles": 7,
-  "totalDirectories": 3,
+  "totalDirectories": 4,
   "filesystems": [
     {
       "device": "/dev/sda",
       "fstype": "hfsplus",
       "fileCount": 7,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/file2.txt",

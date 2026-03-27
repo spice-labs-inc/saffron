@@ -289,7 +289,8 @@ public record LvmMetadata(
         String lvSection = text.substring(lvBlockStart + 1, lvBlockEnd);
 
         // Find each LV definition
-        Pattern lvPattern = Pattern.compile("(\\w+)\\s*\\{", Pattern.MULTILINE);
+        // LV names can contain hyphens (e.g., "ubuntu-lv"), so use [\w-]+ not just \w+
+        Pattern lvPattern = Pattern.compile("([\\w-]+)\\s*\\{", Pattern.MULTILINE);
         Matcher lvMatcher = lvPattern.matcher(lvSection);
 
         int searchStart = 0;

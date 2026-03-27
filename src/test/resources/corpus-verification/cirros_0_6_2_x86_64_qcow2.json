@@ -3,13 +3,17 @@
   "imageBasename": "cirros-0.6.2-x86_64.qcow2",
   "filesystemCount": 2,
   "totalFiles": 9,
-  "totalDirectories": 6,
+  "totalDirectories": 8,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "ext3",
       "fileCount": 7,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/boot/grub/menu.lst",
@@ -52,7 +56,14 @@
       "device": "/dev/sda15",
       "fstype": "vfat",
       "fileCount": 2,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/BOOT/bootx64.efi",

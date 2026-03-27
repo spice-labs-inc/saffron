@@ -3,13 +3,25 @@
   "imageBasename": "ubuntu-20.04-cloudimg-amd64.qcow2",
   "filesystemCount": 2,
   "totalFiles": 57940,
-  "totalDirectories": 10912,
+  "totalDirectories": 10914,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "ext4",
       "fileCount": 57932,
-      "directoryCount": 10909,
+      "directoryCount": 10910,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/debian_version",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/src/linux-headers-5.4.0-216/arch/s390/include/asm/hardirq.h",
@@ -117,7 +129,14 @@
       "device": "/dev/sda15",
       "fstype": "vfat",
       "fileCount": 8,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/ubuntu/shimx64.efi",

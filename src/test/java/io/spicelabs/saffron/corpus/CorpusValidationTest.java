@@ -112,7 +112,6 @@ class CorpusValidationTest {
     }
 
     @Test
-    @EnabledIf("io.spicelabs.saffron.corpus.TestCorpusUtils#isFullCorpusAvailable")
     void corpus_allImageFilesExist() {
         List<String> missing = new ArrayList<>();
         for (CorpusImage image : manifest.images()) {
@@ -122,15 +121,10 @@ class CorpusValidationTest {
             }
         }
 
-        if (!missing.isEmpty()) {
-            System.err.println("WARNING: " + missing.size() + " manifest entries missing from disk:");
-            missing.forEach(p -> System.err.println("  - " + p));
-        }
-
-        // At least 90% of manifest entries should exist
-        assertThat(manifest.totalImages() - missing.size())
-                .as("Most manifest images should exist on disk")
-                .isGreaterThan(manifest.totalImages() * 9 / 10);
+        // Local tests MUST have all corpus files - fail if any are missing
+        assertThat(missing)
+                .as("All corpus images must exist on disk for local testing")
+                .isEmpty();
     }
 
     @Test

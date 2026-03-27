@@ -3,13 +3,20 @@
   "imageBasename": "rocky-8-cloud-amd64.qcow2",
   "filesystemCount": 3,
   "totalFiles": 31596,
-  "totalDirectories": 5682,
+  "totalDirectories": 5685,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "vfat",
       "fileCount": 9,
-      "directoryCount": 4,
+      "directoryCount": 5,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/rocky/grubx64.efi",
@@ -62,7 +69,11 @@
       "device": "/dev/sda2",
       "fstype": "xfs",
       "fileCount": 295,
-      "directoryCount": 6,
+      "directoryCount": 7,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub2/i386-pc/tftp.mod",
@@ -170,7 +181,19 @@
       "device": "/dev/sda5",
       "fstype": "xfs",
       "fileCount": 31292,
-      "directoryCount": 5672,
+      "directoryCount": 5673,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/redhat-release",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/setroubleshoot/plugins/__pycache__/allow_anon_write.cpython-36.pyc",

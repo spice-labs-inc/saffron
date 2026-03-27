@@ -3,13 +3,17 @@
   "imageBasename": "HPCF-CEPC-CE30.VHD",
   "filesystemCount": 1,
   "totalFiles": 13,
-  "totalDirectories": 2,
+  "totalDirectories": 3,
   "filesystems": [
     {
       "device": "/dev/sda4",
       "fstype": "vfat",
       "fileCount": 13,
-      "directoryCount": 2,
+      "directoryCount": 3,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/CONFIG.SYS",
