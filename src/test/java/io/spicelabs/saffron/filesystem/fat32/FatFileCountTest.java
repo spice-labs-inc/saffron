@@ -26,8 +26,20 @@ class FatFileCountTest {
         return java.nio.file.Files.isDirectory(Path.of(CORPUS_BASE));
     }
 
+    static boolean windows95ImageExists() {
+        return java.nio.file.Files.exists(Path.of(CORPUS_BASE + "/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/Windows 95 Hard Disk.vhd"));
+    }
+
+    static boolean windows98ImageExists() {
+        return java.nio.file.Files.exists(Path.of(CORPUS_BASE + "/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/Windows 98 Plus! Hard Disk.vhd"));
+    }
+
+    static boolean windowsMEImageExists() {
+        return java.nio.file.Files.exists(Path.of(CORPUS_BASE + "/vmdk/legacy/windows-me.vmdk"));
+    }
+
     @Test
-    @EnabledIf("corpusExists")
+    @EnabledIf("windows95ImageExists")
     void testWindows95FileCounts() throws Exception {
         String imagePath = CORPUS_BASE + "/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/Windows 95 Hard Disk.vhd";
 
@@ -59,7 +71,7 @@ class FatFileCountTest {
     }
 
     @Test
-    @EnabledIf("corpusExists")
+    @EnabledIf("windows98ImageExists")
     void testWindows98FileCounts() throws Exception {
         String imagePath = CORPUS_BASE + "/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/Windows 98 Plus! Hard Disk.vhd";
 
@@ -91,7 +103,7 @@ class FatFileCountTest {
     }
 
     @Test
-    @EnabledIf("corpusExists")
+    @EnabledIf("windowsMEImageExists")
     void testWindowsMEFileCounts() throws Exception {
         String imagePath = CORPUS_BASE + "/vmdk/legacy/windows-me.vmdk";
 
