@@ -3,13 +3,20 @@
   "imageBasename": "opensuse-tumbleweed-cloud.qcow2",
   "filesystemCount": 2,
   "totalFiles": 16975,
-  "totalDirectories": 3050,
+  "totalDirectories": 3052,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "vfat",
       "fileCount": 4,
-      "directoryCount": 2,
+      "directoryCount": 3,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/BOOT/bootx64.efi",
@@ -37,7 +44,18 @@
       "device": "/dev/sda3",
       "fstype": "xfs",
       "fileCount": 16971,
-      "directoryCount": 3048,
+      "directoryCount": 3049,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/lib64/python3.13/__pycache__/linecache.cpython-313.opt-2.pyc",

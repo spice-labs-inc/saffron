@@ -3,13 +3,17 @@
   "imageBasename": "ubuntu-24.04-vbox.vdi",
   "filesystemCount": 2,
   "totalFiles": 123428,
-  "totalDirectories": 14976,
+  "totalDirectories": 14978,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "ext4",
       "fileCount": 306,
-      "directoryCount": 5,
+      "directoryCount": 6,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub/i386-pc/time.mod",
@@ -117,7 +121,19 @@
       "device": "/dev/ubuntu-vg/ubuntu-lv",
       "fstype": "ext4",
       "fileCount": 123122,
-      "directoryCount": 14971,
+      "directoryCount": 14972,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/debian_version",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/var/lib/dpkg/info/libtry-tiny-perl.md5sums",

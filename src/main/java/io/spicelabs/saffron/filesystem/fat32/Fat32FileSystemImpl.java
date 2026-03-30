@@ -314,6 +314,29 @@ public class Fat32FileSystemImpl implements FileSystem.Fat32FileSystem {
         return bootSector.fatType();
     }
 
+    @Override
+    public @NotNull FatFileCounts fileCounts() throws IOException {
+        long totalFiles = 0;
+        long hiddenSystemFiles = 0;
+
+        try (Stream<FileSystemEntry> walkStream = walk()) {
+            for (FileSystemEntry entry : walkStream.toList()) {
+                if (entry instanceof FileSystemEntry.RegularFile) {
+                    totalFiles++;
+                    Map<String, Object> attrs = entry.attributes();
+                    boolean hidden = Boolean.TRUE.equals(attrs.get("hidden"));
+                    boolean system = Boolean.TRUE.equals(attrs.get("system"));
+                    // Libguestfs (Linux FAT driver) excludes files with both hidden AND system attributes
+                    if (hidden && system) {
+                        hiddenSystemFiles++;
+                    }
+                }
+            }
+        }
+
+        return new FatFileCounts(totalFiles, hiddenSystemFiles, totalFiles - hiddenSystemFiles);
+    }
+
     // ========================================================================
     // Internal methods for cluster chain reading
     // ========================================================================

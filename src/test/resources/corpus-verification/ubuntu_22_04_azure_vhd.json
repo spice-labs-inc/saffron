@@ -3,13 +3,25 @@
   "imageBasename": "ubuntu-22.04-azure.vhd",
   "filesystemCount": 2,
   "totalFiles": 59461,
-  "totalDirectories": 8091,
+  "totalDirectories": 8093,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "ext4",
       "fileCount": 59453,
-      "directoryCount": 8088,
+      "directoryCount": 8089,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/debian_version",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/src/linux-azure-6.8-headers-6.8.0-1044/include/uapi/linux/poll.h",
@@ -117,7 +129,14 @@
       "device": "/dev/sda15",
       "fstype": "vfat",
       "fileCount": 8,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/ubuntu/shimx64.efi",

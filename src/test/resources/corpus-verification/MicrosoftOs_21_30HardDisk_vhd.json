@@ -3,13 +3,17 @@
   "imageBasename": "MicrosoftOs-21.30HardDisk.vhd",
   "filesystemCount": 1,
   "totalFiles": 276,
-  "totalDirectories": 10,
+  "totalDirectories": 11,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "vfat",
       "fileCount": 276,
-      "directoryCount": 10,
+      "directoryCount": 11,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/OS2/SYSLOG.EXE",

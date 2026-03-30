@@ -1,0 +1,27 @@
+# Docker ignore file for corpus scanner
+# Prevents sending large directories to Docker build context
+
+# Test corpus - 150GB+ of VM images
+../../test-corpus/
+/corpus/
+
+# Maven build artifacts
+../../target/
+/target/
+
+# Git
+../../.git/
+/.git/
+
+# IDE files
+../../.idea/
+/.idea/
+*.iml
+
+# Output directories
+/output/
+../../src/test/resources/corpus-verification/
+
+# Temporary files
+*.tmp
+*.log

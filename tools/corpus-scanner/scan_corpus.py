@@ -62,25 +62,32 @@ def scan_image(image_path: str) -> dict:
 
     print(f"  Found {len(filesystems)} filesystem(s): {filesystems}")
 
-    # Filter to only mountable, real filesystems
-    # Skip swap, unknown, LVM PVs that aren't actual filesystems
+    # Categorize filesystems
+    # Track swap and crypto separately - they're real but not mountable
     mountable_fs = {}
+    unmountable_fs = {}  # swap, LUKS - tracked but not mountable
+
     for dev, fstype in filesystems.items():
-        if fstype in ('swap', 'unknown', '', 'LVM2_member', 'crypto_LUKS'):
+        if fstype in ('unknown', '', 'LVM2_member'):
             print(f"  Skipping {dev} ({fstype})")
             continue
-        mountable_fs[dev] = fstype
+        elif fstype in ('swap', 'crypto_LUKS'):
+            print(f"  Tracking unmountable {dev} ({fstype})")
+            unmountable_fs[dev] = fstype
+        else:
+            mountable_fs[dev] = fstype
 
-    if not mountable_fs:
-        print(f"  No mountable filesystems found")
+    if not mountable_fs and not unmountable_fs:
+        print(f"  No filesystems found")
         g.close()
         return {"error": "No mountable filesystems",
                 "imageBasename": basename,
                 "imagePath": make_container_path(image_path)}
 
     print(f"  Mountable filesystems: {len(mountable_fs)}")
+    print(f"  Unmountable filesystems: {len(unmountable_fs)}")
 
-    # Scan each filesystem
+    # Scan each mountable filesystem
     fs_results = []
     for dev, fstype in sorted(mountable_fs.items()):
         print(f"\n  --- Filesystem: {dev} ({fstype}) ---")
@@ -88,11 +95,18 @@ def scan_image(image_path: str) -> dict:
         if fs_data is not None:
             fs_results.append(fs_data)
 
+    # Add entries for unmountable filesystems (swap, LUKS)
+    for dev, fstype in sorted(unmountable_fs.items()):
+        print(f"\n  --- Unmountable Filesystem: {dev} ({fstype}) ---")
+        fs_data = classify_unmountable_filesystem(dev, fstype)
+        fs_results.append(fs_data)
+
     g.close()
 
-    # Compute totals
-    total_files = sum(fs["fileCount"] for fs in fs_results)
-    total_dirs = sum(fs["directoryCount"] for fs in fs_results)
+    # Compute totals (only for mountable filesystems)
+    mountable_results = [fs for fs in fs_results if fs.get("isMountable", True)]
+    total_files = sum(fs["fileCount"] for fs in mountable_results)
+    total_dirs = sum(fs["directoryCount"] for fs in mountable_results)
 
     result = {
         "imagePath": make_container_path(image_path),
@@ -103,7 +117,8 @@ def scan_image(image_path: str) -> dict:
         "filesystems": fs_results,
     }
 
-    print(f"\n  TOTAL: {len(fs_results)} filesystems, {total_files} files, {total_dirs} dirs")
+    print(f"\n  TOTAL: {len(fs_results)} filesystems ({len(mountable_results)} mountable), "
+          f"{total_files} files, {total_dirs} dirs")
     return result
 
 
@@ -134,6 +149,11 @@ def scan_filesystem(g, device: str, fstype: str) -> dict | None:
         dir_count = len(all_dirs)
         print(f"    Files: {file_count}, Directories: {dir_count}")
 
+        # Classify the filesystem (root, boot, home, etc.)
+        classification = classify_filesystem(g, fstype)
+        print(f"    Classification: {classification['purpose']} "
+              f"(mountPoint: {classification.get('mountPoint', 'N/A')})")
+
         # Select up to 20 random files for SHA256 verification
         sample_files = select_sample_files(g, all_files, count=20)
 
@@ -142,6 +162,10 @@ def scan_filesystem(g, device: str, fstype: str) -> dict | None:
             "fstype": fstype,
             "fileCount": file_count,
             "directoryCount": dir_count,
+            "purpose": classification["purpose"],
+            "isMountable": classification["isMountable"],
+            "mountPoint": classification.get("mountPoint"),
+            "expectedPaths": classification.get("expectedPaths", []),
             "sampleFiles": sample_files,
         }
 
@@ -154,10 +178,185 @@ def scan_filesystem(g, device: str, fstype: str) -> dict | None:
             pass
 
 
+def classify_filesystem(g, fstype: str) -> dict:
+    """
+    Classify a mounted filesystem by inspecting its contents.
+    Returns dict with purpose, isMountable, mountPoint, expectedPaths.
+    """
+    try:
+        # Check for root filesystem indicators
+        has_etc = g.exists('/etc')
+        has_bin = g.exists('/bin') or g.exists('/sbin')
+        has_usr = g.exists('/usr')
+        has_init = g.exists('/sbin/init') or g.exists('/usr/sbin/init')
+        has_lib = g.exists('/lib') or g.exists('/lib64') or g.exists('/usr/lib')
+
+        # Check for boot filesystem indicators
+        has_efi = g.exists('/EFI')
+        has_boot = g.exists('/boot') or g.exists('/grub')
+        is_vfat = fstype == 'vfat'
+
+        # Check for home filesystem indicators
+        has_home_root = g.exists('/home')
+        home_entries = []
+        if has_home_root:
+            try:
+                entries = g.readdir('/home')
+                home_entries = [e['name'] for e in entries if e['name'] not in ('.', '..')]
+            except:
+                pass
+        has_home_dirs = len(home_entries) > 0 and len(home_entries) < 20  # Heuristic: home has some but not too many dirs
+
+        # Check for /var filesystem
+        has_var = g.exists('/var')
+        has_var_log = g.exists('/var/log')
+        has_var_lib = g.exists('/var/lib')
+        no_usr = not has_usr  # var fs typically doesn't have /usr
+
+        # Check for /opt filesystem
+        has_opt = g.exists('/opt')
+        opt_entries = []
+        if has_opt:
+            try:
+                entries = g.readdir('/opt')
+                opt_entries = [e['name'] for e in entries if e['name'] not in ('.', '..')]
+            except:
+                pass
+        has_opt_content = len(opt_entries) > 0
+
+        # Classify based on findings
+        if has_etc and has_bin and has_usr:
+            # Strong root filesystem indicators
+            expected = ['/etc', '/bin', '/usr', '/lib']
+            if has_init:
+                expected.append('/sbin/init')
+
+            # Check for specific OS indicators
+            if g.exists('/etc/debian_version'):
+                expected.append('/etc/debian_version')
+            if g.exists('/etc/redhat-release'):
+                expected.append('/etc/redhat-release')
+            if g.exists('/etc/os-release'):
+                expected.append('/etc/os-release')
+
+            return {
+                'purpose': 'root',
+                'isMountable': True,
+                'mountPoint': '/',
+                'expectedPaths': expected
+            }
+        elif is_vfat and (has_efi or has_boot):
+            expected = []
+            if has_efi:
+                expected.append('/EFI')
+            if g.exists('/EFI/BOOT'):
+                expected.append('/EFI/BOOT')
+
+            return {
+                'purpose': 'boot',
+                'isMountable': True,
+                'mountPoint': '/boot/efi',
+                'expectedPaths': expected
+            }
+        elif has_home_root and has_home_dirs and not has_etc and not has_usr:
+            # Home filesystem - has /home with user directories, no /etc or /usr
+            return {
+                'purpose': 'home',
+                'isMountable': True,
+                'mountPoint': '/home',
+                'expectedPaths': []
+            }
+        elif has_var and (has_var_log or has_var_lib) and no_usr:
+            # /var filesystem
+            return {
+                'purpose': 'var',
+                'isMountable': True,
+                'mountPoint': '/var',
+                'expectedPaths': ['/var/log', '/var/lib']
+            }
+        elif has_opt and has_opt_content and not has_etc:
+            # /opt filesystem
+            return {
+                'purpose': 'opt',
+                'isMountable': True,
+                'mountPoint': '/opt',
+                'expectedPaths': []
+            }
+        elif not has_etc and not has_usr and not has_bin:
+            # Data filesystem - no system directories
+            return {
+                'purpose': 'data',
+                'isMountable': True,
+                'mountPoint': None,
+                'expectedPaths': []
+            }
+        else:
+            # Unknown/unclassified
+            return {
+                'purpose': 'unknown',
+                'isMountable': True,
+                'mountPoint': None,
+                'expectedPaths': []
+            }
+
+    except Exception as e:
+        print(f"    Warning: Error during classification: {e}")
+        return {
+            'purpose': 'unknown',
+            'isMountable': True,
+            'mountPoint': None,
+            'expectedPaths': [],
+            'classificationError': str(e)
+        }
+
+
+def classify_unmountable_filesystem(device: str, fstype: str) -> dict:
+    """
+    Create a ground truth entry for unmountable filesystems like swap or LUKS.
+    These are tracked for completeness but cannot be mounted/read.
+    """
+    if fstype == 'swap':
+        return {
+            'device': device,
+            'fstype': fstype,
+            'fileCount': 0,
+            'directoryCount': 0,
+            'purpose': 'swap',
+            'isMountable': False,
+            'mountPoint': None,
+            'expectedPaths': [],
+            'sampleFiles': []
+        }
+    elif fstype == 'crypto_LUKS':
+        return {
+            'device': device,
+            'fstype': fstype,
+            'fileCount': 0,
+            'directoryCount': 0,
+            'purpose': 'encrypted',
+            'isMountable': False,
+            'mountPoint': None,
+            'expectedPaths': [],
+            'sampleFiles': []
+        }
+    else:
+        return {
+            'device': device,
+            'fstype': fstype,
+            'fileCount': 0,
+            'directoryCount': 0,
+            'purpose': 'unknown',
+            'isMountable': False,
+            'mountPoint': None,
+            'expectedPaths': [],
+            'sampleFiles': []
+        }
+
+
 def walk_filesystem(g, root: str) -> dict:
     """Walk the entire filesystem tree and collect files and directories."""
     files = []
-    dirs = []
+    dirs = ["/"]  # Include root directory to match Saffron's walk() behavior
     stack = [root]
 
     while stack:

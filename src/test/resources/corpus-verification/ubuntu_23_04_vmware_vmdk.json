@@ -3,13 +3,17 @@
   "imageBasename": "ubuntu-23.04-vmware.vmdk",
   "filesystemCount": 2,
   "totalFiles": 116365,
-  "totalDirectories": 14342,
+  "totalDirectories": 14344,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "ext4",
       "fileCount": 305,
-      "directoryCount": 5,
+      "directoryCount": 6,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub/i386-pc/cmostest.mod",
@@ -117,7 +121,19 @@
       "device": "/dev/ubuntu-vg/ubuntu-lv",
       "fstype": "ext4",
       "fileCount": 116060,
-      "directoryCount": 14337,
+      "directoryCount": 14338,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/debian_version",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/icons/Yaru/16x16/legacy/epiphany-download.svg",

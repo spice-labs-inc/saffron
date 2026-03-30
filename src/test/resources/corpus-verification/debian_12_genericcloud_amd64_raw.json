@@ -3,13 +3,25 @@
   "imageBasename": "debian-12-genericcloud-amd64.raw",
   "filesystemCount": 2,
   "totalFiles": 21356,
-  "totalDirectories": 2343,
+  "totalDirectories": 2345,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "ext4",
       "fileCount": 21347,
-      "directoryCount": 2340,
+      "directoryCount": 2341,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/debian_version",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/man/de/man8/chgpasswd.8.gz",
@@ -117,7 +129,14 @@
       "device": "/dev/sda15",
       "fstype": "vfat",
       "fileCount": 9,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/BOOT/mmx64.efi",

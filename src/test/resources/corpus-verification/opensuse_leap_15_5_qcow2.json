@@ -3,13 +3,20 @@
   "imageBasename": "opensuse-leap-15.5.qcow2",
   "filesystemCount": 2,
   "totalFiles": 21401,
-  "totalDirectories": 2767,
+  "totalDirectories": 2769,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "vfat",
       "fileCount": 4,
-      "directoryCount": 2,
+      "directoryCount": 3,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/BOOT/bootx64.efi",
@@ -37,7 +44,18 @@
       "device": "/dev/sda3",
       "fstype": "xfs",
       "fileCount": 21397,
-      "directoryCount": 2765,
+      "directoryCount": 2766,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/lib/python3.6/site-packages/pyasn1/codec/ber/__pycache__/eoo.cpython-36.opt-1.pyc",

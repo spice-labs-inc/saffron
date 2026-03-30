@@ -3,13 +3,20 @@
   "imageBasename": "almalinux-9-minimal.qcow2",
   "filesystemCount": 3,
   "totalFiles": 23692,
-  "totalDirectories": 3702,
+  "totalDirectories": 3705,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "vfat",
       "fileCount": 9,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/BOOT/BOOTX64.EFI",
@@ -62,7 +69,11 @@
       "device": "/dev/sda3",
       "fstype": "xfs",
       "fileCount": 300,
-      "directoryCount": 7,
+      "directoryCount": 8,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub2/i386-pc/loopback.mod",
@@ -170,7 +181,19 @@
       "device": "/dev/sda4",
       "fstype": "xfs",
       "fileCount": 23383,
-      "directoryCount": 3692,
+      "directoryCount": 3693,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/redhat-release",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/lib/kbd/keymaps/xkb/fr-bre.map.gz",

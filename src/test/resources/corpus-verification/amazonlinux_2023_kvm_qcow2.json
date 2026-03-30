@@ -3,13 +3,24 @@
   "imageBasename": "amazonlinux-2023-kvm.qcow2",
   "filesystemCount": 2,
   "totalFiles": 39412,
-  "totalDirectories": 5015,
+  "totalDirectories": 5017,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "xfs",
       "fileCount": 39410,
-      "directoryCount": 5012,
+      "directoryCount": 5013,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/lib/python3.9/site-packages/awscli/examples/budgets/describe-notifications-for-budget.rst",
@@ -117,7 +128,14 @@
       "device": "/dev/sda128",
       "fstype": "vfat",
       "fileCount": 2,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/BOOT/BOOTX64.EFI",

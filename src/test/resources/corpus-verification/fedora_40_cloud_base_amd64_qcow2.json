@@ -3,13 +3,20 @@
   "imageBasename": "fedora-40-cloud-base-amd64.qcow2",
   "filesystemCount": 6,
   "totalFiles": 52850,
-  "totalDirectories": 10872,
+  "totalDirectories": 10878,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "vfat",
       "fileCount": 17,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/fedora/mmia32.efi",
@@ -102,7 +109,11 @@
       "device": "/dev/sda3",
       "fstype": "ext4",
       "fileCount": 637,
-      "directoryCount": 10,
+      "directoryCount": 11,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub2/x86_64-efi/tr.mod",
@@ -210,7 +221,14 @@
       "device": "/dev/sda4",
       "fstype": "btrfs",
       "fileCount": 26098,
-      "directoryCount": 5431,
+      "directoryCount": 5432,
+      "purpose": "var",
+      "isMountable": true,
+      "mountPoint": "/var",
+      "expectedPaths": [
+        "/var/log",
+        "/var/lib"
+      ],
       "sampleFiles": [
         {
           "path": "/root/usr/share/bash-completion/completions/tss2_getappdata",
@@ -318,14 +336,30 @@
       "device": "btrfsvol:/dev/sda4/home",
       "fstype": "btrfs",
       "fileCount": 0,
-      "directoryCount": 0,
+      "directoryCount": 1,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": []
     },
     {
       "device": "btrfsvol:/dev/sda4/root",
       "fstype": "btrfs",
       "fileCount": 24760,
-      "directoryCount": 4905,
+      "directoryCount": 4906,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/redhat-release",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/licenses/exfatprogs/COPYING",
@@ -433,7 +467,11 @@
       "device": "btrfsvol:/dev/sda4/var",
       "fstype": "btrfs",
       "fileCount": 1338,
-      "directoryCount": 523,
+      "directoryCount": 524,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/lib/selinux/targeted/active/modules/100/rkt/hll",

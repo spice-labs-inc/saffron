@@ -87,8 +87,8 @@ public final class FileSystemMount {
         if (tableOpt.isPresent()) {
             // Scan partitions for filesystems
             for (Partition p : tableOpt.get().partitions()) {
-                // Skip tiny partitions
-                if (p.sizeInSectors() < 200) continue;
+                // Skip tiny partitions (but allow small EFI System Partitions, ~50MB minimum)
+                if (p.sizeInSectors() < 100) continue;
 
                 long offset = p.startLba() * 512;
                 Optional<FilesystemInfo> fsInfo = FilesystemDetector.detect(disk, offset);
@@ -160,6 +160,7 @@ public final class FileSystemMount {
             case BTRFS -> BtrfsFileSystemImpl.mount(disk, offset);
             case HFS_PLUS -> HfsPlusFileSystemImpl.mount(disk, offset);
             case APFS -> ApfsFileSystemImpl.mount(disk, offset);
+            case SWAP -> throw new UnsupportedOperationException("Swap partitions cannot be mounted as filesystems");
             case UNKNOWN -> throw new UnsupportedOperationException("Unknown filesystem type");
         };
     }
@@ -335,6 +336,7 @@ public final class FileSystemMount {
             case BTRFS -> BtrfsFileSystemImpl.mount(region, 0);
             case HFS_PLUS -> HfsPlusFileSystemImpl.mount(region);
             case APFS -> ApfsFileSystemImpl.mount(region);
+            case SWAP -> throw new UnsupportedOperationException("Swap partitions cannot be mounted as filesystems");
             case UNKNOWN -> throw new UnsupportedOperationException("Unknown filesystem type");
         };
     }
@@ -403,8 +405,65 @@ public final class FileSystemMount {
      * @return list of all mounted filesystems (caller must close each one)
      * @throws IOException if an I/O error occurs
      */
+    /**
+     * Information about a detected filesystem that couldn't be mounted.
+     * Used for filesystems like swap that are detected but not mountable.
+     */
+    public record DetectedFilesystemInfo(
+            @NotNull String device,
+            @NotNull FileSystem.FileSystemType type,
+            long size
+    ) {}
+
+    /**
+     * Result of mountAll containing both mounted filesystems and detected but unmountable filesystems.
+     */
+    public record MountAllResult(
+            @NotNull List<FileSystem> mounted,
+            @NotNull List<DetectedFilesystemInfo> detected
+    ) {
+        public MountAllResult {
+            Objects.requireNonNull(mounted, "mounted must not be null");
+            Objects.requireNonNull(detected, "detected must not be null");
+        }
+
+        /**
+         * Returns the total filesystem count including both mounted and detected.
+         */
+        public int totalFilesystemCount() {
+            return mounted.size() + detected.size();
+        }
+    }
+
+    /**
+     * Mounts ALL filesystems in the disk, including LVM volumes.
+     *
+     * <p>This always returns every mountable filesystem found in the disk,
+     * regardless of whether LVM is present. For LVM disks, it returns both
+     * non-LVM partitions (e.g. /boot) and all LVM logical volumes.
+     * For non-LVM disks, it returns all partition filesystems.
+     *
+     * <p>Swap partitions are detected but not mounted (they can't be mounted as filesystems).
+     *
+     * @param disk the virtual disk
+     * @return list of all mounted filesystems (caller must close each one)
+     * @throws IOException if an I/O error occurs
+     */
     public static @NotNull List<FileSystem> mountAll(@NotNull VirtualDisk disk) throws IOException {
+        return mountAllWithDetected(disk).mounted();
+    }
+
+    /**
+     * Mounts ALL filesystems in the disk, including LVM volumes, and returns both
+     * mounted filesystems and detected but unmountable filesystems (like swap).
+     *
+     * @param disk the virtual disk
+     * @return MountAllResult containing mounted filesystems and detected unmountable filesystems
+     * @throws IOException if an I/O error occurs
+     */
+    public static @NotNull MountAllResult mountAllWithDetected(@NotNull VirtualDisk disk) throws IOException {
         List<FileSystem> mounted = new ArrayList<>();
+        List<DetectedFilesystemInfo> detected = new ArrayList<>();
 
         // Mount all regular partition filesystems
         for (FilesystemLocation fl : findFilesystems(disk)) {
@@ -412,6 +471,10 @@ public final class FileSystemMount {
                 if (fl.info().type() == FileSystem.FileSystemType.BTRFS) {
                     DiskRegion region = DiskRegion.fromPartition(disk, fl.offset(), 0);
                     mounted.addAll(BtrfsFileSystemImpl.mountWithSubvolumes(region, 0));
+                } else if (fl.info().type() == FileSystem.FileSystemType.SWAP) {
+                    // Swap is detected but not mountable
+                    String device = fl.partition().map(p -> "partition-" + p.startLba()).orElse("unknown");
+                    detected.add(new DetectedFilesystemInfo(device, FileSystem.FileSystemType.SWAP, fl.info().totalSize()));
                 } else {
                     mounted.add(mount(disk, fl));
                 }
@@ -425,6 +488,13 @@ public final class FileSystemMount {
             try {
                 if (lfl.info().type() == FileSystem.FileSystemType.BTRFS) {
                     mounted.addAll(BtrfsFileSystemImpl.mountWithSubvolumes(lfl.logicalVolume(), 0));
+                } else if (lfl.info().type() == FileSystem.FileSystemType.SWAP) {
+                    // Swap LV is detected but not mountable
+                    detected.add(new DetectedFilesystemInfo(
+                            lfl.logicalVolume().name(),
+                            FileSystem.FileSystemType.SWAP,
+                            lfl.info().totalSize()
+                    ));
                 } else {
                     mounted.add(mount(lfl));
                 }
@@ -433,7 +503,7 @@ public final class FileSystemMount {
             }
         }
 
-        return mounted;
+        return new MountAllResult(mounted, detected);
     }
 
     /**

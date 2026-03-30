@@ -3,13 +3,25 @@
   "imageBasename": "debian-11-nocloud.qcow2",
   "filesystemCount": 2,
   "totalFiles": 19951,
-  "totalDirectories": 2612,
+  "totalDirectories": 2614,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "ext4",
       "fileCount": 19943,
-      "directoryCount": 2609,
+      "directoryCount": 2610,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/debian_version",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/lib/python3.9/uu.py",
@@ -117,7 +129,14 @@
       "device": "/dev/sda15",
       "fstype": "vfat",
       "fileCount": 8,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/debian/grubx64.efi",

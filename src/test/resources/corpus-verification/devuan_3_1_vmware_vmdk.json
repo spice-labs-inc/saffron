@@ -1,15 +1,19 @@
 {
   "imagePath": "/corpus/vmdk/modern/devuan-3.1-vmware.vmdk",
   "imageBasename": "devuan-3.1-vmware.vmdk",
-  "filesystemCount": 5,
+  "filesystemCount": 6,
   "totalFiles": 108389,
-  "totalDirectories": 14045,
+  "totalDirectories": 14050,
   "filesystems": [
     {
       "device": "/dev/devuan310-vg/home",
       "fstype": "ext4",
       "fileCount": 80,
-      "directoryCount": 34,
+      "directoryCount": 35,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/devuan/.config/pulse/6264b3a603a9527b5edd3bd560541438-default-source",
@@ -117,7 +121,19 @@
       "device": "/dev/devuan310-vg/root",
       "fstype": "ext4",
       "fileCount": 101924,
-      "directoryCount": 13770,
+      "directoryCount": 13771,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/debian_version",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/icons/Adwaita/16x16/emotes/face-kiss-symbolic.symbolic.png",
@@ -225,14 +241,22 @@
       "device": "/dev/devuan310-vg/tmp",
       "fstype": "ext4",
       "fileCount": 0,
-      "directoryCount": 4,
+      "directoryCount": 5,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": []
     },
     {
       "device": "/dev/devuan310-vg/var",
       "fstype": "ext4",
       "fileCount": 6061,
-      "directoryCount": 232,
+      "directoryCount": 233,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/cache/apparmor/ea9ed67a.0/usr.lib.libreoffice.program.oosplash",
@@ -340,7 +364,11 @@
       "device": "/dev/sda1",
       "fstype": "ext2",
       "fileCount": 324,
-      "directoryCount": 5,
+      "directoryCount": 6,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/grub/i386-pc/hwmatch.mod",
@@ -443,6 +471,17 @@
           "sha256": "91aea03ac1ab749ab5ba7e7e50f1d02f10a551e07035b99ee9f874c07698d250"
         }
       ]
+    },
+    {
+      "device": "/dev/devuan310-vg/swap_1",
+      "fstype": "swap",
+      "fileCount": 0,
+      "directoryCount": 0,
+      "purpose": "swap",
+      "isMountable": false,
+      "mountPoint": null,
+      "expectedPaths": [],
+      "sampleFiles": []
     }
   ]
 }

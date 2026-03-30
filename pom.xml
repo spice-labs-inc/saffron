@@ -66,8 +66,8 @@
 
         <!-- Corpus download -->
         <skipCorpusDownload>false</skipCorpusDownload>
-        <saffron.corpus.mode>ci</saffron.corpus.mode>
-        <saffron.corpus.maxSizeGb>2</saffron.corpus.maxSizeGb>
+        <saffron.corpus.mode>full</saffron.corpus.mode>
+        <saffron.corpus.maxSizeGb>0</saffron.corpus.maxSizeGb>
 
         <!-- Plugin versions -->
         <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
@@ -264,7 +264,7 @@
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <parallel>classes</parallel>
-                    <threadCount>4</threadCount>
+                    <threadCount>20</threadCount>
                     <perCoreThreadCount>true</perCoreThreadCount>
                     <forkedProcessExitTimeoutInSeconds>300</forkedProcessExitTimeoutInSeconds>
                     <argLine>@{argLine} -Xmx2g</argLine>

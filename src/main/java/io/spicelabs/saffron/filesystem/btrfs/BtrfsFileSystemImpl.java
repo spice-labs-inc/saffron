@@ -36,9 +36,16 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
     private final long fsTreeRoot;
     private final long rootTreeRoot;
     private final Map<Long, Long> subvolumeTreeRoots = new HashMap<>();
+    private final long subvolumeObjectId;
+    private String subvolumeName;
 
     private BtrfsFileSystemImpl(DiskRegion region, long partitionOffset, BtrfsSuperblock superblock,
                                  BtrfsChunkTree chunkTree, long fsTreeRoot, long rootTreeRoot) {
+        this(region, partitionOffset, superblock, chunkTree, fsTreeRoot, rootTreeRoot, 0);
+    }
+
+    private BtrfsFileSystemImpl(DiskRegion region, long partitionOffset, BtrfsSuperblock superblock,
+                                 BtrfsChunkTree chunkTree, long fsTreeRoot, long rootTreeRoot, long subvolumeObjectId) {
         this.region = region;
         this.partitionOffset = partitionOffset;
         this.superblock = superblock;
@@ -46,6 +53,7 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
         this.treeReader = new BtrfsTreeReader(chunkTree, superblock.nodeSize());
         this.fsTreeRoot = fsTreeRoot;
         this.rootTreeRoot = rootTreeRoot;
+        this.subvolumeObjectId = subvolumeObjectId;
     }
 
     /**
@@ -105,8 +113,11 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
             if (treeRoot == 0) continue;
 
             try {
-                all.add(new BtrfsFileSystemImpl(region, offset, main.superblock,
-                        main.chunkTree, treeRoot, main.rootTreeRoot));
+                BtrfsFileSystemImpl subvol = new BtrfsFileSystemImpl(region, offset, main.superblock,
+                        main.chunkTree, treeRoot, main.rootTreeRoot, objId);
+                // Try to find the subvolume name from DIR_ITEM entries
+                subvol.subvolumeName = main.findSubvolumeName(objId);
+                all.add(subvol);
             } catch (Exception e) {
                 // Skip subvolumes that fail to mount
             }
@@ -153,6 +164,49 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
         long treeRoot = buf.getLong();
         subvolumeTreeRoots.put(subvolumeObjectId, treeRoot);
         return treeRoot;
+    }
+
+    /**
+     * Finds the name of a subvolume by looking up its ROOT_BACKREF entry in the ROOT_TREE.
+     * ROOT_BACKREF structure: key = (subvol_objectid, ROOT_BACKREF, ROOT_TREE_OBJECTID)
+     * data = dirid(8) + sequence(8) + name_len(2) + name
+     */
+    private String findSubvolumeName(long subvolumeObjectId) {
+        try {
+            // Search ROOT_BACKREF entries in the ROOT_TREE
+            List<BtrfsTreeReader.SearchResult> backrefs = treeReader.search(
+                    rootTreeRoot, subvolumeObjectId, BtrfsKey.ROOT_BACKREF);
+
+            for (BtrfsTreeReader.SearchResult result : backrefs) {
+                byte[] data = result.data();
+                // ROOT_BACKREF data: dirid(8) + sequence(8) + name_len(2) + name
+                if (data.length < 18) continue;
+
+                ByteBuffer buf = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
+                buf.getLong(); // skip dirid
+                buf.getLong(); // skip sequence
+                int nameLen = buf.getShort() & 0xFFFF;
+
+                if (nameLen > 0 && nameLen < 1024 && buf.remaining() >= nameLen) {
+                    byte[] nameBytes = new byte[nameLen];
+                    buf.get(nameBytes);
+                    return new String(nameBytes, java.nio.charset.StandardCharsets.UTF_8);
+                }
+            }
+        } catch (Exception e) {
+            // Ignore errors during name lookup
+        }
+        return null;
+    }
+
+    @Override
+    public long subvolumeObjectId() {
+        return subvolumeObjectId;
+    }
+
+    @Override
+    public Optional<String> subvolumeName() {
+        return Optional.ofNullable(subvolumeName);
     }
 
     @Override
@@ -214,6 +268,13 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
 
     @Override
     public @NotNull Optional<FileSystemEntry> resolve(@NotNull String path) throws IOException {
+        return resolve(path, 40); // Max 40 symlink hops
+    }
+
+    /**
+     * Resolves a path, following symbolic links up to maxSymlinkHops.
+     */
+    private @NotNull Optional<FileSystemEntry> resolve(@NotNull String path, int maxSymlinkHops) throws IOException {
         if (!path.startsWith("/")) {
             throw new IllegalArgumentException("Path must be absolute: " + path);
         }
@@ -224,7 +285,8 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
         String[] parts = path.substring(1).split("/");
         FileSystemEntry current = root();
 
-        for (String part : parts) {
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i];
             if (part.isEmpty()) continue;
             if (!(current instanceof FileSystemEntry.Directory dir)) {
                 return Optional.empty();
@@ -234,8 +296,69 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
                 return Optional.empty();
             }
             current = child.get();
+
+            // If this is a symlink, resolve it
+            if (current instanceof FileSystemEntry.SymbolicLink symlink) {
+                if (maxSymlinkHops <= 0) {
+                    return Optional.empty(); // Too many symlink hops
+                }
+
+                String target = symlink.target();
+                String remainingPath = String.join("/", Arrays.copyOfRange(parts, i + 1, parts.length));
+
+                String resolvedTarget;
+                if (target.startsWith("/")) {
+                    // Absolute symlink target
+                    resolvedTarget = target;
+                } else {
+                    // Relative symlink target - resolve relative to current directory
+                    String currentDir = dir.path();
+                    if (!currentDir.endsWith("/")) {
+                        currentDir = currentDir + "/";
+                    }
+                    resolvedTarget = currentDir + target;
+                }
+
+                // Append remaining path components
+                if (!remainingPath.isEmpty()) {
+                    resolvedTarget = resolvedTarget + "/" + remainingPath;
+                }
+
+                // Normalize the path (remove . and ..)
+                resolvedTarget = normalizePath(resolvedTarget);
+
+                // Recursively resolve the symlink target
+                return resolve(resolvedTarget, maxSymlinkHops - 1);
+            }
         }
         return Optional.of(current);
+    }
+
+    /**
+     * Normalizes a path by removing . and .. components.
+     */
+    private String normalizePath(String path) {
+        if (path.equals("/")) {
+            return "/";
+        }
+
+        String[] parts = path.split("/");
+        List<String> result = new ArrayList<>();
+
+        for (String part : parts) {
+            if (part.isEmpty() || ".".equals(part)) {
+                continue;
+            }
+            if ("..".equals(part)) {
+                if (!result.isEmpty()) {
+                    result.remove(result.size() - 1);
+                }
+            } else {
+                result.add(part);
+            }
+        }
+
+        return "/" + String.join("/", result);
     }
 
     @Override

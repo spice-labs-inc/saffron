@@ -3,13 +3,20 @@
   "imageBasename": "opensuse-leap-15.6.qcow2",
   "filesystemCount": 2,
   "totalFiles": 49626,
-  "totalDirectories": 5983,
+  "totalDirectories": 5985,
   "filesystems": [
     {
       "device": "/dev/sda2",
       "fstype": "vfat",
       "fileCount": 4,
-      "directoryCount": 2,
+      "directoryCount": 3,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/BOOT/bootx64.efi",
@@ -37,7 +44,18 @@
       "device": "/dev/sda3",
       "fstype": "xfs",
       "fileCount": 49622,
-      "directoryCount": 5981,
+      "directoryCount": 5982,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/terminfo/a/avt-w",

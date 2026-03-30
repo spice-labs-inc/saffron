@@ -156,15 +156,14 @@ public record GptPartitionTable(
         ByteBuffer entriesBuffer = disk.read(entriesOffset, totalEntriesSize);
         entriesBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
-        int partitionIndex = 0;
         for (int i = 0; i < numEntries; i++) {
             int entryOffset = i * entrySize;
             entriesBuffer.position(entryOffset);
 
-            Optional<GptPartition> partitionOpt = parsePartitionEntry(entriesBuffer, partitionIndex, entrySize);
+            // Use i as the partition index so it matches Linux device naming (sda1 = entry 0)
+            Optional<GptPartition> partitionOpt = parsePartitionEntry(entriesBuffer, i, entrySize);
             if (partitionOpt.isPresent()) {
                 partitions.add(partitionOpt.get());
-                partitionIndex++;
             }
         }
 

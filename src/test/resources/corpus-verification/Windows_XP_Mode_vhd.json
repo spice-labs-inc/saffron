@@ -3,13 +3,17 @@
   "imageBasename": "Windows XP Mode.vhd",
   "filesystemCount": 1,
   "totalFiles": 8339,
-  "totalDirectories": 1054,
+  "totalDirectories": 1055,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "ntfs",
       "fileCount": 8339,
-      "directoryCount": 1054,
+      "directoryCount": 1055,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/WINDOWS/system32/mui/0427/xpsp1res.dll",

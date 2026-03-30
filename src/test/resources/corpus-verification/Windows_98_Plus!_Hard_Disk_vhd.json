@@ -2,14 +2,18 @@
   "imagePath": "/corpus/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/Windows 98 Plus! Hard Disk.vhd",
   "imageBasename": "Windows 98 Plus! Hard Disk.vhd",
   "filesystemCount": 1,
-  "totalFiles": 4738,
+  "totalFiles": 4733,
   "totalDirectories": 260,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "vfat",
-      "fileCount": 4738,
+      "fileCount": 4733,
       "directoryCount": 260,
+      "purpose": "data",
+      "isMountable": true,
+      "mountPoint": null,
+      "expectedPaths": [],
       "sampleFiles": [
         {
           "path": "/WINDOWS/Desktop/Online Services/America Online.lnk",

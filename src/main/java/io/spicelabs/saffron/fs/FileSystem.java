@@ -141,6 +141,7 @@ public sealed interface FileSystem extends Closeable
         BTRFS("btrfs", "Linux Btrfs filesystem"),
         HFS_PLUS("hfsplus", "macOS HFS+ filesystem"),
         APFS("apfs", "macOS APFS filesystem"),
+        SWAP("swap", "Linux swap partition"),
         UNKNOWN("unknown", "Unknown filesystem type");
 
         private final String name;
@@ -239,6 +240,19 @@ public sealed interface FileSystem extends Closeable
          * Returns the FAT type (FAT12, FAT16, FAT32).
          */
         @NotNull String fatType();
+
+        /**
+         * Returns file counts for this FAT filesystem.
+         * FAT filesystems may have hidden+system files that are excluded by some tools.
+         *
+         * @return FatFileCounts containing total and visible file counts
+         */
+        @NotNull FatFileCounts fileCounts() throws IOException;
+
+        /**
+         * File counts for FAT filesystems.
+         */
+        record FatFileCounts(long totalFiles, long hiddenSystemFiles, long visibleFiles) {}
     }
 
     /**
@@ -309,6 +323,20 @@ public sealed interface FileSystem extends Closeable
          * Returns the Btrfs generation number.
          */
         long generation();
+
+        /**
+         * Returns the subvolume object ID for this filesystem instance.
+         * Returns 0 for the main FS_TREE (default subvolume).
+         */
+        long subvolumeObjectId();
+
+        /**
+         * Returns the subvolume name if this is a subvolume instance and
+         * the name could be determined.
+         *
+         * @return the subvolume name, or empty if not available
+         */
+        @NotNull Optional<String> subvolumeName();
     }
 
     /**

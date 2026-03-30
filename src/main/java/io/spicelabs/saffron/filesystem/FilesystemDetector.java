@@ -100,6 +100,9 @@ public final class FilesystemDetector {
         result = tryDetectApfs(disk, offset);
         if (result.isPresent()) return result;
 
+        result = tryDetectSwap(disk, offset);
+        if (result.isPresent()) return result;
+
         return Optional.empty();
     }
 
@@ -150,6 +153,9 @@ public final class FilesystemDetector {
         if (result.isPresent()) return result;
 
         result = tryDetectApfsFromRegion(region);
+        if (result.isPresent()) return result;
+
+        result = tryDetectSwapFromRegion(region);
         if (result.isPresent()) return result;
 
         return Optional.empty();
@@ -967,6 +973,93 @@ public final class FilesystemDetector {
                 blockSize,
                 0
         ));
+    }
+
+    // ========================================================================
+    // Swap detection
+    // ========================================================================
+
+    /**
+     * Tries to detect a Linux swap partition.
+     *
+     * <p>Linux swap signatures:
+     * <ul>
+     *   <li>Old swap (v1): "SWAP-SPACE" at offset 4086 (for 4k page) or 1022 (for 1k page)</li>
+     *   <li>New swap (v2): "SWAPSPACE2" at offset 4086 (for 4k page) or 1022 (for 1k page)</li>
+     * </ul>
+     */
+    private static Optional<FilesystemInfo> tryDetectSwap(VirtualDisk disk, long offset)
+            throws IOException {
+        // Check for swap at both 1k and 4k page offsets
+        long[] signatureOffsets = {offset + 1022, offset + 4086};
+
+        for (long sigOffset : signatureOffsets) {
+            if (disk.virtualSize() < sigOffset + 10) {
+                continue;
+            }
+
+            ByteBuffer buf = disk.read(sigOffset, 10);
+            byte[] magic = new byte[10];
+            buf.get(magic);
+
+            String magicStr = new String(magic, StandardCharsets.US_ASCII);
+            if (magicStr.equals("SWAP-SPACE") || magicStr.equals("SWAPSPACE2")) {
+                // Determine swap version
+                String version = magicStr.equals("SWAPSPACE2") ? "v2" : "v1";
+
+                // Calculate total size from partition/LV size
+                long totalSize = disk.virtualSize() - offset;
+
+                return Optional.of(new FilesystemInfo(
+                        FileSystemType.SWAP,
+                        version,
+                        Optional.empty(),
+                        Optional.empty(),
+                        totalSize,
+                        0,
+                        totalSize,
+                        4096, // Swap typically uses page size
+                        0
+                ));
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    private static Optional<FilesystemInfo> tryDetectSwapFromRegion(DiskRegion region) throws IOException {
+        // Check for swap at both 1k and 4k page offsets
+        long[] signatureOffsets = {1022, 4086};
+
+        for (long sigOffset : signatureOffsets) {
+            if (region.size() < sigOffset + 10) {
+                continue;
+            }
+
+            ByteBuffer buf = region.read(sigOffset, 10);
+            byte[] magic = new byte[10];
+            buf.get(magic);
+
+            String magicStr = new String(magic, StandardCharsets.US_ASCII);
+            if (magicStr.equals("SWAP-SPACE") || magicStr.equals("SWAPSPACE2")) {
+                String version = magicStr.equals("SWAPSPACE2") ? "v2" : "v1";
+                long totalSize = region.size();
+
+                return Optional.of(new FilesystemInfo(
+                        FileSystemType.SWAP,
+                        version,
+                        Optional.empty(),
+                        Optional.empty(),
+                        totalSize,
+                        0,
+                        totalSize,
+                        4096,
+                        0
+                ));
+            }
+        }
+
+        return Optional.empty();
     }
 
     private static Optional<FilesystemInfo> parseBtrfsSuperblock(ByteBuffer sb) {

@@ -137,6 +137,13 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
 
     @Override
     public @NotNull Optional<FileSystemEntry> resolve(@NotNull String path) throws IOException {
+        return resolve(path, 40); // Max 40 symlink hops
+    }
+
+    /**
+     * Resolves a path, following symbolic links up to maxSymlinkHops.
+     */
+    private @NotNull Optional<FileSystemEntry> resolve(@NotNull String path, int maxSymlinkHops) throws IOException {
         if (!path.startsWith("/")) {
             throw new IllegalArgumentException("Path must be absolute: " + path);
         }
@@ -148,7 +155,8 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
         String[] parts = path.substring(1).split("/");
         FileSystemEntry current = root();
 
-        for (String part : parts) {
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i];
             if (part.isEmpty()) continue;
 
             if (!(current instanceof FileSystemEntry.Directory dir)) {
@@ -160,9 +168,71 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
                 return Optional.empty();
             }
             current = next.get();
+
+            // If this is a symlink, resolve it
+            if (current instanceof FileSystemEntry.SymbolicLink symlink) {
+                if (maxSymlinkHops <= 0) {
+                    System.err.println("  Symlink depth exceeded: " + path);
+                    return Optional.empty(); // Too many symlink hops
+                }
+
+                String target = symlink.target();
+                String remainingPath = String.join("/", Arrays.copyOfRange(parts, i + 1, parts.length));
+
+                String resolvedTarget;
+                if (target.startsWith("/")) {
+                    // Absolute symlink target
+                    resolvedTarget = target;
+                } else {
+                    // Relative symlink target - resolve relative to current directory
+                    String currentDir = dir.path();
+                    if (!currentDir.endsWith("/")) {
+                        currentDir = currentDir + "/";
+                    }
+                    resolvedTarget = currentDir + target;
+                }
+
+                // Append remaining path components
+                if (!remainingPath.isEmpty()) {
+                    resolvedTarget = resolvedTarget + "/" + remainingPath;
+                }
+
+                // Normalize the path (remove . and ..)
+                resolvedTarget = normalizePath(resolvedTarget);
+
+                // Recursively resolve the symlink target
+                return resolve(resolvedTarget, maxSymlinkHops - 1);
+            }
         }
 
         return Optional.of(current);
+    }
+
+    /**
+     * Normalizes a path by removing . and .. components.
+     */
+    private String normalizePath(String path) {
+        if (path.equals("/")) {
+            return "/";
+        }
+
+        String[] parts = path.split("/");
+        List<String> result = new ArrayList<>();
+
+        for (String part : parts) {
+            if (part.isEmpty() || ".".equals(part)) {
+                continue;
+            }
+            if ("..".equals(part)) {
+                if (!result.isEmpty()) {
+                    result.remove(result.size() - 1);
+                }
+            } else {
+                result.add(part);
+            }
+        }
+
+        return "/" + String.join("/", result);
     }
 
     @Override

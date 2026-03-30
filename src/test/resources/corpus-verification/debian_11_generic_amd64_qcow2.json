@@ -3,13 +3,25 @@
   "imageBasename": "debian-11-generic-amd64.qcow2",
   "filesystemCount": 2,
   "totalFiles": 23067,
-  "totalDirectories": 2870,
+  "totalDirectories": 2872,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "ext4",
       "fileCount": 23059,
-      "directoryCount": 2867,
+      "directoryCount": 2868,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/debian_version",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/share/zoneinfo/Australia/Perth",
@@ -117,7 +129,14 @@
       "device": "/dev/sda15",
       "fstype": "vfat",
       "fileCount": 8,
-      "directoryCount": 3,
+      "directoryCount": 4,
+      "purpose": "boot",
+      "isMountable": true,
+      "mountPoint": "/boot/efi",
+      "expectedPaths": [
+        "/EFI",
+        "/EFI/BOOT"
+      ],
       "sampleFiles": [
         {
           "path": "/EFI/debian/grubx64.efi",

@@ -3,13 +3,24 @@
   "imageBasename": "amazonlinux-2-kvm.qcow2",
   "filesystemCount": 1,
   "totalFiles": 38529,
-  "totalDirectories": 4822,
+  "totalDirectories": 4823,
   "filesystems": [
     {
       "device": "/dev/sda1",
       "fstype": "xfs",
       "fileCount": 38529,
-      "directoryCount": 4822,
+      "directoryCount": 4823,
+      "purpose": "root",
+      "isMountable": true,
+      "mountPoint": "/",
+      "expectedPaths": [
+        "/etc",
+        "/bin",
+        "/usr",
+        "/lib",
+        "/sbin/init",
+        "/etc/os-release"
+      ],
       "sampleFiles": [
         {
           "path": "/usr/lib/python2.7/site-packages/awscli/examples/chime/get-global-settings.rst",
