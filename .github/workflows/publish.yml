@@ -88,13 +88,13 @@ jobs:
           mvn versions:set -DnewVersion=${{ steps.version.outputs.version }} -DgenerateBackupPoms=false
 
       - name: Build and publish to GitHub Packages
-        run: mvn --batch-mode clean deploy -P github -DskipCorpusDownload=true
+        run: mvn --batch-mode clean deploy -P github -DskipTests -DskipCorpusDownload=true
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           GPG_PASSPHRASE: ${{ secrets.MAVEN_CENTRAL_GPG_PASSPHRASE }}
 
       - name: Build and publish to Maven Central
-        run: mvn --batch-mode clean deploy -P maven-central -DskipCorpusDownload=true
+        run: mvn --batch-mode clean deploy -P maven-central -DskipTests -DskipCorpusDownload=true
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           GPG_PASSPHRASE: ${{ secrets.MAVEN_CENTRAL_GPG_PASSPHRASE }}
