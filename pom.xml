@@ -264,8 +264,9 @@
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <parallel>classes</parallel>
-                    <threadCount>20</threadCount>
-                    <perCoreThreadCount>true</perCoreThreadCount>
+                    <threadCount>4</threadCount>
+                    <perCoreThreadCount>false</perCoreThreadCount>
+                    <reuseForks>true</reuseForks>
                     <forkedProcessExitTimeoutInSeconds>300</forkedProcessExitTimeoutInSeconds>
                     <argLine>@{argLine} -Xmx2g</argLine>
                 </configuration>
