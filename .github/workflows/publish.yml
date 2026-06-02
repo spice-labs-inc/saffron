@@ -28,7 +28,7 @@ jobs:
           github-token: ${{ github.token }}
 
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Extract and Validate Version
         id: version
@@ -110,7 +110,7 @@ jobs:
   notify:
     needs: [publish_jars]
     if: always()
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check deployment status
         id: deployment-status
