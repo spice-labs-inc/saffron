@@ -32,8 +32,11 @@ jobs:
 
       - name: Extract and Validate Version
         id: version
+        env:
+          # tag_name is "vX.Y.Z" (no refs/tags/ prefix) for the release event.
+          TAG_NAME: ${{ github.event.release.tag_name }}
         run: |
-          TAG="${GITHUB_REF#refs/tags/}"
+          TAG="${TAG_NAME}"
           if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "Error: Tag '$TAG' does not match semantic versioning (vX.Y.Z)"
             exit 1
