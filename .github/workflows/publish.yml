@@ -28,7 +28,7 @@ jobs:
           github-token: ${{ github.token }}
 
       - name: Checkout Code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Extract and Validate Version
         id: version
@@ -46,7 +46,7 @@ jobs:
           echo "Validated version: $VERSION"
 
       - name: Set up JDK 21 and GitHub Maven auth
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version: "21"
@@ -103,7 +103,7 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.MAVEN_CENTRAL_GPG_PASSPHRASE }}
 
       - name: Upload JAR to Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             target/saffron-${{ steps.version.outputs.version }}.jar
