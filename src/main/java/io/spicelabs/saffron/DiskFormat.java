@@ -163,10 +163,21 @@ public enum DiskFormat {
             }
         }
 
-        // Try magic byte detection
+        // Try magic byte detection. Note: gzip magic no longer maps to GCP here.
         Optional<DiskFormat> byMagic = detect(header);
         if (byMagic.isPresent()) {
             return byMagic;
+        }
+
+        // GCP is detected by extension rather than magic because a .gz file could
+        // be a compressed single payload, a raw disk image, or a GCP tar archive.
+        String lower = path.getFileName().toString().toLowerCase();
+        if (lower.endsWith(".tar.gz") || lower.endsWith(".tgz")) {
+            return Optional.of(GCP);
+        }
+        // Compressed raw disk images are still raw disks, handled by openRaw().
+        if (lower.endsWith(".img.gz") || lower.endsWith(".raw.gz")) {
+            return Optional.of(RAW);
         }
 
         // VHD has magic at end of file - special case
@@ -213,10 +224,10 @@ public enum DiskFormat {
             return Optional.of(VHDX);
         }
 
-        // GCP: gzip magic (0x1f 0x8b)
-        if (magic[0] == 0x1f && magic[1] == (byte) 0x8b) {
-            return Optional.of(GCP);
-        }
+        // GCP is intentionally NOT detected by gzip magic alone. A .gz file is a
+        // compressed single payload (ContainerFormat.COMPRESSED_SINGLE), not a GCP
+        // disk image. GCP is detected from the .tar.gz / .tgz extension in
+        // detect(Path) and detectByExtension().
 
         // VDI: check signature at offset - need more bytes
         // This is a simplified check; full implementation needs offset 0x40
@@ -247,11 +258,15 @@ public enum DiskFormat {
         if (lower.endsWith(".vdi")) {
             return Optional.of(VDI);
         }
-        if (lower.endsWith(".raw") || lower.endsWith(".img") || lower.endsWith(".dmg")) {
+        if (lower.endsWith(".raw") || lower.endsWith(".img") || lower.endsWith(".dmg")
+                || lower.endsWith(".squashfs")) {
             return Optional.of(RAW);
         }
-        if (lower.endsWith(".tar.gz") && lower.contains("disk")) {
+        if (lower.endsWith(".tar.gz") || lower.endsWith(".tgz")) {
             return Optional.of(GCP);
+        }
+        if (lower.endsWith(".img.gz") || lower.endsWith(".raw.gz")) {
+            return Optional.of(RAW);
         }
         if (lower.endsWith(".manifest.xml")) {
             return Optional.of(AMI);

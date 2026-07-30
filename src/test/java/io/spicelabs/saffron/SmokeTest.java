@@ -202,9 +202,11 @@ class SmokeTest {
 
     @Test
     void fileSystemTypeEnumExists() {
-        assertThat(FileSystem.FileSystemType.values()).hasSize(10);
+        assertThat(FileSystem.FileSystemType.values()).hasSize(12);
         assertThat(FileSystem.FileSystemType.EXT4.getName()).isEqualTo("ext4");
         assertThat(FileSystem.FileSystemType.NTFS.getDescription()).contains("NTFS");
+        assertThat(FileSystem.FileSystemType.SQUASHFS.getName()).isEqualTo("squashfs");
+        assertThat(FileSystem.FileSystemType.BINARY_CONTAINER.getName()).isEqualTo("binary_container");
     }
 
     @Test

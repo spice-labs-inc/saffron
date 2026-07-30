@@ -19,6 +19,7 @@ package io.spicelabs.saffron.filesystem;
 
 import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.filesystem.btrfs.BtrfsSuperblock;
+import io.spicelabs.saffron.filesystem.squashfs.SquashfsSuperblock;
 import io.spicelabs.saffron.fs.FileSystem.FileSystemType;
 import io.spicelabs.saffron.lvm.DiskRegion;
 import io.spicelabs.saffron.partition.Partition;
@@ -103,6 +104,9 @@ public final class FilesystemDetector {
         result = tryDetectSwap(disk, offset);
         if (result.isPresent()) return result;
 
+        result = tryDetectSquashfs(disk, offset);
+        if (result.isPresent()) return result;
+
         return Optional.empty();
     }
 
@@ -156,6 +160,9 @@ public final class FilesystemDetector {
         if (result.isPresent()) return result;
 
         result = tryDetectSwapFromRegion(region);
+        if (result.isPresent()) return result;
+
+        result = tryDetectSquashfsFromRegion(region);
         if (result.isPresent()) return result;
 
         return Optional.empty();
@@ -1060,6 +1067,33 @@ public final class FilesystemDetector {
         }
 
         return Optional.empty();
+    }
+
+    private static Optional<FilesystemInfo> tryDetectSquashfs(VirtualDisk disk, long offset) throws IOException {
+        if (disk.virtualSize() < offset + SquashfsSuperblock.SUPERBLOCK_SIZE) {
+            return Optional.empty();
+        }
+        DiskRegion region = DiskRegion.fromPartition(disk, offset, 0);
+        return tryDetectSquashfsFromRegion(region);
+    }
+
+    private static Optional<FilesystemInfo> tryDetectSquashfsFromRegion(DiskRegion region) throws IOException {
+        Optional<SquashfsSuperblock> sbOpt = SquashfsSuperblock.read(region);
+        if (sbOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        SquashfsSuperblock sb = sbOpt.get();
+        return Optional.of(new FilesystemInfo(
+                FileSystemType.SQUASHFS,
+                sb.versionMajor() + "." + sb.versionMinor(),
+                Optional.empty(),
+                Optional.empty(),
+                sb.bytesUsed(),
+                sb.bytesUsed(),
+                0,
+                sb.blockSize(),
+                sb.inodeCount()
+        ));
     }
 
     private static Optional<FilesystemInfo> parseBtrfsSuperblock(ByteBuffer sb) {

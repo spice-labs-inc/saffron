@@ -38,7 +38,8 @@ public sealed interface FileSystem extends Closeable
         permits FileSystem.Ext4FileSystem, FileSystem.NtfsFileSystem,
                 FileSystem.Fat32FileSystem, FileSystem.ExFatFileSystem, FileSystem.XfsFileSystem,
                 FileSystem.BtrfsFileSystem, FileSystem.HfsPlusFileSystem,
-                FileSystem.ApfsFileSystem {
+                FileSystem.ApfsFileSystem, FileSystem.SquashfsFileSystem,
+                FileSystem.BinaryContainerFileSystem {
 
     /**
      * Returns the filesystem type.
@@ -142,6 +143,8 @@ public sealed interface FileSystem extends Closeable
         HFS_PLUS("hfsplus", "macOS HFS+ filesystem"),
         APFS("apfs", "macOS APFS filesystem"),
         SWAP("swap", "Linux swap partition"),
+        SQUASHFS("squashfs", "Squashfs filesystem"),
+        BINARY_CONTAINER("binary_container", "Binary container (e.g., Linux kernel image)"),
         UNKNOWN("unknown", "Unknown filesystem type");
 
         private final String name;
@@ -377,5 +380,45 @@ public sealed interface FileSystem extends Closeable
          * Returns the volume name.
          */
         @NotNull String volumeName();
+    }
+
+    /**
+     * Squashfs filesystem implementation.
+     */
+    non-sealed interface SquashfsFileSystem extends FileSystem {
+        @Override
+        default @NotNull FileSystemType type() {
+            return FileSystemType.SQUASHFS;
+        }
+
+        /**
+         * Returns the compression algorithm used by the filesystem.
+         *
+         * @return the compression name (e.g., "xz", "gzip", "zstd", "lzo",
+         *         "lz4", "none")
+         */
+        @NotNull String compression();
+
+        /**
+         * Returns the block size in bytes.
+         */
+        int blockSize();
+    }
+
+    /**
+     * Binary container filesystem implementation.
+     */
+    non-sealed interface BinaryContainerFileSystem extends FileSystem {
+        @Override
+        default @NotNull FileSystemType type() {
+            return FileSystemType.BINARY_CONTAINER;
+        }
+
+        /**
+         * Returns the underlying container format.
+         *
+         * @return the container format name
+         */
+        @NotNull String containerFormat();
     }
 }

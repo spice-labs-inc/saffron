@@ -18,9 +18,11 @@
 package io.spicelabs.saffron;
 
 import io.spicelabs.saffron.ami.AmiDiskImpl;
+import io.spicelabs.saffron.container.ContainerDetector;
 import io.spicelabs.saffron.exception.SaffronException;
 import io.spicelabs.saffron.gcp.GcpDiskImpl;
 import io.spicelabs.saffron.qcow2.Qcow2DiskImpl;
+import io.spicelabs.saffron.gzip.GzipRawDiskImpl;
 import io.spicelabs.saffron.raw.RawDiskImpl;
 import io.spicelabs.saffron.vdi.VdiDiskImpl;
 import io.spicelabs.saffron.vhd.VhdDiskImpl;
@@ -30,7 +32,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -62,10 +66,8 @@ public final class DiskReader {
     }
 
     /**
-     * Opens a disk image file with automatic format detection.
-     *
-     * <p>The format is detected by examining magic bytes in the file header.
-     * If magic-based detection fails, the file extension is used as a fallback.
+     * Opens a disk image file with automatic format detection using the default
+     * security policy.
      *
      * @param path the path to the disk image file
      * @return the opened VirtualDisk
@@ -74,19 +76,40 @@ public final class DiskReader {
      * @throws SaffronException.UnsupportedDiskException if the format is not supported
      */
     public static @NotNull VirtualDisk open(@NotNull Path path) throws IOException {
-        Optional<DiskFormat> format = DiskFormat.detect(path);
-        if (format.isEmpty()) {
-            throw new SaffronException.UnsupportedDiskException(
-                    "Unable to detect disk format: " + path);
-        }
-        return open(path, format.get());
+        return open(path, SecurityPolicy.defaults());
     }
 
     /**
-     * Opens a disk image file with the specified format.
+     * Opens a disk image file with automatic format detection.
      *
-     * <p>Use this method when you know the format ahead of time, or when
-     * automatic detection fails.
+     * <p>The format is detected by examining magic bytes in the file header.
+     * If magic-based detection fails, the file extension is used as a fallback.
+     *
+     * @param path the path to the disk image file
+     * @param policy the security policy governing decompression limits
+     * @return the opened VirtualDisk
+     * @throws IOException if an I/O error occurs
+     * @throws SaffronException.InvalidDiskException if the file is not a valid disk image
+     * @throws SaffronException.UnsupportedDiskException if the format is not supported
+     */
+    public static @NotNull VirtualDisk open(@NotNull Path path, @NotNull SecurityPolicy policy) throws IOException {
+        Optional<DiskFormat> format = DiskFormat.detect(path);
+        if (format.isPresent()) {
+            return open(path, format.get(), policy);
+        }
+        // Binary containers (e.g., Linux kernel images, compressed single payloads)
+        // have no disk-format magic, but we can still expose them as a RAW virtual
+        // disk so FileSystemMount can detect and mount them.
+        if (ContainerDetector.detect(path).isPresent()) {
+            return open(path, DiskFormat.RAW, policy);
+        }
+        throw new SaffronException.UnsupportedDiskException(
+                "Unable to detect disk format: " + path);
+    }
+
+    /**
+     * Opens a disk image file with the specified format and the default security
+     * policy.
      *
      * @param path the path to the disk image file
      * @param format the expected disk format
@@ -96,14 +119,30 @@ public final class DiskReader {
      * @throws SaffronException.UnsupportedDiskException if the format version is not supported
      */
     public static @NotNull VirtualDisk open(@NotNull Path path, @NotNull DiskFormat format) throws IOException {
+        return open(path, format, SecurityPolicy.defaults());
+    }
+
+    /**
+     * Opens a disk image file with the specified format.
+     *
+     * @param path the path to the disk image file
+     * @param format the expected disk format
+     * @param policy the security policy governing decompression limits
+     * @return the opened VirtualDisk
+     * @throws IOException if an I/O error occurs
+     * @throws SaffronException.InvalidDiskException if the file is not a valid disk image
+     * @throws SaffronException.UnsupportedDiskException if the format version is not supported
+     */
+    public static @NotNull VirtualDisk open(@NotNull Path path, @NotNull DiskFormat format,
+                                            @NotNull SecurityPolicy policy) throws IOException {
         return switch (format) {
             case QCOW2 -> openQcow2(path);
             case VMDK -> openVmdk(path);
             case VHD -> openVhd(path);
             case VHDX -> openVhdx(path);
             case VDI -> openVdi(path);
-            case RAW -> openRaw(path);
-            case GCP -> openGcp(path);
+            case RAW -> openRaw(path, policy);
+            case GCP -> openGcp(path, policy);
             case AMI -> openAmi(path);
         };
     }
@@ -111,19 +150,13 @@ public final class DiskReader {
     /**
      * Opens a disk image from an InputStream with automatic format detection.
      *
-     * <p>Note: The stream must support mark/reset for format detection,
-     * or be wrapped in a BufferedInputStream.
-     *
      * @param stream the input stream containing the disk image
      * @param sourceName a name for the source (used in error messages and pURL)
      * @return the opened VirtualDisk
      * @throws IOException if an I/O error occurs
-     * @throws SaffronException.InvalidDiskException if the stream is not a valid disk image
-     * @throws SaffronException.UnsupportedDiskException if the format is not supported
      */
     public static @NotNull VirtualDisk open(@NotNull InputStream stream, @NotNull String sourceName)
             throws IOException {
-        // Implementation will buffer and detect format from magic bytes
         throw new UnsupportedOperationException("InputStream support not yet implemented");
     }
 
@@ -135,25 +168,24 @@ public final class DiskReader {
      * @param format the expected disk format
      * @return the opened VirtualDisk
      * @throws IOException if an I/O error occurs
-     * @throws SaffronException.InvalidDiskException if the stream is not a valid disk image
      */
     public static @NotNull VirtualDisk open(@NotNull InputStream stream, @NotNull String sourceName,
-                                            @NotNull DiskFormat format) throws IOException {
+                                              @NotNull DiskFormat format) throws IOException {
         throw new UnsupportedOperationException("InputStream support not yet implemented");
     }
 
     /**
      * Checks if a file appears to be a supported disk image.
      *
-     * <p>This performs a quick check based on magic bytes without fully
-     * parsing the disk structure.
-     *
      * @param path the path to check
      * @return true if the file appears to be a supported disk image
      */
     public static boolean isSupported(@NotNull Path path) {
         try {
-            return DiskFormat.detect(path).isPresent();
+            if (DiskFormat.detect(path).isPresent()) {
+                return true;
+            }
+            return ContainerDetector.detect(path).isPresent();
         } catch (IOException e) {
             return false;
         }
@@ -183,12 +215,31 @@ public final class DiskReader {
         return VdiDiskImpl.open(path);
     }
 
-    private static VirtualDisk openRaw(Path path) throws IOException {
+    private static VirtualDisk openRaw(Path path, SecurityPolicy policy) throws IOException {
+        // Only .img.gz and .raw.gz are gzip-compressed raw disk images. Other .gz
+        // files are handled as compressed single payloads via BinaryContainerMount.
+        if (isCompressedRawDisk(path)) {
+            return GzipRawDiskImpl.open(path, policy);
+        }
         return RawDiskImpl.open(path);
     }
 
-    private static VirtualDisk openGcp(Path path) throws IOException {
-        return GcpDiskImpl.open(path);
+    private static boolean isCompressedRawDisk(Path path) throws IOException {
+        String lower = path.getFileName().toString().toLowerCase(Locale.ROOT);
+        if (!lower.endsWith(".img.gz") && !lower.endsWith(".raw.gz")) {
+            return false;
+        }
+        byte[] header = new byte[2];
+        try (var is = Files.newInputStream(path)) {
+            if (is.read(header) != 2) {
+                return false;
+            }
+        }
+        return header[0] == 0x1f && header[1] == (byte) 0x8b;
+    }
+
+    private static VirtualDisk openGcp(Path path, SecurityPolicy policy) throws IOException {
+        return GcpDiskImpl.open(path, policy);
     }
 
     private static VirtualDisk openAmi(Path path) throws IOException {

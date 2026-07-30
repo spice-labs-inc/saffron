@@ -20,7 +20,9 @@ package io.spicelabs.saffron.gcp;
 import com.github.packageurl.MalformedPackageURLException;
 import com.github.packageurl.PackageURL;
 import io.spicelabs.saffron.DiskFormat;
+import io.spicelabs.saffron.SecurityPolicy;
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.raw.RawDiskImpl;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,9 +44,11 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
  * Implementation of {@link VirtualDisk.GcpDisk} for Google Cloud Platform disk images.
  *
  * <p>GCP images are tar.gz archives containing a file named "disk.raw". This implementation
- * extracts the raw disk to a temporary file and delegates to {@link RawDiskImpl}.
+ * extracts the raw disk to a temporary file with a size bound and delegates to {@link RawDiskImpl}.
  */
 public final class GcpDiskImpl implements VirtualDisk.GcpDisk {
+
+    private static final int BUFFER_SIZE = 8192;
 
     private final Path sourcePath;
     private final Path extractedPath;
@@ -52,13 +56,27 @@ public final class GcpDiskImpl implements VirtualDisk.GcpDisk {
     private final boolean ownsExtractedFile;
 
     /**
-     * Opens a GCP disk image from a tar.gz file.
+     * Opens a GCP disk image from a tar.gz file using the default security policy.
      *
      * @param path the path to the .tar.gz file
      * @return the opened disk
      * @throws IOException if an I/O error occurs or the archive doesn't contain disk.raw
      */
     public static @NotNull GcpDiskImpl open(@NotNull Path path) throws IOException {
+        return open(path, SecurityPolicy.defaults());
+    }
+
+    /**
+     * Opens a GCP disk image from a tar.gz file.
+     *
+     * @param path the path to the .tar.gz file
+     * @param policy the security policy governing decompression limits
+     * @return the opened disk
+     * @throws IOException if an I/O error occurs or the archive doesn't contain disk.raw
+     * @throws ResourceLimitException if the extracted disk.raw exceeds the configured limit
+     */
+    public static @NotNull GcpDiskImpl open(@NotNull Path path,
+                                            @NotNull SecurityPolicy policy) throws IOException {
         // Extract disk.raw to a temporary file
         Path tempDir = Files.createTempDirectory("saffron-gcp-");
         Path extractedPath = tempDir.resolve("disk.raw");
@@ -74,13 +92,8 @@ public final class GcpDiskImpl implements VirtualDisk.GcpDisk {
                 String name = entry.getName();
                 // GCP requires the file to be named disk.raw
                 if (name.equals("disk.raw") || name.endsWith("/disk.raw")) {
-                    // Extract this entry
                     try (OutputStream out = Files.newOutputStream(extractedPath)) {
-                        byte[] buffer = new byte[8192];
-                        int len;
-                        while ((len = tais.read(buffer)) > 0) {
-                            out.write(buffer, 0, len);
-                        }
+                        copyBounded(tais, out, policy.maxDecompressedSize(), extractedPath, path);
                     }
                     found = true;
                     break;
@@ -88,21 +101,36 @@ public final class GcpDiskImpl implements VirtualDisk.GcpDisk {
             }
 
             if (!found) {
-                // Clean up temp directory
                 Files.deleteIfExists(extractedPath);
                 Files.deleteIfExists(tempDir);
                 throw new IOException("GCP archive does not contain disk.raw: " + path);
             }
-        } catch (Exception e) {
-            // Clean up on error
+        } catch (IOException | RuntimeException e) {
             Files.deleteIfExists(extractedPath);
             Files.deleteIfExists(tempDir);
             throw e;
         }
+        extractedPath.toFile().deleteOnExit();
+        tempDir.toFile().deleteOnExit();
 
         // Open the extracted raw disk
         RawDiskImpl innerDisk = RawDiskImpl.open(extractedPath);
         return new GcpDiskImpl(path, extractedPath, innerDisk, true);
+    }
+
+    private static void copyBounded(@NotNull InputStream in, @NotNull OutputStream out,
+                                    long maxDecompressedSize, @NotNull Path extractedPath,
+                                    @NotNull Path sourcePath) throws IOException {
+        byte[] buffer = new byte[BUFFER_SIZE];
+        long written = 0;
+        int len;
+        while ((len = in.read(buffer)) > 0) {
+            if (written + len > maxDecompressedSize) {
+                throw ResourceLimitException.decompressionBomb(maxDecompressedSize, written + len);
+            }
+            out.write(buffer, 0, len);
+            written += len;
+        }
     }
 
     private GcpDiskImpl(Path sourcePath, Path extractedPath, RawDiskImpl innerDisk, boolean ownsExtractedFile) {
