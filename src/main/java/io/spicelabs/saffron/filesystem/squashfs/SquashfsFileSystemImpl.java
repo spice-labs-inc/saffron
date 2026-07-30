@@ -285,7 +285,9 @@ public final class SquashfsFileSystemImpl implements FileSystem.SquashfsFileSyst
         if (fileSize == 0) {
             return 0;
         }
-        if (fragmentBlockIndex == 0xffffffffL) {
+        // The sentinel stored in the inode is 0xffffffff (unsigned). After it is
+        // read as a uint32 and cast to int it becomes -1, so compare as an int.
+        if (fragmentBlockIndex == 0xffffffff) {
             return (int) SafeMath.safeCeilDiv(fileSize, blockSize);
         }
         return (int) (fileSize / blockSize);
