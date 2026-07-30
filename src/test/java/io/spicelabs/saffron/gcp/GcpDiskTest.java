@@ -70,10 +70,11 @@ class GcpDiskTest {
 
     @Test
     void formatDetection() throws Exception {
-        // GCP is detected by extension when filename contains "disk"
+        // GCP is detected by .tar.gz / .tgz extension (not by gzip magic alone, because
+        // a .gz file may be a compressed single payload or a raw disk image).
         assertThat(DiskFormat.detectByExtension("disk.tar.gz")).contains(DiskFormat.GCP);
         assertThat(DiskFormat.detectByExtension("mydisk-image.tar.gz")).contains(DiskFormat.GCP);
-        // Plain tar.gz without "disk" is not detected as GCP by extension
-        assertThat(DiskFormat.detectByExtension("test.tar.gz")).isEmpty();
+        assertThat(DiskFormat.detectByExtension("test.tar.gz")).contains(DiskFormat.GCP);
+        assertThat(DiskFormat.detectByExtension("disk.tgz")).contains(DiskFormat.GCP);
     }
 }

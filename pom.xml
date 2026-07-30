@@ -122,6 +122,20 @@
             <version>${commons-compress.version}</version>
         </dependency>
 
+        <!-- Compression: LZ4 raw blocks -->
+        <dependency>
+            <groupId>org.lz4</groupId>
+            <artifactId>lz4-java</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+
+        <!-- Compression: LZO -->
+        <dependency>
+            <groupId>org.anarres.lzo</groupId>
+            <artifactId>lzo-core</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+
         <!-- Logging facade -->
         <dependency>
             <groupId>org.slf4j</groupId>

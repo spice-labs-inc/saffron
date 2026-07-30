@@ -62,6 +62,21 @@ implementation 'io.spicelabs:saffron:0.1.0-SNAPSHOT'
 | **HFS+** | macOS | Mac OS Extended |
 | **APFS** | macOS | Apple File System |
 
+### Binary Container Formats
+
+Saffron also detects and mounts non-disk binary payloads as containers, exposing
+named entries such as `/payload`, `/kernel`, `/dtb`, or `/ramdisk`.
+
+| Format | Identifier | Notes |
+|---|---|---|
+| **Linux kernel** | bzImage / zImage / Image / uImage | Extracts kernel payload, initramfs, DTB, certificates |
+| **FIT / uImage** | DTB magic + `/images` node | Extracts kernel, ramdisk, fdt |
+| **Device tree blob** | `0xd00dfeed` | Plain DTB exposed as `/dtb` |
+| **ELF** | `0x7f ELF` | Shared objects and executables |
+| **Raspberry Pi firmware** | `start.elf`, `fixup.dat`, `bootcode.bin` | Firmware files |
+| **Android boot** | `ANDROID!` | `boot.img` with kernel, ramdisk, second, dtb |
+| **Compressed single payload** | gzip / xz / bzip2 magic | `.gz`, `.xz`, `.bz2` exposed as `/payload` |
+
 ---
 
 ## Features

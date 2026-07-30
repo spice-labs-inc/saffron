@@ -17,7 +17,9 @@
  */
 package io.spicelabs.saffron.fs;
 
+import io.spicelabs.saffron.SecurityPolicy;
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.exception.SaffronException;
 import io.spicelabs.saffron.filesystem.FilesystemDetector;
 import io.spicelabs.saffron.filesystem.FilesystemInfo;
 import io.spicelabs.saffron.filesystem.apfs.ApfsFileSystemImpl;
@@ -27,12 +29,14 @@ import io.spicelabs.saffron.filesystem.ext4.Ext4FileSystemImpl;
 import io.spicelabs.saffron.filesystem.fat32.Fat32FileSystemImpl;
 import io.spicelabs.saffron.filesystem.hfsplus.HfsPlusFileSystemImpl;
 import io.spicelabs.saffron.filesystem.ntfs.NtfsFileSystemImpl;
+import io.spicelabs.saffron.filesystem.squashfs.SquashfsFileSystemImpl;
 import io.spicelabs.saffron.filesystem.xfs.XfsFileSystemImpl;
 import io.spicelabs.saffron.lvm.DiskRegion;
 import io.spicelabs.saffron.lvm.LogicalVolumeDisk;
 import io.spicelabs.saffron.lvm.LvmVolumeGroup;
 import io.spicelabs.saffron.partition.Partition;
 import io.spicelabs.saffron.partition.PartitionTable;
+import io.spicelabs.saffron.container.BinaryContainerMount;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -160,6 +164,8 @@ public final class FileSystemMount {
             case BTRFS -> BtrfsFileSystemImpl.mount(disk, offset);
             case HFS_PLUS -> HfsPlusFileSystemImpl.mount(disk, offset);
             case APFS -> ApfsFileSystemImpl.mount(disk, offset);
+            case SQUASHFS -> SquashfsFileSystemImpl.mount(disk, offset);
+            case BINARY_CONTAINER -> throw new UnsupportedOperationException("Binary containers are mounted via BinaryContainerMount, not partition detection");
             case SWAP -> throw new UnsupportedOperationException("Swap partitions cannot be mounted as filesystems");
             case UNKNOWN -> throw new UnsupportedOperationException("Unknown filesystem type");
         };
@@ -195,7 +201,8 @@ public final class FileSystemMount {
                 || type == FileSystem.FileSystemType.XFS
                 || type == FileSystem.FileSystemType.BTRFS
                 || type == FileSystem.FileSystemType.HFS_PLUS
-                || type == FileSystem.FileSystemType.APFS;
+                || type == FileSystem.FileSystemType.APFS
+                || type == FileSystem.FileSystemType.SQUASHFS;
     }
 
     private static boolean hasFilesystemAtOffset(List<FilesystemLocation> locations, long offset) {
@@ -336,6 +343,8 @@ public final class FileSystemMount {
             case BTRFS -> BtrfsFileSystemImpl.mount(region, 0);
             case HFS_PLUS -> HfsPlusFileSystemImpl.mount(region);
             case APFS -> ApfsFileSystemImpl.mount(region);
+            case SQUASHFS -> SquashfsFileSystemImpl.mount(region);
+            case BINARY_CONTAINER -> throw new UnsupportedOperationException("Binary containers are mounted via BinaryContainerMount, not partition detection");
             case SWAP -> throw new UnsupportedOperationException("Swap partitions cannot be mounted as filesystems");
             case UNKNOWN -> throw new UnsupportedOperationException("Unknown filesystem type");
         };
@@ -450,7 +459,33 @@ public final class FileSystemMount {
      * @throws IOException if an I/O error occurs
      */
     public static @NotNull List<FileSystem> mountAll(@NotNull VirtualDisk disk) throws IOException {
-        return mountAllWithDetected(disk).mounted();
+        return mountAll(disk, SecurityPolicy.defaults());
+    }
+
+    /**
+     * Mounts ALL filesystems in the disk, including LVM volumes.
+     *
+     * @param disk the virtual disk
+     * @param policy the security policy for binary container decompression
+     * @return list of all mounted filesystems (caller must close each one)
+     * @throws IOException if an I/O error occurs
+     */
+    public static @NotNull List<FileSystem> mountAll(@NotNull VirtualDisk disk,
+                                                     @NotNull SecurityPolicy policy) throws IOException {
+        return mountAllWithDetected(disk, policy).mounted();
+    }
+
+    /**
+     * Mounts ALL filesystems in the disk, including LVM volumes, and returns both
+     * mounted filesystems and detected but unmountable filesystems (like swap).
+     * Uses the default security policy.
+     *
+     * @param disk the virtual disk
+     * @return MountAllResult containing mounted filesystems and detected unmountable filesystems
+     * @throws IOException if an I/O error occurs
+     */
+    public static @NotNull MountAllResult mountAllWithDetected(@NotNull VirtualDisk disk) throws IOException {
+        return mountAllWithDetected(disk, SecurityPolicy.defaults());
     }
 
     /**
@@ -458,10 +493,12 @@ public final class FileSystemMount {
      * mounted filesystems and detected but unmountable filesystems (like swap).
      *
      * @param disk the virtual disk
+     * @param policy the security policy for binary container decompression
      * @return MountAllResult containing mounted filesystems and detected unmountable filesystems
      * @throws IOException if an I/O error occurs
      */
-    public static @NotNull MountAllResult mountAllWithDetected(@NotNull VirtualDisk disk) throws IOException {
+    public static @NotNull MountAllResult mountAllWithDetected(@NotNull VirtualDisk disk,
+                                                                @NotNull SecurityPolicy policy) throws IOException {
         List<FileSystem> mounted = new ArrayList<>();
         List<DetectedFilesystemInfo> detected = new ArrayList<>();
 
@@ -500,6 +537,21 @@ public final class FileSystemMount {
                 }
             } catch (Exception e) {
                 // Skip filesystems that fail to mount
+            }
+        }
+
+        // If no partition filesystems were found, try binary containers (e.g.,
+        // Linux kernel images, FIT images, compressed single payloads) directly on the raw disk.
+        if (mounted.isEmpty() && detected.isEmpty()) {
+            try {
+                Optional<FileSystem> containerFs = BinaryContainerMount.mount(disk, policy);
+                containerFs.ifPresent(mounted::add);
+            } catch (SaffronException e) {
+                // Security/resource-limit failures (e.g., decompression bombs) must be
+                // propagated rather than swallowed as "not a supported binary container".
+                throw e;
+            } catch (Exception e) {
+                // Not a supported binary container
             }
         }
 
