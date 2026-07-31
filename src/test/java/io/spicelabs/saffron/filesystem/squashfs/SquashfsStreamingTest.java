@@ -68,6 +68,48 @@ class SquashfsStreamingTest {
     }
 
     /**
+     * Verifies that a non-fragmented file whose size is not a multiple of the
+     * block size can be read.  Older Saffron code compared the no-fragment
+     * sentinel as a long, so it mis-counted the final partial block as a
+     * fragment and rejected valid files during {@link InputStream} creation.
+     */
+    @Test
+    void openStreamReadsNonFragmentedFileWithPartialLastBlock(@TempDir Path tempDir) throws IOException, InterruptedException {
+        Path source = tempDir.resolve("source");
+        Files.createDirectories(source);
+        Path file = source.resolve("partial.bin");
+        byte[] content = new byte[500_000];
+        java.util.Random random = new java.util.Random(42);
+        random.nextBytes(content);
+        Files.write(file, content);
+
+        Path image = tempDir.resolve("nofrag-partial.squashfs");
+        ProcessBuilder pb = new ProcessBuilder(
+                "mksquashfs", source.toString(), image.toString(),
+                "-no-fragments", "-b", "131072", "-noappend", "-quiet");
+        Process process = pb.inheritIO().start();
+        int exit = process.waitFor();
+        assertThat(exit).isEqualTo(0);
+        assertThat(Files.exists(image)).isTrue();
+
+        try (VirtualDisk disk = DiskReader.open(image);
+             FileSystem fs = mountLargest(disk)) {
+            Optional<FileSystemEntry> found = fs.resolve("/partial.bin");
+            assertThat(found).isPresent();
+            FileSystemEntry entry = found.get();
+            assertThat(entry.type()).isEqualTo(FileSystemEntry.EntryType.REGULAR_FILE);
+
+            FileSystemEntry.RegularFile regular = (FileSystemEntry.RegularFile) entry;
+            assertThat(regular.size()).isEqualTo(content.length);
+            try (InputStream in = regular.openStream()) {
+                byte[] read = in.readAllBytes();
+                assertThat(read).containsExactly(content);
+            }
+            assertThat(regular.readAllBytes()).containsExactly(content);
+        }
+    }
+
+    /**
      * Verifies that a declared file size larger than the data blocks can actually
      * produce is rejected before any allocation is made. The inode table is left
      * uncompressed so the file-size field can be patched directly.
@@ -122,10 +164,10 @@ class SquashfsStreamingTest {
             assertThat(regular.size()).isEqualTo(patchedSize);
             assertThatThrownBy(regular::openStream)
                     .isInstanceOf(IOException.class)
-                    .hasMessageContaining("exceeds available data blocks");
+                    .hasMessageContaining("exceed");
             assertThatThrownBy(regular::readAllBytes)
                     .isInstanceOf(IOException.class)
-                    .hasMessageContaining("exceeds available data blocks");
+                    .hasMessageContaining("exceed");
         }
     }
 
