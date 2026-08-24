@@ -85,48 +85,143 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
      * @throws IOException if an I/O error occurs or filesystem is invalid
      */
     public static @NotNull Ext4FileSystemImpl mount(@NotNull DiskRegion region) throws IOException {
-        // Read superblock
-        Ext4Superblock superblock = Ext4Superblock.read(region);
+        return tryMount(region)
+                .orElseThrow(() -> new IOException(
+                        "Invalid or truncated ext4 filesystem (rejected during defensive validation)"));
+    }
 
-        // Read additional superblock fields we need
-        ByteBuffer sb = region.read(Ext4Superblock.SUPERBLOCK_OFFSET, 1024);
-        sb.order(ByteOrder.LITTLE_ENDIAN);
+    /**
+     * Attempts to mount an ext4 filesystem from a DiskRegion, returning
+     * {@link Optional#empty()} instead of throwing when the region does not
+     * contain a coherent, self-consistent ext4 filesystem.
+     *
+     * <p>This is the defensive entry point. Malformed, truncated, or
+     * misdetected data (e.g. a WAR/ZIP that merely resembles ext4) never
+     * propagates an exception to the caller; it is reported as "not
+     * mountable". All filesystem invariants are validated eagerly so that a
+     * subsequent {@link #root()} / {@link #walk()} cannot fail or crash.
+     *
+     * @param region the disk region containing the filesystem
+     * @return the mounted filesystem, or empty if the data is not valid ext4
+     */
+    public static @NotNull Optional<Ext4FileSystemImpl> tryMount(@NotNull DiskRegion region) {
+        return parseValidated(region);
+    }
 
-        int inodesPerGroup = sb.getInt(40);
-        int blocksPerGroup = sb.getInt(32);
-        int inodeSize = sb.getShort(88) & 0xFFFF;
-        if (inodeSize == 0) {
-            inodeSize = 128; // Default for ext2
+    /**
+     * Attempts to mount an ext4 filesystem from a virtual disk at a partition
+     * offset, returning {@link Optional#empty()} instead of throwing when the
+     * region does not contain a coherent ext4 filesystem.
+     *
+     * @param disk the virtual disk containing the filesystem
+     * @param partitionOffset the byte offset where the partition/filesystem starts
+     * @return the mounted filesystem, or empty if the data is not valid ext4
+     */
+    public static @NotNull Optional<Ext4FileSystemImpl> tryMount(@NotNull VirtualDisk disk, long partitionOffset) {
+        return tryMount(DiskRegion.fromPartition(disk, partitionOffset, 0));
+    }
+
+    /**
+     * Parses and eagerly validates an ext4 filesystem from a region.
+     *
+     * <p>Every invariant needed for a safe {@link #root()} / {@link #walk()}
+     * (superblock sanity, block-group descriptor table bounds, and addressability
+     * of the root inode) is checked here. Any malformed or out-of-bounds
+     * condition is folded into {@link Optional#empty()} so that no exception
+     * escapes to the Saffron API caller for bad input.
+     *
+     * @param region the disk region containing the filesystem
+     * @return the parsed filesystem, or empty if the data is not valid ext4
+     */
+    private static @NotNull Optional<Ext4FileSystemImpl> parseValidated(@NotNull DiskRegion region) {
+        try {
+            Ext4Superblock superblock = Ext4Superblock.read(region);
+
+            // Read additional superblock fields we need
+            ByteBuffer sb = region.read(Ext4Superblock.SUPERBLOCK_OFFSET, 1024);
+            sb.order(ByteOrder.LITTLE_ENDIAN);
+
+            int inodesPerGroup = sb.getInt(40);
+            int blocksPerGroup = sb.getInt(32);
+            int inodeSize = sb.getShort(88) & 0xFFFF;
+            if (inodeSize == 0) {
+                inodeSize = 128; // Default for ext2
+            }
+
+            int blockSize = superblock.blockSize();
+            // Reject implausible block sizes (ext supports 1024..65536, power of two).
+            if (blockSize < 1024 || blockSize > 65536 || (blockSize & (blockSize - 1)) != 0) {
+                return Optional.empty();
+            }
+            if (inodesPerGroup <= 0 || blocksPerGroup <= 0) {
+                return Optional.empty();
+            }
+            if (inodeSize < 128 || inodeSize > blockSize) {
+                return Optional.empty();
+            }
+
+            // Check for file type feature (INCOMPAT_FILETYPE = 0x0002)
+            boolean hasFileType = (superblock.incompatFeatures() & Ext4Superblock.INCOMPAT_FILETYPE) != 0;
+
+            // Determine block group descriptor size
+            boolean is64Bit = superblock.is64Bit();
+            int descSize = Ext4BlockGroupDescriptor.descriptorSize(is64Bit);
+
+            // Calculate number of block groups
+            long numBlockGroups = (superblock.blockCount() + blocksPerGroup - 1) / blocksPerGroup;
+            if (numBlockGroups <= 0 || numBlockGroups > Integer.MAX_VALUE) {
+                return Optional.empty();
+            }
+
+            // Read block group descriptors (located immediately after superblock block)
+            // Superblock is in block 0 (at offset 1024), descriptors start at block 1 (or same block if block size > 1024)
+            long descTableOffset;
+            if (blockSize == 1024) {
+                descTableOffset = 2 * 1024L; // Block 2
+            } else {
+                descTableOffset = blockSize; // Block 1
+            }
+
+            // Guard: the descriptor table must fit entirely inside the region.
+            long descTableBytes = numBlockGroups * (long) descSize;
+            if (descTableOffset < 0 || descTableBytes < 0
+                    || descTableOffset + descTableBytes > region.size()) {
+                return Optional.empty();
+            }
+
+            Ext4BlockGroupDescriptor[] blockGroups = new Ext4BlockGroupDescriptor[(int) numBlockGroups];
+            for (int i = 0; i < numBlockGroups; i++) {
+                ByteBuffer descBuf = region.read(descTableOffset + ((long) i * descSize), descSize);
+                blockGroups[i] = Ext4BlockGroupDescriptor.parse(descBuf, is64Bit);
+            }
+
+            // Eagerly validate that the root inode (2) is addressable so that a
+            // subsequent root()/walk() cannot fail or NPE due to a truncated
+            // descriptor/inode table. This is the crash originally observed when a
+            // WAR was misdetected as ext4.
+            long rootInodeIndex = ROOT_INODE - 1;
+            int rootBg = (int) (rootInodeIndex / inodesPerGroup);
+            int rootIndexInGroup = (int) (rootInodeIndex % inodesPerGroup);
+            if (rootBg >= blockGroups.length) {
+                return Optional.empty();
+            }
+            Ext4BlockGroupDescriptor rootBgDesc = blockGroups[rootBg];
+            if (rootBgDesc == null) {
+                return Optional.empty();
+            }
+            long rootInodeOffset = rootBgDesc.inodeTable() * (long) blockSize
+                    + (long) rootIndexInGroup * inodeSize;
+            if (rootInodeOffset < 0 || rootInodeOffset + inodeSize > region.size()) {
+                return Optional.empty();
+            }
+
+            return Optional.of(new Ext4FileSystemImpl(region, superblock, blockGroups,
+                    inodeSize, inodesPerGroup, blocksPerGroup, hasFileType));
+        } catch (IOException | RuntimeException e) {
+            // Malformed/truncated data must not propagate to the caller; report
+            // the filesystem as not mountable instead of crashing.
+            return Optional.empty();
         }
-
-        // Calculate number of block groups
-        long numBlockGroups = (superblock.blockCount() + blocksPerGroup - 1) / blocksPerGroup;
-
-        // Check for file type feature (INCOMPAT_FILETYPE = 0x0002)
-        boolean hasFileType = (superblock.incompatFeatures() & 0x0002) != 0;
-
-        // Determine block group descriptor size
-        boolean is64Bit = superblock.is64Bit();
-        int descSize = Ext4BlockGroupDescriptor.descriptorSize(is64Bit);
-
-        // Read block group descriptors (located immediately after superblock block)
-        // Superblock is in block 0 (at offset 1024), descriptors start at block 1 (or same block if block size > 1024)
-        int blockSize = superblock.blockSize();
-        long descTableOffset;
-        if (blockSize == 1024) {
-            descTableOffset = 2 * 1024; // Block 2
-        } else {
-            descTableOffset = blockSize; // Block 1
-        }
-
-        Ext4BlockGroupDescriptor[] blockGroups = new Ext4BlockGroupDescriptor[(int) numBlockGroups];
-        for (int i = 0; i < numBlockGroups; i++) {
-            ByteBuffer descBuf = region.read(descTableOffset + (i * descSize), descSize);
-            blockGroups[i] = Ext4BlockGroupDescriptor.parse(descBuf, is64Bit);
-        }
-
-        return new Ext4FileSystemImpl(region, superblock, blockGroups,
-                inodeSize, inodesPerGroup, blocksPerGroup, hasFileType);
     }
 
     @Override
@@ -363,13 +458,21 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
         int blockGroup = (int) (inodeIndex / inodesPerGroup);
         int indexInGroup = (int) (inodeIndex % inodesPerGroup);
 
-        if (blockGroup >= blockGroups.length) {
+        if (blockGroup < 0 || blockGroup >= blockGroups.length) {
             throw new IOException("Invalid inode number: " + inodeNumber);
         }
 
         Ext4BlockGroupDescriptor bg = blockGroups[blockGroup];
+        if (bg == null) {
+            throw new IOException("Missing block group descriptor for inode: " + inodeNumber);
+        }
+
         long inodeTableBlock = bg.inodeTable();
-        long inodeOffset = (inodeTableBlock * superblock.blockSize()) + (indexInGroup * inodeSize);
+        long inodeOffset = (inodeTableBlock * (long) superblock.blockSize())
+                + ((long) indexInGroup * inodeSize);
+        if (inodeOffset < 0 || inodeOffset + inodeSize > region.size()) {
+            throw new IOException("Inode " + inodeNumber + " table offset out of bounds: " + inodeOffset);
+        }
 
         ByteBuffer inodeBuf = region.read(inodeOffset, inodeSize);
         return Ext4Inode.parse(inodeBuf, inodeSize, inodeNumber);

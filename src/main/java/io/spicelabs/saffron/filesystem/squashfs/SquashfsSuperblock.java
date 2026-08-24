@@ -61,6 +61,26 @@ public record SquashfsSuperblock(
     public static final int FLAG_COMPRESSOR_OPTIONS = 0x0400;
     public static final int FLAG_UNCOMPRESSED_IDS = 0x0800;
 
+    /**
+     * Returns whether the buffer begins with the squashfs superblock magic
+     * {@code "hsqs"} (little-endian {@value #SQUASHFS_MAGIC}).
+     *
+     * <p>This is a lightweight, presence-only check intended for stream-based
+     * probing where only a bounded prefix is available; it deliberately does
+     * not validate any size-dependent superblock fields (the full artifact
+     * size is not known to the caller).
+     *
+     * @param buffer the prefix bytes of the artifact
+     * @return true if the buffer starts with the squashfs magic
+     */
+    public static boolean isSquashfsMagic(@NotNull ByteBuffer buffer) {
+        if (buffer == null || buffer.remaining() < 4) {
+            return false;
+        }
+        ByteBuffer b = buffer.duplicate().order(ByteOrder.LITTLE_ENDIAN);
+        return b.getInt(0) == SQUASHFS_MAGIC;
+    }
+
     public static @NotNull Optional<SquashfsSuperblock> read(@NotNull DiskRegion region) throws IOException {
         long size = region.size();
         if (size < SUPERBLOCK_SIZE) {

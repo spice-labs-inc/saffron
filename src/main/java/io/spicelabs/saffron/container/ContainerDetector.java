@@ -426,4 +426,21 @@ public final class ContainerDetector {
         }
         return true;
     }
+
+    /**
+     * Returns whether the given buffer begins with the DMG footer magic
+     * {@code "koly"}. This is a lightweight, presence-only check intended for
+     * stream-based probing where only the trailing {@link #DMG_FOOTER_SIZE}
+     * bytes of an artifact are available; it does not validate the footer's
+     * region table (no total artifact size is available).
+     *
+     * @param footer the trailing bytes of the artifact
+     * @return true if the buffer starts with the DMG footer magic
+     */
+    public static boolean isDmgFooterMagic(@NotNull ByteBuffer footer) {
+        if (footer == null) {
+            return false;
+        }
+        return isDmgMagic(footer.duplicate());
+    }
 }
