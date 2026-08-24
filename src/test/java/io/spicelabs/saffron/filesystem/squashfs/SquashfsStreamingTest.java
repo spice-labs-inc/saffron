@@ -11,7 +11,6 @@ import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.fs.FileSystemMount;
 import io.spicelabs.saffron.fs.FileSystemMount.FilesystemLocation;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,14 +19,22 @@ import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Tests that squashfs file reads are streamed rather than fully materialized.
+ *
+ * <p>The fixtures are pre-built squashfs images checked in under
+ * {@code src/test/resources/squashfs/fixtures/} (generated once with the
+ * {@code mksquashfs} tool during fixture setup). Tests never invoke any
+ * external process.
  */
 class SquashfsStreamingTest {
+
+    private static final String FIXTURE_DIR = "src/test/resources/squashfs/fixtures";
 
     /**
      * Verifies that a file can be read correctly through {@link InputStream}
@@ -35,23 +42,10 @@ class SquashfsStreamingTest {
      * path used by callers that stream large files.
      */
     @Test
-    void openStreamReadsFileInChunks(@TempDir Path tempDir) throws IOException, InterruptedException {
-        Path source = tempDir.resolve("source");
-        Files.createDirectories(source);
-        Path file = source.resolve("hello.txt");
+    void openStreamReadsFileInChunks() throws IOException {
         byte[] content = "Hello, streamed squashfs!".getBytes(java.nio.charset.StandardCharsets.UTF_8);
-        Files.write(file, content);
 
-        Path image = tempDir.resolve("stream-test.squashfs");
-        ProcessBuilder pb = new ProcessBuilder(
-                "mksquashfs", source.toString(), image.toString(),
-                "-noappend", "-quiet");
-        Process process = pb.inheritIO().start();
-        int exit = process.waitFor();
-        assertThat(exit).isEqualTo(0);
-        assertThat(Files.exists(image)).isTrue();
-
-        try (VirtualDisk disk = DiskReader.open(image);
+        try (VirtualDisk disk = DiskReader.open(fixture("hello-stream.squashfs"));
              FileSystem fs = mountLargest(disk)) {
             Optional<FileSystemEntry> found = fs.resolve("/hello.txt");
             assertThat(found).isPresent();
@@ -72,27 +66,17 @@ class SquashfsStreamingTest {
      * block size can be read.  Older Saffron code compared the no-fragment
      * sentinel as a long, so it mis-counted the final partial block as a
      * fragment and rejected valid files during {@link InputStream} creation.
+     *
+     * <p>The fixture was built with {@code -no-fragments -b 131072} and contains
+     * a 500,000-byte file; the content is regenerated here from the same seeded
+     * {@link Random} used to create the fixture.
      */
     @Test
-    void openStreamReadsNonFragmentedFileWithPartialLastBlock(@TempDir Path tempDir) throws IOException, InterruptedException {
-        Path source = tempDir.resolve("source");
-        Files.createDirectories(source);
-        Path file = source.resolve("partial.bin");
+    void openStreamReadsNonFragmentedFileWithPartialLastBlock() throws IOException {
         byte[] content = new byte[500_000];
-        java.util.Random random = new java.util.Random(42);
-        random.nextBytes(content);
-        Files.write(file, content);
+        new Random(42).nextBytes(content);
 
-        Path image = tempDir.resolve("nofrag-partial.squashfs");
-        ProcessBuilder pb = new ProcessBuilder(
-                "mksquashfs", source.toString(), image.toString(),
-                "-no-fragments", "-b", "131072", "-noappend", "-quiet");
-        Process process = pb.inheritIO().start();
-        int exit = process.waitFor();
-        assertThat(exit).isEqualTo(0);
-        assertThat(Files.exists(image)).isTrue();
-
-        try (VirtualDisk disk = DiskReader.open(image);
+        try (VirtualDisk disk = DiskReader.open(fixture("nofrag-partial.squashfs"));
              FileSystem fs = mountLargest(disk)) {
             Optional<FileSystemEntry> found = fs.resolve("/partial.bin");
             assertThat(found).isPresent();
@@ -111,30 +95,15 @@ class SquashfsStreamingTest {
 
     /**
      * Verifies that a declared file size larger than the data blocks can actually
-     * produce is rejected before any allocation is made. The inode table is left
-     * uncompressed so the file-size field can be patched directly.
+     * produce is rejected before any allocation is made. The inode table of the
+     * fixture is uncompressed (built with {@code -noI -noD}) so the file-size
+     * field can be patched directly.
      */
     @Test
-    void rejectsDeclaredFileSizeLargerThanAvailableBlocks(@TempDir Path tempDir) throws IOException, InterruptedException {
+    void rejectsDeclaredFileSizeLargerThanAvailableBlocks() throws IOException {
         int originalSize = 4660;
-        byte[] content = new byte[originalSize];
-        java.util.Random random = new java.util.Random(7);
-        random.nextBytes(content);
 
-        Path source = tempDir.resolve("source");
-        Files.createDirectories(source);
-        Path file = source.resolve("big.txt");
-        Files.write(file, content);
-
-        Path image = tempDir.resolve("size-test.squashfs");
-        ProcessBuilder pb = new ProcessBuilder(
-                "mksquashfs", source.toString(), image.toString(),
-                "-b", "4096", "-noI", "-noD", "-noappend", "-quiet");
-        Process process = pb.inheritIO().start();
-        int exit = process.waitFor();
-        assertThat(exit).isEqualTo(0);
-
-        byte[] data = Files.readAllBytes(image);
+        byte[] data = Files.readAllBytes(fixture("size-patch.squashfs"));
         ByteBuffer buf = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
         long inodeTableStart = buf.getLong(0x40);
         long directoryTableStart = buf.getLong(0x48);
@@ -154,9 +123,10 @@ class SquashfsStreamingTest {
         // larger than any valid layout can satisfy.
         int patchedSize = 8193;
         buf.putInt(patchOffset, patchedSize);
-        Files.write(image, data);
+        Path patched = Files.createTempFile("size-test-", ".squashfs");
+        Files.write(patched, data);
 
-        try (VirtualDisk disk = DiskReader.open(image);
+        try (VirtualDisk disk = DiskReader.open(patched);
              FileSystem fs = mountLargest(disk)) {
             Optional<FileSystemEntry> found = fs.resolve("/big.txt");
             assertThat(found).isPresent();
@@ -168,7 +138,13 @@ class SquashfsStreamingTest {
             assertThatThrownBy(regular::readAllBytes)
                     .isInstanceOf(IOException.class)
                     .hasMessageContaining("exceed");
+        } finally {
+            Files.deleteIfExists(patched);
         }
+    }
+
+    private static Path fixture(String name) {
+        return Path.of(FIXTURE_DIR, name);
     }
 
     private static int findFileSizeOffset(byte[] image, int inodeTableStart, int directoryTableStart, int fileSize) {

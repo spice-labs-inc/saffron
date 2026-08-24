@@ -470,7 +470,24 @@ fi
 TOTAL=$(echo "$DOWNLOAD_LIST" | grep -c . || true)
 echo "Selected $TOTAL images for download."
 
-# ── Compare manifest to local files, skip what already exists ────────────────
+# ── Helper: return 0 if the image is already fully cached on disk ────────────
+# A file counts as cached only when it exists AND is non-empty. A zero-byte
+# leftover (e.g. from an interrupted `mv`) is treated as missing so it gets
+# re-fetched rather than being skipped forever. Any stale .tmp resume file
+# beside an already-complete final file is garbage and is removed so it is not
+# mistaken for a pending partial download.
+is_cached() {
+    local local_path="$CORPUS_DIR/$1"
+    if [[ -s "$local_path" ]]; then
+        if [[ -f "$local_path.tmp" ]]; then
+            rm -f "$local_path.tmp"
+        fi
+        return 0
+    fi
+    return 1
+}
+
+# ── Compare manifest to local files, skip what is already cached ─────────────
 MISSING_LIST=""
 SKIPPED=0
 SELECTED_BYTES=0
@@ -478,8 +495,7 @@ SELECTED_BYTES=0
 while IFS= read -r image_path; do
     [[ -z "$image_path" ]] && continue
 
-    local_path="$CORPUS_DIR/$image_path"
-    if [[ -f "$local_path" ]]; then
+    if is_cached "$image_path"; then
         SKIPPED=$((SKIPPED + 1))
     else
         MISSING_LIST="${MISSING_LIST:+$MISSING_LIST
@@ -526,6 +542,20 @@ while IFS= read -r image_path; do
     encoded_path=$(url_encode "$image_path")
     url="$S3_BASE_URL/$encoded_path"
     mkdir -p "$(dirname "$local_path")"
+
+    # If a resume temp already holds the complete expected size, finalize it
+    # without attempting any network transfer (avoids re-downloading cached data).
+    if [[ -f "$local_path.tmp" ]]; then
+        tmp_size=$(stat -c%s "$local_path.tmp" 2>/dev/null || stat -f%z "$local_path.tmp" 2>/dev/null || echo 0)
+        expected_size=$(get_image_size "$image_path")
+        if [[ "$expected_size" -gt 0 && "$tmp_size" -ge "$expected_size" ]]; then
+            echo "  Finalizing complete cached download $image_path ($(numfmt --to=iec $tmp_size))..."
+            mv "$local_path.tmp" "$local_path"
+            TOTAL_BYTES=$((TOTAL_BYTES + tmp_size))
+            DOWNLOADED=$((DOWNLOADED + 1))
+            continue
+        fi
+    fi
 
     # Track retries for this specific file
     FILE_FAILURES[$image_path]=0
