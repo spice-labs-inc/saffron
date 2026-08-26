@@ -82,6 +82,14 @@
         <spotbugs-maven-plugin.version>4.8.3.1</spotbugs-maven-plugin.version>
         <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
         <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
+            <!-- Whether a Maven Central deployment publishes itself once validated.
+             `true` is the normal path. The publish workflow overrides this to
+             `false` when the release tag is not a natural successor to the
+             previous release, which leaves the deployment sitting in the
+             Central Portal for a human to publish or drop. A published Central
+             version can never be deleted or overwritten, so that is the one
+             channel worth stopping at. -->
+        <central.autoPublish>true</central.autoPublish>
     </properties>
 
     <dependencies>
@@ -446,7 +454,7 @@
                         <configuration>
                             <publishingServerId>central</publishingServerId>
                             <tokenAuth>true</tokenAuth>
-                            <autoPublish>true</autoPublish>
+                            <autoPublish>${central.autoPublish}</autoPublish>
                             <checksums>all</checksums>
                         </configuration>
                     </plugin>
