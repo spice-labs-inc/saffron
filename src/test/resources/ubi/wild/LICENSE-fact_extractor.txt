@@ -1,0 +1,4 @@
+factext-test.ubifs:
+  Source: https://github.com/fkie-cad/fact_extractor/tree/master/fact_extractor/plugins/unpacking/ubi/test/data
+  License: GPL-3.0 (fkie-cad/fact_extractor project license)
+  Downloaded: 2026-08-25

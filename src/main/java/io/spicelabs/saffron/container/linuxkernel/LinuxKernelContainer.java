@@ -21,6 +21,7 @@ import io.spicelabs.saffron.container.BinaryContainer;
 import io.spicelabs.saffron.container.ContainerEntry;
 import io.spicelabs.saffron.container.ContainerFormat;
 import io.spicelabs.saffron.container.linuxkernel.LinuxKernelContainerFactory.KernelType;
+import io.spicelabs.saffron.io.ChunkedDisk;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveInputStream;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +30,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -43,6 +43,10 @@ import java.util.zip.GZIPInputStream;
 
 /**
  * A Linux kernel image exposed as a binary container.
+ *
+ * <p>The container can be backed either by an in-memory byte array or by a
+ * {@link ChunkedDisk} (bounded reads — the artifact is never loaded as a
+ * whole). Entries stream from the backing source on demand.
  */
 final class LinuxKernelContainer implements BinaryContainer {
 
@@ -53,16 +57,73 @@ final class LinuxKernelContainer implements BinaryContainer {
     private static final byte[] END_CERTIFICATE = "-----END CERTIFICATE-----".getBytes(StandardCharsets.US_ASCII);
     private static final int DTB_MAGIC = 0xd00d_feed;
 
-    private final byte[] data;
+    private final byte[] data;          // in-memory backing (may be null)
+    private final ChunkedDisk disk;     // bounded disk backing (may be null)
+    private final int length;
     private final KernelType type;
     private final long payloadOffset;
     private final long payloadSize;
 
+    /**
+     * Memoized entry list and name index. The container is immutable
+     * (never rebound to a different source), so the memoized list is
+     * valid for the container's lifetime. Computed lazily because the
+     * scans (gzip detection, decompression, appended-region sweeps) are
+     * expensive — especially over a chunked disk.
+     */
+    private volatile List<ContainerEntry> memoizedEntries;
+    private volatile Map<String, ContainerEntry> memoizedEntryByName;
+
     LinuxKernelContainer(byte[] data) {
         this.data = data.clone();
-        this.type = LinuxKernelContainerFactory.detectType(data, data.length);
-        this.payloadOffset = computePayloadOffset(data, type);
-        this.payloadSize = computePayloadSize(data, type, payloadOffset, data.length);
+        this.disk = null;
+        this.length = this.data.length;
+        this.type = LinuxKernelContainerFactory.detectType(this.data, this.data.length);
+        this.payloadOffset = computePayloadOffset(this.data, type);
+        this.payloadSize = computePayloadSize(this.data, type, payloadOffset, this.data.length);
+    }
+
+    LinuxKernelContainer(@NotNull ChunkedDisk disk) throws IOException {
+        this.data = null;
+        this.disk = disk;
+        this.length = (int) disk.size();
+        byte[] header = disk.copyRange(0, 512);
+        this.type = LinuxKernelContainerFactory.detectType(header, disk.size());
+        this.payloadOffset = computePayloadOffsetDisk(disk, type);
+        this.payloadSize = computePayloadSizeDisk(disk, type, payloadOffset, disk.size());
+    }
+
+    private int len() {
+        return length;
+    }
+
+    private int get(int i) throws IOException {
+        if (data != null) {
+            return data[i] & 0xff;
+        }
+        return disk.get(i);
+    }
+
+    private int getInt(int i, ByteOrder order) throws IOException {
+        if (data != null) {
+            java.nio.ByteBuffer buf = java.nio.ByteBuffer.wrap(data, i, 4).order(order);
+            return buf.getInt(0);
+        }
+        return disk.getInt(i, order);
+    }
+
+    private InputStream stream(int off, int len) {
+        if (data != null) {
+            return new ByteArrayInputStream(data, off, len);
+        }
+        return disk.stream(off, len);
+    }
+
+    private byte[] copy(int off, int len) throws IOException {
+        if (data != null) {
+            return Arrays.copyOfRange(data, off, off + len);
+        }
+        return disk.copyRange(off, len);
     }
 
     @Override
@@ -72,11 +133,32 @@ final class LinuxKernelContainer implements BinaryContainer {
 
     @Override
     public @NotNull List<ContainerEntry> entries() {
+        List<ContainerEntry> result = memoizedEntries;
+        if (result != null) {
+            return result;
+        }
+        synchronized (this) {
+            result = memoizedEntries;
+            if (result != null) {
+                return result;
+            }
+            result = computeEntries();
+            Map<String, ContainerEntry> byName = new LinkedHashMap<>();
+            for (ContainerEntry entry : result) {
+                byName.putIfAbsent(entry.name(), entry);
+            }
+            memoizedEntryByName = Collections.unmodifiableMap(byName);
+            memoizedEntries = result;
+            return result;
+        }
+    }
+
+    private @NotNull List<ContainerEntry> computeEntries() {
         List<ContainerEntry> entries = new ArrayList<>();
         entries.add(new KernelPayloadEntry());
         findConfigGz().ifPresent(entries::add);
 
-        Optional<byte[]> decompressedPayload = decompressPayload(data, type, payloadOffset, payloadSize);
+        Optional<byte[]> decompressedPayload = decompressPayload(type, payloadOffset, payloadSize);
         if (decompressedPayload.isPresent()) {
             byte[] payload = decompressedPayload.get();
             findInitramfs(payload).ifPresent(entries::add);
@@ -85,13 +167,11 @@ final class LinuxKernelContainer implements BinaryContainer {
         }
 
         // Real kernels often append a DTB and X.509 certificates after the
-        // compressed payload region. Scan any raw bytes following the declared
-        // payload end for these optional components.
-        long payloadEnd = Math.addExact(payloadOffset, payloadSize);
-        if (payloadEnd < data.length) {
-            byte[] appended = safeCopy(data, (int) payloadEnd, (int) (data.length - payloadEnd));
-            findDtb(appended).ifPresent(entries::add);
-            findCertificates(appended).ifPresent(entries::add);
+        // compressed payload region. Scan the trailing bytes for them.
+        long payloadEnd = payloadOffset + payloadSize;
+        if (payloadEnd < len()) {
+            findDtbAppended(payloadEnd).ifPresent(entries::add);
+            findCertificatesAppended(payloadEnd).ifPresent(entries::add);
         }
 
         return Collections.unmodifiableList(entries);
@@ -99,10 +179,11 @@ final class LinuxKernelContainer implements BinaryContainer {
 
     @Override
     public @NotNull Optional<ContainerEntry> findEntry(@NotNull String path) {
-        for (ContainerEntry entry : entries()) {
-            if (entry.name().equals(path)) {
-                return Optional.of(entry);
-            }
+        // Populate the memoized list once, then use the name index.
+        entries();
+        Map<String, ContainerEntry> byName = memoizedEntryByName;
+        if (byName != null) {
+            return Optional.ofNullable(byName.get(path));
         }
         return Optional.empty();
     }
@@ -119,114 +200,153 @@ final class LinuxKernelContainer implements BinaryContainer {
 
     @Override
     public long size() {
-        return data.length;
+        return len();
     }
 
     private @NotNull Optional<ContainerEntry> findConfigGz() {
-        int offset = findGzipStreamWithConfig(data);
-        if (offset < 0) {
-            return Optional.empty();
-        }
-        int size = gzipMemberSize(data, offset);
-        if (size <= 0) {
-            return Optional.empty();
-        }
-        return Optional.of(new SlicedEntry("/config.gz", offset, size));
-    }
-
-    /**
-     * Returns the decompressed payload bytes, or empty if the payload is not
-     * compressed or decompression fails.
-     */
-    private static @NotNull Optional<byte[]> decompressPayload(byte[] data, KernelType type, long payloadOffset, long payloadSize) {
-        long offsetLong = payloadOffset;
-        long lengthLong = payloadSize;
-        if (offsetLong < 0 || offsetLong > data.length || lengthLong < 0 || offsetLong + lengthLong > data.length) {
-            return Optional.empty();
-        }
-        int offset = (int) offsetLong;
-        int length = (int) lengthLong;
-
-        return switch (type) {
-            case BZIMAGE, GZIP_IMAGE -> KernelDecompressor.decompress(data, offset, length);
-            case UIMAGE -> {
-                int compression = uImageCompression(data);
-                if (compression == 0) {
-                    yield Optional.empty();
-                }
-                yield KernelDecompressor.decompressUImage(data, offset, length, compression);
+        try {
+            int offset = findGzipStreamWithConfig();
+            if (offset < 0) {
+                return Optional.empty();
             }
-            case IMAGE, ZIMAGE, UNKNOWN -> Optional.empty();
-        };
-    }
-
-    private static byte[] safeCopy(byte[] data, int offset, int length) {
-        if (offset < 0 || length <= 0 || offset > data.length) {
-            return new byte[0];
+            int size = gzipMemberSize(offset);
+            if (size <= 0) {
+                return Optional.empty();
+            }
+            return Optional.of(new SlicedEntry("/config.gz", offset, size));
+        } catch (IOException e) {
+            return Optional.empty();
         }
-        int end = Math.min(offset + length, data.length);
-        return Arrays.copyOfRange(data, offset, end);
     }
 
-    private static int uImageCompression(byte[] data) {
-        if (data.length < 36) {
+    private @NotNull Optional<byte[]> decompressPayload(KernelType type, long payloadOffset,
+                                                        long payloadSize) {
+        try {
+            if (payloadOffset < 0 || payloadOffset > len() || payloadSize < 0
+                    || payloadOffset + payloadSize > len()) {
+                return Optional.empty();
+            }
+            int offset = (int) payloadOffset;
+            int length = (int) payloadSize;
+            byte[] payload = copy(offset, length);
+
+            return switch (type) {
+                case BZIMAGE, GZIP_IMAGE -> KernelDecompressor.decompress(payload, 0, length);
+                case UIMAGE -> {
+                    int compression = uImageCompression();
+                    if (compression == 0) {
+                        yield Optional.empty();
+                    }
+                    yield KernelDecompressor.decompressUImage(payload, 0, length, compression);
+                }
+                case IMAGE, ZIMAGE, UNKNOWN -> Optional.empty();
+            };
+        } catch (IOException | RuntimeException e) {
+            return Optional.empty();
+        }
+    }
+
+    private int uImageCompression() throws IOException {
+        if (len() < 36) {
             return 0;
         }
-        return data[34] & 0xFF;
+        return get(34);
     }
 
-    private static int uImageDataSize(byte[] data) {
-        if (data.length < 12) {
+    private int uImageDataSizeDisk() throws IOException {
+        if (len() < 12) {
             return 0;
         }
-        return ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getInt(12);
+        return getInt(12, ByteOrder.BIG_ENDIAN);
     }
 
-    private static int bzImageSetupSects(byte[] data) {
-        if (data.length < 0x1f2) {
+    private int bzImageSetupSectsDisk() throws IOException {
+        if (len() < 0x1f2) {
             return 0;
         }
-        return data[0x1f1] & 0xFF;
+        return get(0x1f1);
     }
 
-    private static long bzImageSetupSize(byte[] data) {
-        return (bzImageSetupSects(data) + 1L) * 512L;
+    private long bzImageSetupSizeDisk() throws IOException {
+        return (bzImageSetupSectsDisk() + 1L) * 512L;
     }
 
-    private static long bzImagePayloadLength(byte[] data) {
-        // payload_length is at offset 0x24c in the bzImage header.
-        // Only trust this field when the setup region is large enough to contain it.
-        if (bzImageSetupSize(data) < 0x250) {
+    private long bzImagePayloadLengthDisk() throws IOException {
+        if (bzImageSetupSizeDisk() < 0x250) {
             return -1;
         }
-        ByteBuffer buf = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
-        long length = buf.getInt(0x24c) & 0xffffffffL;
+        long length = getInt(0x24c, ByteOrder.LITTLE_ENDIAN) & 0xffffffffL;
         return length > 0 ? length : -1;
     }
 
-    private static long arm64ImageSize(byte[] data) {
-        // image_size is at offset 0x08 in the ARM64 Image header.
-        if (data.length < 0x10) {
+    private long arm64ImageSizeDisk() throws IOException {
+        if (len() < 0x10) {
             return -1;
         }
-        ByteBuffer buf = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
-        long size = buf.getLong(0x08);
+        long size = getInt(0x08, ByteOrder.LITTLE_ENDIAN) & 0xffffffffL;
         return size > 0 ? size : -1;
     }
 
-    private static long computePayloadSize(byte[] data, KernelType type, long payloadOffset, long sourceSize) {
+    private long computePayloadSizeDisk(ChunkedDisk disk, KernelType type, long payloadOffset,
+                                        long sourceSize) {
         long fallback = Math.max(0, sourceSize - payloadOffset);
         return switch (type) {
             case BZIMAGE -> {
-                long length = bzImagePayloadLength(data);
+                try {
+                    long length = bzImagePayloadLengthDisk();
+                    yield length > 0 ? length : fallback;
+                } catch (IOException e) {
+                    yield fallback;
+                }
+            }
+            case UIMAGE -> {
+                try {
+                    long length = uImageDataSizeDisk() & 0xffffffffL;
+                    yield length > 0 ? Math.min(length, fallback) : fallback;
+                } catch (IOException e) {
+                    yield fallback;
+                }
+            }
+            case IMAGE, GZIP_IMAGE -> {
+                try {
+                    long size = arm64ImageSizeDisk();
+                    yield size > 0 ? Math.min(size, fallback) : fallback;
+                } catch (IOException e) {
+                    yield fallback;
+                }
+            }
+            case ZIMAGE, UNKNOWN -> fallback;
+        };
+    }
+
+    private long computePayloadOffsetDisk(ChunkedDisk disk, KernelType type) {
+        return switch (type) {
+            case UIMAGE -> 64; // U-Boot uImage header is 64 bytes
+            case BZIMAGE -> {
+                try {
+                    yield Math.min(bzImageSetupSizeDisk(), len());
+                } catch (IOException e) {
+                    yield 0;
+                }
+            }
+            case ZIMAGE, IMAGE, GZIP_IMAGE, UNKNOWN -> 0;
+        };
+    }
+
+    private static long computePayloadSize(byte[] data, KernelType type, long payloadOffset,
+                                           long sourceSize) {
+        long fallback = Math.max(0, sourceSize - payloadOffset);
+        return switch (type) {
+            case BZIMAGE -> {
+                long length = bzImagePayloadLengthBytes(data);
                 yield length > 0 ? length : fallback;
             }
             case UIMAGE -> {
-                long length = uImageDataSize(data) & 0xffffffffL;
+                long length = uImageDataSizeBytes(data) & 0xffffffffL;
                 yield length > 0 ? Math.min(length, fallback) : fallback;
             }
             case IMAGE, GZIP_IMAGE -> {
-                long size = arm64ImageSize(data);
+                long size = arm64ImageSizeBytes(data);
                 yield size > 0 ? Math.min(size, fallback) : fallback;
             }
             case ZIMAGE, UNKNOWN -> fallback;
@@ -236,9 +356,45 @@ final class LinuxKernelContainer implements BinaryContainer {
     private static long computePayloadOffset(byte[] data, KernelType type) {
         return switch (type) {
             case UIMAGE -> 64; // U-Boot uImage header is 64 bytes
-            case BZIMAGE -> Math.min(bzImageSetupSize(data), data.length);
+            case BZIMAGE -> Math.min(bzImageSetupSizeBytes(data), data.length);
             case ZIMAGE, IMAGE, GZIP_IMAGE, UNKNOWN -> 0;
         };
+    }
+
+    private static int uImageDataSizeBytes(byte[] data) {
+        if (data.length < 12) {
+            return 0;
+        }
+        return java.nio.ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getInt(12);
+    }
+
+    private static int bzImageSetupSectsBytes(byte[] data) {
+        if (data.length < 0x1f2) {
+            return 0;
+        }
+        return data[0x1f1] & 0xFF;
+    }
+
+    private static long bzImageSetupSizeBytes(byte[] data) {
+        return (bzImageSetupSectsBytes(data) + 1L) * 512L;
+    }
+
+    private static long bzImagePayloadLengthBytes(byte[] data) {
+        if (bzImageSetupSizeBytes(data) < 0x250) {
+            return -1;
+        }
+        java.nio.ByteBuffer buf = java.nio.ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
+        long length = buf.getInt(0x24c) & 0xffffffffL;
+        return length > 0 ? length : -1;
+    }
+
+    private static long arm64ImageSizeBytes(byte[] data) {
+        if (data.length < 0x10) {
+            return -1;
+        }
+        java.nio.ByteBuffer buf = java.nio.ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
+        long size = buf.getLong(0x08);
+        return size > 0 ? size : -1;
     }
 
     private static @NotNull Optional<ContainerEntry> findInitramfs(byte[] decompressed) {
@@ -304,14 +460,65 @@ final class LinuxKernelContainer implements BinaryContainer {
 
     private static @NotNull Optional<ContainerEntry> findDtb(byte[] decompressed) {
         for (int i = 0; i <= decompressed.length - 8; i++) {
-            if (ByteBuffer.wrap(decompressed).order(ByteOrder.BIG_ENDIAN).getInt(i) == DTB_MAGIC) {
-                int totalSize = ByteBuffer.wrap(decompressed).order(ByteOrder.BIG_ENDIAN).getInt(i + 4);
+            int magic = java.nio.ByteBuffer.wrap(decompressed).order(ByteOrder.BIG_ENDIAN).getInt(i);
+            if (magic == DTB_MAGIC) {
+                int totalSize = java.nio.ByteBuffer.wrap(decompressed).order(ByteOrder.BIG_ENDIAN).getInt(i + 4);
                 if (totalSize >= 40 && i + totalSize <= decompressed.length) {
                     return Optional.of(new BytesEntry("/dtb", Arrays.copyOfRange(decompressed, i, i + totalSize)));
                 }
             }
         }
         return Optional.empty();
+    }
+
+    private @NotNull Optional<ContainerEntry> findDtbAppended(long start) {
+        try {
+            for (int i = (int) start; i <= len() - 8; i++) {
+                if (getInt(i, ByteOrder.BIG_ENDIAN) == DTB_MAGIC) {
+                    int totalSize = getInt(i + 4, ByteOrder.BIG_ENDIAN);
+                    if (totalSize >= 40 && i + totalSize <= len()) {
+                        int from = i;
+                        int to = i + totalSize;
+                        return Optional.of(new SlicedEntry("/dtb", from, to - from));
+                    }
+                }
+            }
+        } catch (IOException e) {
+            // fall through
+        }
+        return Optional.empty();
+    }
+
+    private @NotNull Optional<ContainerEntry> findCertificatesAppended(long start) {
+        try {
+            int i = (int) start;
+            int firstBegin = -1;
+            int lastEnd = -1;
+            int count = 0;
+            while (i <= len() - BEGIN_CERTIFICATE.length) {
+                int begin = indexOf(i, BEGIN_CERTIFICATE);
+                if (begin < 0) {
+                    break;
+                }
+                int end = indexOf(begin + BEGIN_CERTIFICATE.length, END_CERTIFICATE);
+                if (end < 0) {
+                    break;
+                }
+                end += END_CERTIFICATE.length;
+                if (firstBegin < 0) {
+                    firstBegin = begin;
+                }
+                lastEnd = end;
+                count++;
+                i = end;
+            }
+            if (count == 0) {
+                return Optional.empty();
+            }
+            return Optional.of(new SlicedEntry("/certificates", firstBegin, lastEnd - firstBegin));
+        } catch (IOException e) {
+            return Optional.empty();
+        }
     }
 
     private static @NotNull Optional<ContainerEntry> findCertificates(byte[] decompressed) {
@@ -346,6 +553,19 @@ final class LinuxKernelContainer implements BinaryContainer {
         return Optional.of(new BytesEntry("/certificates", out.toByteArray()));
     }
 
+    private int indexOf(int fromIndex, byte[] pattern) throws IOException {
+        outer:
+        for (int i = fromIndex; i <= len() - pattern.length; i++) {
+            for (int j = 0; j < pattern.length; j++) {
+                if (get(i + j) != (pattern[j] & 0xff)) {
+                    continue outer;
+                }
+            }
+            return i;
+        }
+        return -1;
+    }
+
     private static int indexOf(byte[] data, byte[] pattern, int fromIndex) {
         outer:
         for (int i = fromIndex; i <= data.length - pattern.length; i++) {
@@ -363,14 +583,14 @@ final class LinuxKernelContainer implements BinaryContainer {
      * Scans the kernel image for a gzip member whose decompressed content
      * contains the {@code CONFIG_} marker used by {@code config.gz}.
      */
-    private static int findGzipStreamWithConfig(byte[] data) {
+    private int findGzipStreamWithConfig() throws IOException {
         byte[] marker = "CONFIG_".getBytes();
-        for (int i = 0; i < data.length - 2; i++) {
-            if (data[i] == GZIP_MAGIC[0] && data[i + 1] == GZIP_MAGIC[1]) {
-                if (i + 2 < data.length && data[i + 2] != 0x08) {
+        for (int i = 0; i < len() - 2; i++) {
+            if (get(i) == (GZIP_MAGIC[0] & 0xff) && get(i + 1) == (GZIP_MAGIC[1] & 0xff)) {
+                if (i + 2 < len() && get(i + 2) != 0x08) {
                     continue; // not deflate
                 }
-                try (GZIPInputStream gz = new GZIPInputStream(new ByteArrayInputStream(data, i, data.length - i))) {
+                try (GZIPInputStream gz = new GZIPInputStream(stream(i, len() - i))) {
                     if (streamContains(gz, marker)) {
                         return i;
                     }
@@ -382,10 +602,6 @@ final class LinuxKernelContainer implements BinaryContainer {
         return -1;
     }
 
-    /**
-     * Returns true if the input stream contains the given byte sequence,
-     * using a sliding window to detect markers that span read boundaries.
-     */
     private static boolean streamContains(InputStream in, byte[] marker) throws IOException {
         byte[] window = new byte[marker.length];
         int filled = 0;
@@ -420,18 +636,18 @@ final class LinuxKernelContainer implements BinaryContainer {
      * Returns the compressed size of a gzip member starting at {@code offset},
      * or -1 if it cannot be determined safely.
      */
-    private static int gzipMemberSize(byte[] data, int offset) {
-        try (GZIPInputStream gz = new GZIPInputStream(new ByteArrayInputStream(data, offset, data.length - offset))) {
+    private int gzipMemberSize(int offset) throws IOException {
+        try (GZIPInputStream gz = new GZIPInputStream(stream(offset, len() - offset))) {
             byte[] buf = new byte[8192];
             while (gz.read(buf) >= 0) {
                 // Drain the member to find its end.
             }
-            for (int i = offset + 2; i < data.length - 1; i++) {
-                if (data[i] == GZIP_MAGIC[0] && data[i + 1] == GZIP_MAGIC[1]) {
+            for (int i = offset + 2; i < len() - 1; i++) {
+                if (get(i) == (GZIP_MAGIC[0] & 0xff) && get(i + 1) == (GZIP_MAGIC[1] & 0xff)) {
                     return i - offset;
                 }
             }
-            return data.length - offset;
+            return len() - offset;
         } catch (IOException e) {
             return -1;
         }
@@ -488,7 +704,7 @@ final class LinuxKernelContainer implements BinaryContainer {
 
         @Override
         public @NotNull InputStream openStream() throws IOException {
-            return new ByteArrayInputStream(data, (int) payloadOffset, (int) payloadSize);
+            return stream((int) payloadOffset, (int) payloadSize);
         }
 
         @Override
@@ -522,7 +738,7 @@ final class LinuxKernelContainer implements BinaryContainer {
 
         @Override
         public @NotNull InputStream openStream() throws IOException {
-            return new ByteArrayInputStream(data, offset, length);
+            return stream(offset, length);
         }
 
         @Override

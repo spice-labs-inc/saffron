@@ -92,6 +92,15 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
                         header.descriptorSizeBytes());
             }
 
+            // Differencing disks read zeros for grains absent from the
+            // grain directory; reject loudly instead of silent wrong data.
+            if (descriptor != null && descriptor.hasParent()) {
+                throw new IOException("Differencing VMDK images are not supported: "
+                        + path.getFileName());
+            }
+
+            validateHeader(header, channel.size());
+
             // Read grain directory
             int[] grainDirectory = readGrainDirectory(channel, header);
 
@@ -105,6 +114,31 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
             if (!success) {
                 channel.close();
             }
+        }
+    }
+
+    /** VMDK spec: 2 TB max per extent, 512-byte sectors. */
+    private static final long MAX_VMDK_SIZE = 2L * 1024 * 1024 * 1024 * 1024;
+
+    /** Grain directory cap (memory budget: 1M entries x 4 = 4 MiB). */
+    private static final int MAX_GD_ENTRIES = 1_000_000;
+
+    private static void validateHeader(SparseExtentHeader header, long fileSize)
+            throws IOException {
+        long capacityBytes;
+        try {
+            capacityBytes = Math.multiplyExact(header.capacity(),
+                    (long) SparseExtentHeader.SECTOR_SIZE);
+        } catch (ArithmeticException e) {
+            throw new IOException("VMDK capacity overflows: " + header.capacity(), e);
+        }
+        if (capacityBytes <= 0 || capacityBytes > MAX_VMDK_SIZE) {
+            throw new IOException("Invalid VMDK capacity: " + capacityBytes + " bytes");
+        }
+        long grainSectors = header.grainSize();
+        if (grainSectors < 1 || grainSectors > 4096
+                || (grainSectors & (grainSectors - 1)) != 0) {
+            throw new IOException("Invalid VMDK grain size: " + grainSectors + " sectors");
         }
     }
 
@@ -124,70 +158,79 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
         if (header.gdOffset() < 0) {
             long fileSize = channel.size();
             if (fileSize > SparseExtentHeader.HEADER_SIZE * 2) {
-                try {
-                    SparseExtentHeader footer = SparseExtentHeader.read(channel,
-                            fileSize - SparseExtentHeader.HEADER_SIZE * 2);
+                SparseExtentHeader footer = SparseExtentHeader.read(channel,
+                        fileSize - SparseExtentHeader.HEADER_SIZE * 2);
+                if (footer.gdOffset() > 0) {
+                    effectiveHeader = footer;
+                } else {
+                    // Try last sector
+                    footer = SparseExtentHeader.read(channel,
+                            fileSize - SparseExtentHeader.HEADER_SIZE);
                     if (footer.gdOffset() > 0) {
                         effectiveHeader = footer;
                     } else {
-                        // Try last sector
-                        footer = SparseExtentHeader.read(channel,
-                                fileSize - SparseExtentHeader.HEADER_SIZE);
-                        if (footer.gdOffset() > 0) {
-                            effectiveHeader = footer;
-                        } else {
-                            return new int[0];
-                        }
+                        throw new IOException(
+                                "VMDK stream-optimized footer has no valid grain directory");
                     }
-                } catch (Exception e) {
-                    return new int[0];
                 }
             } else {
-                return new int[0];
+                throw new IOException(
+                        "VMDK stream-optimized file too small to hold a footer");
             }
         }
 
         // Calculate number of grain directory entries
         int grainSizeBytes = effectiveHeader.grainSizeBytes();
         if (grainSizeBytes == 0) {
-            return new int[0];
+            throw new IOException("VMDK grain size is zero");
         }
 
-        long capacity = effectiveHeader.capacity() * SparseExtentHeader.SECTOR_SIZE;
+        long capacity;
+        try {
+            capacity = Math.multiplyExact(effectiveHeader.capacity(),
+                    (long) SparseExtentHeader.SECTOR_SIZE);
+        } catch (ArithmeticException e) {
+            throw new IOException("VMDK capacity overflows", e);
+        }
         long grainsPerGT = effectiveHeader.numGTEsPerGT();
         if (grainsPerGT == 0) {
             grainsPerGT = 512; // Default
         }
 
         long totalGrains = (capacity + grainSizeBytes - 1) / grainSizeBytes;
-        int numGDEntries = (int) ((totalGrains + grainsPerGT - 1) / grainsPerGT);
+        long numGDEntriesLong = (totalGrains + grainsPerGT - 1) / grainsPerGT;
+        if (numGDEntriesLong <= 0) {
+            return new int[0];
+        }
+        if (numGDEntriesLong > MAX_GD_ENTRIES) {
+            throw new IOException("VMDK grain directory too large: " + numGDEntriesLong
+                    + " entries (max " + MAX_GD_ENTRIES + ")");
+        }
+        int numGDEntries = (int) numGDEntriesLong;
 
         // Always use the primary grain directory (GD). The RGD is a backup copy
         // for recovery; the GD is the authoritative copy for reading.
         long gdSectorOffset = effectiveHeader.gdOffset();
 
-        if (numGDEntries == 0 || gdSectorOffset <= 0) {
+        if (gdSectorOffset <= 0) {
             return new int[0];
-        }
-
-        // Limit grain directory size for safety
-        if (numGDEntries > 1_000_000) {
-            numGDEntries = 1_000_000;
         }
 
         int[] gd = new int[numGDEntries];
         ByteBuffer buffer = ByteBuffer.allocate(numGDEntries * 4);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         channel.position(gdSectorOffset * SparseExtentHeader.SECTOR_SIZE);
-        int read = channel.read(buffer);
-        if (read < numGDEntries * 4) {
-            // Partial read is okay for some VMDKs
-            buffer.flip();
-            int entries = read / 4;
-            for (int i = 0; i < entries; i++) {
-                gd[i] = buffer.getInt();
+        int totalRead = 0;
+        while (totalRead < numGDEntries * 4) {
+            int n = channel.read(buffer);
+            if (n < 0) {
+                throw new IOException("Truncated VMDK grain directory: expected "
+                        + (numGDEntries * 4) + " bytes, got " + totalRead);
             }
-            return gd;
+            if (n == 0) {
+                throw new IOException("No progress reading VMDK grain directory");
+            }
+            totalRead += n;
         }
         buffer.flip();
 
@@ -274,7 +317,19 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
 
         synchronized (channel) {
             channel.position(gtOffset + gtIndex * 4L);
-            channel.read(gtBuffer);
+            int totalRead = 0;
+            while (totalRead < 4) {
+                int n = channel.read(gtBuffer);
+                if (n < 0) {
+                    throw new IOException("Truncated VMDK grain table entry: expected 4 bytes at "
+                            + (gtOffset + gtIndex * 4L) + ", got " + totalRead);
+                }
+                if (n == 0) {
+                    throw new IOException("No progress reading VMDK grain table entry at "
+                            + (gtOffset + gtIndex * 4L));
+                }
+                totalRead += n;
+            }
         }
         gtBuffer.flip();
         long grainOffset = Integer.toUnsignedLong(gtBuffer.getInt());
@@ -302,12 +357,17 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
 
         synchronized (channel) {
             channel.position(offset);
-            int read = channel.read(buffer);
-            if (read < length) {
-                // Pad with zeros
-                while (buffer.position() < length) {
-                    buffer.put((byte) 0);
+            int totalRead = 0;
+            while (totalRead < length) {
+                int read = channel.read(buffer);
+                if (read < 0) {
+                    throw new IOException("Truncated VMDK grain: expected " + length
+                            + " bytes at offset " + offset + ", got " + totalRead);
                 }
+                if (read == 0) {
+                    throw new IOException("No progress reading VMDK grain at offset " + offset);
+                }
+                totalRead += read;
             }
         }
 
@@ -329,16 +389,28 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
 
         synchronized (channel) {
             channel.position(grainOffset);
-            channel.read(markerBuffer);
+            int totalRead = 0;
+            while (totalRead < 12) {
+                int n = channel.read(markerBuffer);
+                if (n < 0) {
+                    throw new IOException("Truncated VMDK grain marker: expected 12 bytes at "
+                            + grainOffset + ", got " + totalRead);
+                }
+                if (n == 0) {
+                    throw new IOException("No progress reading VMDK grain marker at "
+                            + grainOffset);
+                }
+                totalRead += n;
+            }
         }
         markerBuffer.flip();
 
         long lba = markerBuffer.getLong();
         int compressedSize = markerBuffer.getInt();
 
-        if (compressedSize == 0 || compressedSize > grainSize * 2) {
-            // Invalid or uncompressed - return zeros
-            return new byte[length];
+        if (compressedSize <= 0 || compressedSize > grainSize * 2) {
+            // Invalid marker: corruption, not a valid uncompressed grain.
+            throw new IOException("Invalid VMDK compressed grain size: " + compressedSize);
         }
 
         // Read compressed data
@@ -347,7 +419,20 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
 
         synchronized (channel) {
             channel.position(grainOffset + 12);
-            channel.read(compBuffer);
+            int totalRead = 0;
+            while (totalRead < compressedSize) {
+                int n = channel.read(compBuffer);
+                if (n < 0) {
+                    throw new IOException("Truncated VMDK compressed grain: expected "
+                            + compressedSize + " bytes at " + (grainOffset + 12)
+                            + ", got " + totalRead);
+                }
+                if (n == 0) {
+                    throw new IOException("No progress reading VMDK compressed grain at "
+                            + (grainOffset + 12));
+                }
+                totalRead += n;
+            }
         }
 
         // Decompress (may require multiple inflate() calls for large grains)
@@ -359,16 +444,17 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
             while (!inflater.finished() && totalDecompressed < grainSize) {
                 int n = inflater.inflate(decompressed, totalDecompressed, grainSize - totalDecompressed);
                 if (n == 0 && inflater.needsInput()) {
-                    break; // No more input data
+                    // Input exhausted before the stream finished: corruption.
+                    throw new IOException("VMDK compressed grain truncated: deflate stream not finished");
                 }
                 totalDecompressed += n;
             }
-            if (totalDecompressed < grainSize) {
-                Arrays.fill(decompressed, totalDecompressed, grainSize, (byte) 0);
+            if (totalDecompressed < grainSize && !inflater.finished()) {
+                throw new IOException("VMDK compressed grain did not decompress fully");
             }
         } catch (DataFormatException e) {
-            // Return zeros if decompression fails
-            return new byte[length];
+            throw new IOException("VMDK compressed grain decompression failed: "
+                    + e.getMessage(), e);
         } finally {
             inflater.end();
         }
@@ -532,6 +618,9 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
 
         @Override
         public int read(byte[] b, int off, int len) throws IOException {
+            if (len == 0) {
+                return 0;
+            }
             if (position >= size) {
                 return -1;
             }

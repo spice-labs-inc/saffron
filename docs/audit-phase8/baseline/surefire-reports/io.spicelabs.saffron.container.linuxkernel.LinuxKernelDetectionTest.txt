@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: io.spicelabs.saffron.container.linuxkernel.LinuxKernelDetectionTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.050 s -- in io.spicelabs.saffron.container.linuxkernel.LinuxKernelDetectionTest

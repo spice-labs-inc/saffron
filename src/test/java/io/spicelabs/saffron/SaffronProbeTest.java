@@ -198,6 +198,53 @@ class SaffronProbeTest {
     }
 
     @Test
+    void jffs2Magic_returnsFilesystemJffs2() throws IOException {
+        byte[] prefix = readPrefix(res("jffs2/fixtures/tree-zlib.jffs2"));
+
+        assertKind(SaffronProbe.detect(prefix, null, null), Kind.FILESYSTEM_JFFS2);
+    }
+
+    @Test
+    void cramfsMagic_returnsFilesystemCramfs() throws IOException {
+        byte[] prefix = readPrefix(res("cramfs/fixtures/tree.cramfs"));
+
+        assertKind(SaffronProbe.detect(prefix, null, null), Kind.FILESYSTEM_CRAMFS);
+    }
+
+    @Test
+    void yaffs2Image_returnsFilesystemYaffs2() throws IOException {
+        byte[] prefix = readPrefix(res("yaffs2/wild/unblob-sample.2048.64.le.yaffs2"));
+
+        assertKind(SaffronProbe.detect(prefix, null, null), Kind.FILESYSTEM_YAFFS2);
+    }
+
+    @Test
+    void ubifsImage_returnsFilesystemUbifs() throws IOException {
+        byte[] prefix = readPrefix(res("ubi/wild/banana-zlib.ubifs"));
+
+        assertKind(SaffronProbe.detect(prefix, null, null), Kind.FILESYSTEM_UBIFS);
+    }
+
+    @Test
+    void ubiContainer_returnsContainerUbi() throws IOException {
+        byte[] prefix = readPrefix(res("ubi/wild/fruits.ubi"));
+
+        assertKind(SaffronProbe.detect(prefix, null, null), Kind.CONTAINER_UBI);
+    }
+
+    @Test
+    void jffs2Extension_returnsDiskRaw() {
+        // JFFS2 images have no standard extension in the wild, but a caller
+        // may name one .jffs2: the extension fallback (mirroring
+        // DiskFormat.detectByExtension) treats it like other bare-filesystem
+        // raw images.
+        byte[] prefix = new byte[4096];
+        new Random(3).nextBytes(prefix);
+
+        assertKind(SaffronProbe.detect(prefix, null, "rootfs.jffs2"), Kind.DISK_RAW);
+    }
+
+    @Test
     void fatWithBootSignature_isNotShadowedByRaw() {
         // FAT carries 55 AA at offset 510 (a "raw MBR" signal). Filesystem
         // detection must run before the raw-MBR heuristic or this would be

@@ -22,6 +22,7 @@ import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
+import io.spicelabs.saffron.filesystem.ChunkedRegionStream;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -42,8 +43,23 @@ import java.util.stream.StreamSupport;
  */
 public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
 
+    /** Maximum default walk depth (hostile trees must not overflow the stack). */
+    private static final int MAX_WALK_DEPTH = 512;
+
     /** Maximum file size that can be read into memory (256 MB) */
-    private static final long MAX_READABLE_SIZE = 256 * 1024 * 1024;
+    private static final long MAX_READABLE_SIZE = 16 * 1024 * 1024;
+
+    /** Cap on $ATTRIBUTE_LIST entries processed per record (CPU DoS guard). */
+    private static final int MAX_ATTRIBUTE_LIST_ENTRIES = 4096;
+
+    /** MFT cache: entry cap. */
+    private static final int MAX_MFT_CACHE_ENTRIES = 4096;
+
+    /** MFT cache: aggregate attribute-payload byte budget. */
+    private static final long MAX_MFT_CACHE_BYTES = 16 * 1024 * 1024;
+
+    /** Records whose attribute payload exceeds this are never cached. */
+    private static final long MAX_CACHEABLE_RECORD_BYTES = 4 * 1024 * 1024;
 
     /** Maximum symlink resolution depth to prevent infinite loops */
     private static final int MAX_SYMLINK_DEPTH = 40;
@@ -52,7 +68,7 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
     private final NtfsBootSector bootSector;
     private final int mftRecordSize;
     private final int clusterSize;
-    private final Map<Long, MftRecord> mftCache;
+    private final io.spicelabs.saffron.io.LruCache<Long, MftRecord> mftCache;
     private final Optional<String> volumeLabel;
     private final List<NtfsAttribute.DataRun> mftDataRuns;
     private long cachedUsedClusters = -1;
@@ -64,7 +80,10 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
         this.bootSector = bootSector;
         this.mftRecordSize = bootSector.mftRecordSize();
         this.clusterSize = bootSector.clusterSize();
-        this.mftCache = new HashMap<>();
+        // Bounded LRU: 4096 records AND a 16 MiB attribute-payload budget
+        // (a merged $ATTRIBUTE_LIST can retain megabytes per record).
+        this.mftCache = new io.spicelabs.saffron.io.LruCache<>(
+                MAX_MFT_CACHE_ENTRIES, MAX_MFT_CACHE_BYTES, MftRecord::attributePayloadBytes);
         this.volumeLabel = volumeLabel;
         this.mftDataRuns = mftDataRuns;
     }
@@ -177,7 +196,9 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
             baseRecord = resolveAttributeList(baseRecord, attrListAttr.get());
         }
 
-        mftCache.put(recordNumber, baseRecord);
+        if (baseRecord.attributePayloadBytes() <= MAX_CACHEABLE_RECORD_BYTES) {
+            mftCache.put(recordNumber, baseRecord);
+        }
         return baseRecord;
     }
 
@@ -229,6 +250,11 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
         if (attrListAttr.isResident()) {
             attrListData = attrListAttr.residentData();
         } else {
+            if (attrListAttr.dataSize() > MAX_READABLE_SIZE) {
+                throw new ResourceLimitException("NTFS attribute list too large: "
+                        + attrListAttr.dataSize() + " bytes (limit: 16 MB).",
+                        "allocation_size", MAX_READABLE_SIZE, attrListAttr.dataSize());
+            }
             attrListData = readDataRuns(attrListAttr.dataRuns(), (int) attrListAttr.dataSize());
         }
 
@@ -240,9 +266,15 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
         buf.order(ByteOrder.LITTLE_ENDIAN);
         int offset = 0;
 
+        int entriesProcessed = 0;
         while (offset + 26 <= attrListData.length) {
             int recordLength = buf.getShort(offset + 4) & 0xFFFF;
             if (recordLength < 26 || offset + recordLength > attrListData.length) break;
+
+            if (++entriesProcessed > MAX_ATTRIBUTE_LIST_ENTRIES) {
+                throw new ResourceLimitException("NTFS attribute list has too many entries",
+                        "attribute_list_entries", MAX_ATTRIBUTE_LIST_ENTRIES, entriesProcessed);
+            }
 
             long mftRef = buf.getLong(offset + 16) & 0x0000FFFFFFFFFFFFL;
 
@@ -309,15 +341,50 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
 
         // Non-resident data - read from data runs
         long dataSize = attr.dataSize();
-        if (dataSize > MAX_READABLE_SIZE) {
-            throw new ResourceLimitException("File too large to read into memory: " + dataSize + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, dataSize);
-        }
-
         if (attr.isCompressed()) {
             return readCompressedDataRuns(attr.dataRuns(), (int) dataSize, attr.compressionUnitSize());
         }
 
         return readDataRuns(attr.dataRuns(), (int) dataSize);
+    }
+
+    /**
+     * Opens a lazy stream over the record's data attribute: resident data
+     * is served from memory; non-resident data streams from the data runs
+     * in bounded chunks (see {@link ChunkedRegionStream}). Compressed
+     * files fall back to per-file materialization (decompression requires
+     * the compression units; capped at 16 MiB).
+     */
+    private InputStream openFileStream(MftRecord record) throws IOException {
+        Optional<NtfsAttribute> dataAttr = record.findAttribute(NtfsAttribute.TYPE_DATA);
+        if (dataAttr.isEmpty()) {
+            return new ByteArrayInputStream(new byte[0]);
+        }
+        NtfsAttribute attr = dataAttr.get();
+        if (attr.isResident()) {
+            return new ByteArrayInputStream(attr.residentData());
+        }
+        long dataSize = attr.dataSize();
+        if (attr.isCompressed()) {
+            return new ByteArrayInputStream(readCompressedDataRuns(
+                    attr.dataRuns(), (int) dataSize, attr.compressionUnitSize()));
+        }
+        List<ChunkedRegionStream.Segment> segments = new ArrayList<>();
+        long logical = 0;
+        for (NtfsAttribute.DataRun run : attr.dataRuns()) {
+            if (logical >= dataSize) {
+                break;
+            }
+            long runBytes = Math.min(run.length() * clusterSize, dataSize - logical);
+            if (!run.sparse()) {
+                long diskOffset = run.lcn() * clusterSize;
+                if (diskOffset >= 0) {
+                    segments.add(new ChunkedRegionStream.Segment(logical, diskOffset, runBytes));
+                }
+            }
+            logical += runBytes;
+        }
+        return new ChunkedRegionStream(region, segments, dataSize);
     }
 
     /**
@@ -489,6 +556,11 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
      */
     private List<MftRecord> readIndexAllocation(NtfsAttribute indexAllocAttr, int indexBlockSize) throws IOException {
         List<MftRecord> entries = new ArrayList<>();
+        if (indexAllocAttr.dataSize() > MAX_READABLE_SIZE) {
+            throw new ResourceLimitException("NTFS index allocation too large: "
+                    + indexAllocAttr.dataSize() + " bytes (limit: 16 MB).",
+                    "allocation_size", MAX_READABLE_SIZE, indexAllocAttr.dataSize());
+        }
         byte[] indexData = readDataRuns(indexAllocAttr.dataRuns(), (int) indexAllocAttr.dataSize());
         ByteBuffer buf = ByteBuffer.wrap(indexData);
         buf.order(ByteOrder.LITTLE_ENDIAN);
@@ -621,7 +693,7 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
 
     @Override
     public @NotNull Stream<FileSystemEntry> walk() throws IOException {
-        return walk("/", Integer.MAX_VALUE);
+        return walk("/", MAX_WALK_DEPTH);
     }
 
     @Override
@@ -1009,12 +1081,17 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
 
         @Override
         public byte[] readAllBytes() throws IOException {
+            if (size() > MAX_READABLE_SIZE) {
+                throw new ResourceLimitException("File too large to read into memory: " + size()
+                        + " bytes (limit: 16 MB). Use openStream() for large files.",
+                        "allocation_size", MAX_READABLE_SIZE, size());
+            }
             return readFileData(record);
         }
 
         @Override
         public @NotNull InputStream openStream() throws IOException {
-            return new ByteArrayInputStream(readAllBytes());
+            return openFileStream(record);
         }
     }
 

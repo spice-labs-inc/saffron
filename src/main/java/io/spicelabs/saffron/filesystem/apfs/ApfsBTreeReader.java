@@ -38,6 +38,9 @@ import java.util.function.BiFunction;
  */
 public class ApfsBTreeReader {
 
+    /** Maximum b-tree search depth (real APFS trees are shallow). */
+    private static final int MAX_SEARCH_DEPTH = 64;
+
     // Node flags
     public static final int BTNODE_ROOT = 0x0001;
     public static final int BTNODE_LEAF = 0x0002;
@@ -161,12 +164,26 @@ public class ApfsBTreeReader {
                                            @NotNull BiFunction<byte[], Void, Integer> keyComparator,
                                            @Nullable BiFunction<Long, Long, Long> resolveVirtual) throws IOException {
         BTreeNode node = readNode(rootBlock);
-        return searchNode(node, keyComparator, resolveVirtual);
+        return searchNode(node, keyComparator, resolveVirtual, 0);
     }
 
     private List<KVEntry> searchNode(BTreeNode node,
                                        BiFunction<byte[], Void, Integer> keyComparator,
                                        BiFunction<Long, Long, Long> resolveVirtual) throws IOException {
+        return searchNode(node, keyComparator, resolveVirtual, 0);
+    }
+
+    /**
+     * Depth-capped tree descent: a hostile node referencing itself (or an
+     * ancestor) must fail checked, never {@link StackOverflowError}.
+     */
+    private List<KVEntry> searchNode(BTreeNode node,
+                                       BiFunction<byte[], Void, Integer> keyComparator,
+                                       BiFunction<Long, Long, Long> resolveVirtual,
+                                       int depth) throws IOException {
+        if (depth > MAX_SEARCH_DEPTH) {
+            throw new IOException("apfs b-tree too deep");
+        }
         List<KVEntry> results = new ArrayList<>();
 
         if (node.isLeaf()) {
@@ -193,7 +210,7 @@ public class ApfsBTreeReader {
                         childBlock = childOid; // Physical
                     }
                     BTreeNode child = readNode(childBlock);
-                    results.addAll(searchNode(child, keyComparator, resolveVirtual));
+                    results.addAll(searchNode(child, keyComparator, resolveVirtual, depth + 1));
                     break;
                 }
             }

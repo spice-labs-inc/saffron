@@ -15,6 +15,9 @@ import java.util.List;
  */
 public class BtrfsTreeReader {
 
+    /** Maximum tree recursion depth (real btrfs trees are shallow). */
+    private static final int MAX_TREE_DEPTH = 64;
+
     private final BtrfsChunkTree chunkTree;
     private final int nodeSize;
 
@@ -106,6 +109,9 @@ public class BtrfsTreeReader {
         buf.get(csum);
         buf.position(32 + 16 + 8 + 8 + 16 + 8 + 8);  // Skip to nritems
         int nrItems = buf.getInt();
+        if (nrItems < 0 || nrItems > nodeSize / 16) {
+            throw new IOException("Invalid btrfs leaf item count: " + nrItems);
+        }
 
         // Read items starting after header
         buf.position(NodeHeader.SIZE);
@@ -114,6 +120,11 @@ public class BtrfsTreeReader {
             BtrfsKey key = BtrfsKey.read(buf);
             int dataOffset = buf.getInt();
             int dataSize = buf.getInt();
+            if (dataOffset < 0 || dataSize < 0
+                    || dataOffset + (long) dataSize > nodeSize - NodeHeader.SIZE) {
+                throw new IOException("Invalid btrfs leaf item bounds: offset="
+                        + dataOffset + ", size=" + dataSize);
+            }
             items.add(new LeafItem(key, dataOffset, dataSize));
         }
         return items;
@@ -132,6 +143,11 @@ public class BtrfsTreeReader {
 
         // Item data offset is relative to the leaf data area start (right after the header)
         int dataStart = NodeHeader.SIZE + item.dataOffset();
+        if (dataStart < NodeHeader.SIZE || item.dataSize() < 0
+                || dataStart + (long) item.dataSize() > nodeSize) {
+            throw new IOException("Invalid btrfs item data bounds: start=" + dataStart
+                    + ", size=" + item.dataSize());
+        }
         byte[] data = new byte[item.dataSize()];
         buf.position(dataStart);
         buf.get(data);
@@ -148,6 +164,9 @@ public class BtrfsTreeReader {
         // Read header to get item count
         buf.position(32 + 16 + 8 + 8 + 16 + 8 + 8);  // Skip to nritems
         int nrItems = buf.getInt();
+        if (nrItems < 0 || nrItems > nodeSize / 16) {
+            throw new IOException("Invalid btrfs internal node item count: " + nrItems);
+        }
 
         // Read key pointers after header
         buf.position(NodeHeader.SIZE);
@@ -187,6 +206,19 @@ public class BtrfsTreeReader {
 
     private void searchRecursive(long nodeAddr, BtrfsKey searchKey, long targetObjId, int targetType,
                                   List<SearchResult> results) throws IOException {
+        searchRecursive(nodeAddr, searchKey, targetObjId, targetType, results, 0,
+                new java.util.HashSet<>());
+    }
+
+    private void searchRecursive(long nodeAddr, BtrfsKey searchKey, long targetObjId,
+                                 int targetType, List<SearchResult> results, int depth,
+                                 java.util.Set<Long> visited) throws IOException {
+        if (depth > MAX_TREE_DEPTH) {
+            throw new IOException("btrfs tree too deep");
+        }
+        if (!visited.add(nodeAddr)) {
+            throw new IOException("btrfs tree cycle at node " + nodeAddr);
+        }
         NodeHeader header = readHeader(nodeAddr);
 
         if (header.isLeaf()) {
@@ -209,7 +241,7 @@ public class BtrfsTreeReader {
                 }
                 boolean lastChild = (i == ptrs.size() - 1);
                 if (lastChild || targetObjId <= ptrs.get(i + 1).key().objectId()) {
-                    searchRecursive(ptrs.get(i).blockPtr(), searchKey, targetObjId, targetType, results);
+                    searchRecursive(ptrs.get(i).blockPtr(), searchKey, targetObjId, targetType, results, depth + 1, visited);
                 }
             }
         }
@@ -225,6 +257,22 @@ public class BtrfsTreeReader {
     }
 
     private void findAllRecursive(long nodeAddr, long targetObjId, List<SearchResult> results) throws IOException {
+        findAllRecursive(nodeAddr, targetObjId, results, 0);
+    }
+
+    private void findAllRecursive(long nodeAddr, long targetObjId, List<SearchResult> results,
+                                  int depth) throws IOException {
+        findAllRecursive(nodeAddr, targetObjId, results, depth, new java.util.HashSet<>());
+    }
+
+    private void findAllRecursive(long nodeAddr, long targetObjId, List<SearchResult> results,
+                                  int depth, java.util.Set<Long> visited) throws IOException {
+        if (depth > MAX_TREE_DEPTH) {
+            throw new IOException("btrfs tree too deep");
+        }
+        if (!visited.add(nodeAddr)) {
+            throw new IOException("btrfs tree cycle at node " + nodeAddr);
+        }
         NodeHeader header = readHeader(nodeAddr);
 
         if (header.isLeaf()) {
@@ -244,7 +292,7 @@ public class BtrfsTreeReader {
                 }
                 boolean lastChild = (i == ptrs.size() - 1);
                 if (lastChild || targetObjId <= ptrs.get(i + 1).key().objectId()) {
-                    findAllRecursive(ptrs.get(i).blockPtr(), targetObjId, results);
+                    findAllRecursive(ptrs.get(i).blockPtr(), targetObjId, results, depth + 1, visited);
                 }
             }
         }
@@ -260,7 +308,23 @@ public class BtrfsTreeReader {
     }
 
     private void scanForTypeRecursive(long nodeAddr, int targetType, List<SearchResult> results, int limit) throws IOException {
+        scanForTypeRecursive(nodeAddr, targetType, results, limit, 0);
+    }
+
+    private void scanForTypeRecursive(long nodeAddr, int targetType, List<SearchResult> results,
+                                      int limit, int depth) throws IOException {
+        scanForTypeRecursive(nodeAddr, targetType, results, limit, depth, new java.util.HashSet<>());
+    }
+
+    private void scanForTypeRecursive(long nodeAddr, int targetType, List<SearchResult> results,
+                                      int limit, int depth, java.util.Set<Long> visited) throws IOException {
         if (results.size() >= limit) return;
+        if (depth > MAX_TREE_DEPTH) {
+            throw new IOException("btrfs tree too deep");
+        }
+        if (!visited.add(nodeAddr)) {
+            throw new IOException("btrfs tree cycle at node " + nodeAddr);
+        }
 
         NodeHeader header = readHeader(nodeAddr);
 
@@ -277,7 +341,7 @@ public class BtrfsTreeReader {
             List<KeyPtr> ptrs = readKeyPtrs(nodeAddr);
             for (KeyPtr ptr : ptrs) {
                 if (results.size() >= limit) return;
-                scanForTypeRecursive(ptr.blockPtr(), targetType, results, limit);
+                scanForTypeRecursive(ptr.blockPtr(), targetType, results, limit, depth + 1, visited);
             }
         }
     }

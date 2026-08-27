@@ -118,6 +118,49 @@ fork. Tests: `DmgContainerMountTest.rawEntryExistsAndHasCorrectSize`,
 Claim: Fuzzing DMG detection and mounting does not produce unchecked crashes. Test:
 `DmgContainerFuzzTest.footerFuzz`.
 
+## Bounded reads on container mount
+
+Container mounting from a `VirtualDisk` (the `DiskReader.open` / container-mount
+path used by Goat Rodeo on OCI layers and disk images) must never load a whole
+artifact into memory. The whole-artifact readers — ELF, DTB, FIT (via DTB
+parsing), and Linux kernel images — traverse the disk through
+`io.spicelabs.saffron.io.ChunkedDisk`, which issues reads in 256 KiB chunks and
+keeps at most 4 chunks resident (LRU), so no single disk read exceeds 256 KiB
+and memory stays bounded regardless of artifact size. Entry content streams
+from the disk on demand.
+
+The same guarantee holds for the path-based APIs: `ElfContainer.open(Path)`,
+`DtbContainer.open(Path)`, `FitContainer.open(Path)`,
+`DeviceTreeBlob.parse(Path)`, `ContainerDetector.detect(Path)`, and
+`BinaryContainerMount.mount(Path)` all delegate to the bounded chunked path
+and never call `Files.readAllBytes` on the artifact. Containers opened from a
+path own their file handle and release it on `close()`.
+
+Claim: mounting multi-megabyte ELF/DTB/kernel artifacts issues no single disk
+read larger than 1 MiB and returns byte-identical entry content. Tests:
+`BoundedReadTest.elfContainerReadsStayBounded`,
+`BoundedReadTest.dtbContainerReadsStayBounded`,
+`BoundedReadTest.kernelContainerReadsStayBounded`.
+
+Claim: opening multi-megabyte ELF/DTB/FIT files by path returns byte-identical
+entry content via the bounded path, and path-based detection/mount classifies
+and walks them. Tests: `BoundedPathOpenTest.elfPathOpenStreamsCorrectContent`,
+`BoundedPathOpenTest.dtbPathOpenStreamsCorrectContent`,
+`BoundedPathOpenTest.fitPathOpenStreamsCorrectContent`,
+`BoundedPathOpenTest.detectorClassifiesLargeDtbFromPath`,
+`BoundedPathOpenTest.mountFromPathWalksLargeElf`.
+
+Claim: `ChunkedDisk` reads are correct across chunk boundaries, honor byte
+order, bound every underlying read to the chunk size, keep resident memory
+bounded, and reject out-of-bounds access. Tests:
+`ChunkedDiskTest.getIsCorrectAcrossChunkBoundaries`,
+`ChunkedDiskTest.multiByteReadAtChunkBoundaryIsCorrect`,
+`ChunkedDiskTest.getIntHonorsByteOrder`,
+`ChunkedDiskTest.copyRangeSpansChunksAndReadsAreBounded`,
+`ChunkedDiskTest.streamReturnsExactBytesWithBoundedReads`,
+`ChunkedDiskTest.residentChunkCountIsBounded`,
+`ChunkedDiskTest.outOfBoundsAccessIsRejected`.
+
 ## Format tests
 
 - `FormatDetectionTest` — general detection cases.
@@ -131,3 +174,26 @@ Claim: Fuzzing DMG detection and mounting does not produce unchecked crashes. Te
   `WimContainerSecurityTest`, `WimContainerFuzzTest` — WIM detection and mounting.
 - `DmgContainerDetectionTest`, `DmgContainerMountTest`, `DmgContainerFixtureTest`,
   `DmgContainerSecurityTest`, `DmgContainerFuzzTest` — DMG detection and mounting.
+
+## Code smells resolved (phase 7)
+
+- Linux kernel containers memoize their entry list (lazy, thread-safe);
+  `findEntry` uses a name index. The container is immutable — the
+  memoized list is valid for its lifetime. Claim → test:
+  `KernelMemoizationTest.entriesAreMemoizedAndStable`.
+- `ElfHeader` is parse-once: one parser driven by a slice fetcher for
+  both `ByteBuffer` and `ChunkedDisk` backings; phdr/shdr entries are
+  fetched lazily on first accessor use (detection still validates with a
+  small header buffer). The duplicated accessor sets are deleted. Oracle:
+  the entire ELF suite + `BoundedReadTest`/`BoundedPathOpenTest`.
+- Defensive semantics: `ElfContainer.open(VirtualDisk)` and
+  `DtbContainer.open(VirtualDisk)` now return `Optional.empty()` on
+  malformed input (parity with the Path variants). Claim → tests:
+  `ElfOpenParityTest.openVariantsAgreeOnMalformedInputs`,
+  `ElfOpenParityTest.openVariantsAgreeOnValidElf`.
+- `ChunkedDisk.stream()` reuses a per-stream single-byte buffer (no
+  `new byte[1]` per `read()`).
+- Removed the stray `System.err.println` in ext4 (deep-symlink skip
+  semantics unchanged).
+- `ContainerDetector` parses DTB sources once (no separate header-magic
+  re-parse) for the Path and VirtualDisk variants.

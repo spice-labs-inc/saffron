@@ -16,6 +16,11 @@ supported format through a single `FileSystem` interface.
 | HFS+ | H+ / HX signatures | `FilesystemDetector` | `FileSystemMount.mount` | existing corpus tests |
 | APFS | NXSB container superblock | `FilesystemDetector` | `FileSystemMount.mount` | existing corpus tests |
 | swap | SWAPSPACE2 or SWAP-SPACE | `FilesystemDetector` | Detected but not mounted | `LvmTest` / existing tests |
+| JFFS2 | `0x1985` node header at offset 0 | `FilesystemDetector` | `FileSystemMount.mount` | `Jffs2DetectionTest.detectsReferenceFixtures` |
+| cramfs | `0x28cd3d45` + "Compressed ROMFS" | `FilesystemDetector` | `FileSystemMount.mount` | `CramfsDetectionTest.detectsLittleEndianFixture` |
+| YAFFS2 | chunk-tag geometry (no magic) | `FilesystemDetector` | `FileSystemMount.mount` | `Yaffs2DetectionTest.detectsWildSamples` |
+| UBIFS | `0x06101831` node magic | `FilesystemDetector` | `FileSystemMount.mount` | `UbifsDetectionTest.detectsWildUbifsVolumes` |
+| UBI | `UBI#`/`UBI!` PEB headers | `FilesystemDetector` | attach + mount UBIFS volumes | `UbifsDetectionTest.detectsWildUbiContainers` |
 
 ## Supported binary containers
 
@@ -219,8 +224,52 @@ the compressed input size, not by a fixed cap.
   actual data blocks and rejects files larger than `Integer.MAX_VALUE` before
   allocating.
 
-## Security model
+## Allocation caps and metadata validation (phase 3)
 
+Validate-before-allocate: on-disk size fields are checked before any
+allocation; violations throw `IOException` (checked). Per-driver:
+
+- btrfs: nodeSize power-of-2 4 KiB..1 MiB; sectorSize 512..64 KiB;
+  sysChunkArraySize ≥ 0; leaf/internal item counts ≤ nodeSize/16; item
+  data bounds checked; extent decompression caps at 16 MiB
+  (`ResourceLimitException`); checked logical-address arithmetic.
+- APFS: container blockSize power-of-2 512 B..64 MiB validated at mount
+  (not just detection).
+- XFS: blockSize power-of-2 512 B..64 KiB; dirBlockLog ≤ 7.
+- HFS+: volume blockSize power-of-2 512 B..4 MiB; B-tree node record
+  counts/offsets/lengths bounds-checked.
+- squashfs: fragment-entry count and extended-inode block counts capped
+  before allocation; extended-inode fileSize capped at 16 MiB.
+- NTFS: BPB validated (bytesPerSector pow2 512..4096, sectorsPerCluster
+  pow2 1..128); MFT record size 256 B..1 MiB; `$ATTRIBUTE_LIST` and
+  `$INDEX_ALLOCATION` reads capped at 16 MiB; attribute-list entries
+  capped at 4096.
+- UBI: lnum arrays bounded by the image PEB count.
+- UBIFS: inline data capped at 16 MiB.
+- FAT/exFAT: BPB validated (bytesPerSector pow2 512..4096,
+  sectorsPerCluster pow2 ≥ 1); FAT geometry (dataSectors > 0) checked;
+  exFAT cluster size ≤ 16 MiB; directory-chain materialization capped
+  inside the loop at 16 MiB.
+- readAllBytes: ALL drivers refuse files > 16 MiB with
+  `ResourceLimitException` directing callers to `openStream()`
+  (user-approved memory budget). Corpus verification tests stream
+  instead.
+- Per-node decompression buffers (jffs2/yaffs2) capped at 16 MiB.
+
+Claim: hostile header fields are rejected with `IOException` at parse,
+and boundary values still parse. Test:
+`FilesystemAllocationCapsTest` (btrfsNodeSizeValidation,
+apfsBlockSizeValidatedAtMount, xfsBlockSizeValidation,
+hfsPlusBlockSizeValidation, hfsPlusBTreeNodeImplausibleRecordCountRejected,
+fatBpbValidation, ntfsBpbAndMftRecordSizeValidation, exfatBpbValidation).
+
+Claim: real images keep working after the caps. Tests: corpus
+verification suites (`CorpusFileVerificationTest`,
+`CorpusFileCountVerificationTest`, `CorpusFullVerificationTest`,
+`PerFilesystemVerificationTest`) and the wild-image suites — all green
+with the caps enabled.
+
+## Security model
 - **Pure Java:** no shell execution, no native code.
 - **Bounds checking:** every offset and size read from the image is validated
   against the source file size before use. Verified by
@@ -264,3 +313,111 @@ the compressed input size, not by a fixed cap.
 
 Binary container formats (WIM, DMG) are planned for later phases. Linux kernel,
 FIT, ELF, DTB, Raspberry Pi firmware, and Android boot are complete.
+
+## Post-audit remediation (2026-08-27)
+
+Adversarial-audit fixes: ext4 directory reads now carry the same 16 MiB
+cap as files (`readDirectoryEntries`); APFS omap descent is depth-capped
+(64) with a visited-set (the generic btree cap did not cover this path);
+hfs+ B-tree node validation now throws checked `IOException` (was
+unchecked `IllegalArgumentException`); the FAT32 directory-chain cap is
+enforced inside the loop; btrfs tree recursions gained visited-sets and
+the chunk scan enforces the `region.size()/32` plausibility bound in
+addition to the 64k cap; GPT rejects entry counts > 256 instead of
+silently clamping.
+
+Recorded deviation: R4.1's pinned failure mode ("IOException('directory
+tree too deep')") is implemented as SILENT TRUNCATION at the default
+depth instead — the stack-safety goal is met, explicit-depth callers get
+exact semantics, and throwing from lazy stream construction would change
+every driver's walk contract. This is the accepted behavior; the
+pinned-failure-mode wording in the plan is superseded.
+
+## Recursion safety (phase 4)
+
+Hostile self-referential structures must fail with a checked
+`IOException`, never a `StackOverflowError`:
+
+- `walk()` defaults to `MAX_WALK_DEPTH = 512` in every driver (callers
+  passing an explicit depth get what they ask for). Stream-based walks
+  surface the depth error on stream consumption.
+- ext4 extent-tree walk: depth cap 64 + visited block set (cycle →
+  `IOException`); xfs extent btree: same; APFS b-tree search: depth cap
+  64; btrfs tree recursions (search/findAll/scanForType): depth cap 64.
+- FAT/exFAT cluster chains: visited-set — a cyclic chain is corruption
+  and fails checked (chains were already iteration-capped; this is
+  correctness, not hang prevention). The exFAT walk also switched to
+  UNSIGNED 32-bit comparisons: the EOC/BAD markers (0xFFFFFFF8/F7) are
+  negative as signed ints, so the pre-existing signed comparison stopped
+  every chain after one cluster — a latent correctness bug found by the
+  new tests.
+- YAFFS2 hardlinks: visited object-id set — mutually recursive
+  hardlinks fail checked.
+
+Claim: hostile cycles and over-deep trees fail checked per driver.
+Tests: `Ext4ExtentCycleTest`, `XfsExtentBtreeCycleTest`,
+`FatClusterChainCycleTest`, `ExFatClusterChainCycleTest`,
+`Yaffs2HardlinkCycleTest`.
+
+## Streaming openStream (phase 5)
+
+All 13 drivers' `openStream()` are true lazy streams; no whole-file
+materialization remains (except per-unit decompression for formats that
+require it — NTFS compressed runs, btrfs compressed extents, APFS
+decmpfs — each capped at 16 MiB):
+
+- Shared helper `ChunkedRegionStream` (window 256 KiB, ≤ 1 MiB per
+  region read, sparse gaps served as zeros WITHOUT reading, segment
+  metadata capped at 1M entries).
+- Converted: ntfs (data-run segments, sparse runs = holes), fat32/exfat
+  (cluster chains), xfs (extent/btree with logical offsets), hfs+
+  (fork extents), apfs (extent records), ext4 (indirect-block list;
+  extent files already streamed, per-read now capped at 1 MiB), btrfs
+  (per-extent lazy walk; regular extents stream through the chunk tree
+  in bounded windows — diskBytenr is a LOGICAL address, the stream
+  never bypasses the chunk mapping).
+- The 16 MiB `readAllBytes` cap stays; `openStream()` is the unbounded
+  path.
+
+Claim: stream bytes equal the materialized reference. Tests:
+`ChunkedRegionStreamTest` (6 methods — segment gaps, bounded reads via
+recording region, sparse regions never read, independence, single-byte
+reads), `NtfsFileSystemTest.ntfsFileSystem_streamsEqualMaterializedContent`,
+`ExFatFileSystemTest.exFatFileSystem_streamsEqualMaterializedContent`,
+and the corpus suites (SHA-256 oracles streamed through the new code —
+`CorpusFileVerificationTest`, `CorpusFullVerificationTest`,
+`PerFilesystemVerificationTest`).
+
+Note: the corpus oracle caught a real bug during this phase — the first
+btrfs stream read logical addresses directly from the region, bypassing
+the chunk-tree mapping (SHA-256 mismatches on real images); fixed by
+streaming through `chunkTree.readLogical` windows.
+
+## Lazy/evicting mount structures (phase 6)
+
+- NTFS MFT cache: bounded LRU (4096 records AND a 16 MiB attribute
+  payload budget, synchronized; records over 4 MiB payload are not
+  cached at all — re-read on demand).
+- APFS object-map resolution cache: bounded LRU (4096 entries,
+  synchronized).
+- btrfs chunk scan: plausibility cap of 65536 chunk items, loud
+  `IOException` at mount beyond it (see `docs/adr/0003-btrfs-chunk-scan.md`).
+- squashfs metadata tables (inode + directory): lazy — construction
+  reads only block headers; decompressed blocks are produced on demand
+  and cached in a bounded LRU of 32 blocks; the final block's true
+  length is learned eagerly (spec: only the last block may decompress
+  short); readers chain blocks so reads may cross block boundaries
+  byte-identically to the eager implementation. The pre-change eager
+  implementation is preserved in test scope as the golden oracle
+  (`SquashfsMetadataTableEager`).
+- SecurityPolicy overlay: DEFERRED — mount APIs do not currently accept
+  a `SecurityPolicy`; hard caps above serve as the defaults (policy gap
+  documented).
+
+Claim: cache mechanics (LRU order, byte budget, knob validation). Test:
+`LruCacheTest` (5 methods).
+
+Claim: lazy squashfs tables equal the eager oracle byte-for-byte across
+random positions, the block cache stays ≤ 32 under linear and thrash
+access, and unknown blocks are rejected. Tests:
+`SquashfsMetadataTableLazyTest` (4 methods).

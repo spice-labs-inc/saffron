@@ -1,0 +1,6 @@
+banana-*.ubifs, fruits.ubi, orange-truncated.ubi:
+  Source: https://github.com/onekey-sec/unblob/tree/main/tests/integration/filesystem/ubi
+  License: MIT (onekey-sec/unblob project license)
+  Note: generated mkfs.ubifs/ubinize test inputs (zlib/lzo/zstd compression;
+        UBI containers)
+  Downloaded: 2026-08-25

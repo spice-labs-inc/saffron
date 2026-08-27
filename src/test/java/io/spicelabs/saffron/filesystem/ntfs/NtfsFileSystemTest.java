@@ -9,9 +9,11 @@ import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
@@ -228,7 +230,54 @@ class NtfsFileSystemTest {
     }
 
     private byte[] createNtfsVolumeWithFiles() {
-        return createMinimalNtfsVolume();
+        byte[] volume = createMinimalNtfsVolume();
+        int mftOffset = 6 * 4096;
+        int recordSize = 1024;
+        int fileRecord = mftOffset + 6 * recordSize;
+        ByteBuffer buf = ByteBuffer.wrap(volume).order(ByteOrder.LITTLE_ENDIAN);
+
+        // File record 6: hello.txt with a non-resident data attribute.
+        createMftRecordHeader(buf, fileRecord, 6, false);
+        byte[] stdInfo = createStandardInformationAttribute();
+        byte[] fileName = createFileNameAttribute("hello.txt");
+        byte[] dataAttr = createNonResidentDataAttribute();
+        buf.position(fileRecord + 56);
+        buf.put(stdInfo);
+        buf.put(fileName);
+        buf.put(dataAttr);
+        buf.putInt(0xFFFFFFFF); // end of attributes
+
+        // File content at LCN 100 (cluster size 4096).
+        byte[] content = "hello ntfs stream".getBytes(StandardCharsets.US_ASCII);
+        buf.position(100 * 4096);
+        buf.put(content);
+
+        // Add an index entry for record 6 to the root directory's
+        // $INDEX_ROOT (record 5, attribute at +56, value at +88,
+        // index header at +104, entries at +120).
+        int attrOffset = mftOffset + 5 * recordSize + 56;
+        buf.putInt(attrOffset + 4, 96);        // attribute length
+        buf.putInt(attrOffset + 16, 64);       // value length
+        int entriesOffset = attrOffset + 32 + 16 + 16;
+        // index header
+        buf.putInt(attrOffset + 32 + 16, 16);  // entries offset
+        buf.putInt(attrOffset + 32 + 20, 32);  // index size
+        buf.putInt(attrOffset + 32 + 24, 48);  // allocated size
+        // entry for record 6
+        buf.putLong(entriesOffset, 6);         // mft reference
+        buf.putShort(entriesOffset + 8, (short) 16);  // entry length
+        buf.putShort(entriesOffset + 10, (short) 0);  // content length
+        buf.putInt(entriesOffset + 12, 0);     // flags
+        // last-entry marker after it
+        buf.putLong(entriesOffset + 16, 0);
+        buf.putShort(entriesOffset + 24, (short) 16);
+        buf.putShort(entriesOffset + 26, (short) 0);
+        buf.putInt(entriesOffset + 28, NtfsAttribute.IndexEntry.FLAG_LAST);
+        // attribute end marker
+        buf.position(attrOffset + 96);
+        buf.putInt(0xFFFFFFFF);
+
+        return volume;
     }
 
     private void createMftRecords(ByteBuffer buf, int mftOffset) {
@@ -540,4 +589,34 @@ class NtfsFileSystemTest {
 
         Files.write(path, qcow2);
     }
+
+    /**
+     * Phase 5: every regular file's openStream() bytes equal readAllBytes()
+     * (the lazy stream must match the materialized reference exactly).
+     */
+    @Test
+    void ntfsFileSystem_streamsEqualMaterializedContent(@TempDir Path tempDir) throws Exception {
+        byte[] diskData = createNtfsVolumeWithFiles();
+        Path diskPath = tempDir.resolve("disk.qcow2");
+        createQcow2(diskPath, diskData);
+
+        try (VirtualDisk disk = DiskReader.open(diskPath);
+             FileSystem fs = NtfsFileSystemImpl.mount(disk, 0)) {
+            int checked = 0;
+            try (var walk = fs.walk()) {
+                for (FileSystemEntry entry : (Iterable<FileSystemEntry>) walk::iterator) {
+                    if (entry.type() != FileSystemEntry.EntryType.REGULAR_FILE) {
+                        continue;
+                    }
+                    FileSystemEntry.RegularFile file = (FileSystemEntry.RegularFile) entry;
+                    try (InputStream in = file.openStream()) {
+                        assertThat(in.readAllBytes()).isEqualTo(file.readAllBytes());
+                    }
+                    checked++;
+                }
+            }
+            assertThat(checked).isPositive();
+        }
+    }
+
 }

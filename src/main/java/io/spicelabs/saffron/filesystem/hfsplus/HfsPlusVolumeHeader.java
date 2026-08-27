@@ -70,6 +70,10 @@ public record HfsPlusVolumeHeader(
 
         // Block size at offset 40, total blocks at offset 44 (uint32), free blocks at 48 (uint32)
         int blockSize = buf.getInt(40);
+        if (blockSize < 512 || blockSize > 4 * 1024 * 1024
+                || (blockSize & (blockSize - 1)) != 0) {
+            throw new IOException("Invalid HFS+ block size: " + blockSize);
+        }
         long totalBlocks = buf.getInt(44) & 0xFFFFFFFFL;
         long freeBlocks = buf.getInt(48) & 0xFFFFFFFFL;
 

@@ -162,6 +162,19 @@ class Qcow2DiskTest {
         }
     }
 
+    @Test
+    void streamZeroLengthReadReturnsZero(@TempDir Path tempDir) throws IOException {
+        byte[] header = createMinimalQcow2(3, 16, 1024 * 1024);
+        Path qcow2 = tempDir.resolve("stream.qcow2");
+        Files.write(qcow2, header);
+
+        try (VirtualDisk disk = DiskReader.open(qcow2)) {
+            try (InputStream is = disk.openStream()) {
+                assertThat(is.read(new byte[8], 0, 0)).isZero();
+            }
+        }
+    }
+
     // Anti-fake test
     @Test
     @EnabledIf("corpusImageExists")

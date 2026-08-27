@@ -129,6 +129,12 @@ public record VhdxMetadata(
 
         // Skip reserved (20 bytes)
 
+        // Read entry table (each entry is 32 bytes)
+        ByteBuffer entriesBuffer = ByteBuffer.allocate(entryCount * 32);
+        entriesBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        readFully(channel, regionOffset + 32, entriesBuffer);
+        entriesBuffer.flip();
+
         // Read metadata entries
         long virtualDiskSize = 0;
         int blockSize = 0;
@@ -139,12 +145,6 @@ public record VhdxMetadata(
         UUID virtualDiskId = null;
         String parentLocatorType = null;
 
-        // Read entry table (each entry is 32 bytes)
-        ByteBuffer entriesBuffer = ByteBuffer.allocate(entryCount * 32);
-        entriesBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        channel.position(regionOffset + 32);
-        read = channel.read(entriesBuffer);
-        entriesBuffer.flip();
 
         for (int i = 0; i < entryCount && entriesBuffer.remaining() >= 32; i++) {
             // Read entry GUID
@@ -155,6 +155,16 @@ public record VhdxMetadata(
 
             // Length
             int itemLength = entriesBuffer.getInt();
+
+            // Bound every metadata item against the metadata region
+            // itself: itemOffset/itemLength are raw 32-bit on-disk fields
+            // and drive ByteBuffer.allocate(itemLength) below.
+            if (itemOffset < 0 || itemLength < 0
+                    || (long) itemOffset + itemLength > regionLength) {
+                throw new IOException("VHDX metadata item out of region bounds: offset="
+                        + itemOffset + ", length=" + itemLength
+                        + ", regionLength=" + regionLength);
+            }
 
             // Flags
             int flags = entriesBuffer.getInt();
@@ -167,8 +177,7 @@ public record VhdxMetadata(
             if (itemId.equals(FILE_PARAMETERS_GUID) && itemLength >= 8) {
                 ByteBuffer itemBuffer = ByteBuffer.allocate(itemLength);
                 itemBuffer.order(ByteOrder.LITTLE_ENDIAN);
-                channel.position(regionOffset + itemOffset);
-                channel.read(itemBuffer);
+                readFully(channel, regionOffset + itemOffset, itemBuffer);
                 itemBuffer.flip();
 
                 blockSize = itemBuffer.getInt();
@@ -178,32 +187,28 @@ public record VhdxMetadata(
             } else if (itemId.equals(VIRTUAL_DISK_SIZE_GUID) && itemLength >= 8) {
                 ByteBuffer itemBuffer = ByteBuffer.allocate(itemLength);
                 itemBuffer.order(ByteOrder.LITTLE_ENDIAN);
-                channel.position(regionOffset + itemOffset);
-                channel.read(itemBuffer);
+                readFully(channel, regionOffset + itemOffset, itemBuffer);
                 itemBuffer.flip();
 
                 virtualDiskSize = itemBuffer.getLong();
             } else if (itemId.equals(VIRTUAL_DISK_ID_GUID) && itemLength >= 16) {
                 ByteBuffer itemBuffer = ByteBuffer.allocate(itemLength);
                 itemBuffer.order(ByteOrder.LITTLE_ENDIAN);
-                channel.position(regionOffset + itemOffset);
-                channel.read(itemBuffer);
+                readFully(channel, regionOffset + itemOffset, itemBuffer);
                 itemBuffer.flip();
 
                 virtualDiskId = readGuid(itemBuffer);
             } else if (itemId.equals(LOGICAL_SECTOR_SIZE_GUID) && itemLength >= 4) {
                 ByteBuffer itemBuffer = ByteBuffer.allocate(itemLength);
                 itemBuffer.order(ByteOrder.LITTLE_ENDIAN);
-                channel.position(regionOffset + itemOffset);
-                channel.read(itemBuffer);
+                readFully(channel, regionOffset + itemOffset, itemBuffer);
                 itemBuffer.flip();
 
                 logicalSectorSize = itemBuffer.getInt();
             } else if (itemId.equals(PHYSICAL_SECTOR_SIZE_GUID) && itemLength >= 4) {
                 ByteBuffer itemBuffer = ByteBuffer.allocate(itemLength);
                 itemBuffer.order(ByteOrder.LITTLE_ENDIAN);
-                channel.position(regionOffset + itemOffset);
-                channel.read(itemBuffer);
+                readFully(channel, regionOffset + itemOffset, itemBuffer);
                 itemBuffer.flip();
 
                 physicalSectorSize = itemBuffer.getInt();
@@ -220,6 +225,32 @@ public record VhdxMetadata(
                 virtualDiskId,
                 parentLocatorType
         );
+    }
+
+    /**
+     * Reads exactly {@code buffer.remaining()} bytes from the channel at
+     * {@code offset}; throws on EOF or zero progress (no silent
+     * zero-filled metadata).
+     */
+    private static void readFully(SeekableByteChannel channel, long offset,
+                                  ByteBuffer buffer) throws IOException {
+        int length = buffer.remaining();
+        int total = 0;
+        synchronized (channel) {
+            channel.position(offset);
+            while (total < length) {
+                int n = channel.read(buffer);
+                if (n < 0) {
+                    throw new IOException("Truncated VHDX metadata: expected " + length
+                            + " bytes at offset " + offset + ", got " + total);
+                }
+                if (n == 0) {
+                    throw new IOException("No progress reading VHDX metadata at offset "
+                            + offset);
+                }
+                total += n;
+            }
+        }
     }
 
     private static UUID readGuid(ByteBuffer buffer) {

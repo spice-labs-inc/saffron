@@ -24,12 +24,18 @@ import io.spicelabs.saffron.filesystem.FilesystemDetector;
 import io.spicelabs.saffron.filesystem.FilesystemInfo;
 import io.spicelabs.saffron.filesystem.apfs.ApfsFileSystemImpl;
 import io.spicelabs.saffron.filesystem.btrfs.BtrfsFileSystemImpl;
+import io.spicelabs.saffron.filesystem.cramfs.CramfsFileSystemImpl;
 import io.spicelabs.saffron.filesystem.exfat.ExFatFileSystemImpl;
 import io.spicelabs.saffron.filesystem.ext4.Ext4FileSystemImpl;
 import io.spicelabs.saffron.filesystem.fat32.Fat32FileSystemImpl;
 import io.spicelabs.saffron.filesystem.hfsplus.HfsPlusFileSystemImpl;
+import io.spicelabs.saffron.filesystem.jffs2.Jffs2FileSystemImpl;
 import io.spicelabs.saffron.filesystem.ntfs.NtfsFileSystemImpl;
 import io.spicelabs.saffron.filesystem.squashfs.SquashfsFileSystemImpl;
+import io.spicelabs.saffron.filesystem.yaffs2.Yaffs2FileSystemImpl;
+import io.spicelabs.saffron.filesystem.ubi.UbiSuperblock;
+import io.spicelabs.saffron.filesystem.ubi.UbiVolumeRegion;
+import io.spicelabs.saffron.filesystem.ubifs.UbifsFileSystemImpl;
 import io.spicelabs.saffron.filesystem.xfs.XfsFileSystemImpl;
 import io.spicelabs.saffron.lvm.DiskRegion;
 import io.spicelabs.saffron.lvm.LogicalVolumeDisk;
@@ -165,6 +171,11 @@ public final class FileSystemMount {
             case HFS_PLUS -> HfsPlusFileSystemImpl.mount(disk, offset);
             case APFS -> ApfsFileSystemImpl.mount(disk, offset);
             case SQUASHFS -> SquashfsFileSystemImpl.mount(disk, offset);
+            case JFFS2 -> Jffs2FileSystemImpl.mount(disk, offset);
+            case CRAMFS -> CramfsFileSystemImpl.mount(disk, offset);
+            case YAFFS2 -> Yaffs2FileSystemImpl.mount(disk, offset);
+            case UBIFS -> UbifsFileSystemImpl.mount(disk, offset);
+            case UBI -> mountFirstUbifsVolume(disk, offset);
             case BINARY_CONTAINER -> throw new UnsupportedOperationException("Binary containers are mounted via BinaryContainerMount, not partition detection");
             case SWAP -> throw new UnsupportedOperationException("Swap partitions cannot be mounted as filesystems");
             case UNKNOWN -> throw new UnsupportedOperationException("Unknown filesystem type");
@@ -202,7 +213,34 @@ public final class FileSystemMount {
                 || type == FileSystem.FileSystemType.BTRFS
                 || type == FileSystem.FileSystemType.HFS_PLUS
                 || type == FileSystem.FileSystemType.APFS
-                || type == FileSystem.FileSystemType.SQUASHFS;
+                || type == FileSystem.FileSystemType.SQUASHFS
+                || type == FileSystem.FileSystemType.JFFS2
+                || type == FileSystem.FileSystemType.CRAMFS
+                || type == FileSystem.FileSystemType.YAFFS2
+                || type == FileSystem.FileSystemType.UBIFS
+                || type == FileSystem.FileSystemType.UBI;
+    }
+
+    /** Mounts the first UBIFS volume inside a UBI container. */
+    private static FileSystem mountFirstUbifsVolume(VirtualDisk disk, long offset)
+            throws IOException {
+        DiskRegion region = DiskRegion.fromPartition(disk, offset, 0);
+        return mountFirstUbifsVolume(region);
+    }
+
+    /** Mounts the first UBIFS volume inside a UBI container region. */
+    private static FileSystem mountFirstUbifsVolume(DiskRegion region) throws IOException {
+        UbiSuperblock ubi = UbiSuperblock.attach(region)
+                .orElseThrow(() -> new IOException("Not a valid ubi image"));
+        for (UbiSuperblock.UbiVolume volume : ubi.volumesFlat()) {
+            UbiVolumeRegion vr = UbiVolumeRegion.of(ubi, volume);
+            try {
+                return UbifsFileSystemImpl.mount(vr);
+            } catch (IOException e) {
+                // Not a UBIFS volume: try the next one.
+            }
+        }
+        throw new IOException("No UBIFS volume found in the UBI image");
     }
 
     private static boolean hasFilesystemAtOffset(List<FilesystemLocation> locations, long offset) {
@@ -344,6 +382,11 @@ public final class FileSystemMount {
             case HFS_PLUS -> HfsPlusFileSystemImpl.mount(region);
             case APFS -> ApfsFileSystemImpl.mount(region);
             case SQUASHFS -> SquashfsFileSystemImpl.mount(region);
+            case JFFS2 -> Jffs2FileSystemImpl.mount(region);
+            case CRAMFS -> CramfsFileSystemImpl.mount(region);
+            case YAFFS2 -> Yaffs2FileSystemImpl.mount(region);
+            case UBIFS -> UbifsFileSystemImpl.mount(region);
+            case UBI -> mountFirstUbifsVolume(region);
             case BINARY_CONTAINER -> throw new UnsupportedOperationException("Binary containers are mounted via BinaryContainerMount, not partition detection");
             case SWAP -> throw new UnsupportedOperationException("Swap partitions cannot be mounted as filesystems");
             case UNKNOWN -> throw new UnsupportedOperationException("Unknown filesystem type");

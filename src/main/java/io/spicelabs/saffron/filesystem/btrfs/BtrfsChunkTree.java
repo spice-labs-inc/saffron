@@ -23,6 +23,9 @@ import java.util.Set;
  */
 public class BtrfsChunkTree {
 
+    /** Plausibility cap on CHUNK_ITEM count (real images have < 100). */
+    static final int MAX_CHUNK_ITEMS = 64 * 1024;
+
     private final DiskRegion region;
     private final long partitionOffset;
     private final List<Chunk> chunks;
@@ -114,8 +117,12 @@ public class BtrfsChunkTree {
         BtrfsTreeReader treeReader = new BtrfsTreeReader(bootstrapTree, sb.nodeSize());
 
         try {
+            // Plausibility cap: real images have < 100 chunk items; a
+            // hostile image can pack the chunk tree with millions. Ask
+            // for one more than the cap so the overflow is detectable.
             List<BtrfsTreeReader.SearchResult> chunkItems =
-                    treeReader.scanForType(sb.chunkTreeRoot(), BtrfsKey.CHUNK_ITEM, Integer.MAX_VALUE);
+                    treeReader.scanForType(sb.chunkTreeRoot(), BtrfsKey.CHUNK_ITEM,
+                            MAX_CHUNK_ITEMS + 1);
 
             for (BtrfsTreeReader.SearchResult result : chunkItems) {
                 long logicalAddr = result.item().key().offset();
@@ -131,6 +138,17 @@ public class BtrfsChunkTree {
             // If full chunk tree loading fails, fall back to bootstrap-only chunks.
             // This can happen if the chunk tree root itself is not mappable via bootstrap,
             // or if the underlying disk reader rejects the translated physical address.
+        }
+
+        // The plausibility caps are LOUD: an image with an implausible
+        // chunk item count must fail mount, never silently fall back.
+        if (chunks.size() > MAX_CHUNK_ITEMS) {
+            throw new IOException("btrfs chunk item count exceeds the plausibility cap: "
+                    + chunks.size() + " (max " + MAX_CHUNK_ITEMS + ")");
+        }
+        if (chunks.size() > region.size() / 32) {
+            throw new IOException("btrfs chunk item count exceeds the size plausibility cap: "
+                    + chunks.size() + " (region bytes / 32 = " + (region.size() / 32) + ")");
         }
 
         // Sort chunks by logical address for binary search

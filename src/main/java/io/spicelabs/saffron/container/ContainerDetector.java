@@ -102,14 +102,10 @@ public final class ContainerDetector {
         if (RpiFirmwareContainerFactory.looksLikeRpiFirmware(path, headerBuffer, size)) {
             return Optional.of(ContainerFormat.RPI_FIRMWARE);
         }
-        if (size <= Integer.MAX_VALUE) {
-            byte[] all = Files.readAllBytes(path);
-            Optional<ContainerFormat> dtb = tryDetectDtb(ByteBuffer.wrap(all), size);
-            if (dtb.isPresent()) {
-                return dtb;
-            }
-        }
-        return Optional.empty();
+        // DTB/FIT: parse once through a bounded chunked reader (never
+        // loaded as a whole). DeviceTreeBlob.parse validates the magic
+        // itself, so no separate header probe is needed.
+        return classifyDtb(DeviceTreeBlob.parse(path));
     }
 
     /**
@@ -147,9 +143,12 @@ public final class ContainerDetector {
             return kernel;
         }
 
-        if (size <= Integer.MAX_VALUE && isDtbHeader(header)) {
+        if (size <= Integer.MAX_VALUE) {
             Optional<DeviceTreeBlob> blob = DeviceTreeBlob.parse(disk);
-            return classifyDtb(blob);
+            Optional<ContainerFormat> classified = classifyDtb(blob);
+            if (classified.isPresent()) {
+                return classified;
+            }
         }
 
         Optional<ContainerFormat> rpi = tryDetectRpiFirmware(header, size);

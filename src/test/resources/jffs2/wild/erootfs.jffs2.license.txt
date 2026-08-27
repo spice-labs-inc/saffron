@@ -1,0 +1,6 @@
+Source: https://archive.org/details/erootfs (LeapFrog Didj handheld: "Didj kernel.bin and erootfs.jffs2")
+File: erootfs.jffs2 - the Didj root filesystem (part of the Didj NAND), as published on archive.org by LeapFrog
+MD5: 7bb34f01e4689309ef88ef8a29b6cbc9
+Size: 7077888 bytes
+License: GPL-2.0-or-later (the image contains the Linux kernel and GPL-licensed userspace, e.g. BusyBox)
+Downloaded: 2026-08-25

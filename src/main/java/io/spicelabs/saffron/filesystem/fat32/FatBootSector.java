@@ -134,6 +134,14 @@ public record FatBootSector(
         // Common BPB fields
         int bytesPerSector = boot.getShort(11) & 0xFFFF;
         int sectorsPerCluster = boot.get(13) & 0xFF;
+        if (bytesPerSector < 512 || bytesPerSector > 4096
+                || (bytesPerSector & (bytesPerSector - 1)) != 0) {
+            throw new IOException("Invalid FAT bytes per sector: " + bytesPerSector);
+        }
+        if (sectorsPerCluster < 1 || sectorsPerCluster > 128
+                || (sectorsPerCluster & (sectorsPerCluster - 1)) != 0) {
+            throw new IOException("Invalid FAT sectors per cluster: " + sectorsPerCluster);
+        }
         int reservedSectors = boot.getShort(14) & 0xFFFF;
         int numberOfFats = boot.get(16) & 0xFF;
         int rootDirectoryEntries = boot.getShort(17) & 0xFFFF;

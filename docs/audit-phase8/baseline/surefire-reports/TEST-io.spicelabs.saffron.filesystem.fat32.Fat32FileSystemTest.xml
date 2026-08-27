@@ -1,0 +1,1009 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="io.spicelabs.saffron.filesystem.fat32.Fat32FileSystemTest" time="0.141" tests="13" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="21"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/data/target/test-classes:/data/target/classes:/home/claude/.m2/repository/org/jetbrains/annotations/24.1.0/annotations-24.1.0.jar:/home/claude/.m2/repository/com/github/package-url/packageurl-java/1.5.0/packageurl-java-1.5.0.jar:/home/claude/.m2/repository/org/tukaani/xz/1.9/xz-1.9.jar:/home/claude/.m2/repository/com/github/luben/zstd-jni/1.5.5-6/zstd-jni-1.5.5-6.jar:/home/claude/.m2/repository/org/apache/commons/commons-compress/1.26.0/commons-compress-1.26.0.jar:/home/claude/.m2/repository/commons-io/commons-io/2.15.1/commons-io-2.15.1.jar:/home/claude/.m2/repository/org/apache/commons/commons-lang3/3.14.0/commons-lang3-3.14.0.jar:/home/claude/.m2/repository/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar:/home/claude/.m2/repository/org/anarres/lzo/lzo-core/1.0.6/lzo-core-1.0.6.jar:/home/claude/.m2/repository/com/google/code/findbugs/annotations/2.0.3/annotations-2.0.3.jar:/home/claude/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar:/home/claude/.m2/repository/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar:/home/claude/.m2/repository/org/junit/jupiter/junit-jupiter/5.10.2/junit-jupiter-5.10.2.jar:/home/claude/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.2/junit-jupiter-api-5.10.2.jar:/home/claude/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/claude/.m2/repository/org/junit/platform/junit-platform-commons/1.10.2/junit-platform-commons-1.10.2.jar:/home/claude/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/claude/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.2/junit-jupiter-params-5.10.2.jar:/home/claude/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.2/junit-jupiter-engine-5.10.2.jar:/home/claude/.m2/repository/org/junit/platform/junit-platform-engine/1.10.2/junit-platform-engine-1.10.2.jar:/home/claude/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/home/claude/.m2/repository/org/assertj/assertj-core/3.25.3/assertj-core-3.25.3.jar:/home/claude/.m2/repository/net/bytebuddy/byte-buddy/1.14.11/byte-buddy-1.14.11.jar:/home/claude/.m2/repository/org/slf4j/slf4j-simple/2.0.9/slf4j-simple-2.0.9.jar:/home/claude/.m2/repository/org/awaitility/awaitility/4.2.0/awaitility-4.2.0.jar:/home/claude/.m2/repository/org/hamcrest/hamcrest/2.1/hamcrest-2.1.jar:/home/claude/.m2/repository/com/code-intelligence/jazzer-junit/0.22.1/jazzer-junit-0.22.1.jar:/home/claude/.m2/repository/com/code-intelligence/jazzer-api/0.22.1/jazzer-api-0.22.1.jar:/home/claude/.m2/repository/com/code-intelligence/jazzer/0.22.1/jazzer-0.22.1.jar:/home/claude/.m2/repository/com/tngtech/archunit/archunit-junit5/1.2.1/archunit-junit5-1.2.1.jar:/home/claude/.m2/repository/com/tngtech/archunit/archunit-junit5-api/1.2.1/archunit-junit5-api-1.2.1.jar:/home/claude/.m2/repository/com/tngtech/archunit/archunit/1.2.1/archunit-1.2.1.jar:/home/claude/.m2/repository/com/tngtech/archunit/archunit-junit5-engine/1.2.1/archunit-junit5-engine-1.2.1.jar:/home/claude/.m2/repository/com/tngtech/archunit/archunit-junit5-engine-api/1.2.1/archunit-junit5-engine-api-1.2.1.jar:/home/claude/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar:/home/claude/.m2/repository/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/home/claude/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar:/home/claude/.m2/repository/org/openjdk/jmh/jmh-generator-annprocess/1.37/jmh-generator-annprocess-1.37.jar:"/>
+    <property name="java.vm.vendor" value="Ubuntu"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://ubuntu.com/"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.vm.specification.version" value="21"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-21-openjdk-amd64/lib"/>
+    <property name="sun.java.command" value="/data/target/surefire/surefirebooter-20260827161131130_3.jar /data/target/surefire 2026-08-27T16-11-31_055-jvmRun1 surefire-20260827161131130_1tmp surefire_0-20260827161131130_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/data/target/test-classes:/data/target/classes:/home/claude/.m2/repository/org/jetbrains/annotations/24.1.0/annotations-24.1.0.jar:/home/claude/.m2/repository/com/github/package-url/packageurl-java/1.5.0/packageurl-java-1.5.0.jar:/home/claude/.m2/repository/org/tukaani/xz/1.9/xz-1.9.jar:/home/claude/.m2/repository/com/github/luben/zstd-jni/1.5.5-6/zstd-jni-1.5.5-6.jar:/home/claude/.m2/repository/org/apache/commons/commons-compress/1.26.0/commons-compress-1.26.0.jar:/home/claude/.m2/repository/commons-io/commons-io/2.15.1/commons-io-2.15.1.jar:/home/claude/.m2/repository/org/apache/commons/commons-lang3/3.14.0/commons-lang3-3.14.0.jar:/home/claude/.m2/repository/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar:/home/claude/.m2/repository/org/anarres/lzo/lzo-core/1.0.6/lzo-core-1.0.6.jar:/home/claude/.m2/repository/com/google/code/findbugs/annotations/2.0.3/annotations-2.0.3.jar:/home/claude/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar:/home/claude/.m2/repository/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar:/home/claude/.m2/repository/org/junit/jupiter/junit-jupiter/5.10.2/junit-jupiter-5.10.2.jar:/home/claude/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.2/junit-jupiter-api-5.10.2.jar:/home/claude/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/claude/.m2/repository/org/junit/platform/junit-platform-commons/1.10.2/junit-platform-commons-1.10.2.jar:/home/claude/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/claude/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.2/junit-jupiter-params-5.10.2.jar:/home/claude/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.2/junit-jupiter-engine-5.10.2.jar:/home/claude/.m2/repository/org/junit/platform/junit-platform-engine/1.10.2/junit-platform-engine-1.10.2.jar:/home/claude/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/home/claude/.m2/repository/org/assertj/assertj-core/3.25.3/assertj-core-3.25.3.jar:/home/claude/.m2/repository/net/bytebuddy/byte-buddy/1.14.11/byte-buddy-1.14.11.jar:/home/claude/.m2/repository/org/slf4j/slf4j-simple/2.0.9/slf4j-simple-2.0.9.jar:/home/claude/.m2/repository/org/awaitility/awaitility/4.2.0/awaitility-4.2.0.jar:/home/claude/.m2/repository/org/hamcrest/hamcrest/2.1/hamcrest-2.1.jar:/home/claude/.m2/repository/com/code-intelligence/jazzer-junit/0.22.1/jazzer-junit-0.22.1.jar:/home/claude/.m2/repository/com/code-intelligence/jazzer-api/0.22.1/jazzer-api-0.22.1.jar:/home/claude/.m2/repository/com/code-intelligence/jazzer/0.22.1/jazzer-0.22.1.jar:/home/claude/.m2/repository/com/tngtech/archunit/archunit-junit5/1.2.1/archunit-junit5-1.2.1.jar:/home/claude/.m2/repository/com/tngtech/archunit/archunit-junit5-api/1.2.1/archunit-junit5-api-1.2.1.jar:/home/claude/.m2/repository/com/tngtech/archunit/archunit/1.2.1/archunit-1.2.1.jar:/home/claude/.m2/repository/com/tngtech/archunit/archunit-junit5-engine/1.2.1/archunit-junit5-engine-1.2.1.jar:/home/claude/.m2/repository/com/tngtech/archunit/archunit-junit5-engine-api/1.2.1/archunit-junit5-engine-api-1.2.1.jar:/home/claude/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar:/home/claude/.m2/repository/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/home/claude/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar:/home/claude/.m2/repository/org/openjdk/jmh/jmh-generator-annprocess/1.37/jmh-generator-annprocess-1.37.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/claude"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2026-04-21"/>
+    <property name="java.home" value="/usr/lib/jvm/java-21-openjdk-amd64"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/data"/>
+    <property name="java.vm.compressedOopsMode" value="32-bit"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="surefire.real.class.path" value="/data/target/surefire/surefirebooter-20260827161131130_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="21.0.11+10-1-24.04.2-Ubuntu"/>
+    <property name="user.name" value="dpp"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="7.0.0-28-generic"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="/home/claude/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugs.launchpad.net/ubuntu/+source/openjdk-21"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="21.0.11"/>
+    <property name="user.dir" value="/data"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.vendor" value="Ubuntu"/>
+    <property name="java.vm.version" value="21.0.11+10-1-24.04.2-Ubuntu"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="65.0"/>
+  </properties>
+  <testcase name="testFileSha256OnImages" classname="io.spicelabs.saffron.corpus.CorpusFileVerificationTest" time="0.035">
+    <system-out><![CDATA[/var/lib/dpkg/info/reportbug.conffiles: a8172860bfa9c13a... (size: 20 bytes)
+]]></system-out>
+  </testcase>
+  <testcase name="testFileSha256OnImages" classname="io.spicelabs.saffron.corpus.CorpusFileVerificationTest" time="0.033">
+    <system-out><![CDATA[/usr/share/perl5/Debconf/Template.pm: 4ee3d67fccb651ed... (size: 8201 bytes)
+]]></system-out>
+  </testcase>
+  <testcase name="testFileSha256OnImages" classname="io.spicelabs.saffron.corpus.CorpusFileVerificationTest" time="0.034">
+    <system-out><![CDATA[Testing FAT32 with image: test-corpus/vmdk/legacy/windows-me.vmdk
+/usr/lib/python3/dist-packages/cryptography/hazmat/primitives/ciphers/__pycache__/__init__.cpython-39.pyc: 40acc0104b159e51... (size: 569 bytes)
+]]></system-out>
+  </testcase>
+  <testcase name="testFileSha256OnImages" classname="io.spicelabs.saffron.corpus.CorpusFileVerificationTest" time="0.003">
+    <system-out><![CDATA[/OS2/SYSLOG.EXE: c6631eef8e9d69ea... (size: 85088 bytes)
+]]></system-out>
+  </testcase>
+  <testcase name="testFileSha256OnImages" classname="io.spicelabs.saffron.corpus.CorpusFileVerificationTest" time="0.002">
+    <system-out><![CDATA[/OS2/SUPPORT/STDCDROM.VSD: f1644cd1856a8b79... (size: 4997 bytes)
+]]></system-out>
+  </testcase>
+  <testcase name="testFileSha256OnImages" classname="io.spicelabs.saffron.corpus.CorpusFileVerificationTest" time="0.002">
+    <system-out><![CDATA[/OS2/INSTALL/DDINST2.DLL: 836d6a48cfedd367... (size: 515 bytes)
+]]></system-out>
+  </testcase>
+  <testcase name="testFileSha256OnImages" classname="io.spicelabs.saffron.corpus.CorpusFileVerificationTest" time="0.003">
+    <system-out><![CDATA[/OS2/HELP.CMD: 7c307375c1383163... (size: 502 bytes)
+FAT32 root entries:
+]]></system-out>
+  </testcase>
+  <testcase name="testFileSha256OnImages" classname="io.spicelabs.saffron.corpus.CorpusFileVerificationTest" time="0.003">
+    <system-out><![CDATA[/OS2/APPEND.EXE: a0cae173c55a16d6... (size: 6912 bytes)
+]]></system-out>
+  </testcase>
+  <testcase name="fat32FileSystem_canWalkEntireFilesystem" classname="io.spicelabs.saffron.filesystem.fat32.Fat32FileSystemTest" time="0.033">
+    <system-out><![CDATA[FAT32 filesystem contains: 4980 files, 302 directories
+Files found:
+  /CONFIG.SYS (0 bytes)
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.1 (1048580 bytes)
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.2 (1048580 bytes)
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.3 (1048580 bytes)
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.4 (1048580 bytes)
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.5 (1048580 bytes)
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.6 (1048580 bytes)
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.7 (1048580 bytes)
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.8 (1048580 bytes)
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.9 (1048580 bytes)
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.10 (1048580 bytes)
+  /_RESTORE/LOGS/vxdsfp.log (1048580 bytes)
+  /_RESTORE/LOGS/vxdalt1.log (1048580 bytes)
+  /_RESTORE/DSINFO.DAT (52 bytes)
+  /_RESTORE/VxDMon.dat (62294 bytes)
+  /_RESTORE/VxDMon.cfg (28 bytes)
+  /_RESTORE/SRDISKID.DAT (1 bytes)
+  /_RESTORE/DISKCFG.DAT (104 bytes)
+  /MSDOS.--- (22 bytes)
+  /WINDOWS/SYSTEM/INFRARED.DLL (69120 bytes)
+]]></system-out>
+  </testcase>
+  <testcase name="fat32FileSystem_providesCorrectMetadata" classname="io.spicelabs.saffron.filesystem.fat32.Fat32FileSystemTest" time="0.016">
+    <system-out><![CDATA[FAT type: FAT32
+Metadata: {fatType=FAT32, oemId=MSWIN4.1, bytesPerSector=512, sectorsPerCluster=8, clusterSize=4096, mediaType=Fixed disk}
+Total size: 8587160064 bytes
+UUID: 135C07E7
+Label: HARD DISK
+]]></system-out>
+  </testcase>
+  <testcase name="fat32FileSystem_canReadPartition" classname="io.spicelabs.saffron.filesystem.fat32.Fat32FileSystemTest" time="0.017">
+    <system-out><![CDATA[  CONFIG.SYS (REGULAR_FILE)
+  _RESTORE (DIRECTORY)
+  MSDOS.--- (REGULAR_FILE)
+  WINDOWS (DIRECTORY)
+  MSDOS.SYS (REGULAR_FILE)
+  SUHDLOG.DAT (REGULAR_FILE)
+  AUTOEXEC.BAK (REGULAR_FILE)
+  AUTOEXEC.BAT (REGULAR_FILE)
+  Recycled (DIRECTORY)
+  SYSTEM.1ST (REGULAR_FILE)
+  io.sys (REGULAR_FILE)
+  Program Files (DIRECTORY)
+  command.com (REGULAR_FILE)
+  My Documents (DIRECTORY)
+No EFI directory found - this is normal for legacy images
+]]></system-out>
+  </testcase>
+  <testcase name="fat32FileSystem_supportsLongFileNames" classname="io.spicelabs.saffron.filesystem.fat32.Fat32FileSystemTest" time="0.033">
+    <system-out><![CDATA[Files with long names:
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.1
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.2
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.3
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.4
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.5
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.6
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.7
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.8
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.9
+  /_RESTORE/ARCHIVE/BKUPVXDLASTLOG.10
+  /WINDOWS/SYSTEM/verisignpub1.crl
+  /WINDOWS/SYSTEM/COLOR/sRGB Color Space Profile.icm
+  /WINDOWS/SYSTEM/COLOR/Diamond Compatible 9300K G2.2.icm
+  /WINDOWS/SYSTEM/COLOR/Hitachi Compatible 9300K G2.2.icm
+  /WINDOWS/SYSTEM/COLOR/NEC Compatible 9300K G2.2.icm
+  /WINDOWS/SYSTEM/COLOR/Trinitron Compatible 9300K G2.2.icm
+  /WINDOWS/SYSTEM/Blank Screen.scr
+  /WINDOWS/SYSTEM/ICMFILTER.DLL
+  /WINDOWS/SYSTEM/Mystify Your Mind.scr
+  /WINDOWS/SYSTEM/Underwater.dll
+  /WINDOWS/SYSTEM/CatRoot/{F750E6C3-38EE-11D1-85E5-00C04FC295EE}/DX4.9.0.0904.0.CAT
+  /WINDOWS/SYSTEM/CatRoot/{F750E6C3-38EE-11D1-85E5-00C04FC295EE}/BDA4.9.0.0904.0.CAT
+  /WINDOWS/SYSTEM/CatRoot/{F750E6C3-38EE-11D1-85E5-00C04FC295EE}/Q833989_ME.cat
+  /WINDOWS/SYSTEM/CatRoot/{F750E6C3-38EE-11D1-85E5-00C04FC295EE}/Q916281_ME.cat
+  /WINDOWS/SYSTEM/CatRoot/{F750E6C3-38EE-11D1-85E5-00C04FC295EE}/Q918439_ME.cat
+  /WINDOWS/SYSTEM/CatRoot/{F750E6C3-38EE-11D1-85E5-00C04FC295EE}/Q891781_ME.cat
+  /WINDOWS/SYSTEM/CatRoot/{F750E6C3-38EE-11D1-85E5-00C04FC295EE}/Q329414-25_WinMEx.cat
+  /WINDOWS/SYSTEM/My Pictures Screen Saver.scr
+  /WINDOWS/SYSTEM/Flying Windows.scr
+  /WINDOWS/SYSTEM/3D Flying Objects.scr
+  /WINDOWS/SYSTEM/3D Maze.scr
+  /WINDOWS/SYSTEM/3D Pipes.scr
+  /WINDOWS/SYSTEM/3D Text.scr
+  /WINDOWS/SYSTEM/3D Flower Box.scr
+  /WINDOWS/SYSTEM/Flying Through Space.scr
+  /WINDOWS/SYSTEM/Curves and Colors.scr
+  /WINDOWS/SYSTEM/Scrolling Marquee.scr
+  /WINDOWS/SYSTEM/Show Desktop.scf
+  /WINDOWS/SYSTEM/msjetoledb40.dll
+  /WINDOWS/SYSTEM/Inside your Computer.dll
+  /WINDOWS/SYSTEM/Inside your Computer.scr
+  /WINDOWS/SYSTEM/The 60's USA.scr
+  /WINDOWS/SYSTEM/Leonardo da Vinci.dll
+  /WINDOWS/SYSTEM/Leonardo da Vinci.scr
+  /WINDOWS/SYSTEM/The Golden Era.dll
+  /WINDOWS/SYSTEM/The Golden Era.scr
+  /WINDOWS/SYSTEM/Dangerous Creatures.dll
+  /WINDOWS/SYSTEM/Dangerous Creatures.scr
+  /WINDOWS/SYSTEM/Underwater.scr
+  /WINDOWS/SYSTEM/wmpscheme.xml
+  /WINDOWS/WEB/wiastream.htt
+  /WINDOWS/WEB/Wallpaper/Water Color.jpg
+  /WINDOWS/WEB/Wallpaper/Solar Eclipse.jpg
+  /WINDOWS/WEB/Wallpaper/Ocean Wave.jpg
+  /WINDOWS/WEB/Wallpaper/Snow Trees.jpg
+  /WINDOWS/WEB/Wallpaper/Boiling Point.jpg
+  /WINDOWS/WEB/Wallpaper/Fall Memories.jpg
+  /WINDOWS/WEB/Wallpaper/Fly Away.jpg
+  /WINDOWS/WEB/Wallpaper/Gold Petals.jpg
+  /WINDOWS/WEB/Wallpaper/Purple Sponge.jpg
+  /WINDOWS/WEB/Wallpaper/Windows Millennium.jpg
+  /WINDOWS/WEB/Wallpaper/Windows Me.htm
+  /WINDOWS/MEDIA/Jungle Maximize.wav
+  /WINDOWS/MEDIA/Jungle Menu Command.wav
+  /WINDOWS/MEDIA/Jungle Menu Popup.wav
+  /WINDOWS/MEDIA/Jungle Restore Up.wav
+  /WINDOWS/MEDIA/Jungle Error.wav
+  /WINDOWS/MEDIA/Musica Maximize.wav
+  /WINDOWS/MEDIA/Musica Menu Command.wav
+  /WINDOWS/MEDIA/Musica Restore Down.wav
+  /WINDOWS/MEDIA/Musica Critical Stop.wav
+  /WINDOWS/MEDIA/Jungle Recycle.wav
+  /WINDOWS/MEDIA/Robotz Maximize.wav
+  /WINDOWS/MEDIA/Robotz Menu Command.wav
+  /WINDOWS/MEDIA/Robotz Restore Down.wav
+  /WINDOWS/MEDIA/Robotz Critical Stop.wav
+  /WINDOWS/MEDIA/Utopia Recycle.wav
+  /WINDOWS/MEDIA/Utopia Maximize.wav
+  /WINDOWS/MEDIA/Utopia Menu Command.wav
+  /WINDOWS/MEDIA/Utopia Restore Down.wav
+  /WINDOWS/MEDIA/Utopia Critical Stop.wav
+  /WINDOWS/MEDIA/The Microsoft Sound.wav
+  /WINDOWS/MEDIA/Musica Recycle.wav
+  /WINDOWS/MEDIA/Musica Default.wav
+  /WINDOWS/MEDIA/Musica Windows Start.wav
+  /WINDOWS/MEDIA/Musica Windows Exit.wav
+  /WINDOWS/MEDIA/Musica Question.wav
+  /WINDOWS/MEDIA/Musica Exclamation.wav
+  /WINDOWS/MEDIA/Musica Asterisk.wav
+  /WINDOWS/MEDIA/Musica Open.wav
+  /WINDOWS/MEDIA/Musica Close.wav
+  /WINDOWS/MEDIA/Musica Minimize.wav
+  /WINDOWS/MEDIA/Musica Restore Up.wav
+  /WINDOWS/MEDIA/Musica Error.wav
+  /WINDOWS/MEDIA/Musica Menu Popup.wav
+  /WINDOWS/MEDIA/Jungle Default.wav
+  /WINDOWS/MEDIA/Jungle Windows Start.wav
+  /WINDOWS/MEDIA/Jungle Windows Exit.wav
+  /WINDOWS/MEDIA/Jungle Critical Stop.wav
+  /WINDOWS/MEDIA/Jungle Question.wav
+  /WINDOWS/MEDIA/Jungle Exclamation.wav
+  /WINDOWS/MEDIA/Jungle Asterisk.wav
+  /WINDOWS/MEDIA/Jungle Open.wav
+  /WINDOWS/MEDIA/Jungle Close.wav
+  /WINDOWS/MEDIA/Jungle Minimize.wav
+  /WINDOWS/MEDIA/Jungle Restore Down.wav
+  /WINDOWS/MEDIA/Robotz Recycle.wav
+  /WINDOWS/MEDIA/Robotz Default.wav
+  /WINDOWS/MEDIA/Robotz Windows Start.wav
+  /WINDOWS/MEDIA/Robotz Windows Exit.wav
+  /WINDOWS/MEDIA/Robotz Question.wav
+  /WINDOWS/MEDIA/Robotz Exclamation.wav
+  /WINDOWS/MEDIA/Robotz Asterisk.wav
+  /WINDOWS/MEDIA/Robotz Open.wav
+  /WINDOWS/MEDIA/Robotz Close.wav
+  /WINDOWS/MEDIA/Robotz Minimize.wav
+  /WINDOWS/MEDIA/Robotz Restore Up.wav
+  /WINDOWS/MEDIA/Robotz Error.wav
+  /WINDOWS/MEDIA/Robotz Menu Popup.wav
+  /WINDOWS/MEDIA/Utopia Default.wav
+  /WINDOWS/MEDIA/Utopia Windows Start.wav
+  /WINDOWS/MEDIA/Utopia Windows Exit.wav
+  /WINDOWS/MEDIA/Utopia Question.wav
+  /WINDOWS/MEDIA/Utopia Exclamation.wav
+  /WINDOWS/MEDIA/Utopia Asterisk.wav
+  /WINDOWS/MEDIA/Utopia Open.wav
+  /WINDOWS/MEDIA/Utopia Close.wav
+  /WINDOWS/MEDIA/Utopia Minimize.wav
+  /WINDOWS/MEDIA/Utopia Restore Up.wav
+  /WINDOWS/MEDIA/Utopia Error.wav
+  /WINDOWS/MEDIA/Utopia Menu Popup.wav
+  /WINDOWS/Pinstripe.bmp
+  /WINDOWS/PCHEALTH/HELPCTR/Database/HelpSessionHistory.stream
+  /WINDOWS/PCHEALTH/HELPCTR/System/css/navbar__16colors.css
+  /WINDOWS/PCHEALTH/HELPCTR/System/css/navbar__highcontrast.css
+  /WINDOWS/PCHEALTH/HELPCTR/System/css/PCHealth__16colors.css
+  /WINDOWS/PCHEALTH/HELPCTR/System/css/PCHealth__highcontrast.css
+  /WINDOWS/PCHEALTH/HELPCTR/System/css/Viewer__16colors.css
+  /WINDOWS/PCHEALTH/HELPCTR/System/css/Viewer__highcontrast.css
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/HTMLHelp_sm.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/WebHelp_sm.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/btn-back_inactive.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/btn-back_over.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/btn-forward.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/btn-forward_inactive.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/btn-forward_over.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/btn-print.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/btn-print_inactive.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/btn-print_over.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/content_grow.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/content_grow_over.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/content_shrink.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/content_shrink_over.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/content_logo.gif
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/Home_lowerLeft.jpg
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/Home_lowerRight.jpg
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/Home_topLeft.jpg
+  /WINDOWS/PCHEALTH/HELPCTR/System/images/Home_topRight.jpg
+  /WINDOWS/PCHEALTH/HELPCTR/System/comps/MenuSeparator.htc
+  /WINDOWS/PCHEALTH/HELPCTR/System/comps/RecentHelpTopics.htc
+  /WINDOWS/PCHEALTH/HELPCTR/System/comps/SearchResults.htc
+  /WINDOWS/PCHEALTH/HELPCTR/System/comps/TaxonomyNodesOnly.htc
+  /WINDOWS/PCHEALTH/HELPCTR/System/comps/Tutorials.htc
+  /WINDOWS/PCHEALTH/HELPCTR/System/comps/Background.htc
+  /WINDOWS/PCHEALTH/HELPCTR/System/comps/Background__16colors.htc
+  /WINDOWS/PCHEALTH/HELPCTR/System/comps/Background__highcontrast.htc
+  /WINDOWS/PCHEALTH/HELPCTR/System/HomePage__16colors.htm
+  /WINDOWS/PCHEALTH/HELPCTR/System/Banner__16colors.htm
+  /WINDOWS/PCHEALTH/HELPCTR/System/HomePage__highcontrast.htm
+  /WINDOWS/PCHEALTH/HELPCTR/System/Banner__highcontrast.htm
+  /WINDOWS/PCHEALTH/HELPCTR/System/StatusClosed.htm
+  /WINDOWS/PCHEALTH/HELPCTR/System/Tutorials.htm
+  /WINDOWS/PCHEALTH/HELPCTR/System/ContentViewer.htm
+  /WINDOWS/PCHEALTH/HELPCTR/System/IndexViewer.htm
+  /WINDOWS/PCHEALTH/HELPCTR/System/SelectPage.htm
+  /WINDOWS/PCHEALTH/HELPCTR/System/MessageBoard.htm
+  /WINDOWS/PCHEALTH/HELPCTR/Vendors/CN=Microsoft Corporation,L=Redmond,S=Washington,C=US/pssmachinesnapshot.xml
+  /WINDOWS/PCHEALTH/HELPCTR/Vendors/CN=Microsoft Corporation,L=Redmond,S=Washington,C=US/pssmachinehistory.xml
+  /WINDOWS/PCHEALTH/HELPCTR/Vendors/CN=Microsoft Corporation,L=Redmond,S=Washington,C=US/onofflinedet.htm
+  /WINDOWS/PCHEALTH/HELPCTR/Vendors/CN=Microsoft Corporation,L=Redmond,S=Washington,C=US/OfflineSupport.htm
+  /WINDOWS/PCHEALTH/HELPCTR/Vendors/CN=Microsoft Corporation,L=Redmond,S=Washington,C=US/CheckConnection.js
+  /WINDOWS/TASKS/PCHealth Scheduler for Data Collection.job
+  /WINDOWS/Sandstone.bmp
+  /WINDOWS/Start Menu/Programs/Accessories/Windows Movie Maker.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/System Tools/System Information.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/System Tools/Maintenance Wizard.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/System Tools/Disk Defragmenter.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/System Tools/Disk Cleanup.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/System Tools/DriveSpace.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/System Tools/System Monitor.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/System Tools/Resource Meter.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/System Tools/Net Watcher.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/System Tools/Character Map.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/System Tools/Clipboard Viewer.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/System Tools/Scheduled Tasks.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/System Tools/System Restore.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Communications/Home Networking Wizard.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Communications/Dial-Up Networking.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Communications/HyperTerminal.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Communications/Phone Dialer.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Communications/ISDN Configuration Wizard.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Communications/Internet Connection Wizard.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Communications/NetMeeting.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Communications/Remote Desktop Connection.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Entertainment/Sound Recorder.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Entertainment/Volume Control.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Entertainment/Windows Millennium Edition Preview.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Entertainment/Windows Media Player.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/MS-DOS Prompt.pif
+  /WINDOWS/Start Menu/Programs/Accessories/Windows Explorer.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Calculator.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Accessibility/Magnifier.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Accessibility/Accessibility Wizard.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Accessibility/On-Screen Keyboard.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Address Book.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Windows Update.lnk
+  /WINDOWS/Start Menu/Programs/Accessories/Synchronise.lnk
+  /WINDOWS/Start Menu/Programs/Games/Minesweeper.lnk
+  /WINDOWS/Start Menu/Programs/Games/Solitaire.lnk
+  /WINDOWS/Start Menu/Programs/Games/Spider Solitaire.lnk
+  /WINDOWS/Start Menu/Programs/Windows Media Player.lnk
+  /WINDOWS/Start Menu/Programs/Internet Explorer.lnk
+  /WINDOWS/Application Data/Microsoft/Internet Explorer/Quick Launch/Launch Internet Explorer Browser.lnk
+  /WINDOWS/Application Data/Microsoft/Internet Explorer/Quick Launch/Show Desktop.scf
+  /WINDOWS/Application Data/Microsoft/Installer/{FE2F6A2C-196E-4210-9C04-2B1BC21F07EF}/ARPPRODUCTICON.exe
+  /WINDOWS/Application Data/Microsoft/Media Player/CurrentDatabase_59R.wmdb
+  /WINDOWS/Application Data/Microsoft/Movie Maker/Windows Movie Maker.COL
+  /WINDOWS/Straw Mat.bmp
+  /WINDOWS/Carved Stone.bmp
+  /WINDOWS/Houndstooth.bmp
+  /WINDOWS/Triangles.bmp
+  /WINDOWS/Blue Rivets.bmp
+  /WINDOWS/Black Thatch.bmp
+  /WINDOWS/Red Blocks.bmp
+  /WINDOWS/Gold Weave.bmp
+  /WINDOWS/Metal Links.bmp
+  /WINDOWS/Channel Screen Saver.SCR
+  /WINDOWS/SendTo/3½ Floppy (A).lnk
+  /WINDOWS/SendTo/Mail Recipient.MAPIMail
+  /WINDOWS/SendTo/Desktop (create shortcut).DeskLink
+  /WINDOWS/SendTo/My Briefcase.lnk
+  /WINDOWS/SendTo/Compressed Folder.ZFSendToTarget
+  /WINDOWS/SendTo/Documents.mydocs
+  /WINDOWS/Sti_Trace.log
+  /WINDOWS/Sti_Event.log
+  /WINDOWS/RunOnceEx Log.txt
+  /WINDOWS/Downloaded Program Files/Microsoft XML Parser for Java.osd
+  /WINDOWS/Downloaded Program Files/DirectAnimation Java Classes.osd
+  /WINDOWS/All Users/Application Data/Microsoft/Media Index/wmplibrary_v_0_12.db
+  /WINDOWS/All Users/Application Data/Microsoft/Media Player/DefaultStore_59R.bin
+  /WINDOWS/All Users/Application Data/Microsoft/Media Player/UserMigratedStore_59R.bin
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Favorites -- 4 and 5 star rated.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/High bitrate media in my library.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Low bitrate media in my library.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Favorites -- One Data CD-R worth.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Music tracks I have not rated.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Music tracks I dislike.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Music tracks with content protection.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Favorites -- Have not heard recently.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Favorites -- Listen to late at night.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Favorites -- One Audio CD worth.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Favorites -- Listen to on Weekends.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Favorites -- Listen to on Weekdays.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Fresh tracks -- yet to be played.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Fresh tracks -- yet to be rated.wpl
+  /WINDOWS/All Users/Documents/My Music/Sample Playlists/0001E2D7/Fresh tracks.wpl
+  /WINDOWS/All Users/Documents/My Music/My Playlists/Sample Playlist.wpl
+  /WINDOWS/ShellIconCache
+  /WINDOWS/Active Setup Log.txt
+  /WINDOWS/Active Setup Log.BAK
+  /WINDOWS/vgxuninst.exe
+  /Program Files/Common Files/SYSTEM/ADO/MDACReadMe.htm
+  /Program Files/Common Files/Adaptec Shared/CDEngine/ACMWrapperV2.dll
+  /Program Files/Common Files/Adaptec Shared/CDEngine/MediaPlayerV2.dll
+  /Program Files/Common Files/Adaptec Shared/CDEngine/driversV2.dll
+  /Program Files/Common Files/Adaptec Shared/CreatorAPI/Cdbootable.dll
+  /Program Files/Common Files/Adaptec Shared/CreatorAPI/Translator.dll
+  /Program Files/Plus!/Themes/Sports no.cur
+  /Program Files/Plus!/Themes/Nature no.cur
+  /Program Files/Plus!/Themes/Sports up.cur
+  /Program Files/Plus!/Themes/Jungle Normal Select.cur
+  /Program Files/Plus!/Themes/Mystery wait.ani
+  /Program Files/Plus!/Themes/Nature arrow.cur
+  /Program Files/Plus!/Themes/Space Normal Select.cur
+  /Program Files/Plus!/Themes/Sports arrow.cur
+  /Program Files/Plus!/Themes/The Golden Era wait.ani
+  /Program Files/Plus!/Themes/Travel arrow.cur
+  /Program Files/Plus!/Themes/Underwater Text Select.cur
+  /Program Files/Plus!/Themes/Baseball Alternate Select.cur
+  /Program Files/Plus!/Themes/Nature up.cur
+  /Program Files/Plus!/Themes/Baseball Help Select.cur
+  /Program Files/Plus!/Themes/Dangerous Creatures cross.cur
+  /Program Files/Plus!/Themes/Dangerous Creatures no.cur
+  /Program Files/Plus!/Themes/Dangerous Creatures pen.cur
+  /Program Files/Plus!/Themes/Jungle (256 color).theme
+  /Program Files/Plus!/Themes/Inside your Computer move.cur
+  /Program Files/Plus!/Themes/Inside your Computer Size NWSE.cur
+  /Program Files/Plus!/Themes/Inside your Computer asterisk.wav
+  /Program Files/Plus!/Themes/Jungle Alternate Select.cur
+  /Program Files/Plus!/Themes/Travel no.cur
+  /Program Files/Plus!/Themes/Jungle Help Select.cur
+  /Program Files/Plus!/Themes/Travel up.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci help.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci no.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci pen.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci wait.cur
+  /Program Files/Plus!/Themes/More Windows help.cur
+  /Program Files/Plus!/Themes/More Windows no.cur
+  /Program Files/Plus!/Themes/More Windows pen.cur
+  /Program Files/Plus!/Themes/More Windows asterisk.wav
+  /Program Files/Plus!/Themes/Mystery help.cur
+  /Program Files/Plus!/Themes/Mystery no.cur
+  /Program Files/Plus!/Themes/Mystery pen.cur
+  /Program Files/Plus!/Themes/Mystery asterisk.wav
+  /Program Files/Plus!/Themes/Nature cross.cur
+  /Program Files/Plus!/Themes/Nature Size NESW.cur
+  /Program Files/Plus!/Themes/Nature Size NWSE.cur
+  /Program Files/Plus!/Themes/Nature wait.cur
+  /Program Files/Plus!/Themes/Science help.cur
+  /Program Files/Plus!/Themes/Science no.cur
+  /Program Files/Plus!/Themes/Science pen.cur
+  /Program Files/Plus!/Themes/Science asterisk.wav
+  /Program Files/Plus!/Themes/Space Alternate Select.cur
+  /Program Files/Plus!/Themes/Space Handwriting.cur
+  /Program Files/Plus!/Themes/Space Help Select.cur
+  /Program Files/Plus!/Themes/Sports beam.cur
+  /Program Files/Plus!/Themes/Sports move.cur
+  /Program Files/Plus!/Themes/Sports Size NS.cur
+  /Program Files/Plus!/Themes/Sports Size WE.cur
+  /Program Files/Plus!/Themes/The 60's USA beam.cur
+  /Program Files/Plus!/Themes/The 60's USA move.cur
+  /Program Files/Plus!/Themes/The 60's USA Size NS.cur
+  /Program Files/Plus!/Themes/The 60's USA up.cur
+  /Program Files/Plus!/Themes/The Golden Era beam.cur
+  /Program Files/Plus!/Themes/The Golden Era move.cur
+  /Program Files/Plus!/Themes/The Golden Era Size NS.cur
+  /Program Files/Plus!/Themes/The Golden Era up.cur
+  /Program Files/Plus!/Themes/Travel beam.cur
+  /Program Files/Plus!/Themes/Travel move.cur
+  /Program Files/Plus!/Themes/Travel Size NS.cur
+  /Program Files/Plus!/Themes/Travel Size WE.cur
+  /Program Files/Plus!/Themes/Underwater Precision Select.cur
+  /Program Files/Plus!/Themes/Underwater Diagonal Resize 2.cur
+  /Program Files/Plus!/Themes/Underwater Unavailable.cur
+  /Program Files/Plus!/Themes/Underwater maximize.wav
+  /Program Files/Plus!/Themes/Baseball Recycle Full.ico
+  /Program Files/Plus!/Themes/Dangerous Creatures Recycle Full.ico
+  /Program Files/Plus!/Themes/Inside your Computer busy.ani
+  /Program Files/Plus!/Themes/Jungle Recycle Full.ico
+  /Program Files/Plus!/Themes/Leonardo da Vinci busy.ani
+  /Program Files/Plus!/Themes/More Windows busy.ani
+  /Program Files/Plus!/Themes/Mystery Recycle Empty.ico
+  /Program Files/Plus!/Themes/Nature Recycle Empty.ico
+  /Program Files/Plus!/Themes/Nature busy.ani
+  /Program Files/Plus!/Themes/Science Recycle Full.ico
+  /Program Files/Plus!/Themes/Space Recycle Empty.ico
+  /Program Files/Plus!/Themes/Sports Recycle Empty.ico
+  /Program Files/Plus!/Themes/Sports busy.ani
+  /Program Files/Plus!/Themes/The 60's USA busy.ani
+  /Program Files/Plus!/Themes/The Golden Era Recycle Full.ico
+  /Program Files/Plus!/Themes/Travel Recycle Empty.ico
+  /Program Files/Plus!/Themes/Underwater My Computer.ico
+  /Program Files/Plus!/Themes/Underwater Busy.ani
+  /Program Files/Plus!/Themes/Dangerous Creatures up.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci wait.ani
+  /Program Files/Plus!/Themes/Sports wallpaper.pal
+  /Program Files/Plus!/Themes/Travel wallpaper.pal
+  /Program Files/Plus!/Themes/Leonardo da Vinci My Computer.ico
+  /Program Files/Plus!/Themes/The 60's USA wait.ani
+  /Program Files/Plus!/Themes/Dangerous Creatures wallpaper.jpg
+  /Program Files/Plus!/Themes/Jungle wallpaper.jpg
+  /Program Files/Plus!/Themes/Sports wallpaper.jpg
+  /Program Files/Plus!/Themes/Travel wallpaper.jpg
+  /Program Files/Plus!/Themes/Baseball default sound.wav
+  /Program Files/Plus!/Themes/Baseball exit windows.wav
+  /Program Files/Plus!/Themes/Baseball minimize.wav
+  /Program Files/Plus!/Themes/Baseball close program.wav
+  /Program Files/Plus!/Themes/Baseball restore up.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures default sound.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures maximize.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures question.wav
+  /Program Files/Plus!/Themes/Jungle My Computer.ico
+  /Program Files/Plus!/Themes/Inside your Computer program error.wav
+  /Program Files/Plus!/Themes/Inside your Computer menu popup.wav
+  /Program Files/Plus!/Themes/Inside your Computer restore down.wav
+  /Program Files/Plus!/Themes/Science (256 color).theme
+  /Program Files/Plus!/Themes/Jungle restore up.wav
+  /Program Files/Plus!/Themes/Nature (high color).theme
+  /Program Files/Plus!/Themes/Jungle exit windows.wav
+  /Program Files/Plus!/Themes/Jungle minimize.wav
+  /Program Files/Plus!/Themes/Jungle close program.wav
+  /Program Files/Plus!/Themes/Jungle startup.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci program error.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci menu command.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci restore up.wav
+  /Program Files/Plus!/Themes/The Golden Era busy.ani
+  /Program Files/Plus!/Themes/More Windows program error.wav
+  /Program Files/Plus!/Themes/More Windows maximize.wav
+  /Program Files/Plus!/Themes/More Windows minimize.wav
+  /Program Files/Plus!/Themes/More Windows critical stop.wav
+  /Program Files/Plus!/Themes/Mystery default sound.wav
+  /Program Files/Plus!/Themes/Mystery exclamation.wav
+  /Program Files/Plus!/Themes/Mystery menu popup.wav
+  /Program Files/Plus!/Themes/Mystery question.wav
+  /Program Files/Plus!/Themes/Baseball (256 color).theme
+  /Program Files/Plus!/Themes/Nature program error.wav
+  /Program Files/Plus!/Themes/Nature exit windows.wav
+  /Program Files/Plus!/Themes/Nature menu command.wav
+  /Program Files/Plus!/Themes/Nature restore down.wav
+  /Program Files/Plus!/Themes/Nature critical stop.wav
+  /Program Files/Plus!/Themes/Science program error.wav
+  /Program Files/Plus!/Themes/Science exit windows.wav
+  /Program Files/Plus!/Themes/Science menu command.wav
+  /Program Files/Plus!/Themes/Science restore down.wav
+  /Program Files/Plus!/Themes/Science critical stop.wav
+  /Program Files/Plus!/Themes/Space default sound.wav
+  /Program Files/Plus!/Themes/Space exit windows.wav
+  /Program Files/Plus!/Themes/Space minimize.wav
+  /Program Files/Plus!/Themes/Space close program.wav
+  /Program Files/Plus!/Themes/Space restore up.wav
+  /Program Files/Plus!/Themes/Sports beep.wav
+  /Program Files/Plus!/Themes/Sports program error.wav
+  /Program Files/Plus!/Themes/Sports maximize.wav
+  /Program Files/Plus!/Themes/Sports minimize.wav
+  /Program Files/Plus!/Themes/Sports critical stop.wav
+  /Program Files/Plus!/Themes/The 60's USA empty recycle bin.wav
+  /Program Files/Plus!/Themes/The 60's USA maximize.wav
+  /Program Files/Plus!/Themes/The 60's USA minimize.wav
+  /Program Files/Plus!/Themes/The 60's USA restore up.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci beam.cur
+  /Program Files/Plus!/Themes/The Golden Era program error.wav
+  /Program Files/Plus!/Themes/The Golden Era menu popup.wav
+  /Program Files/Plus!/Themes/The Golden Era startup.wav
+  /Program Files/Plus!/Themes/Jungle Recycle Empty.ico
+  /Program Files/Plus!/Themes/Travel program error.wav
+  /Program Files/Plus!/Themes/Travel exit windows.wav
+  /Program Files/Plus!/Themes/Travel menu command.wav
+  /Program Files/Plus!/Themes/Travel restore down.wav
+  /Program Files/Plus!/Themes/Travel critical stop.wav
+  /Program Files/Plus!/Themes/Underwater open program.wav
+  /Program Files/Plus!/Themes/Underwater beep.wav
+  /Program Files/Plus!/Themes/Underwater program error.wav
+  /Program Files/Plus!/Themes/Underwater minimize.wav
+  /Program Files/Plus!/Themes/Underwater restore up.wav
+  /Program Files/Plus!/Themes/Windows default (256 color).theme
+  /Program Files/Plus!/Themes/Windows Millennium (high color).theme
+  /Program Files/Plus!/Themes/More Windows wallpaper.jpg
+  /Program Files/Plus!/Themes/More Windows wallpaper.pal
+  /Program Files/Plus!/Themes/More Windows My Computer.ico
+  /Program Files/Plus!/Themes/More Windows Network Neighborhood.ico
+  /Program Files/Plus!/Themes/More Windows Recycle Empty.ico
+  /Program Files/Plus!/Themes/More Windows Recycle Full.ico
+  /Program Files/Plus!/Themes/More Windows wait.ani
+  /Program Files/Plus!/Themes/More Windows arrow.cur
+  /Program Files/Plus!/Themes/More Windows beam.cur
+  /Program Files/Plus!/Themes/More Windows cross.cur
+  /Program Files/Plus!/Themes/More Windows move.cur
+  /Program Files/Plus!/Themes/More Windows Size NESW.cur
+  /Program Files/Plus!/Themes/More Windows Size NS.cur
+  /Program Files/Plus!/Themes/More Windows Size NWSE.cur
+  /Program Files/Plus!/Themes/More Windows up.cur
+  /Program Files/Plus!/Themes/More Windows Size WE.cur
+  /Program Files/Plus!/Themes/More Windows beep.wav
+  /Program Files/Plus!/Themes/More Windows default sound.wav
+  /Program Files/Plus!/Themes/More Windows empty recycle bin.wav
+  /Program Files/Plus!/Themes/More Windows exclamation.wav
+  /Program Files/Plus!/Themes/More Windows exit Windows.wav
+  /Program Files/Plus!/Themes/More Windows menu popup.wav
+  /Program Files/Plus!/Themes/More Windows menu command.wav
+  /Program Files/Plus!/Themes/More Windows question.wav
+  /Program Files/Plus!/Themes/More Windows restore down.wav
+  /Program Files/Plus!/Themes/More Windows restore up.wav
+  /Program Files/Plus!/Themes/Inside your Computer (high color).theme
+  /Program Files/Plus!/Themes/Inside your Computer wallpaper.jpg
+  /Program Files/Plus!/Themes/Inside your Computer wallpaper.pal
+  /Program Files/Plus!/Themes/Inside your Computer My Computer.ico
+  /Program Files/Plus!/Themes/Inside your Computer Network Neighborhood.ico
+  /Program Files/Plus!/Themes/Inside your Computer Recycle Empty.ico
+  /Program Files/Plus!/Themes/Inside your Computer Recycle Full.ico
+  /Program Files/Plus!/Themes/Inside your Computer wait.ani
+  /Program Files/Plus!/Themes/Inside your Computer arrow.cur
+  /Program Files/Plus!/Themes/Inside your Computer beam.cur
+  /Program Files/Plus!/Themes/Inside your Computer cross.cur
+  /Program Files/Plus!/Themes/Inside your Computer help.cur
+  /Program Files/Plus!/Themes/Inside your Computer Size NESW.cur
+  /Program Files/Plus!/Themes/Inside your Computer no.cur
+  /Program Files/Plus!/Themes/Inside your Computer Size NS.cur
+  /Program Files/Plus!/Themes/Inside your Computer pen.cur
+  /Program Files/Plus!/Themes/Inside your Computer up.cur
+  /Program Files/Plus!/Themes/Inside your Computer Size WE.cur
+  /Program Files/Plus!/Themes/Inside your Computer beep.wav
+  /Program Files/Plus!/Themes/Inside your Computer default sound.wav
+  /Program Files/Plus!/Themes/Inside your Computer empty recycle bin.wav
+  /Program Files/Plus!/Themes/Inside your Computer exclamation.wav
+  /Program Files/Plus!/Themes/Inside your Computer exit windows.wav
+  /Program Files/Plus!/Themes/Inside your Computer maximize.wav
+  /Program Files/Plus!/Themes/Inside your Computer menu command.wav
+  /Program Files/Plus!/Themes/Inside your Computer minimize.wav
+  /Program Files/Plus!/Themes/Inside your Computer question.wav
+  /Program Files/Plus!/Themes/Inside your Computer restore up.wav
+  /Program Files/Plus!/Themes/Inside your Computer startup.wav
+  /Program Files/Plus!/Themes/Inside your Computer critical stop.wav
+  /Program Files/Plus!/Themes/Science wallpaper.jpg
+  /Program Files/Plus!/Themes/Science wallpaper.pal
+  /Program Files/Plus!/Themes/Science My Computer.ico
+  /Program Files/Plus!/Themes/Science Network Neighborhood.ico
+  /Program Files/Plus!/Themes/Science Recycle Empty.ico
+  /Program Files/Plus!/Themes/Science busy.ani
+  /Program Files/Plus!/Themes/Science wait.ani
+  /Program Files/Plus!/Themes/Science arrow.cur
+  /Program Files/Plus!/Themes/Science beam.cur
+  /Program Files/Plus!/Themes/Science cross.cur
+  /Program Files/Plus!/Themes/Science move.cur
+  /Program Files/Plus!/Themes/Science Size NESW.cur
+  /Program Files/Plus!/Themes/Science Size NS.cur
+  /Program Files/Plus!/Themes/Science Size NWSE.cur
+  /Program Files/Plus!/Themes/Science up.cur
+  /Program Files/Plus!/Themes/Science Size WE.cur
+  /Program Files/Plus!/Themes/Science beep.wav
+  /Program Files/Plus!/Themes/Science default sound.wav
+  /Program Files/Plus!/Themes/Science empty recycle bin.wav
+  /Program Files/Plus!/Themes/Science exclamation.wav
+  /Program Files/Plus!/Themes/Science maximize.wav
+  /Program Files/Plus!/Themes/Science menu popup.wav
+  /Program Files/Plus!/Themes/Science minimize.wav
+  /Program Files/Plus!/Themes/Science question.wav
+  /Program Files/Plus!/Themes/Science restore up.wav
+  /Program Files/Plus!/Themes/Science startup.wav
+  /Program Files/Plus!/Themes/Space (256 color).theme
+  /Program Files/Plus!/Themes/Space wallpaper.jpg
+  /Program Files/Plus!/Themes/Space My Computer.ico
+  /Program Files/Plus!/Themes/Space Network Neighborhood.ico
+  /Program Files/Plus!/Themes/Space Recycle Full.ico
+  /Program Files/Plus!/Themes/Space Busy.ani
+  /Program Files/Plus!/Themes/Space Working in Background.ani
+  /Program Files/Plus!/Themes/Space Text Select.cur
+  /Program Files/Plus!/Themes/Space Precision Select.cur
+  /Program Files/Plus!/Themes/Space Move.cur
+  /Program Files/Plus!/Themes/Space Diagonal Resize 2.cur
+  /Program Files/Plus!/Themes/Space Unavailable.cur
+  /Program Files/Plus!/Themes/Space Horizontal Resize.cur
+  /Program Files/Plus!/Themes/Space Diagonal Resize 1.cur
+  /Program Files/Plus!/Themes/Space Vertical Resize.cur
+  /Program Files/Plus!/Themes/Space asterisk.wav
+  /Program Files/Plus!/Themes/Space beep.wav
+  /Program Files/Plus!/Themes/Space empty recycle bin.wav
+  /Program Files/Plus!/Themes/Space program error.wav
+  /Program Files/Plus!/Themes/Space exclamation.wav
+  /Program Files/Plus!/Themes/Space maximize.wav
+  /Program Files/Plus!/Themes/Space menu popup.wav
+  /Program Files/Plus!/Themes/Space menu command.wav
+  /Program Files/Plus!/Themes/Space question.wav
+  /Program Files/Plus!/Themes/Space restore down.wav
+  /Program Files/Plus!/Themes/Space startup.wav
+  /Program Files/Plus!/Themes/Space critical stop.wav
+  /Program Files/Plus!/Themes/Space open program.wav
+  /Program Files/Plus!/Themes/Mystery (high color).theme
+  /Program Files/Plus!/Themes/Mystery wallpaper.jpg
+  /Program Files/Plus!/Themes/Mystery wallpaper.pal
+  /Program Files/Plus!/Themes/Mystery My Computer.ico
+  /Program Files/Plus!/Themes/Mystery Network Neighborhood.ico
+  /Program Files/Plus!/Themes/Mystery Recycle Full.ico
+  /Program Files/Plus!/Themes/Mystery busy.ani
+  /Program Files/Plus!/Themes/Mystery arrow.cur
+  /Program Files/Plus!/Themes/Mystery beam.cur
+  /Program Files/Plus!/Themes/Mystery cross.cur
+  /Program Files/Plus!/Themes/Mystery move.cur
+  /Program Files/Plus!/Themes/Mystery Size NESW.cur
+  /Program Files/Plus!/Themes/Mystery Size NS.cur
+  /Program Files/Plus!/Themes/Mystery Size NWSE.cur
+  /Program Files/Plus!/Themes/Mystery up.cur
+  /Program Files/Plus!/Themes/Mystery Size WE.cur
+  /Program Files/Plus!/Themes/Mystery beep.wav
+  /Program Files/Plus!/Themes/Mystery empty recycle bin.wav
+  /Program Files/Plus!/Themes/Mystery program error.wav
+  /Program Files/Plus!/Themes/Mystery exit windows.wav
+  /Program Files/Plus!/Themes/Mystery maximize.wav
+  /Program Files/Plus!/Themes/Mystery menu command.wav
+  /Program Files/Plus!/Themes/Mystery minimize.wav
+  /Program Files/Plus!/Themes/Mystery startup.wav
+  /Program Files/Plus!/Themes/Mystery critical stop.wav
+  /Program Files/Plus!/Themes/Baseball wallpaper.jpg
+  /Program Files/Plus!/Themes/Baseball My Computer.ico
+  /Program Files/Plus!/Themes/Baseball Network Neighborhood.ico
+  /Program Files/Plus!/Themes/Baseball Recycle Empty.ico
+  /Program Files/Plus!/Themes/Baseball Busy.ani
+  /Program Files/Plus!/Themes/Baseball Working in Background.ani
+  /Program Files/Plus!/Themes/Baseball Normal Select.cur
+  /Program Files/Plus!/Themes/Baseball Text Select.cur
+  /Program Files/Plus!/Themes/Baseball Precision Select.cur
+  /Program Files/Plus!/Themes/Baseball Move.cur
+  /Program Files/Plus!/Themes/Baseball Diagonal Resize 2.cur
+  /Program Files/Plus!/Themes/Baseball Unavailable.cur
+  /Program Files/Plus!/Themes/Baseball Vertical Resize.cur
+  /Program Files/Plus!/Themes/Baseball Diagonal Resize 1.cur
+  /Program Files/Plus!/Themes/Baseball Handwriting.cur
+  /Program Files/Plus!/Themes/Baseball Horizontal Resize.cur
+  /Program Files/Plus!/Themes/Baseball asterisk.wav
+  /Program Files/Plus!/Themes/Baseball beep.wav
+  /Program Files/Plus!/Themes/Baseball empty recycle bin.wav
+  /Program Files/Plus!/Themes/Baseball program error.wav
+  /Program Files/Plus!/Themes/Baseball exclamation.wav
+  /Program Files/Plus!/Themes/Baseball maximize.wav
+  /Program Files/Plus!/Themes/Baseball menu popup.wav
+  /Program Files/Plus!/Themes/Baseball menu command.wav
+  /Program Files/Plus!/Themes/Baseball question.wav
+  /Program Files/Plus!/Themes/Baseball restore down.wav
+  /Program Files/Plus!/Themes/Baseball startup.wav
+  /Program Files/Plus!/Themes/Baseball critical stop.wav
+  /Program Files/Plus!/Themes/Baseball open program.wav
+  /Program Files/Plus!/Themes/Sports (256 color).theme
+  /Program Files/Plus!/Themes/Sports My Computer.ico
+  /Program Files/Plus!/Themes/Sports Network Neighborhood.ico
+  /Program Files/Plus!/Themes/Sports Recycle Full.ico
+  /Program Files/Plus!/Themes/Sports wait.ani
+  /Program Files/Plus!/Themes/Sports cross.cur
+  /Program Files/Plus!/Themes/Sports help.cur
+  /Program Files/Plus!/Themes/Sports Size NESW.cur
+  /Program Files/Plus!/Themes/Sports Size NWSE.cur
+  /Program Files/Plus!/Themes/Sports pen.cur
+  /Program Files/Plus!/Themes/Sports asterisk.wav
+  /Program Files/Plus!/Themes/Sports default sound.wav
+  /Program Files/Plus!/Themes/Sports empty recycle bin.wav
+  /Program Files/Plus!/Themes/Sports exclamation.wav
+  /Program Files/Plus!/Themes/Sports exit windows.wav
+  /Program Files/Plus!/Themes/Sports menu popup.wav
+  /Program Files/Plus!/Themes/Sports menu command.wav
+  /Program Files/Plus!/Themes/Sports question.wav
+  /Program Files/Plus!/Themes/Sports startup.wav
+  /Program Files/Plus!/Themes/The 60's USA (256 color).theme
+  /Program Files/Plus!/Themes/The 60's USA wallpaper.jpg
+  /Program Files/Plus!/Themes/The 60's USA wallpaper.pal
+  /Program Files/Plus!/Themes/The 60's USA My Computer.ico
+  /Program Files/Plus!/Themes/The 60's USA Network Neighborhood.ico
+  /Program Files/Plus!/Themes/The 60's USA Recycle Empty.ico
+  /Program Files/Plus!/Themes/The 60's USA Recycle Full.ico
+  /Program Files/Plus!/Themes/The 60's USA arrow.cur
+  /Program Files/Plus!/Themes/The 60's USA cross.cur
+  /Program Files/Plus!/Themes/The 60's USA help.cur
+  /Program Files/Plus!/Themes/The 60's USA Size NESW.cur
+  /Program Files/Plus!/Themes/The 60's USA no.cur
+  /Program Files/Plus!/Themes/The 60's USA Size NWSE.cur
+  /Program Files/Plus!/Themes/The 60's USA pen.cur
+  /Program Files/Plus!/Themes/The 60's USA Size WE.cur
+  /Program Files/Plus!/Themes/The 60's USA asterisk.wav
+  /Program Files/Plus!/Themes/The 60's USA beep.wav
+  /Program Files/Plus!/Themes/The 60's USA default sound.wav
+  /Program Files/Plus!/Themes/The 60's USA program error.wav
+  /Program Files/Plus!/Themes/The 60's USA exclamation.wav
+  /Program Files/Plus!/Themes/The 60's USA exit windows.wav
+  /Program Files/Plus!/Themes/The 60's USA menu popup.wav
+  /Program Files/Plus!/Themes/The 60's USA menu command.wav
+  /Program Files/Plus!/Themes/The 60's USA question.wav
+  /Program Files/Plus!/Themes/The 60's USA restore down.wav
+  /Program Files/Plus!/Themes/The 60's USA startup.wav
+  /Program Files/Plus!/Themes/The 60's USA critical stop.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci (256 color).theme
+  /Program Files/Plus!/Themes/Leonardo da Vinci wallpaper.jpg
+  /Program Files/Plus!/Themes/Leonardo da Vinci wallpaper.pal
+  /Program Files/Plus!/Themes/Leonardo da Vinci Network Neighborhood.ico
+  /Program Files/Plus!/Themes/Leonardo da Vinci Recycle Empty.ico
+  /Program Files/Plus!/Themes/Leonardo da Vinci Recycle Full.ico
+  /Program Files/Plus!/Themes/Leonardo da Vinci arrow.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci busy.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci cross.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci move.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci Size NESW.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci Size NS.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci Size NWSE.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci up.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci Size WE.cur
+  /Program Files/Plus!/Themes/Leonardo da Vinci asterisk.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci beep.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci default sound.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci empty recycle bin.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci exclamation.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci maximize.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci menu popup.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci minimize.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci question.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci restore down.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci startup.wav
+  /Program Files/Plus!/Themes/Leonardo da Vinci critical stop.wav
+  /Program Files/Plus!/Themes/The Golden Era (high color).theme
+  /Program Files/Plus!/Themes/The Golden Era wallpaper.jpg
+  /Program Files/Plus!/Themes/The Golden Era wallpaper.pal
+  /Program Files/Plus!/Themes/The Golden Era My Computer.ico
+  /Program Files/Plus!/Themes/The Golden Era Network Neighborhood.ico
+  /Program Files/Plus!/Themes/The Golden Era Recycle Empty.ico
+  /Program Files/Plus!/Themes/The Golden Era arrow.cur
+  /Program Files/Plus!/Themes/The Golden Era cross.cur
+  /Program Files/Plus!/Themes/The Golden Era help.cur
+  /Program Files/Plus!/Themes/The Golden Era Size NESW.cur
+  /Program Files/Plus!/Themes/The Golden Era no.cur
+  /Program Files/Plus!/Themes/The Golden Era Size NWSE.cur
+  /Program Files/Plus!/Themes/The Golden Era pen.cur
+  /Program Files/Plus!/Themes/The Golden Era Size WE.cur
+  /Program Files/Plus!/Themes/The Golden Era asterisk.wav
+  /Program Files/Plus!/Themes/The Golden Era beep.wav
+  /Program Files/Plus!/Themes/The Golden Era default sound.wav
+  /Program Files/Plus!/Themes/The Golden Era empty recycle bin.wav
+  /Program Files/Plus!/Themes/The Golden Era exclamation.wav
+  /Program Files/Plus!/Themes/The Golden Era exit windows.wav
+  /Program Files/Plus!/Themes/The Golden Era maximize.wav
+  /Program Files/Plus!/Themes/The Golden Era menu command.wav
+  /Program Files/Plus!/Themes/The Golden Era minimize.wav
+  /Program Files/Plus!/Themes/The Golden Era question.wav
+  /Program Files/Plus!/Themes/The Golden Era critical stop.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures (256 color).theme
+  /Program Files/Plus!/Themes/Dangerous Creatures wallpaper.pal
+  /Program Files/Plus!/Themes/Dangerous Creatures My Computer.ico
+  /Program Files/Plus!/Themes/Dangerous Creatures Network Neighborhood.ico
+  /Program Files/Plus!/Themes/Dangerous Creatures Recycle Empty.ico
+  /Program Files/Plus!/Themes/Dangerous Creatures busy.ani
+  /Program Files/Plus!/Themes/Dangerous Creatures wait.ani
+  /Program Files/Plus!/Themes/Dangerous Creatures arrow.cur
+  /Program Files/Plus!/Themes/Dangerous Creatures beam.cur
+  /Program Files/Plus!/Themes/Dangerous Creatures help.cur
+  /Program Files/Plus!/Themes/Dangerous Creatures move.cur
+  /Program Files/Plus!/Themes/Dangerous Creatures Size NESW.cur
+  /Program Files/Plus!/Themes/Dangerous Creatures Size NS.cur
+  /Program Files/Plus!/Themes/Dangerous Creatures Size NWSE.cur
+  /Program Files/Plus!/Themes/Dangerous Creatures Size WE.cur
+  /Program Files/Plus!/Themes/Dangerous Creatures asterisk.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures beep.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures empty recycle bin.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures program error.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures exclamation.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures menu popup.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures menu command.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures minimize.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures startup.wav
+  /Program Files/Plus!/Themes/Dangerous Creatures critical stop.wav
+  /Program Files/Plus!/Themes/Jungle Network Neighborhood.ico
+  /Program Files/Plus!/Themes/Jungle Busy.ani
+  /Program Files/Plus!/Themes/Jungle Working in Background.ani
+  /Program Files/Plus!/Themes/Jungle Text Select.cur
+  /Program Files/Plus!/Themes/Jungle Precision Select.cur
+  /Program Files/Plus!/Themes/Jungle Move.cur
+  /Program Files/Plus!/Themes/Jungle Diagonal Resize 2.cur
+  /Program Files/Plus!/Themes/Jungle Unavailable.cur
+  /Program Files/Plus!/Themes/Jungle Vertical Resize.cur
+  /Program Files/Plus!/Themes/Jungle Diagonal Resize 1.cur
+  /Program Files/Plus!/Themes/Jungle Handwriting.cur
+  /Program Files/Plus!/Themes/Jungle Horizontal Resize.cur
+  /Program Files/Plus!/Themes/Jungle asterisk.wav
+  /Program Files/Plus!/Themes/Jungle beep.wav
+  /Program Files/Plus!/Themes/Jungle default sound.wav
+  /Program Files/Plus!/Themes/Jungle empty recycle bin.wav
+  /Program Files/Plus!/Themes/Jungle program error.wav
+  /Program Files/Plus!/Themes/Jungle exclamation.wav
+  /Program Files/Plus!/Themes/Jungle maximize.wav
+  /Program Files/Plus!/Themes/Jungle menu popup.wav
+  /Program Files/Plus!/Themes/Jungle menu command.wav
+  /Program Files/Plus!/Themes/Jungle question.wav
+  /Program Files/Plus!/Themes/Jungle restore down.wav
+  /Program Files/Plus!/Themes/Jungle critical stop.wav
+  /Program Files/Plus!/Themes/Jungle open program.wav
+  /Program Files/Plus!/Themes/Nature wallpaper.jpg
+  /Program Files/Plus!/Themes/Nature wallpaper.pal
+  /Program Files/Plus!/Themes/Nature My Computer.ico
+  /Program Files/Plus!/Themes/Nature Network Neighborhood.ico
+  /Program Files/Plus!/Themes/Nature Recycle Full.ico
+  /Program Files/Plus!/Themes/Nature wait.ani
+  /Program Files/Plus!/Themes/Nature beam.cur
+  /Program Files/Plus!/Themes/Nature busy.cur
+  /Program Files/Plus!/Themes/Nature help.cur
+  /Program Files/Plus!/Themes/Nature move.cur
+  /Program Files/Plus!/Themes/Nature Size NS.cur
+  /Program Files/Plus!/Themes/Nature pen.cur
+  /Program Files/Plus!/Themes/Nature Size WE.cur
+  /Program Files/Plus!/Themes/Nature asterisk.wav
+  /Program Files/Plus!/Themes/Nature beep.wav
+  /Program Files/Plus!/Themes/Nature default sound.wav
+  /Program Files/Plus!/Themes/Nature empty recycle bin.wav
+  /Program Files/Plus!/Themes/Nature exclamation.wav
+  /Program Files/Plus!/Themes/Nature maximize.wav
+  /Program Files/Plus!/Themes/Nature menu popup.wav
+  /Program Files/Plus!/Themes/Nature minimize.wav
+  /Program Files/Plus!/Themes/Nature question.wav
+  /Program Files/Plus!/Themes/Nature restore up.wav
+  /Program Files/Plus!/Themes/Nature startup.wav
+  /Program Files/Plus!/Themes/Travel (high color).theme
+  /Program Files/Plus!/Themes/Travel My Computer.ico
+  /Program Files/Plus!/Themes/Travel Network Neighborhood.ico
+  /Program Files/Plus!/Themes/Travel Recycle Full.ico
+  /Program Files/Plus!/Themes/Travel busy.ani
+  /Program Files/Plus!/Themes/Travel wait.ani
+  /Program Files/Plus!/Themes/Travel cross.cur
+  /Program Files/Plus!/Themes/Travel help.cur
+  /Program Files/Plus!/Themes/Travel Size NESW.cur
+  /Program Files/Plus!/Themes/Travel Size NWSE.cur
+  /Program Files/Plus!/Themes/Travel pen.cur
+  /Program Files/Plus!/Themes/Travel asterisk.wav
+  /Program Files/Plus!/Themes/Travel beep.wav
+  /Program Files/Plus!/Themes/Travel default sound.wav
+  /Program Files/Plus!/Themes/Travel empty recycle bin.wav
+  /Program Files/Plus!/Themes/Travel exclamation.wav
+  /Program Files/Plus!/Themes/Travel maximize.wav
+  /Program Files/Plus!/Themes/Travel menu popup.wav
+  /Program Files/Plus!/Themes/Travel minimize.wav
+  /Program Files/Plus!/Themes/Travel question.wav
+  /Program Files/Plus!/Themes/Travel restore up.wav
+  /Program Files/Plus!/Themes/Travel startup.wav
+  /Program Files/Plus!/Themes/Underwater (high color).theme
+  /Program Files/Plus!/Themes/Underwater wallpaper.jpg
+  /Program Files/Plus!/Themes/Underwater Network Neighborhood.ico
+  /Program Files/Plus!/Themes/Underwater Recycle Empty.ico
+  /Program Files/Plus!/Themes/Underwater Recycle Full.ico
+  /Program Files/Plus!/Themes/Underwater Working in Background.ani
+  /Program Files/Plus!/Themes/Underwater Normal Select.cur
+  /Program Files/Plus!/Themes/Underwater Help Select.cur
+  /Program Files/Plus!/Themes/Underwater Move.cur
+  /Program Files/Plus!/Themes/Underwater Diagonal Resize 1.cur
+  /Program Files/Plus!/Themes/Underwater Horizontal Resize.cur
+  /Program Files/Plus!/Themes/Underwater Vertical Resize.cur
+  /Program Files/Plus!/Themes/Underwater Handwriting.cur
+  /Program Files/Plus!/Themes/Underwater Alternate Select.cur
+  /Program Files/Plus!/Themes/Underwater empty recycle bin.wav
+  /Program Files/Plus!/Themes/Underwater menu command.wav
+  /Program Files/Plus!/Themes/Underwater asterisk.wav
+  /Program Files/Plus!/Themes/Underwater exclamation.wav
+  /Program Files/Plus!/Themes/Underwater critical stop.wav
+  /Program Files/Plus!/Themes/Underwater question.wav
+  /Program Files/Plus!/Themes/Underwater close program.wav
+  /Program Files/Plus!/Themes/Underwater exit windows.wav
+  /Program Files/Plus!/Themes/Underwater menu popup.wav
+  /Program Files/Plus!/Themes/Underwater default sound.wav
+  /Program Files/Plus!/Themes/Underwater restore down.wav
+  /Program Files/Plus!/Themes/Underwater startup.wav
+  /Program Files/Plus!/Themes/Windows Classic.theme
+  /Program Files/Internet Explorer/Uninstall Information/Mobile Option Pack.DAT
+  /Program Files/Internet Explorer/Uninstall Information/Mobile Option Pack.INI
+  /Program Files/Windows Media Player/SKINS/Headspace.wmz
+  /Program Files/Windows Media Player/SKINS/Miniplayer.wmz
+  /Program Files/Windows Media Player/SKINS/9SeriesDefault.wmz
+  /Program Files/Windows Media Player/Installer/media player 9 (98se, me, 2000).exe
+  /Program Files/Uninstall Information/IE UserData/IE UserData.DAT
+  /Program Files/Uninstall Information/IE UserData/IE UserData.INI
+  /Program Files/Uninstall Information/vgxupdate/vgxupdate.DAT
+  /Program Files/Uninstall Information/vgxupdate/vgxupdate.INI
+  /Program Files/VMware/VMware Tools/vm-support.vbs
+  /Program Files/VMware/VMware Tools/VMwareXferlogs.exe
+  /Program Files/VMware/VMware Tools/deployPkg.dll
+  /Program Files/VMware/VMware Tools/poweroff-vm-default.bat
+  /Program Files/VMware/VMware Tools/poweron-vm-default.bat
+  /Program Files/VMware/VMware Tools/resume-vm-default.bat
+  /Program Files/VMware/VMware Tools/suspend-vm-default.bat
+  /Program Files/VMware/VMware Tools/VMControlPanel.cpl
+  /Program Files/VMware/VMware Tools/VMwareHgfsClient.exe
+  /Program Files/VMware/VMware Tools/VMwareService.exe
+  /Program Files/VMware/VMware Tools/VMwareTray.exe
+  /Program Files/VMware/VMware Tools/VMwareUser.exe
+  /Program Files/VMware/VMware Tools/VMwareToolsUpgrader.exe
+  /My Documents/My Pictures/Cliff in Clouds.jpg
+  /My Documents/My Pictures/Diagonal Sand.jpg
+  /My Documents/My Pictures/Shed in Field.jpg
+  /My Documents/My Pictures/Smokey Light.jpg
+  /My Documents/My Videos/Windows Movie Maker Sample File.wmv
+]]></system-out>
+  </testcase>
+  <testcase name="fat32FileSystem_canResolvePaths" classname="io.spicelabs.saffron.filesystem.fat32.Fat32FileSystemTest" time="0.019">
+    <system-out><![CDATA[Found: /WINDOWS -> DIRECTORY
+Found: / -> DIRECTORY
+]]></system-out>
+  </testcase>
+</testsuite>

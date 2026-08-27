@@ -20,6 +20,8 @@ package io.spicelabs.saffron.container.dtb;
 import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.container.BinaryContainer;
 import io.spicelabs.saffron.container.ContainerEntry;
+import io.spicelabs.saffron.io.ChunkedDisk;
+import io.spicelabs.saffron.raw.RawDiskImpl;
 import io.spicelabs.saffron.container.ContainerFormat;
 import io.spicelabs.saffron.container.devicetree.DeviceTreeBlob;
 import io.spicelabs.saffron.container.devicetree.DeviceTreeNode;
@@ -55,6 +57,7 @@ public final class DtbContainer implements BinaryContainer {
 
     private final long sourceSize;
     private final byte[] source;
+    private final ChunkedDisk disk;
     private final List<ContainerEntry> entries;
     private final Map<String, ContainerEntry> entryByName;
     private final long totalSize;
@@ -63,6 +66,18 @@ public final class DtbContainer implements BinaryContainer {
                            long totalSize) {
         this.sourceSize = sourceSize;
         this.source = source.clone();
+        this.disk = null;
+        this.entries = Collections.unmodifiableList(new ArrayList<>(entries));
+        this.entryByName = this.entries.stream()
+                .collect(Collectors.toMap(ContainerEntry::name, e -> e, (a, b) -> a, LinkedHashMap::new));
+        this.totalSize = totalSize;
+    }
+
+    private DtbContainer(long sourceSize, @NotNull ChunkedDisk disk,
+                         @NotNull List<ContainerEntry> entries, long totalSize) {
+        this.sourceSize = sourceSize;
+        this.source = null;
+        this.disk = disk;
         this.entries = Collections.unmodifiableList(new ArrayList<>(entries));
         this.entryByName = this.entries.stream()
                 .collect(Collectors.toMap(ContainerEntry::name, e -> e, (a, b) -> a, LinkedHashMap::new));
@@ -71,6 +86,11 @@ public final class DtbContainer implements BinaryContainer {
 
     /**
      * Attempts to open a DTB container from a file path.
+     *
+     * <p>Reads are bounded (see {@link ChunkedDisk}): the file is never
+     * loaded into memory as a whole; entries stream from the file on demand.
+     * The container owns the file handle and closes it on
+     * {@link #close()}.</p>
      *
      * @param path the path to examine
      * @return the container, or empty if the file is not a plain DTB
@@ -81,8 +101,25 @@ public final class DtbContainer implements BinaryContainer {
         if (size < 4 || size > Integer.MAX_VALUE) {
             return Optional.empty();
         }
-        byte[] data = Files.readAllBytes(path);
-        return open(ByteBuffer.wrap(data), size);
+        ChunkedDisk chunked = new ChunkedDisk(RawDiskImpl.open(path), true);
+        try {
+            Optional<DeviceTreeBlob> blobOpt = DeviceTreeBlob.parse(chunked);
+            if (blobOpt.isEmpty()) {
+                chunked.close();
+                return Optional.empty();
+            }
+            DeviceTreeBlob blob = blobOpt.get();
+            if (blob.root().child(IMAGES_NODE).isPresent()) {
+                chunked.close();
+                return Optional.empty();
+            }
+            List<ContainerEntry> entries = buildEntries(blob, chunked);
+            return Optional.of(new DtbContainer(size, chunked, entries, blob.totalSize()));
+        } catch (RuntimeException | Error e) {
+            // Defensive: malformed input must not escape as unchecked.
+            chunked.close();
+            return Optional.empty();
+        }
     }
 
     /**
@@ -97,8 +134,25 @@ public final class DtbContainer implements BinaryContainer {
         if (size < 4 || size > Integer.MAX_VALUE) {
             return Optional.empty();
         }
-        ByteBuffer data = disk.read(0, (int) size);
-        return open(data, size);
+        // Bounded reads: the DTB is parsed through a chunked disk reader and
+        // never loaded as a whole; the raw entry streams from the disk.
+        ChunkedDisk chunked = new ChunkedDisk(disk);
+        try {
+            Optional<DeviceTreeBlob> blobOpt = DeviceTreeBlob.parse(chunked);
+            if (blobOpt.isEmpty()) {
+                return Optional.empty();
+            }
+            DeviceTreeBlob blob = blobOpt.get();
+            if (blob.root().child(IMAGES_NODE).isPresent()) {
+                return Optional.empty();
+            }
+            List<ContainerEntry> entries = buildEntries(blob, chunked);
+            return Optional.of(new DtbContainer(size, chunked, entries, blob.totalSize()));
+        } catch (RuntimeException | Error e) {
+            // Defensive: malformed input must not escape as unchecked
+            // (parity with open(Path)).
+            return Optional.empty();
+        }
     }
 
     /**
@@ -142,6 +196,17 @@ public final class DtbContainer implements BinaryContainer {
     private static @NotNull List<ContainerEntry> buildEntries(@NotNull DeviceTreeBlob blob, byte @NotNull [] source) {
         List<ContainerEntry> entries = new ArrayList<>();
         entries.add(rawEntry(source));
+        collectProperties(blob.root(), "", entries);
+        return entries;
+    }
+
+    private static @NotNull List<ContainerEntry> buildEntries(@NotNull DeviceTreeBlob blob,
+                                                              @NotNull ChunkedDisk disk) {
+        List<ContainerEntry> entries = new ArrayList<>();
+        Map<String, String> meta = new LinkedHashMap<>();
+        meta.put("type", "raw");
+        meta.put("size", Long.toString(disk.size()));
+        entries.add(new DtbEntry(RAW_ENTRY, disk, 0, disk.size(), meta));
         collectProperties(blob.root(), "", entries);
         return entries;
     }
@@ -222,5 +287,17 @@ public final class DtbContainer implements BinaryContainer {
     @Override
     public long size() {
         return sourceSize;
+    }
+
+    /**
+     * Releases the backing source when this container opened it itself
+     * (path-based opens). Containers created over a caller-provided
+     * {@link VirtualDisk} leave the caller's disk untouched.
+     */
+    @Override
+    public void close() throws IOException {
+        if (disk != null) {
+            disk.close();
+        }
     }
 }

@@ -1,0 +1,3 @@
+Source: https://github.com/fox-it/dissect.cramfs/blob/main/tests/_data/webcramfs.img.gz
+License: repo AGPL-3.0 (fox-it/dissect.cramfs); image is a device web-firmware cramfs (busybox + macGuarder), no separate license stated
+Downloaded: 2026-08-25

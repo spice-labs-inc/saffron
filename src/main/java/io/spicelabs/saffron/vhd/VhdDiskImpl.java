@@ -71,13 +71,23 @@ public final class VhdDiskImpl implements VirtualDisk.VhdDisk {
             // Read footer from end of file
             VhdFooter footer = VhdFooter.read(channel);
 
+            // Differencing disks read zeros for unallocated blocks because
+            // the parent is never resolved; reject them loudly instead of
+            // returning silent wrong data.
+            if (footer.diskType() == VhdFooter.DiskType.DIFFERENCING) {
+                throw new IOException("Differencing VHD images are not supported: "
+                        + path.getFileName());
+            }
+            validateFooter(footer);
+
             VhdDynamicHeader dynamicHeader = null;
             int[] bat = null;
 
-            // For dynamic/differencing disks, read the dynamic header and BAT
+            // For dynamic disks, read the dynamic header and BAT
             if (!footer.isFixed()) {
                 // Dynamic header follows the copy of footer at the beginning
                 dynamicHeader = VhdDynamicHeader.read(channel, VhdFooter.FOOTER_SIZE);
+                validateDynamicHeader(dynamicHeader, footer);
 
                 // Read Block Allocation Table
                 bat = readBat(channel, dynamicHeader);
@@ -89,6 +99,32 @@ public final class VhdDiskImpl implements VirtualDisk.VhdDisk {
         } catch (Exception e) {
             channel.close();
             throw e;
+        }
+    }
+
+    /** Maximum VHD virtual disk size per the format (2 TiB). */
+    private static final long MAX_VHD_SIZE = 2L * 1024 * 1024 * 1024 * 1024;
+
+    /** Maximum BAT size: 4M entries x 4 bytes = 16 MiB (memory budget). */
+    private static final int MAX_BAT_ENTRIES = 4 * 1024 * 1024;
+
+    private static void validateFooter(VhdFooter footer) throws IOException {
+        long currentSize = footer.currentSize();
+        if (currentSize <= 0 || currentSize > MAX_VHD_SIZE) {
+            throw new IOException("Invalid VHD current size: " + currentSize);
+        }
+    }
+
+    private static void validateDynamicHeader(VhdDynamicHeader header, VhdFooter footer)
+            throws IOException {
+        int blockSize = header.blockSize();
+        if (blockSize < 512 || blockSize > 8 * 1024 * 1024
+                || (blockSize & (blockSize - 1)) != 0) {
+            throw new IOException("Invalid VHD block size: " + blockSize);
+        }
+        int entries = header.maxTableEntries();
+        if (entries < 0 || entries > MAX_BAT_ENTRIES) {
+            throw new IOException("Invalid VHD max table entries: " + entries);
         }
     }
 
@@ -106,14 +142,34 @@ public final class VhdDiskImpl implements VirtualDisk.VhdDisk {
     private static int[] readBat(SeekableByteChannel channel, VhdDynamicHeader header)
             throws IOException {
         int entries = header.maxTableEntries();
+        long batBytes = (long) entries * 4;
+        final long batEnd;
+        try {
+            batEnd = Math.addExact(header.tableOffset(), batBytes);
+        } catch (ArithmeticException e) {
+            throw new IOException("VHD BAT bounds overflow: tableOffset="
+                    + header.tableOffset() + ", bytes=" + batBytes, e);
+        }
+        if (batEnd > channel.size()) {
+            throw new IOException("VHD BAT out of bounds: tableOffset=" + header.tableOffset()
+                    + ", entries=" + entries + ", fileSize=" + channel.size());
+        }
         int[] bat = new int[entries];
 
         ByteBuffer buffer = ByteBuffer.allocate(entries * 4);
         buffer.order(ByteOrder.BIG_ENDIAN);
         channel.position(header.tableOffset());
-        int read = channel.read(buffer);
-        if (read < entries * 4) {
-            throw new IOException("Failed to read VHD BAT: got " + read + " bytes");
+        int totalRead = 0;
+        while (totalRead < entries * 4) {
+            int read = channel.read(buffer);
+            if (read < 0) {
+                throw new IOException("Truncated VHD BAT: expected " + (entries * 4)
+                        + " bytes, got " + totalRead);
+            }
+            if (read == 0) {
+                throw new IOException("No progress reading VHD BAT");
+            }
+            totalRead += read;
         }
         buffer.flip();
 
@@ -205,15 +261,21 @@ public final class VhdDiskImpl implements VirtualDisk.VhdDisk {
 
     private void readFromChannel(long position, ByteBuffer dest, int length) throws IOException {
         ByteBuffer temp = ByteBuffer.allocate(length);
-        channel.position(position);
+        synchronized (channel) {
+            channel.position(position);
 
-        int totalRead = 0;
-        while (totalRead < length) {
-            int read = channel.read(temp);
-            if (read < 0) {
-                break;
+            int totalRead = 0;
+            while (totalRead < length) {
+                int read = channel.read(temp);
+                if (read < 0) {
+                    throw new IOException("Truncated VHD file: expected " + length
+                            + " bytes at offset " + position + ", got " + totalRead);
+                }
+                if (read == 0) {
+                    throw new IOException("No progress reading VHD file at offset " + position);
+                }
+                totalRead += read;
             }
-            totalRead += read;
         }
 
         temp.flip();
@@ -352,6 +414,9 @@ public final class VhdDiskImpl implements VirtualDisk.VhdDisk {
 
         @Override
         public int read(byte[] b, int off, int len) throws IOException {
+            if (len == 0) {
+                return 0;
+            }
             if (position >= size) {
                 return -1;
             }

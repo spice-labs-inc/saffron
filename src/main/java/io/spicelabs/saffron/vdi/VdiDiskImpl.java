@@ -75,6 +75,14 @@ public final class VdiDiskImpl implements VirtualDisk.VdiDisk {
         boolean success = false;
         try {
             VdiHeader header = VdiHeader.read(channel);
+
+            // Differencing disks read zeros for unallocated blocks because
+            // the parent is never resolved; reject loudly.
+            if (header.hasParent()) {
+                throw new IOException("Differencing VDI images are not supported: "
+                        + path.getFileName());
+            }
+            validateHeader(header, channel);
             int[] bam = readBlockAllocationMap(channel, header);
             VdiDiskImpl disk = new VdiDiskImpl(path, channel, header, bam);
             success = true;
@@ -83,6 +91,33 @@ public final class VdiDiskImpl implements VirtualDisk.VdiDisk {
             if (!success) {
                 channel.close();
             }
+        }
+    }
+
+    /** Maximum BAM size: 4M entries x 4 bytes = 16 MiB (memory budget). */
+    private static final int MAX_BAM_ENTRIES = 4 * 1024 * 1024;
+
+    private static void validateHeader(VdiHeader header, SeekableByteChannel channel)
+            throws IOException {
+        int blockSize = header.blockSize();
+        if (blockSize <= 0 || blockSize > 64 * 1024 * 1024
+                || (blockSize & (blockSize - 1)) != 0) {
+            throw new IOException("Invalid VDI block size: " + blockSize);
+        }
+        int blocks = header.blocksInHdd();
+        if (blocks < 0 || blocks > MAX_BAM_ENTRIES) {
+            throw new IOException("Invalid VDI blocks in HDD: " + blocks);
+        }
+        // Cross-check against the declared disk geometry: a BAM smaller
+        // than diskSize/blockSize would index past the array on reads.
+        long neededBlocks = (header.diskSize() + blockSize - 1) / blockSize;
+        if (neededBlocks > blocks) {
+            throw new IOException("VDI blocks in HDD too small for the disk size: "
+                    + blocks + " blocks for " + header.diskSize() + " bytes");
+        }
+        long bamBytes = (long) blocks * 4;
+        if (Math.addExact(header.blocksOffset(), bamBytes) > channel.size()) {
+            throw new IOException("VDI block allocation map out of bounds");
         }
     }
 
@@ -170,12 +205,19 @@ public final class VdiDiskImpl implements VirtualDisk.VdiDisk {
                 ByteBuffer blockData = ByteBuffer.allocate(toRead);
                 synchronized (channel) {
                     channel.position(blockFileOffset);
-                    int read = channel.read(blockData);
-                    if (read < toRead) {
-                        // Partial read - pad with zeros
-                        while (blockData.position() < toRead) {
-                            blockData.put((byte) 0);
+                    int totalRead = 0;
+                    while (totalRead < toRead) {
+                        int read = channel.read(blockData);
+                        if (read < 0) {
+                            throw new IOException("Truncated VDI file: expected " + toRead
+                                    + " bytes at offset " + blockFileOffset
+                                    + ", got " + totalRead);
                         }
+                        if (read == 0) {
+                            throw new IOException("No progress reading VDI file at offset "
+                                    + blockFileOffset);
+                        }
+                        totalRead += read;
                     }
                 }
                 blockData.flip();
@@ -318,6 +360,9 @@ public final class VdiDiskImpl implements VirtualDisk.VdiDisk {
 
         @Override
         public int read(byte[] b, int off, int len) throws IOException {
+            if (len == 0) {
+                return 0;
+            }
             if (position >= size) {
                 return -1;
             }

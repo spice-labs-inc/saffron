@@ -64,6 +64,13 @@ public record ApfsContainerSuperblock(
         int blockSize = buf.getInt(36);
         long blockCount = buf.getLong(40);
 
+        // Validate at MOUNT (not just detection): every node read allocates
+        // blockSize bytes, so a hostile value is an OOM vector.
+        if (blockSize < 512 || blockSize > 64 * 1024 * 1024
+                || (blockSize & (blockSize - 1)) != 0) {
+            throw new IOException("Invalid APFS container block size: " + blockSize);
+        }
+
         // Container UUID at offset 72 (16 bytes)
         byte[] containerUuid = new byte[16];
         buf.position(72);

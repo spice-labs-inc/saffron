@@ -1,0 +1,180 @@
+      5 Medium: new io.spicelabs.saffron.filesystem.hfsplus.HfsPlusVolumeHeader(short, short, int, int, long, long, int, int, List, List, List, List, long, long, long, long, int, int, byte
+      3 Medium: new io.spicelabs.saffron.filesystem.btrfs.BtrfsTreeReader$NodeHeader(byte
+      3 Medium: new io.spicelabs.saffron.filesystem.btrfs.BtrfsSuperblock(byte
+      2 Medium: Possible null pointer dereference in io.spicelabs.saffron.vdi.VdiDiskImpl.metadata() due to return value of called method 
+      2 Medium: Possible null pointer dereference in io.spicelabs.saffron.DiskFormat.detect(Path) due to return value of called method 
+      2 Medium: new io.spicelabs.saffron.filesystem.ntfs.NtfsAttribute(int, int, boolean, Optional, int, byte
+      2 Medium: new io.spicelabs.saffron.filesystem.apfs.ApfsContainerSuperblock(ApfsObjectHeader, int, long, long, List, long, byte
+      2 Medium: new io.spicelabs.saffron.filesystem.apfs.ApfsBTreeReader$KVEntry(byte
+      1 Medium: Useless object stored in variable vidByPeb of method io.spicelabs.saffron.filesystem.ubi.UbiSuperblock.tryAttach(DiskRegion, long, long) 
+      1 Medium: Useless condition: it's known that data.length >= 2 at this point 
+      1 Medium: Unread field: io.spicelabs.saffron.filesystem.ext4.Ext4FileSystemImpl$Ext4ExtentInputStream.offsetInCurrentExtent 
+      1 Medium: Switch statement found in io.spicelabs.saffron.filesystem.apfs.ApfsInodeRecord.parse(byte
+      1 Medium: Private method io.spicelabs.saffron.filesystem.btrfs.BtrfsFileSystemImpl.readSymlinkTarget(long) is never called 
+      1 Medium: Private method io.spicelabs.saffron.filesystem.btrfs.BtrfsFileSystemImpl.readInode(long) is never called 
+      1 Medium: Private method io.spicelabs.saffron.filesystem.btrfs.BtrfsFileSystemImpl.readFileData(long, long) is never called 
+      1 Medium: Private method io.spicelabs.saffron.filesystem.btrfs.BtrfsFileSystemImpl.readDirEntries(long) is never called 
+      1 Medium: Private method io.spicelabs.saffron.filesystem.apfs.ApfsBTreeReader.searchNode(ApfsBTreeReader$BTreeNode, BiFunction, BiFunction) is never called 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.vmdk.VmdkDiskImpl.packageUrl() due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.vhdx.VhdxDiskImpl.packageUrl() due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.vhdx.VhdxDiskImpl.metadata() due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.vhd.VhdDiskImpl.packageUrl() due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.vdi.VdiDiskImpl.packageUrl() due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.vdi.VdiDiskImpl.backingFile() due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.raw.RawDiskImpl.packageUrl() due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.qcow2.Qcow2DiskImpl.packageUrl() due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.qcow2.Qcow2DiskImpl.open(Path, int) due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.gzip.GzipRawDiskImpl.packageUrl() due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.gzip.GzipRawDiskImpl.close() due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.gcp.GcpDiskImpl.packageUrl() due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.gcp.GcpDiskImpl.close() due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.DiskReader.isCompressedRawDisk(Path) due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.container.rpi.RpiFirmwareContainer.open(Path) due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.container.rpi.RpiFirmwareContainerFactory.looksLikeRpiFirmware(Path, ByteBuffer, long) due to return value of called method 
+      1 Medium: Possible null pointer dereference in io.spicelabs.saffron.container.compressed.CompressedSingleFormat.isExcludedPath(Path) due to return value of called method 
+      1 Medium: new io.spicelabs.saffron.vmdk.descriptor.VmdkDescriptor(int, String, String, String, List, Map) may expose internal representation by storing an externally mutable object into VmdkDescriptor.extents 
+      1 Medium: new io.spicelabs.saffron.vmdk.descriptor.VmdkDescriptor(int, String, String, String, List, Map) may expose internal representation by storing an externally mutable object into VmdkDescriptor.ddb 
+      1 Medium: new io.spicelabs.saffron.qcow2.cluster.ClusterReader(SeekableByteChannel, Qcow2Header, VirtualDisk) may expose internal representation by storing an externally mutable object into ClusterReader.channel 
+      1 Medium: new io.spicelabs.saffron.partition.MbrPartitionTable(int, List, boolean) may expose internal representation by storing an externally mutable object into MbrPartitionTable.partitions 
+      1 Medium: new io.spicelabs.saffron.partition.GptPartitionTable(UUID, long, long, long, List) may expose internal representation by storing an externally mutable object into GptPartitionTable.partitions 
+      1 Medium: new io.spicelabs.saffron.lvm.LvmMetadata(String, String, long, List, List) may expose internal representation by storing an externally mutable object into LvmMetadata.physicalVolumes 
+      1 Medium: new io.spicelabs.saffron.lvm.LvmMetadata(String, String, long, List, List) may expose internal representation by storing an externally mutable object into LvmMetadata.logicalVolumes 
+      1 Medium: new io.spicelabs.saffron.lvm.LvmMetadata$Segment(long, long, String, List) may expose internal representation by storing an externally mutable object into LvmMetadata$Segment.stripes 
+      1 Medium: new io.spicelabs.saffron.lvm.LvmMetadata$LogicalVolume(String, String, List) may expose internal representation by storing an externally mutable object into LvmMetadata$LogicalVolume.segments 
+      1 Medium: new io.spicelabs.saffron.fs.FileSystemMount$MountAllResult(List, List) may expose internal representation by storing an externally mutable object into FileSystemMount$MountAllResult.mounted 
+      1 Medium: new io.spicelabs.saffron.fs.FileSystemMount$MountAllResult(List, List) may expose internal representation by storing an externally mutable object into FileSystemMount$MountAllResult.detected 
+      1 Medium: new io.spicelabs.saffron.filesystem.xfs.XfsInode(int, int, int, int, int, int, int, Instant, Instant, Instant, long, long, int, int, int, int, int, int, Optional, long, byte
+      1 Medium: new io.spicelabs.saffron.filesystem.xfs.XfsExtent$BtreeRoot(int, int, List, List) may expose internal representation by storing an externally mutable object into XfsExtent$BtreeRoot.pointers 
+      1 Medium: new io.spicelabs.saffron.filesystem.xfs.XfsExtent$BtreeRoot(int, int, List, List) may expose internal representation by storing an externally mutable object into XfsExtent$BtreeRoot.keys 
+      1 Medium: new io.spicelabs.saffron.filesystem.xfs.XfsDirectoryEntry$LeafBlock(int, List) may expose internal representation by storing an externally mutable object into XfsDirectoryEntry$LeafBlock.entries 
+      1 Medium: new io.spicelabs.saffron.filesystem.ubi.UbiSuperblock$UbiVolume(long, String, int, long, long, long
+      1 Medium: new io.spicelabs.saffron.filesystem.ubifs.UbifsNode$Superblock(int, int, long, int, int, int, long, byte
+      1 Medium: new io.spicelabs.saffron.filesystem.ntfs.NtfsAttribute$IndexRoot(int, int, int, int, int, List) may expose internal representation by storing an externally mutable object into NtfsAttribute$IndexRoot.entries 
+      1 Medium: new io.spicelabs.saffron.filesystem.ntfs.MftRecord(int, int, int, int, List) may expose internal representation by storing an externally mutable object into MftRecord.attributes 
+      1 Medium: new io.spicelabs.saffron.filesystem.hfsplus.HfsPlusCatalogRecord$FileRecord(int, long, long, long, long, long, long, List, long, List, int, String, int) may expose internal representation by storing an externally mutable object into HfsPlusCatalogRecord$FileRecord.resourceExtents 
+      1 Medium: new io.spicelabs.saffron.filesystem.hfsplus.HfsPlusCatalogRecord$FileRecord(int, long, long, long, long, long, long, List, long, List, int, String, int) may expose internal representation by storing an externally mutable object into HfsPlusCatalogRecord$FileRecord.dataExtents 
+      1 Medium: new io.spicelabs.saffron.filesystem.hfsplus.HfsPlusBTreeNode(int, int, int, int, int, byte
+      1 Medium: new io.spicelabs.saffron.filesystem.ext4.Ext4Inode(int, int, int, long, Instant, Instant, Instant, Instant, int, long, int, byte
+      1 Medium: new io.spicelabs.saffron.filesystem.btrfs.BtrfsTreeReader$SearchResult(long, BtrfsTreeReader$LeafItem, byte
+      1 Medium: new io.spicelabs.saffron.filesystem.btrfs.BtrfsExtentData(long, long, int, int, int, int, byte
+      1 Medium: new io.spicelabs.saffron.filesystem.btrfs.BtrfsChunkTree$Chunk(long, long, long, long, int, List) may expose internal representation by storing an externally mutable object into BtrfsChunkTree$Chunk.stripes 
+      1 Medium: new io.spicelabs.saffron.filesystem.apfs.ApfsXattr(long, String, int, byte
+      1 Medium: new io.spicelabs.saffron.filesystem.apfs.ApfsBTreeReader$BTreeNode(ApfsObjectHeader, int, int, int, boolean, boolean, boolean, List) may expose internal representation by storing an externally mutable object into ApfsBTreeReader$BTreeNode.entries 
+      1 Medium: new io.spicelabs.saffron.adapter.ByteArrayInputStreamSource(byte
+      1 Medium: io.spicelabs.saffron.vmdk.sparse.SparseExtentHeader.MAGIC_BYTES should be package protected 
+      1 Medium: io.spicelabs.saffron.vmdk.descriptor.VmdkDescriptor.extents() may expose internal representation by returning VmdkDescriptor.extents 
+      1 Medium: io.spicelabs.saffron.vmdk.descriptor.VmdkDescriptor.ddb() may expose internal representation by returning VmdkDescriptor.ddb 
+      1 Medium: io.spicelabs.saffron.vhdx.metadata.VhdxMetadata.METADATA_TABLE_MAGIC should be package protected 
+      1 Medium: io.spicelabs.saffron.vhdx.header.VhdxHeader.MAGIC should be package protected 
+      1 Medium: io.spicelabs.saffron.vhdx.header.VhdxFileIdentifier.MAGIC should be package protected 
+      1 Medium: io.spicelabs.saffron.vhd.footer.VhdFooter.MAGIC should be package protected 
+      1 Medium: io.spicelabs.saffron.vhd.dynamic.VhdDynamicHeader.MAGIC should be package protected 
+      1 Medium: io.spicelabs.saffron.qcow2.header.Qcow2Header.MAGIC should be package protected 
+      1 Medium: io.spicelabs.saffron.partition.MbrPartitionTable.partitions() may expose internal representation by returning MbrPartitionTable.partitions 
+      1 Medium: io.spicelabs.saffron.partition.GptPartitionTable.partitions() may expose internal representation by returning GptPartitionTable.partitions 
+      1 Medium: io.spicelabs.saffron.lvm.LvmMetadata.physicalVolumes() may expose internal representation by returning LvmMetadata.physicalVolumes 
+      1 Medium: io.spicelabs.saffron.lvm.LvmMetadata.logicalVolumes() may expose internal representation by returning LvmMetadata.logicalVolumes 
+      1 Medium: io.spicelabs.saffron.lvm.LvmMetadata$Segment.stripes() may expose internal representation by returning LvmMetadata$Segment.stripes 
+      1 Medium: io.spicelabs.saffron.lvm.LvmMetadata$LogicalVolume.segments() may expose internal representation by returning LvmMetadata$LogicalVolume.segments 
+      1 Medium: io.spicelabs.saffron.fs.FileSystemMount$MountAllResult.mounted() may expose internal representation by returning FileSystemMount$MountAllResult.mounted 
+      1 Medium: io.spicelabs.saffron.fs.FileSystemMount$MountAllResult.detected() may expose internal representation by returning FileSystemMount$MountAllResult.detected 
+      1 Medium: io.spicelabs.saffron.filesystem.yaffs2.Yaffs2Node.SPARES should be package protected 
+      1 Medium: io.spicelabs.saffron.filesystem.yaffs2.Yaffs2Node.PAGES should be package protected 
+      1 Medium: io.spicelabs.saffron.filesystem.xfs.XfsInode.dataFork() may expose internal representation by returning XfsInode.dataFork 
+      1 Medium: io.spicelabs.saffron.filesystem.xfs.XfsFileSystemImpl$XfsDirectory.list() might ignore java.lang.Exception 
+      1 Medium: io.spicelabs.saffron.filesystem.xfs.XfsExtent$BtreeRoot.pointers() may expose internal representation by returning XfsExtent$BtreeRoot.pointers 
+      1 Medium: io.spicelabs.saffron.filesystem.xfs.XfsExtent$BtreeRoot.keys() may expose internal representation by returning XfsExtent$BtreeRoot.keys 
+      1 Medium: io.spicelabs.saffron.filesystem.xfs.XfsDirectoryEntry.parseBlock(byte
+      1 Medium: io.spicelabs.saffron.filesystem.xfs.XfsDirectoryEntry$LeafBlock.entries() may expose internal representation by returning XfsDirectoryEntry$LeafBlock.entries 
+      1 Medium: io.spicelabs.saffron.filesystem.ubi.UbiSuperblock.volumes() may expose internal representation by returning UbiSuperblock.volumes 
+      1 Medium: io.spicelabs.saffron.filesystem.ubi.UbiSuperblock$UbiVolume.lnumToPeb() may expose internal representation by returning UbiSuperblock$UbiVolume.lnumToPeb 
+      1 Medium: io.spicelabs.saffron.filesystem.ubifs.UbifsNode$Superblock.uuid() may expose internal representation by returning UbifsNode$Superblock.uuid 
+      1 Medium: io.spicelabs.saffron.filesystem.ntfs.NtfsAttribute.residentData() may expose internal representation by returning NtfsAttribute.residentData 
+      1 Medium: io.spicelabs.saffron.filesystem.ntfs.NtfsAttribute.dataRuns() may expose internal representation by returning NtfsAttribute.dataRuns 
+      1 Medium: io.spicelabs.saffron.filesystem.ntfs.NtfsAttribute$IndexRoot.entries() may expose internal representation by returning NtfsAttribute$IndexRoot.entries 
+      1 Medium: io.spicelabs.saffron.filesystem.ntfs.MftRecord.attributes() may expose internal representation by returning MftRecord.attributes 
+      1 Medium: io.spicelabs.saffron.filesystem.hfsplus.HfsPlusVolumeHeader.finderInfo() may expose internal representation by returning HfsPlusVolumeHeader.finderInfo 
+      1 Medium: io.spicelabs.saffron.filesystem.hfsplus.HfsPlusVolumeHeader.extentsOverflowExtents() may expose internal representation by returning HfsPlusVolumeHeader.extentsOverflowExtents 
+      1 Medium: io.spicelabs.saffron.filesystem.hfsplus.HfsPlusVolumeHeader.catalogExtents() may expose internal representation by returning HfsPlusVolumeHeader.catalogExtents 
+      1 Medium: io.spicelabs.saffron.filesystem.hfsplus.HfsPlusVolumeHeader.attributesExtents() may expose internal representation by returning HfsPlusVolumeHeader.attributesExtents 
+      1 Medium: io.spicelabs.saffron.filesystem.hfsplus.HfsPlusVolumeHeader.allocationExtents() may expose internal representation by returning HfsPlusVolumeHeader.allocationExtents 
+      1 Medium: io.spicelabs.saffron.filesystem.hfsplus.HfsPlusCatalogRecord$FileRecord.resourceExtents() may expose internal representation by returning HfsPlusCatalogRecord$FileRecord.resourceExtents 
+      1 Medium: io.spicelabs.saffron.filesystem.hfsplus.HfsPlusCatalogRecord$FileRecord.dataExtents() may expose internal representation by returning HfsPlusCatalogRecord$FileRecord.dataExtents 
+      1 Medium: io.spicelabs.saffron.filesystem.hfsplus.HfsPlusBTreeNode.data() may expose internal representation by returning HfsPlusBTreeNode.data 
+      1 Medium: io.spicelabs.saffron.filesystem.ext4.Ext4Superblock.compatFeatureNames() uses the same code for two branches 
+      1 Medium: io.spicelabs.saffron.filesystem.ext4.Ext4Inode.blockData() may expose internal representation by returning Ext4Inode.blockData 
+      1 Medium: io.spicelabs.saffron.filesystem.btrfs.BtrfsTreeReader$SearchResult.data() may expose internal representation by returning BtrfsTreeReader$SearchResult.data 
+      1 Medium: io.spicelabs.saffron.filesystem.btrfs.BtrfsTreeReader$NodeHeader.fsid() may expose internal representation by returning BtrfsTreeReader$NodeHeader.fsid 
+      1 Medium: io.spicelabs.saffron.filesystem.btrfs.BtrfsTreeReader$NodeHeader.csum() may expose internal representation by returning BtrfsTreeReader$NodeHeader.csum 
+      1 Medium: io.spicelabs.saffron.filesystem.btrfs.BtrfsTreeReader$NodeHeader.chunkTreeUuid() may expose internal representation by returning BtrfsTreeReader$NodeHeader.chunkTreeUuid 
+      1 Medium: io.spicelabs.saffron.filesystem.btrfs.BtrfsSuperblock.sysChunkArray() may expose internal representation by returning BtrfsSuperblock.sysChunkArray 
+      1 Medium: io.spicelabs.saffron.filesystem.btrfs.BtrfsSuperblock.MAGIC is a mutable array 
+      1 Medium: io.spicelabs.saffron.filesystem.btrfs.BtrfsSuperblock.fsid() may expose internal representation by returning BtrfsSuperblock.fsid 
+      1 Medium: io.spicelabs.saffron.filesystem.btrfs.BtrfsSuperblock.csum() may expose internal representation by returning BtrfsSuperblock.csum 
+      1 Medium: io.spicelabs.saffron.filesystem.btrfs.BtrfsFileSystemImpl.mountWithSubvolumes(DiskRegion, long) might ignore java.lang.Exception 
+      1 Medium: io.spicelabs.saffron.filesystem.btrfs.BtrfsExtentData.inlineData() may expose internal representation by returning BtrfsExtentData.inlineData 
+      1 Medium: io.spicelabs.saffron.filesystem.btrfs.BtrfsChunkTree$Chunk.stripes() may expose internal representation by returning BtrfsChunkTree$Chunk.stripes 
+      1 Medium: io.spicelabs.saffron.filesystem.apfs.ApfsXattr.data() may expose internal representation by returning ApfsXattr.data 
+      1 Medium: io.spicelabs.saffron.filesystem.apfs.ApfsContainerSuperblock.volumeOids() may expose internal representation by returning ApfsContainerSuperblock.volumeOids 
+      1 Medium: io.spicelabs.saffron.filesystem.apfs.ApfsContainerSuperblock.containerUuid() may expose internal representation by returning ApfsContainerSuperblock.containerUuid 
+      1 Medium: io.spicelabs.saffron.filesystem.apfs.ApfsBTreeReader$KVEntry.val() may expose internal representation by returning ApfsBTreeReader$KVEntry.val 
+      1 Medium: io.spicelabs.saffron.filesystem.apfs.ApfsBTreeReader$KVEntry.key() may expose internal representation by returning ApfsBTreeReader$KVEntry.key 
+      1 Medium: io.spicelabs.saffron.filesystem.apfs.ApfsBTreeReader$BTreeNode.entries() may expose internal representation by returning ApfsBTreeReader$BTreeNode.entries 
+      1 Medium: io.spicelabs.saffron.container.devicetree.DeviceTreeBlob.root() may expose internal representation by returning DeviceTreeBlob.root 
+      1 Medium: io.spicelabs.saffron.container.compressed.CompressedSingleContainer.metadata() may expose internal representation by returning CompressedSingleContainer.metadata 
+      1 Medium: Exception thrown in class io.spicelabs.saffron.qcow2.cluster.ClusterReader at new io.spicelabs.saffron.qcow2.cluster.ClusterReader(SeekableByteChannel, Qcow2Header) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. 
+      1 Medium: Exception thrown in class io.spicelabs.saffron.qcow2.cluster.ClusterReader at new io.spicelabs.saffron.qcow2.cluster.ClusterReader(SeekableByteChannel, Qcow2Header, VirtualDisk) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. 
+      1 Medium: Exception thrown in class io.spicelabs.saffron.io.BoundedInputStream at new io.spicelabs.saffron.io.BoundedInputStream(InputStream, long) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. 
+      1 Medium: Exception thrown in class io.spicelabs.saffron.filesystem.squashfs.SquashfsFileSystemImpl$SquashfsInputStream at new io.spicelabs.saffron.filesystem.squashfs.SquashfsFileSystemImpl$SquashfsInputStream(SquashfsFileSystemImpl, SquashfsInode$FileInode) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. 
+      1 Medium: Exception thrown in class io.spicelabs.saffron.filesystem.ntfs.NtfsFileSystemImpl$DirectoryIterator at new io.spicelabs.saffron.filesystem.ntfs.NtfsFileSystemImpl$DirectoryIterator(FileSystemEntry$Directory) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. 
+      1 Medium: Exception thrown in class io.spicelabs.saffron.filesystem.hfsplus.HfsPlusFileSystemImpl$DirectoryIterator at new io.spicelabs.saffron.filesystem.hfsplus.HfsPlusFileSystemImpl$DirectoryIterator(FileSystemEntry$Directory) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. 
+      1 Medium: Exception thrown in class io.spicelabs.saffron.filesystem.fat32.Fat32FileSystemImpl$DirectoryIterator at new io.spicelabs.saffron.filesystem.fat32.Fat32FileSystemImpl$DirectoryIterator(FileSystemEntry$Directory) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. 
+      1 Medium: Exception thrown in class io.spicelabs.saffron.filesystem.exfat.ExFatFileSystemImpl$DirectoryIterator at new io.spicelabs.saffron.filesystem.exfat.ExFatFileSystemImpl$DirectoryIterator(FileSystemEntry$Directory) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. 
+      1 Medium: Exception thrown in class io.spicelabs.saffron.filesystem.btrfs.BtrfsFileSystemImpl$BtrfsFileInputStream at new io.spicelabs.saffron.filesystem.btrfs.BtrfsFileSystemImpl$BtrfsFileInputStream(BtrfsFileSystemImpl, long, long, long) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. 
+      1 Medium: Exception thrown in class io.spicelabs.saffron.filesystem.apfs.ApfsFileSystemImpl$DirectoryIterator at new io.spicelabs.saffron.filesystem.apfs.ApfsFileSystemImpl$DirectoryIterator(FileSystemEntry$Directory) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. 
+      1 Medium: Dead store to version in io.spicelabs.saffron.filesystem.FilesystemDetector.parseHfsPlusVolumeHeader(ByteBuffer) 
+      1 Medium: Dead store to updateSeqNum in io.spicelabs.saffron.filesystem.ntfs.NtfsFileSystemImpl.applyIndexFixup(ByteBuffer, int, int, int, int) 
+      1 Medium: Dead store to subStripes in io.spicelabs.saffron.filesystem.btrfs.BtrfsChunkTree.parseChunkItem(long, ByteBuffer) 
+      1 Medium: Dead store to sectorSize in io.spicelabs.saffron.filesystem.FilesystemDetector.parseBtrfsSuperblock(ByteBuffer) 
+      1 Medium: Dead store to sectorSize in io.spicelabs.saffron.filesystem.btrfs.BtrfsChunkTree.parseChunkItem(long, ByteBuffer) 
+      1 Medium: Dead store to roCompatFeatures in io.spicelabs.saffron.filesystem.FilesystemDetector.tryDetectExt(VirtualDisk, long) 
+      1 Medium: Dead store to owner in io.spicelabs.saffron.filesystem.btrfs.BtrfsChunkTree.parseChunkItem(long, ByteBuffer) 
+      1 Medium: Dead store to nameLen in io.spicelabs.saffron.filesystem.apfs.ApfsXattr.parse(byte
+      1 Medium: Dead store to mftCluster in io.spicelabs.saffron.filesystem.FilesystemDetector.tryDetectNtfs(VirtualDisk, long) 
+      1 Medium: Dead store to lba in io.spicelabs.saffron.vmdk.VmdkDiskImpl.readCompressedGrain(long, int, int, int) 
+      1 Medium: Dead store to ioWidth in io.spicelabs.saffron.filesystem.btrfs.BtrfsChunkTree.parseChunkItem(long, ByteBuffer) 
+      1 Medium: Dead store to ioAlign in io.spicelabs.saffron.filesystem.btrfs.BtrfsChunkTree.parseChunkItem(long, ByteBuffer) 
+      1 Medium: Dead store to inodeLog in io.spicelabs.saffron.filesystem.xfs.XfsFileSystemImpl.mount(DiskRegion) 
+      1 Medium: Dead store to generation in io.spicelabs.saffron.filesystem.FilesystemDetector.parseBtrfsSuperblock(ByteBuffer) 
+      1 Medium: Dead store to freeSpaceOffset in io.spicelabs.saffron.filesystem.apfs.ApfsBTreeReader.parseNode(ByteBuffer) 
+      1 Medium: Dead store to freeSpaceLen in io.spicelabs.saffron.filesystem.apfs.ApfsBTreeReader.parseNode(ByteBuffer) 
+      1 Medium: Dead store to freeInodeCount in io.spicelabs.saffron.filesystem.FilesystemDetector.tryDetectExt(VirtualDisk, long) 
+      1 Medium: Dead store to currentLba in io.spicelabs.saffron.partition.GptPartitionTable.tryParse(VirtualDisk) 
+      1 Medium: Dead store to clusterHeapOffset in io.spicelabs.saffron.filesystem.FilesystemDetector.tryDetectExFat(VirtualDisk, long) 
+      1 Medium: Dead store to clusterCount in io.spicelabs.saffron.filesystem.FilesystemDetector.tryDetectExFat(VirtualDisk, long) 
+      1 Medium: Dead store to bytesRead in io.spicelabs.saffron.filesystem.hfsplus.HfsPlusFileSystemImpl.readFileData(HfsPlusCatalogRecord$FileRecord) 
+      1 Medium: Dead store to blockLog in io.spicelabs.saffron.filesystem.xfs.XfsFileSystemImpl.mount(DiskRegion) 
+      1 Medium: Dead store to bestChildOid in io.spicelabs.saffron.filesystem.apfs.ApfsObjectMap.searchOmapNode(ApfsBTreeReader$BTreeNode, long, long) 
+      1 Medium: Dead store to backupLba in io.spicelabs.saffron.partition.GptPartitionTable.tryParse(VirtualDisk) 
+      1 Medium: Dead store to allocationClumpSize in io.spicelabs.saffron.filesystem.hfsplus.HfsPlusVolumeHeader.read(DiskRegion) 
+      1 High: Useless condition: it's known that val.length >= 92 ('\') at this point 
+      1 High: Useless condition: it's known that dsize <= 2147483647 (0x7fffffff) at this point 
+      1 High: Useless condition: it's known that attrType != -1 at this point 
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.SaffronProbe.<static initializer for SaffronProbe>(): String.getBytes() 
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.xfs.XfsSuperblock.parseNullTerminated(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.xfs.XfsInode.inlineSymlinkTarget(): new String(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.xfs.XfsFileSystemImpl$XfsSymbolicLink.target(): new String(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.ntfs.NtfsBootSector.read(DiskRegion): new String(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.hfsplus.HfsPlusFileSystemImpl$HfsPlusSymlink.target(): new String(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.FilesystemDetector.tryDetectNtfs(VirtualDisk, long): new String(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.FilesystemDetector.tryDetectNtfsFromRegion(DiskRegion): new String(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.FilesystemDetector.tryDetectFat(VirtualDisk, long): new String(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.FilesystemDetector.tryDetectFatFromRegion(DiskRegion): new String(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.FilesystemDetector.parseNullTerminatedString(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.fat32.FatBootSector.read(DiskRegion): new String(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.ext4.Ext4Superblock.parseNullTerminated(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.ext4.Ext4Inode.inlineSymlinkTarget(): new String(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.filesystem.ext4.Ext4FileSystemImpl$Ext4SymbolicLink.target(): new String(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.DiskFormat.<static initializer for DiskFormat>(): String.getBytes() 
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.DiskFormat.detect(byte
+      1 High: Found reliance on default encoding in io.spicelabs.saffron.container.linuxkernel.LinuxKernelContainer.findGzipStreamWithConfig(): String.getBytes() 

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: io.spicelabs.saffron.filesystem.yaffs2.Yaffs2SecurityTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.062 s -- in io.spicelabs.saffron.filesystem.yaffs2.Yaffs2SecurityTest

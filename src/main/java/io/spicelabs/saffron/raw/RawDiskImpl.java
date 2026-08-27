@@ -136,8 +136,12 @@ public final class RawDiskImpl implements VirtualDisk.RawDisk {
             int totalRead = 0;
             while (totalRead < length) {
                 int read = channel.read(buffer);
-                if (read == -1) {
-                    break;
+                if (read < 0) {
+                    throw new IOException("Truncated raw disk: expected " + length
+                            + " bytes at offset " + offset + ", got " + totalRead);
+                }
+                if (read == 0) {
+                    throw new IOException("No progress reading raw disk at offset " + offset);
                 }
                 totalRead += read;
             }

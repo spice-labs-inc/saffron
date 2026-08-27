@@ -91,6 +91,8 @@ public final class SaffronProbe {
         FILESYSTEM_EXT, FILESYSTEM_FAT, FILESYSTEM_EXFAT, FILESYSTEM_NTFS,
         FILESYSTEM_XFS, FILESYSTEM_BTRFS, FILESYSTEM_SQUASHFS,
         FILESYSTEM_HFSPLUS, FILESYSTEM_APFS, FILESYSTEM_SWAP,
+        FILESYSTEM_JFFS2, FILESYSTEM_CRAMFS, FILESYSTEM_YAFFS2,
+        FILESYSTEM_UBIFS, CONTAINER_UBI,
         NONE
     }
 
@@ -243,7 +245,9 @@ public final class SaffronProbe {
             return Kind.DISK_VDI;
         }
         if (lower.endsWith(".raw") || lower.endsWith(".img") || lower.endsWith(".dmg")
-                || lower.endsWith(".squashfs")) {
+                || lower.endsWith(".squashfs") || lower.endsWith(".jffs2")
+                || lower.endsWith(".cramfs") || lower.endsWith(".yaffs2")
+                || lower.endsWith(".ubifs") || lower.endsWith(".ubi")) {
             return Kind.DISK_RAW;
         }
         if (lower.endsWith(".tar.gz") || lower.endsWith(".tgz")
@@ -291,6 +295,11 @@ public final class SaffronProbe {
             case HFS_PLUS -> Kind.FILESYSTEM_HFSPLUS;
             case APFS -> Kind.FILESYSTEM_APFS;
             case SWAP -> Kind.FILESYSTEM_SWAP;
+            case JFFS2 -> Kind.FILESYSTEM_JFFS2;
+            case CRAMFS -> Kind.FILESYSTEM_CRAMFS;
+            case YAFFS2 -> Kind.FILESYSTEM_YAFFS2;
+            case UBIFS -> Kind.FILESYSTEM_UBIFS;
+            case UBI -> Kind.CONTAINER_UBI;
             default -> null;
         };
     }

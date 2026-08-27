@@ -1,0 +1,12 @@
+annotations:26.1.0 sha512=f1ccde58143b38ce... remote=f1ccde58143b38ce... major=52 OK
+xz:1.12 sha512=a854dc65df5a07fb... remote=a854dc65df5a07fb... major=52 OK
+zstd-jni:1.5.7-15 sha512=d98e7743c1e7da96... remote=<html>... major=52 MISMATCH
+commons-compress:1.28.0 sha512=f1f140f4f40ab3cf... remote=<html>... major=52 MISMATCH
+lz4-java:1.8.1 MISSING
+slf4j-api:2.0.18 sha512=539288fa0c96cea7... remote=539288fa0c96cea7... major=52 OK
+junit-jupiter:5.14.4 sha512=1132de399f97b844... remote=1132de399f97b844... major=53 OK
+gson:2.14.0 sha512=d040d19a47ca2df3... remote=d040d19a47ca2df3... major=52 OK
+assertj-core:3.27.7 sha512=adde16df9fd0b61d... remote=adde16df9fd0b61d... major=53 OK
+awaitility:4.3.0 sha512=a92686428447e4a6... remote=<html>... major=52 MISMATCH
+jazzer-junit:0.30.0 sha512=acf184f95f128ebe... remote=acf184f95f128ebe... major=52 OK
+archunit-junit5:1.5.0 sha512=9ac41ae79b756697... remote=9ac41ae79b756697... major=n/a OK

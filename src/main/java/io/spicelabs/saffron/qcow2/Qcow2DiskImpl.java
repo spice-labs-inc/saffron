@@ -399,11 +399,12 @@ public final class Qcow2DiskImpl implements VirtualDisk.Qcow2Disk {
                     60L, "header.nb_snapshots", DiskFormat.QCOW2);
         }
 
-        channel.position(snapshotsOffset);
-
         List<Snapshot> result = new ArrayList<>(nbSnapshots);
 
-        for (int i = 0; i < nbSnapshots; i++) {
+        synchronized (channel) {
+            channel.position(snapshotsOffset);
+
+            for (int i = 0; i < nbSnapshots; i++) {
             // Read the fixed-size portion of the snapshot entry (40 bytes)
             ByteBuffer entryBuf = ByteBuffer.allocate(40);
             entryBuf.order(ByteOrder.BIG_ENDIAN);
@@ -485,7 +486,8 @@ public final class Qcow2DiskImpl implements VirtualDisk.Qcow2Disk {
                 skipBytes(channel, padding);
             }
 
-            result.add(new Snapshot(id, name, vmStateSize, dateSec, dateNsec));
+                result.add(new Snapshot(id, name, vmStateSize, dateSec, dateNsec));
+            }
         }
 
         return Collections.unmodifiableList(result);
@@ -500,6 +502,9 @@ public final class Qcow2DiskImpl implements VirtualDisk.Qcow2Disk {
             int n = channel.read(buf);
             if (n < 0) {
                 throw new IOException("Unexpected end of QCOW2 file while reading snapshot table");
+            }
+            if (n == 0) {
+                throw new IOException("No progress reading QCOW2 snapshot table");
             }
         }
     }
@@ -548,6 +553,9 @@ public final class Qcow2DiskImpl implements VirtualDisk.Qcow2Disk {
 
         @Override
         public int read(byte[] b, int off, int len) throws IOException {
+            if (len == 0) {
+                return 0;
+            }
             if (position >= size) {
                 return -1;
             }

@@ -22,6 +22,7 @@ import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
+import io.spicelabs.saffron.filesystem.ChunkedRegionStream;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -42,8 +43,11 @@ import java.util.stream.StreamSupport;
  */
 public class ExFatFileSystemImpl implements FileSystem.ExFatFileSystem {
 
+    /** Maximum default walk depth (hostile trees must not overflow the stack). */
+    private static final int MAX_WALK_DEPTH = 512;
+
     /** Maximum file size that can be read into memory (256 MB) */
-    private static final long MAX_READABLE_SIZE = 256 * 1024 * 1024;
+    private static final long MAX_READABLE_SIZE = 16 * 1024 * 1024;
 
     /** End of cluster chain marker */
     private static final int EXFAT_EOC = 0xFFFFFFF8;
@@ -178,7 +182,7 @@ public class ExFatFileSystemImpl implements FileSystem.ExFatFileSystem {
 
     @Override
     public @NotNull Stream<FileSystemEntry> walk() throws IOException {
-        return walk("/", Integer.MAX_VALUE);
+        return walk("/", MAX_WALK_DEPTH);
     }
 
     @Override
@@ -285,7 +289,7 @@ public class ExFatFileSystemImpl implements FileSystem.ExFatFileSystem {
      */
     byte[] readClusterChain(int startCluster, long fileSize, boolean noFatChain) throws IOException {
         if (fileSize > MAX_READABLE_SIZE) {
-            throw new ResourceLimitException("File too large to read into memory: " + fileSize + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, fileSize);
+            throw new ResourceLimitException("File too large to read into memory: " + fileSize + " bytes (limit: 16 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, fileSize);
         }
 
         if (startCluster < 2) {
@@ -326,21 +330,48 @@ public class ExFatFileSystemImpl implements FileSystem.ExFatFileSystem {
     /**
      * Gets the chain of clusters starting from the given cluster.
      */
-    List<Integer> getClusterChain(int startCluster) {
+    List<Integer> getClusterChain(int startCluster) throws IOException {
+        return walkClusterChain(fatTable, startCluster, EXFAT_EOC, EXFAT_BAD, "exFAT");
+    }
+
+    /**
+     * Walks an exFAT cluster chain with cycle detection (seam for
+     * hostile-chain tests). A cyclic chain is corruption, not data.
+     */
+    /**
+     * Unsigned chain-termination test (seam for hostile-chain tests):
+     * EOC/BAD markers are negative as signed ints; every comparison must
+     * use unsigned semantics.
+     */
+    static boolean chainTerminates(int nextCluster, int eocMarker, int badMarker) {
+        long next = Integer.toUnsignedLong(nextCluster);
+        return next >= Integer.toUnsignedLong(eocMarker)
+                || next < 2
+                || next == Integer.toUnsignedLong(badMarker);
+    }
+
+    static List<Integer> walkClusterChain(int[] fatTable, int startCluster, int eocMarker,
+                                          int badMarker, String label) throws IOException {
         List<Integer> chain = new ArrayList<>();
         int cluster = startCluster;
         int maxClusters = fatTable.length;
         int iterations = 0;
+        java.util.Set<Integer> seen = new java.util.HashSet<>();
 
         while (cluster >= 2 && cluster < maxClusters && iterations < maxClusters) {
+            if (!seen.add(cluster)) {
+                throw new IOException(label + " cluster chain cycle at cluster " + cluster);
+            }
             chain.add(cluster);
-            int nextCluster = fatTable[cluster];
-
-            if (nextCluster >= EXFAT_EOC || nextCluster < 2 || nextCluster == EXFAT_BAD) {
+            // exFAT FAT entries are unsigned 32-bit; the EOC/BAD markers
+            // (0xFFFFFFF8/0xFFFFFFF7) are negative as signed ints, so all
+            // comparisons must be unsigned (previously every normal entry
+            // was >= the signed EOC and chains stopped after one cluster).
+            int next = fatTable[cluster];
+            if (chainTerminates(next, eocMarker, badMarker)) {
                 break;
             }
-
-            cluster = nextCluster;
+            cluster = next;
             iterations++;
         }
 
@@ -373,18 +404,24 @@ public class ExFatFileSystemImpl implements FileSystem.ExFatFileSystem {
         }
 
         List<byte[]> chunks = new ArrayList<>();
-        int totalSize = 0;
+        long totalSize = 0;
 
         if (noFatChain) {
             // For contiguous directories, read clusters until we hit end-of-directory
             int cluster = startCluster;
             while (cluster < bootSector.clusterCount() + 2) {
+                // Cap INSIDE the loop: a hostile contiguous directory with
+                // no end marker must not grow unboundedly.
+                totalSize += clusterSize;
+                if (totalSize > MAX_READABLE_SIZE) {
+                    throw new ResourceLimitException("exFAT directory chain too large",
+                            "allocation_size", MAX_READABLE_SIZE, totalSize);
+                }
                 long clusterOffset = clusterToOffset(cluster);
                 ByteBuffer buf = region.read(clusterOffset, clusterSize);
                 byte[] chunk = new byte[clusterSize];
                 buf.get(chunk);
                 chunks.add(chunk);
-                totalSize += clusterSize;
 
                 // Check if this cluster contains end of directory
                 if (containsEndOfDirectory(chunk)) {
@@ -396,17 +433,21 @@ public class ExFatFileSystemImpl implements FileSystem.ExFatFileSystem {
             // Follow FAT chain
             List<Integer> clusterChain = getClusterChain(startCluster);
             for (int cluster : clusterChain) {
+                totalSize += clusterSize;
+                if (totalSize > MAX_READABLE_SIZE) {
+                    throw new ResourceLimitException("exFAT directory chain too large",
+                            "allocation_size", MAX_READABLE_SIZE, totalSize);
+                }
                 long clusterOffset = clusterToOffset(cluster);
                 ByteBuffer buf = region.read(clusterOffset, clusterSize);
                 byte[] chunk = new byte[clusterSize];
                 buf.get(chunk);
                 chunks.add(chunk);
-                totalSize += clusterSize;
             }
         }
 
         // Combine chunks
-        byte[] data = new byte[totalSize];
+        byte[] data = new byte[(int) totalSize];
         int offset = 0;
         for (byte[] chunk : chunks) {
             System.arraycopy(chunk, 0, data, offset, chunk.length);
@@ -597,7 +638,28 @@ public class ExFatFileSystemImpl implements FileSystem.ExFatFileSystem {
 
         @Override
         public @NotNull InputStream openStream() throws IOException {
-            return new ByteArrayInputStream(readAllBytes());
+            // Lazy stream over the cluster chain: reads are bounded by
+            // ChunkedRegionStream (<= 1 MiB per region read).
+            List<ChunkedRegionStream.Segment> segments = new ArrayList<>();
+            long remaining = entry.dataLength();
+            long logical = 0;
+            if (entry.noFatChain()) {
+                if (remaining > 0 && entry.firstCluster() >= 2) {
+                    segments.add(new ChunkedRegionStream.Segment(
+                            logical, clusterToOffset(entry.firstCluster()), remaining));
+                }
+            } else {
+                for (int cluster : getClusterChain(entry.firstCluster())) {
+                    if (remaining <= 0) {
+                        break;
+                    }
+                    long len = Math.min(clusterSize, remaining);
+                    segments.add(new ChunkedRegionStream.Segment(logical, clusterToOffset(cluster), len));
+                    logical += len;
+                    remaining -= len;
+                }
+            }
+            return new ChunkedRegionStream(region, segments, entry.dataLength());
         }
     }
 

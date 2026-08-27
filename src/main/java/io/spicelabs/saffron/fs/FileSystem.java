@@ -39,6 +39,8 @@ public sealed interface FileSystem extends Closeable
                 FileSystem.Fat32FileSystem, FileSystem.ExFatFileSystem, FileSystem.XfsFileSystem,
                 FileSystem.BtrfsFileSystem, FileSystem.HfsPlusFileSystem,
                 FileSystem.ApfsFileSystem, FileSystem.SquashfsFileSystem,
+                FileSystem.Jffs2FileSystem, FileSystem.CramfsFileSystem, FileSystem.Yaffs2FileSystem,
+                FileSystem.UbifsFileSystem,
                 FileSystem.BinaryContainerFileSystem {
 
     /**
@@ -144,6 +146,11 @@ public sealed interface FileSystem extends Closeable
         APFS("apfs", "macOS APFS filesystem"),
         SWAP("swap", "Linux swap partition"),
         SQUASHFS("squashfs", "Squashfs filesystem"),
+        JFFS2("jffs2", "JFFS2 flash filesystem"),
+        CRAMFS("cramfs", "Compressed ROM filesystem"),
+        YAFFS2("yaffs2", "YAFFS2 flash filesystem"),
+        UBIFS("ubifs", "UBIFS flash filesystem"),
+        UBI("ubi", "UBI flash volume container"),
         BINARY_CONTAINER("binary_container", "Binary container (e.g., Linux kernel image)"),
         UNKNOWN("unknown", "Unknown filesystem type");
 
@@ -420,5 +427,45 @@ public sealed interface FileSystem extends Closeable
          * @return the container format name
          */
         @NotNull String containerFormat();
+    }
+
+    /**
+     * JFFS2 filesystem implementation.
+     */
+    non-sealed interface Jffs2FileSystem extends FileSystem {
+        @Override
+        default @NotNull FileSystemType type() {
+            return FileSystemType.JFFS2;
+        }
+    }
+
+    /**
+     * cramfs filesystem implementation.
+     */
+    non-sealed interface CramfsFileSystem extends FileSystem {
+        @Override
+        default @NotNull FileSystemType type() {
+            return FileSystemType.CRAMFS;
+        }
+    }
+
+    /**
+     * YAFFS2 filesystem implementation.
+     */
+    non-sealed interface Yaffs2FileSystem extends FileSystem {
+        @Override
+        default @NotNull FileSystemType type() {
+            return FileSystemType.YAFFS2;
+        }
+    }
+
+    /**
+     * UBIFS filesystem implementation.
+     */
+    non-sealed interface UbifsFileSystem extends FileSystem {
+        @Override
+        default @NotNull FileSystemType type() {
+            return FileSystemType.UBIFS;
+        }
     }
 }

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: io.spicelabs.saffron.filesystem.ext4.Ext4FileSystemTest
+-------------------------------------------------------------------------------
+Tests run: 24, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.664 s -- in io.spicelabs.saffron.filesystem.ext4.Ext4FileSystemTest

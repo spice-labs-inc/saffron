@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: io.spicelabs.saffron.corpus.CorpusFileCountVerificationTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.847 s -- in io.spicelabs.saffron.corpus.CorpusFileCountVerificationTest

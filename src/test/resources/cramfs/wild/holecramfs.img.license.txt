@@ -1,0 +1,3 @@
+Source: https://github.com/fox-it/dissect.cramfs/blob/main/tests/_data/holecramfs.img.gz
+License: repo AGPL-3.0 (fox-it/dissect.cramfs); image is a generated test filesystem (hole-support variant)
+Downloaded: 2026-08-25

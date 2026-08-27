@@ -19,7 +19,12 @@ package io.spicelabs.saffron.filesystem;
 
 import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.filesystem.btrfs.BtrfsSuperblock;
+import io.spicelabs.saffron.filesystem.cramfs.CramfsSuperblock;
+import io.spicelabs.saffron.filesystem.jffs2.Jffs2Superblock;
 import io.spicelabs.saffron.filesystem.squashfs.SquashfsSuperblock;
+import io.spicelabs.saffron.filesystem.yaffs2.Yaffs2Superblock;
+import io.spicelabs.saffron.filesystem.ubi.UbiSuperblock;
+import io.spicelabs.saffron.filesystem.ubifs.UbifsSuperblock;
 import io.spicelabs.saffron.fs.FileSystem.FileSystemType;
 import io.spicelabs.saffron.lvm.DiskRegion;
 import io.spicelabs.saffron.partition.Partition;
@@ -74,8 +79,25 @@ public final class FilesystemDetector {
      */
     public static @NotNull Optional<FilesystemInfo> detect(@NotNull VirtualDisk disk, long offset)
             throws IOException {
-        // Try each filesystem type
+        // Try each filesystem type. JFFS2 is checked first: its evidence is a
+        // validated node header at offset 0, the strongest possible signal,
+        // and it cannot conflict with the superblock-at-1024 checks below.
         Optional<FilesystemInfo> result;
+
+        result = tryDetectJffs2(disk, offset);
+        if (result.isPresent()) return result;
+
+        result = tryDetectCramfs(disk, offset);
+        if (result.isPresent()) return result;
+
+        result = tryDetectYaffs2(disk, offset);
+        if (result.isPresent()) return result;
+
+        result = tryDetectUbifs(disk, offset);
+        if (result.isPresent()) return result;
+
+        result = tryDetectUbi(disk, offset);
+        if (result.isPresent()) return result;
 
         result = tryDetectExt(disk, offset);
         if (result.isPresent()) return result;
@@ -132,8 +154,23 @@ public final class FilesystemDetector {
      * @throws IOException if an I/O error occurs
      */
     public static @NotNull Optional<FilesystemInfo> detect(@NotNull DiskRegion region) throws IOException {
-        // Try each filesystem type
+        // Try each filesystem type. JFFS2 is checked first (see detect(disk, offset)).
         Optional<FilesystemInfo> result;
+
+        result = tryDetectJffs2FromRegion(region);
+        if (result.isPresent()) return result;
+
+        result = tryDetectCramfsFromRegion(region);
+        if (result.isPresent()) return result;
+
+        result = tryDetectYaffs2FromRegion(region);
+        if (result.isPresent()) return result;
+
+        result = tryDetectUbifsFromRegion(region);
+        if (result.isPresent()) return result;
+
+        result = tryDetectUbiFromRegion(region);
+        if (result.isPresent()) return result;
 
         result = tryDetectExtFromRegion(region);
         if (result.isPresent()) return result;
@@ -1093,6 +1130,199 @@ public final class FilesystemDetector {
                 0,
                 sb.blockSize(),
                 sb.inodeCount()
+        ));
+    }
+
+    // ========================================================================
+    // JFFS2 detection
+    // ========================================================================
+
+    private static Optional<FilesystemInfo> tryDetectJffs2(VirtualDisk disk, long offset)
+            throws IOException {
+        if (disk.virtualSize() < offset + Jffs2Superblock.MIN_SIZE) {
+            return Optional.empty();
+        }
+        DiskRegion region = DiskRegion.fromPartition(disk, offset, 0);
+        return tryDetectJffs2FromRegion(region);
+    }
+
+    private static Optional<FilesystemInfo> tryDetectJffs2FromRegion(DiskRegion region)
+            throws IOException {
+        Optional<Jffs2Superblock> sbOpt = Jffs2Superblock.read(region);
+        if (sbOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        Jffs2Superblock sb = sbOpt.get();
+        return Optional.of(new FilesystemInfo(
+                FileSystemType.JFFS2,
+                "jffs2",
+                Optional.empty(), // JFFS2 has no volume label
+                Optional.empty(), // JFFS2 has no filesystem UUID
+                sb.totalSize(),
+                0,               // used size requires a full node scan
+                0,               // free space is not tracked by JFFS2
+                Jffs2Superblock.blockSize(),
+                0                // inode count requires a full node scan
+        ));
+    }
+
+    // ========================================================================
+    // UBIFS / UBI detection
+    // ========================================================================
+
+    private static Optional<FilesystemInfo> tryDetectUbifs(VirtualDisk disk, long offset)
+            throws IOException {
+        if (disk.virtualSize() < offset + 48) {
+            return Optional.empty();
+        }
+        DiskRegion region = DiskRegion.fromPartition(disk, offset, 0);
+        return tryDetectUbifsFromRegion(region);
+    }
+
+    private static Optional<FilesystemInfo> tryDetectUbifsFromRegion(DiskRegion region)
+            throws IOException {
+        Optional<UbifsSuperblock> sbOpt = UbifsSuperblock.read(region);
+        if (sbOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        UbifsSuperblock sb = sbOpt.get();
+        return Optional.of(new FilesystemInfo(
+                FileSystemType.UBIFS,
+                "ubifs",
+                Optional.empty(),
+                Optional.empty(),
+                region.size(),
+                region.size(),
+                0,
+                sb.blockSize(),
+                0
+        ));
+    }
+
+    private static Optional<FilesystemInfo> tryDetectUbi(VirtualDisk disk, long offset)
+            throws IOException {
+        if (disk.virtualSize() < offset + 32768L) {
+            return Optional.empty();
+        }
+        DiskRegion region = DiskRegion.fromPartition(disk, offset, 0);
+        return tryDetectUbiFromRegion(region);
+    }
+
+    private static Optional<FilesystemInfo> tryDetectUbiFromRegion(DiskRegion region)
+            throws IOException {
+        Optional<UbiSuperblock> ubiOpt = UbiSuperblock.attach(region);
+        if (ubiOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        UbiSuperblock ubi = ubiOpt.get();
+        // If any volume carries a UBIFS superblock at its LEB 0, report
+        // UBIFS; otherwise report the UBI container itself.
+        boolean hasUbifs = false;
+        for (UbiSuperblock.UbiVolume volume : ubi.volumesFlat()) {
+            try {
+                io.spicelabs.saffron.filesystem.ubi.UbiVolumeRegion vr =
+                        io.spicelabs.saffron.filesystem.ubi.UbiVolumeRegion.of(ubi, volume);
+                if (UbifsSuperblock.read(vr).isPresent()) {
+                    hasUbifs = true;
+                    break;
+                }
+            } catch (IOException e) {
+                // Ignore unreadable volumes.
+            }
+        }
+        long totalSize = ubi.pebSize() * ubi.pebCount();
+        if (hasUbifs) {
+            return Optional.of(new FilesystemInfo(
+                    FileSystemType.UBIFS,
+                    "ubifs",
+                    Optional.empty(),
+                    Optional.empty(),
+                    totalSize,
+                    totalSize,
+                    0,
+                    (int) Math.min(totalSize, Integer.MAX_VALUE),
+                    0
+            ));
+        }
+        String label = ubi.volumesFlat().stream()
+                .map(v -> v.name()).filter(n -> !n.isEmpty())
+                .findFirst().orElse(null);
+        return Optional.of(new FilesystemInfo(
+                FileSystemType.UBI,
+                "ubi",
+                Optional.ofNullable(label),
+                Optional.empty(),
+                totalSize,
+                totalSize,
+                0,
+                (int) Math.min(totalSize, Integer.MAX_VALUE),
+                0
+        ));
+    }
+
+    // ========================================================================
+    // YAFFS2 detection
+    // ========================================================================
+
+    private static Optional<FilesystemInfo> tryDetectYaffs2(VirtualDisk disk, long offset)
+            throws IOException {
+        if (disk.virtualSize() < offset + 2112L * 2) {
+            return Optional.empty();
+        }
+        DiskRegion region = DiskRegion.fromPartition(disk, offset, 0);
+        return tryDetectYaffs2FromRegion(region);
+    }
+
+    private static Optional<FilesystemInfo> tryDetectYaffs2FromRegion(DiskRegion region)
+            throws IOException {
+        Optional<Yaffs2Superblock> sbOpt = Yaffs2Superblock.read(region);
+        if (sbOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        Yaffs2Superblock sb = sbOpt.get();
+        return Optional.of(new FilesystemInfo(
+                FileSystemType.YAFFS2,
+                "yaffs2",
+                Optional.empty(), // YAFFS2 has no volume label
+                Optional.empty(), // YAFFS2 has no filesystem UUID
+                sb.totalSize(),
+                sb.totalSize(),
+                0,
+                Yaffs2Superblock.blockSize(sb),
+                0                // object count requires a full scan
+        ));
+    }
+
+    // ========================================================================
+    // cramfs detection
+    // ========================================================================
+
+    private static Optional<FilesystemInfo> tryDetectCramfs(VirtualDisk disk, long offset)
+            throws IOException {
+        if (disk.virtualSize() < offset + CramfsSuperblock.SUPERBLOCK_SIZE) {
+            return Optional.empty();
+        }
+        DiskRegion region = DiskRegion.fromPartition(disk, offset, 0);
+        return tryDetectCramfsFromRegion(region);
+    }
+
+    private static Optional<FilesystemInfo> tryDetectCramfsFromRegion(DiskRegion region)
+            throws IOException {
+        Optional<CramfsSuperblock> sbOpt = CramfsSuperblock.read(region);
+        if (sbOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        CramfsSuperblock sb = sbOpt.get();
+        return Optional.of(new FilesystemInfo(
+                FileSystemType.CRAMFS,
+                "cramfs",
+                sb.name().isBlank() ? Optional.empty() : Optional.of(sb.name()),
+                Optional.empty(), // cramfs has no filesystem UUID
+                sb.size(),
+                sb.size(),
+                0,
+                CramfsSuperblock.blockSize(),
+                sb.files()
         ));
     }
 

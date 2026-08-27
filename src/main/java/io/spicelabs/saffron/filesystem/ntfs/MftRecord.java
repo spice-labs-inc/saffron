@@ -69,6 +69,18 @@ public record MftRecord(
     /** Flag: Record is a directory */
     public static final int FLAG_DIRECTORY = 0x0002;
 
+    /**
+     * Approximate retained attribute payload size in bytes (used by the
+     * MFT cache's byte budget: merged attribute lists can be large).
+     */
+    public long attributePayloadBytes() {
+        long total = 0;
+        for (NtfsAttribute attr : attributes) {
+            total += attr.dataSize();
+        }
+        return total;
+    }
+
     /** System MFT record numbers */
     public static final int MFT_RECORD_MFT = 0;
     public static final int MFT_RECORD_MFT_MIRROR = 1;

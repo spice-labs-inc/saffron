@@ -9,6 +9,7 @@ import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
+import io.spicelabs.saffron.filesystem.ChunkedRegionStream;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -38,8 +39,11 @@ import java.util.stream.StreamSupport;
  */
 public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
 
+    /** Maximum default walk depth (hostile trees must not overflow the stack). */
+    private static final int MAX_WALK_DEPTH = 512;
+
     /** Maximum file size that can be read into memory (256 MB) */
-    private static final long MAX_READABLE_SIZE = 256 * 1024 * 1024;
+    private static final long MAX_READABLE_SIZE = 16 * 1024 * 1024;
 
     /** Maximum depth for following symlink chains before giving up */
     private static final int MAX_SYMLINK_DEPTH = 40;
@@ -217,7 +221,7 @@ public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
 
     @Override
     public @NotNull Stream<FileSystemEntry> walk() throws IOException {
-        return walk("/", Integer.MAX_VALUE);
+        return walk("/", MAX_WALK_DEPTH);
     }
 
     @Override
@@ -396,9 +400,6 @@ public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
      * Reads file data from file extent records.
      */
     private byte[] readFileData(long privateId, long fileSize) throws IOException {
-        if (fileSize > MAX_READABLE_SIZE) {
-            throw new ResourceLimitException("File too large to read into memory: " + fileSize + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, fileSize);
-        }
         if (fileSize == 0) {
             return new byte[0];
         }
@@ -527,7 +528,7 @@ public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
         if (header.uncompressedSize() > MAX_READABLE_SIZE) {
             throw new ResourceLimitException(
                     "Compressed file too large to decompress into memory: " + header.uncompressedSize()
-                            + " bytes (limit: 256 MB).",
+                            + " bytes (limit: 16 MB).",
                     "allocation_size", MAX_READABLE_SIZE, header.uncompressedSize());
         }
 
@@ -704,6 +705,11 @@ public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
 
         @Override
         public byte[] readAllBytes() throws IOException {
+            if (size() > MAX_READABLE_SIZE) {
+                throw new ResourceLimitException("File too large to read into memory: " + size()
+                        + " bytes (limit: 16 MB). Use openStream() for large files.",
+                        "allocation_size", MAX_READABLE_SIZE, size());
+            }
             if (inode.isCompressed()) {
                 return readCompressedFileData(inode);
             }
@@ -712,7 +718,38 @@ public class ApfsFileSystemImpl implements FileSystem.ApfsFileSystem {
 
         @Override
         public @NotNull InputStream openStream() throws IOException {
-            return new ByteArrayInputStream(readAllBytes());
+            if (inode.isCompressed()) {
+                // Compressed (decmpfs) files decompress as a unit.
+                return new ByteArrayInputStream(readCompressedFileData(inode));
+            }
+            long fileSize = size();
+            if (fileSize == 0) {
+                return new ByteArrayInputStream(new byte[0]);
+            }
+            BiFunction<Long, Long, Long> resolver = volumeOmap.resolver();
+            List<ApfsBTreeReader.KVEntry> entries = fsBtreeReader.collectPrefix(
+                    fsTreeRootBlock,
+                    (key, unused) -> ApfsFileExtent.isFileExtentForId(key, inode.privateId()),
+                    resolver);
+            List<ApfsFileExtent> extents = new ArrayList<>();
+            for (ApfsBTreeReader.KVEntry entry : entries) {
+                ApfsFileExtent extent = ApfsFileExtent.parse(entry.key(), entry.val());
+                if (extent != null) {
+                    extents.add(extent);
+                }
+            }
+            extents.sort(Comparator.comparingLong(ApfsFileExtent::logicalOffset));
+            List<ChunkedRegionStream.Segment> segments = new ArrayList<>();
+            for (ApfsFileExtent extent : extents) {
+                long logicalStart = extent.logicalOffset();
+                if (logicalStart >= fileSize) {
+                    break;
+                }
+                long length = Math.min(extent.length(), fileSize - logicalStart);
+                segments.add(new ChunkedRegionStream.Segment(logicalStart,
+                        extent.physicalBlock() * blockSize, length));
+            }
+            return new ChunkedRegionStream(region, segments, fileSize);
         }
     }
 

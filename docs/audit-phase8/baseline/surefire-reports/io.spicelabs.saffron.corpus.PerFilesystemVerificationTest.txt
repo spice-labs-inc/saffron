@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: io.spicelabs.saffron.corpus.PerFilesystemVerificationTest
+-------------------------------------------------------------------------------
+Tests run: 84, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 489.6 s -- in io.spicelabs.saffron.corpus.PerFilesystemVerificationTest

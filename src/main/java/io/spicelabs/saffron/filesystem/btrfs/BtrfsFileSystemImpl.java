@@ -9,6 +9,7 @@ import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
+import io.spicelabs.saffron.filesystem.ChunkedRegionStream;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -26,7 +27,13 @@ import java.util.stream.StreamSupport;
  */
 public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
 
+    /** Maximum default walk depth (hostile trees must not overflow the stack). */
+    private static final int MAX_WALK_DEPTH = 512;
+
     private static final int MAX_SYMLINK_DEPTH = 40;
+
+    /** Memory budget: no single extent read or decompression > 16 MiB. */
+    private static final long MAX_READABLE_SIZE = 16 * 1024 * 1024;
 
     private final DiskRegion region;
     private final long partitionOffset;
@@ -363,7 +370,7 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
 
     @Override
     public @NotNull Stream<FileSystemEntry> walk() throws IOException {
-        return walk("/", Integer.MAX_VALUE);
+        return walk("/", MAX_WALK_DEPTH);
     }
 
     @Override
@@ -480,10 +487,6 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
     }
 
     private byte[] readFileData(long treeRoot, long objectId, long size) throws IOException {
-        if (size > 256 * 1024 * 1024) {
-            throw new ResourceLimitException("File too large to read into memory: " + size + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", 256L * 1024 * 1024, size);
-        }
-
         List<BtrfsTreeReader.SearchResult> extents = treeReader.search(
                 treeRoot, objectId, BtrfsKey.EXTENT_DATA);
 
@@ -504,6 +507,12 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
                 // Inline data (may be compressed)
                 byte[] data = extent.inlineData();
                 if (extent.isCompressed()) {
+                    if (extent.ramBytes() > MAX_READABLE_SIZE) {
+                        throw new ResourceLimitException(
+                                "Btrfs inline extent too large: " + extent.ramBytes()
+                                        + " (limit: 16 MB).",
+                                "extent_size", MAX_READABLE_SIZE, extent.ramBytes());
+                    }
                     try {
                         data = decompressExtent(data, (int) extent.ramBytes(), extent.compression());
                     } catch (IOException e) {
@@ -526,6 +535,16 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
                 long numBytesNeeded = extent.numBytes();
 
                 if (diskAddr != 0 && compressedSize > 0) {
+                    // Memory budget: reject implausible sizes before any
+                    // allocation or (int) cast.
+                    if (compressedSize > MAX_READABLE_SIZE || uncompressedSize > MAX_READABLE_SIZE) {
+                        throw new ResourceLimitException(
+                                "Btrfs extent too large: compressed=" + compressedSize
+                                        + ", uncompressed=" + uncompressedSize
+                                        + " (limit: 16 MB).",
+                                "extent_size", MAX_READABLE_SIZE,
+                                Math.max(compressedSize, uncompressedSize));
+                    }
                     try {
                         ByteBuffer compBuf = chunkTree.readLogical(diskAddr, (int) compressedSize);
                         byte[] compressed = new byte[(int) compressedSize];
@@ -540,6 +559,8 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
                             result.position((int) fileOffset);
                             result.put(decompressed, srcOff, copyLen);
                         }
+                    } catch (ResourceLimitException e) {
+                        throw e;
                     } catch (IOException e) {
                         // Decompression failed - leave as zeros
                     }
@@ -550,7 +571,13 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
                 long extentOffset = extent.offset();
                 long numBytes = extent.numBytes();
 
-                ByteBuffer extentBuf = chunkTree.readLogical(diskAddr + extentOffset, (int) numBytes);
+                long logical;
+                try {
+                    logical = Math.addExact(diskAddr, extentOffset);
+                } catch (ArithmeticException e) {
+                    throw new IOException("Btrfs extent logical address overflows", e);
+                }
+                ByteBuffer extentBuf = chunkTree.readLogical(logical, (int) numBytes);
                 extentBuf.order(ByteOrder.LITTLE_ENDIAN);
 
                 int copyLen = (int) Math.min(numBytes, size - fileOffset);
@@ -866,13 +893,245 @@ public class BtrfsFileSystemImpl implements FileSystem.BtrfsFileSystem {
 
         @Override
         public @NotNull InputStream openStream() throws IOException {
-            byte[] data = readFileData(treeRoot, objectId, size());
-            return new ByteArrayInputStream(data);
+            return new BtrfsFileInputStream(treeRoot, objectId, size());
         }
 
         @Override
         public byte[] readAllBytes() throws IOException {
+            if (size() > MAX_READABLE_SIZE) {
+                throw new ResourceLimitException("File too large to read into memory: " + size()
+                        + " bytes (limit: 16 MB). Use openStream() for large files.",
+                        "allocation_size", MAX_READABLE_SIZE, size());
+            }
             return readFileData(treeRoot, objectId, size());
+        }
+    }
+
+    /**
+     * Lazy stream over a file's extents: regular extents stream in bounded
+     * chunks (see {@link ChunkedRegionStream}); compressed extents are
+     * decompressed per extent on demand (capped at 16 MiB); holes yield
+     * zeros without touching the region.
+     */
+    private class BtrfsFileInputStream extends InputStream {
+        private final List<BtrfsTreeReader.SearchResult> extents;
+        private final long size;
+        private long pos;
+        private int extentIdx;
+        private InputStream current;
+
+        BtrfsFileInputStream(long treeRoot, long objectId, long size) throws IOException {
+            this.size = size;
+            this.extents = treeReader.search(treeRoot, objectId, BtrfsKey.EXTENT_DATA);
+            this.extents.sort(Comparator.comparingLong(e -> e.item().key().offset()));
+            this.pos = 0;
+            this.extentIdx = 0;
+            this.current = new ByteArrayInputStream(new byte[0]);
+        }
+
+        @Override
+        public int read() throws IOException {
+            byte[] one = new byte[1];
+            int n = read(one, 0, 1);
+            return n < 0 ? -1 : one[0] & 0xFF;
+        }
+
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            if (len == 0) {
+                return 0;
+            }
+            if (pos >= size) {
+                return -1;
+            }
+            int total = 0;
+            while (total < len && pos < size) {
+                if (currentAtEnd()) {
+                    advance();
+                }
+                int n = current.read(b, off + total, (int) Math.min(len - total,
+                        Math.min(Integer.MAX_VALUE, size - pos)));
+                if (n < 0) {
+                    continue;
+                }
+                pos += n;
+                total += n;
+            }
+            return total;
+        }
+
+        private boolean currentAtEnd() throws IOException {
+            if (current instanceof ChunkedRegionStream chunked) {
+                return chunked.atEnd();
+            }
+            return current.available() == 0;
+        }
+
+        /** Loads the next extent covering {@code pos} (or a zero hole). */
+        private void advance() throws IOException {
+            BtrfsTreeReader.SearchResult result = extentIdx < extents.size()
+                    ? extents.get(extentIdx++) : null;
+            long extentStart = result == null ? Long.MAX_VALUE
+                    : result.item().key().offset();
+            long extentLen = result == null ? 0 : extentBytes(result);
+
+            if (result == null || pos < extentStart || extentLen == 0) {
+                // Sparse hole up to the next extent (or EOF).
+                long holeEnd = result == null ? size : Math.min(extentStart, size);
+                long hole = Math.min(holeEnd - pos, Integer.MAX_VALUE);
+                current = new ZeroInputStream(hole);
+                return;
+            }
+
+            BtrfsExtentData extent = BtrfsExtentData.parse(result.data());
+            if (extent.isInline()) {
+                byte[] data = extent.inlineData();
+                if (extent.isCompressed()) {
+                    if (extent.ramBytes() > MAX_READABLE_SIZE) {
+                        throw new ResourceLimitException("Btrfs inline extent too large: "
+                                + extent.ramBytes() + " (limit: 16 MB).",
+                                "extent_size", MAX_READABLE_SIZE, extent.ramBytes());
+                    }
+                    data = decompressExtent(data, (int) extent.ramBytes(), extent.compression());
+                }
+                current = new ByteArrayInputStream(data);
+            } else if (extent.isCompressed()) {
+                long diskAddr = extent.diskBytenr();
+                long compressedSize = extent.diskNumBytes();
+                long uncompressedSize = extent.ramBytes();
+                if (compressedSize > MAX_READABLE_SIZE || uncompressedSize > MAX_READABLE_SIZE) {
+                    throw new ResourceLimitException("Btrfs extent too large: compressed="
+                            + compressedSize + ", uncompressed=" + uncompressedSize
+                            + " (limit: 16 MB).",
+                            "extent_size", MAX_READABLE_SIZE,
+                            Math.max(compressedSize, uncompressedSize));
+                }
+                ByteBuffer compBuf = chunkTree.readLogical(diskAddr, (int) compressedSize);
+                byte[] compressed = new byte[(int) compressedSize];
+                compBuf.get(compressed);
+                byte[] decompressed = decompressExtent(compressed, (int) uncompressedSize,
+                        extent.compression());
+                current = new ByteArrayInputStream(decompressed,
+                        (int) Math.min(extent.offset(), decompressed.length),
+                        (int) Math.min(extentLen, decompressed.length
+                                - Math.min((int) extent.offset(), decompressed.length)));
+            } else {
+                long diskAddr;
+                try {
+                    diskAddr = Math.addExact(extent.diskBytenr(), extent.offset());
+                } catch (ArithmeticException e) {
+                    throw new IOException("Btrfs extent logical address overflows", e);
+                }
+                // diskBytenr is a LOGICAL btrfs address: reads must go
+                // through the chunk tree (RAID/chunk mapping), not the raw
+                // region.
+                current = new BtrfsLogicalStream(diskAddr, extentLen);
+            }
+        }
+
+        private long extentBytes(BtrfsTreeReader.SearchResult result) {
+            BtrfsExtentData extent = BtrfsExtentData.parse(result.data());
+            if (extent.isInline()) {
+                return extent.isCompressed() ? extent.ramBytes() : extent.inlineData().length;
+            }
+            return extent.numBytes();
+        }
+    }
+
+    /**
+     * Streams a contiguous logical range through the chunk tree in bounded
+     * windows (never a single read over 1 MiB).
+     */
+    private class BtrfsLogicalStream extends InputStream {
+        private final long logicalStart;
+        private final long length;
+        private long remaining;
+        private final byte[] window = new byte[256 * 1024];
+        private int windowPos;
+        private int windowLen;
+
+        BtrfsLogicalStream(long logicalStart, long length) {
+            this.logicalStart = logicalStart;
+            this.length = length;
+            this.remaining = length;
+        }
+
+        @Override
+        public int read() throws IOException {
+            byte[] one = new byte[1];
+            int n = read(one, 0, 1);
+            return n < 0 ? -1 : one[0] & 0xFF;
+        }
+
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            if (len == 0) {
+                return 0;
+            }
+            if (remaining == 0) {
+                return -1;
+            }
+            int total = 0;
+            while (total < len && remaining > 0) {
+                if (windowPos >= windowLen) {
+                    fill();
+                }
+                int n = Math.min(Math.min(len - total, windowLen - windowPos),
+                        (int) Math.min(remaining, Integer.MAX_VALUE));
+                System.arraycopy(window, windowPos, b, off + total, n);
+                windowPos += n;
+                remaining -= n;
+                total += n;
+            }
+            return total;
+        }
+
+        private void fill() throws IOException {
+            long pos = logicalStart + (length - remaining);
+            int toRead = (int) Math.min(Math.min(window.length, remaining), Integer.MAX_VALUE);
+            ByteBuffer buf = chunkTree.readLogical(pos, toRead);
+            buf.get(window, 0, toRead);
+            windowLen = toRead;
+            windowPos = 0;
+        }
+
+        @Override
+        public int available() throws IOException {
+            return (int) Math.min(remaining, Integer.MAX_VALUE);
+        }
+    }
+
+    /** A stream of a fixed number of zero bytes (sparse holes). */
+    private static final class ZeroInputStream extends InputStream {
+        private long remaining;
+
+        ZeroInputStream(long remaining) {
+            this.remaining = remaining;
+        }
+
+        @Override
+        public int read() throws IOException {
+            if (remaining <= 0) {
+                return -1;
+            }
+            remaining--;
+            return 0;
+        }
+
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            if (remaining <= 0) {
+                return -1;
+            }
+            int n = (int) Math.min(Math.min(len, remaining), Integer.MAX_VALUE);
+            java.util.Arrays.fill(b, off, off + n, (byte) 0);
+            remaining -= n;
+            return n;
+        }
+
+        @Override
+        public int available() {
+            return (int) Math.min(remaining, Integer.MAX_VALUE);
         }
     }
 

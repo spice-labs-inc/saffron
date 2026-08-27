@@ -1,0 +1,4 @@
+Source: https://github.com/util-linux/util-linux/blob/master/tests/ts/cramfs/cramfs-little.img
+License: GPL-2.0-or-later (util-linux project license)
+Downloaded: 2026-08-25
+Note: little-endian cramfs test image from the util-linux test suite.

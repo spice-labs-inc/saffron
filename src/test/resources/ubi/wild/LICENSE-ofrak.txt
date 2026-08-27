@@ -1,0 +1,5 @@
+ofrak-bcm53xx-carved.ubi:
+  Source: https://github.com/redballoonsecurity/ofrak/tree/master/ofrak_core/tests/components/assets
+  License: Apache-2.0 (redballoonsecurity/ofrak project license)
+  Note: UBI image carved from a Broadcom bcm53xx device dump
+  Downloaded: 2026-08-25

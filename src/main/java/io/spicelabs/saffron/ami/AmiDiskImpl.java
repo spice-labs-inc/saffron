@@ -59,6 +59,8 @@ public final class AmiDiskImpl implements VirtualDisk.AmiDisk {
     private final long virtualSize;
     private final long bundledSize;
     private final List<Path> partFiles;
+    /** Cumulative byte offset of each part within the bundle (indexed lookup). */
+    private final long[] partOffsets;
     private final String digest;
     private final boolean encrypted;
 
@@ -92,8 +94,10 @@ public final class AmiDiskImpl implements VirtualDisk.AmiDisk {
             }
 
             String imageName = getElementText(imageElement, "name");
-            long virtualSize = Long.parseLong(getElementText(imageElement, "size"));
-            long bundledSize = Long.parseLong(getElementText(imageElement, "bundled_size"));
+            long virtualSize = parseLongChecked(getElementText(imageElement, "size"),
+                    "image size");
+            long bundledSize = parseLongChecked(getElementText(imageElement, "bundled_size"),
+                    "bundled size");
             String digest = getElementText(imageElement, "digest");
 
             // Check encryption
@@ -117,6 +121,12 @@ public final class AmiDiskImpl implements VirtualDisk.AmiDisk {
                 NodeList parts = partsElement.getElementsByTagName("part");
                 Path bundleDir = manifestPath.getParent();
 
+                if (parts.getLength() > MAX_PARTS) {
+                    throw new SaffronException.InvalidDiskException(
+                            "AMI manifest declares too many parts: " + parts.getLength()
+                                    + " (max " + MAX_PARTS + ")");
+                }
+
                 for (int i = 0; i < parts.getLength(); i++) {
                     Element part = (Element) parts.item(i);
                     String filename = getElementText(part, "filename");
@@ -130,11 +140,37 @@ public final class AmiDiskImpl implements VirtualDisk.AmiDisk {
             // Sort parts by index
             partFiles.sort(Comparator.comparing(p -> p.getFileName().toString()));
 
+            // A bundle with missing parts cannot serve reads correctly;
+            // reject at open instead of silently skipping parts.
+            for (Path part : partFiles) {
+                if (!Files.exists(part)) {
+                    throw new SaffronException.InvalidDiskException(
+                            "AMI part file missing: " + part.getFileName());
+                }
+            }
+
             return new AmiDiskImpl(manifestPath, imageName, architecture, virtualSize,
                     bundledSize, partFiles, digest, encrypted);
 
         } catch (ParserConfigurationException | SAXException e) {
             throw new SaffronException.InvalidDiskException("Failed to parse AMI manifest: " + e.getMessage(), e);
+        }
+    }
+
+    /** Maximum number of parts accepted from a manifest. */
+    static final int MAX_PARTS = 10_000;
+
+    private static long parseLongChecked(String value, String field)
+            throws SaffronException.InvalidDiskException {
+        if (value == null || value.isEmpty()) {
+            throw new SaffronException.InvalidDiskException(
+                    "Invalid AMI manifest: missing " + field);
+        }
+        try {
+            return Long.parseLong(value.trim());
+        } catch (NumberFormatException e) {
+            throw new SaffronException.InvalidDiskException(
+                    "Invalid AMI manifest: bad " + field + " value: " + value, e);
         }
     }
 
@@ -144,6 +180,29 @@ public final class AmiDiskImpl implements VirtualDisk.AmiDisk {
             return nodes.item(0).getTextContent();
         }
         return null;
+    }
+
+    /**
+     * Reads exactly {@code length} bytes into {@code out} at {@code off}.
+     * Throws {@link IOException} on EOF or zero-progress short reads.
+     *
+     * <p>Package-visible as a test seam: partial/truncated streams are not
+     * reproducible through a real file, so the seam lets tests force the
+     * failure mode directly.</p>
+     */
+    static void readFully(InputStream in, byte[] out, int off, int length) throws IOException {
+        int total = 0;
+        while (total < length) {
+            int n = in.read(out, off + total, length - total);
+            if (n < 0) {
+                throw new IOException("Truncated AMI part: expected " + length
+                        + " bytes, got " + total);
+            }
+            if (n == 0) {
+                throw new IOException("No progress reading AMI part");
+            }
+            total += n;
+        }
     }
 
     private AmiDiskImpl(Path manifestPath, String imageName, String architecture,
@@ -157,6 +216,28 @@ public final class AmiDiskImpl implements VirtualDisk.AmiDisk {
         this.partFiles = Collections.unmodifiableList(partFiles);
         this.digest = digest;
         this.encrypted = encrypted;
+        long[] offsets;
+        try {
+            offsets = computePartOffsets(partFiles);
+        } catch (ArithmeticException | IOException e) {
+            throw new IllegalArgumentException("AMI bundle size computation failed", e);
+        }
+        this.partOffsets = offsets;
+    }
+
+    /**
+     * Prefix sums of part sizes: {@code partOffsets[i]} is the bundle offset
+     * where part {@code i} begins. Missing parts are treated as size 0 here;
+     * the read path rejects them loudly.
+     */
+    private static long[] computePartOffsets(List<Path> parts) throws IOException {
+        long[] offsets = new long[parts.size()];
+        long running = 0;
+        for (int i = 0; i < parts.size(); i++) {
+            offsets[i] = running;
+            running = Math.addExact(running, Files.size(parts.get(i)));
+        }
+        return offsets;
     }
 
     @Override
@@ -180,17 +261,35 @@ public final class AmiDiskImpl implements VirtualDisk.AmiDisk {
             throw new SaffronException.UnsupportedDiskException(
                     "Reading encrypted AMI bundles requires AWS credentials");
         }
+        if (offset < 0 || length < 0) {
+            throw new IOException("Negative AMI read bounds: offset=" + offset
+                    + ", length=" + length);
+        }
+        long end;
+        try {
+            end = Math.addExact(offset, length);
+        } catch (ArithmeticException e) {
+            throw new IOException("AMI read bounds overflow: offset=" + offset
+                    + ", length=" + length, e);
+        }
+        if (end > virtualSize) {
+            throw new IOException("AMI read beyond virtual size: offset=" + offset
+                    + ", length=" + length + ", virtualSize=" + virtualSize);
+        }
 
         ByteBuffer buffer = ByteBuffer.allocate(length);
-        long currentOffset = 0;
-        int bytesRead = 0;
 
-        for (Path partFile : partFiles) {
+        // Locate the first part containing the requested range via the
+        // prefix-offset index (binary search), then walk forward.
+        int startPart = lowerBoundPart(offset);
+        for (int i = startPart; i < partFiles.size(); i++) {
+            Path partFile = partFiles.get(i);
             if (!Files.exists(partFile)) {
-                continue;
+                throw new IOException("AMI part file missing: " + partFile.getFileName());
             }
 
             long partSize = Files.size(partFile);
+            long currentOffset = partOffsets[i];
             long partEnd = currentOffset + partSize;
 
             // Check if this part contains data we need
@@ -200,24 +299,64 @@ public final class AmiDiskImpl implements VirtualDisk.AmiDisk {
                 int toRead = (int) (readEnd - readStart);
 
                 try (InputStream is = Files.newInputStream(partFile)) {
-                    is.skip(readStart);
+                    skipFully(is, readStart);
                     byte[] partData = new byte[toRead];
-                    int read = is.read(partData);
-                    if (read > 0) {
-                        buffer.put(partData, 0, read);
-                        bytesRead += read;
-                    }
+                    readFully(is, partData, 0, toRead);
+                    buffer.put(partData);
                 }
             }
 
-            currentOffset = partEnd;
-            if (bytesRead >= length) {
+            if (partEnd >= offset + length) {
                 break;
             }
         }
 
         buffer.flip();
         return buffer;
+    }
+
+    /** Index of the first part whose range contains {@code offset}. */
+    private int lowerBoundPart(long offset) {
+        int lo = 0;
+        int hi = partOffsets.length;
+        while (lo < hi) {
+            int mid = (lo + hi) >>> 1;
+            long partSize = 0;
+            try {
+                if (Files.exists(partFiles.get(mid))) {
+                    partSize = Files.size(partFiles.get(mid));
+                }
+            } catch (IOException e) {
+                partSize = 0;
+            }
+            if (partOffsets[mid] + partSize <= offset) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+        return lo;
+    }
+
+    /**
+     * Skips exactly {@code n} bytes; throws on EOF (a truncated part must
+     * not silently read as zeros).
+     */
+    private static void skipFully(InputStream in, long n) throws IOException {
+        long remaining = n;
+        while (remaining > 0) {
+            long skipped = in.skip(remaining);
+            if (skipped <= 0) {
+                // Fall back to reading; report EOF loudly.
+                int b = in.read();
+                if (b < 0) {
+                    throw new IOException("Truncated AMI part during skip: "
+                            + (n - remaining) + " of " + n + " bytes");
+                }
+                skipped = 1;
+            }
+            remaining -= skipped;
+        }
     }
 
     @Override
@@ -227,18 +366,18 @@ public final class AmiDiskImpl implements VirtualDisk.AmiDisk {
                     "Reading encrypted AMI bundles requires AWS credentials");
         }
 
-        return new SequenceInputStream(Collections.enumeration(
-                partFiles.stream()
-                        .filter(Files::exists)
-                        .map(p -> {
-                            try {
-                                return Files.newInputStream(p);
-                            } catch (IOException e) {
-                                throw new UncheckedIOException(e);
-                            }
-                        })
-                        .toList()
-        ));
+        List<InputStream> streams = new ArrayList<>();
+        for (Path partFile : partFiles) {
+            if (!Files.exists(partFile)) {
+                for (InputStream s : streams) {
+                    s.close();
+                }
+                throw new IOException("AMI part file missing: " + partFile.getFileName());
+            }
+            streams.add(Files.newInputStream(partFile));
+        }
+
+        return new SequenceInputStream(Collections.enumeration(streams));
     }
 
     @Override

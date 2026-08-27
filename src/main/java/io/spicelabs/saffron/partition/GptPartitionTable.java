@@ -137,21 +137,32 @@ public record GptPartitionTable(
         // Number of partition entries
         int numEntries = header.getInt();
 
-        // Size of each entry
+        // Size of each entry (spec allows up to 4096)
         int entrySize = header.getInt();
-        if (entrySize < STANDARD_ENTRY_SIZE) {
+        if (entrySize < STANDARD_ENTRY_SIZE || entrySize > 4096) {
             return Optional.empty();
         }
 
-        // Limit entries for safety
+        // Reject implausible entry counts loudly (plan R1.3: checked
+        // rejection, never silent truncation).
         if (numEntries > 256) {
-            numEntries = 256;
+            return Optional.empty();
         }
 
-        // Read partition entries
+        // Read partition entries (checked arithmetic: hostile values must
+        // yield Optional.empty, never an unchecked escape)
         List<Partition> partitions = new ArrayList<>();
-        long entriesOffset = entriesLba * 512;
-        int totalEntriesSize = numEntries * entrySize;
+        final long entriesOffset;
+        final int totalEntriesSize;
+        try {
+            entriesOffset = Math.multiplyExact(entriesLba, 512L);
+            totalEntriesSize = Math.multiplyExact(numEntries, entrySize);
+        } catch (ArithmeticException e) {
+            return Optional.empty();
+        }
+        if (entriesOffset < 0 || Math.addExact(entriesOffset, totalEntriesSize) > disk.virtualSize()) {
+            return Optional.empty();
+        }
 
         ByteBuffer entriesBuffer = disk.read(entriesOffset, totalEntriesSize);
         entriesBuffer.order(ByteOrder.LITTLE_ENDIAN);

@@ -1,0 +1,5 @@
+quectel-usrdata.ubi:
+  Source: https://github.com/Biktorgj/quectel_eg25_recovery/blob/master/update/usrdata.ubi
+  License: GPL-3.0 (Biktorgj/quectel_eg25_recovery project license)
+  Note: Quectel EG25 modem UBI data volume (real device firmware)
+  Downloaded: 2026-08-25
