@@ -34,6 +34,11 @@ public class ApfsObjectMap {
     private final io.spicelabs.saffron.io.LruCache<Long, Long> cache =
             new io.spicelabs.saffron.io.LruCache<>(MAX_CACHE_ENTRIES);
 
+    /** Test/observation seam for the bounded cache (package scope). */
+    int cacheSize() {
+        return cache.size();
+    }
+
     /** Object-map resolution cache: bounded LRU (hostile walks). */
     private static final int MAX_CACHE_ENTRIES = 4096;
 

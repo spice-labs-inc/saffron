@@ -10,7 +10,7 @@ supported formats through a single `FileSystem` interface.
 | Format | Detection | Notes | Key test |
 |--------|-----------|-------|----------|
 | squashfs | `hsqs` magic at offset 0 | Phase 1. Supports xz, gzip, lzo, lz4, zstd, uncompressed. | `SquashfsDetectionTest.detectsMagic` |
-| ext2/3/4 | `0xEF53` at superblock offset 1024 | Standard Linux filesystem. | existing corpus tests |
+| ext2/3/4 | `0xEF53` at superblock offset 1024 | Standard Linux filesystem; dir reads capped at 16 MiB. | `Ext4DirectoryCapTest` (synthetic) |
 | NTFS | `"NTFS    "` OEM ID | Windows filesystem. | existing corpus tests |
 | FAT32 / exFAT | FAT boot sector | Legacy/UEFI filesystems. | existing corpus tests |
 | XFS | `"XFSB"` | Linux journaling filesystem. | existing corpus tests |

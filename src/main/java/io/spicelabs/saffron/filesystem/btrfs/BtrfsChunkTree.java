@@ -26,6 +26,21 @@ public class BtrfsChunkTree {
     /** Plausibility cap on CHUNK_ITEM count (real images have < 100). */
     static final int MAX_CHUNK_ITEMS = 64 * 1024;
 
+    /**
+     * Loud plausibility check (seam for hostile-image tests): both the
+     * fixed 64k cap and the region-size-proportional bound must hold.
+     */
+    static void checkChunkCount(int count, long regionSize) throws IOException {
+        if (count > MAX_CHUNK_ITEMS) {
+            throw new IOException("btrfs chunk item count exceeds the plausibility cap: "
+                    + count + " (max " + MAX_CHUNK_ITEMS + ")");
+        }
+        if (count > regionSize / 32) {
+            throw new IOException("btrfs chunk item count exceeds the size plausibility cap: "
+                    + count + " (region bytes / 32 = " + (regionSize / 32) + ")");
+        }
+    }
+
     private final DiskRegion region;
     private final long partitionOffset;
     private final List<Chunk> chunks;
@@ -142,14 +157,7 @@ public class BtrfsChunkTree {
 
         // The plausibility caps are LOUD: an image with an implausible
         // chunk item count must fail mount, never silently fall back.
-        if (chunks.size() > MAX_CHUNK_ITEMS) {
-            throw new IOException("btrfs chunk item count exceeds the plausibility cap: "
-                    + chunks.size() + " (max " + MAX_CHUNK_ITEMS + ")");
-        }
-        if (chunks.size() > region.size() / 32) {
-            throw new IOException("btrfs chunk item count exceeds the size plausibility cap: "
-                    + chunks.size() + " (region bytes / 32 = " + (region.size() / 32) + ")");
-        }
+        checkChunkCount(chunks.size(), region.size());
 
         // Sort chunks by logical address for binary search
         chunks.sort(Comparator.comparingLong(Chunk::logicalAddress));

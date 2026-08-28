@@ -277,6 +277,37 @@ class DiskValidationTest {
                 .isInstanceOf(IOException.class);
     }
 
+    // --------------------------------------------------------------- VMDK
+
+    @Test
+    void vmdkCompressedGrainMarkerSizeHugeRejected(@TempDir Path dir) throws IOException {
+        int grainSize = 65536;
+        byte[] image = DiskFixtures.vmdk(8L * grainSize, grainSize, true, true, null);
+        // Compressed grain marker: size field at grain-data start + 8.
+        long grainData = DiskFixtures.vmdkGrainDataStart(grainSize);
+        putIntLe(image, (int) grainData + 8, 0x7FFFFFFF);
+        Path file = dir.resolve("vmdk-marker.vmdk");
+        Files.write(file, image);
+
+        try (var disk = DiskReader.open(file, DiskFormat.VMDK)) {
+            assertThatThrownBy(() -> disk.read(0, 512)).isInstanceOf(IOException.class);
+        }
+    }
+
+    @Test
+    void vmdkCompressedGrainTruncatedMarkerRejected(@TempDir Path dir) throws IOException {
+        int grainSize = 65536;
+        byte[] image = DiskFixtures.vmdk(8L * grainSize, grainSize, true, true, null);
+        Path file = dir.resolve("vmdk-truncmarker.vmdk");
+        Files.write(file, image);
+        long grainData = DiskFixtures.vmdkGrainDataStart(grainSize);
+        DiskFixtures.truncate(file, grainData + 4); // cut mid-marker
+
+        try (var disk = DiskReader.open(file, DiskFormat.VMDK)) {
+            assertThatThrownBy(() -> disk.read(0, 512)).isInstanceOf(IOException.class);
+        }
+    }
+
     // ---------------------------------------------------------------- GPT
 
     private byte[] minimalGptDisk(long entriesLba, int numEntries, int entrySize) {

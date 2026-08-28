@@ -49,6 +49,15 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
     /** Maximum file size that can be read into memory (256 MB) */
     private static final long MAX_READABLE_SIZE = 16 * 1024 * 1024;
 
+    /** Test/observation seams for the cache budgets (package scope). */
+    int mftCacheEntries() {
+        return mftCache.size();
+    }
+
+    long mftCacheBytes() {
+        return mftCache.totalBytes();
+    }
+
     /** Cap on $ATTRIBUTE_LIST entries processed per record (CPU DoS guard). */
     private static final int MAX_ATTRIBUTE_LIST_ENTRIES = 4096;
 

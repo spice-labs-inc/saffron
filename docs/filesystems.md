@@ -326,6 +326,14 @@ the chunk scan enforces the `region.size()/32` plausibility bound in
 addition to the 64k cap; GPT rejects entry counts > 256 instead of
 silently clamping.
 
+Test coverage note (post-audit): boundary/cycle/cache-budget unit tests
+now exist for walk depth (Yaffs2BoundaryTest), readAllBytes caps
+(Yaffs2BoundaryTest), NTFS cache budgets (NtfsCacheBudgetTest), the
+btrfs chunk cap (BtrfsChunkCapTest), APFS omap LRU + cycles
+(ApfsObjectMapCacheTest), the ext4 directory 16 MiB cap
+(Ext4DirectoryCapTest, mutation-verified), VMDK grain markers, and the
+exFAT unsigned comparison. All post-audit gaps have unit-level tests.
+
 Recorded deviation: R4.1's pinned failure mode ("IOException('directory
 tree too deep')") is implemented as SILENT TRUNCATION at the default
 depth instead — the stack-safety goal is met, explicit-depth callers get
