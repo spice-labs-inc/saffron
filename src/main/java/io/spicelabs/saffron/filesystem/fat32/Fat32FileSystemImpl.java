@@ -22,6 +22,7 @@ import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
+import io.spicelabs.saffron.filesystem.ChunkedRegionStream;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -42,8 +43,11 @@ import java.util.stream.StreamSupport;
  */
 public class Fat32FileSystemImpl implements FileSystem.Fat32FileSystem {
 
+    /** Maximum default walk depth (hostile trees must not overflow the stack). */
+    private static final int MAX_WALK_DEPTH = 512;
+
     /** Maximum file size that can be read into memory (256 MB) */
-    private static final long MAX_READABLE_SIZE = 256 * 1024 * 1024;
+    private static final long MAX_READABLE_SIZE = 16 * 1024 * 1024;
 
     /** End of cluster chain markers */
     private static final int FAT12_EOC = 0x0FF8;
@@ -133,10 +137,18 @@ public class Fat32FileSystemImpl implements FileSystem.Fat32FileSystem {
 
         long dataSectors = bootSector.totalSectors() -
                 (bootSector.reservedSectors() + (bootSector.numberOfFats() * bootSector.sectorsPerFat()) + rootDirSectors);
-        int countOfClusters = (int) (dataSectors / bootSector.sectorsPerCluster()) + 2;
+        if (dataSectors <= 0 || fatSize <= 0) {
+            throw new IOException("Invalid FAT geometry: dataSectors=" + dataSectors
+                    + ", fatSize=" + fatSize);
+        }
+        long countOfClustersLong = dataSectors / bootSector.sectorsPerCluster() + 2;
+        if (countOfClustersLong <= 0 || countOfClustersLong > Integer.MAX_VALUE) {
+            throw new IOException("Invalid FAT cluster count: " + countOfClustersLong);
+        }
+        int countOfClusters = (int) countOfClustersLong;
 
         // Limit FAT read size to avoid memory issues
-        int maxFatBytes = Math.min((int) fatSize, 64 * 1024 * 1024); // Max 64MB
+        int maxFatBytes = Math.min((int) Math.min(fatSize, Integer.MAX_VALUE), 16 * 1024 * 1024); // Max 16MB
         ByteBuffer fatBuffer = region.read(fatOffset, maxFatBytes);
         fatBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
@@ -211,7 +223,7 @@ public class Fat32FileSystemImpl implements FileSystem.Fat32FileSystem {
 
     @Override
     public @NotNull Stream<FileSystemEntry> walk() throws IOException {
-        return walk("/", Integer.MAX_VALUE);
+        return walk("/", MAX_WALK_DEPTH);
     }
 
     @Override
@@ -346,7 +358,7 @@ public class Fat32FileSystemImpl implements FileSystem.Fat32FileSystem {
      */
     byte[] readClusterChain(int startCluster, long fileSize) throws IOException {
         if (fileSize > MAX_READABLE_SIZE) {
-            throw new ResourceLimitException("File too large to read into memory: " + fileSize + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, fileSize);
+            throw new ResourceLimitException("File too large to read into memory: " + fileSize + " bytes (limit: 16 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, fileSize);
         }
 
         if (startCluster < 2) {
@@ -374,20 +386,34 @@ public class Fat32FileSystemImpl implements FileSystem.Fat32FileSystem {
     /**
      * Gets the chain of clusters starting from the given cluster.
      */
-    List<Integer> getClusterChain(int startCluster) {
-        List<Integer> chain = new ArrayList<>();
-        int cluster = startCluster;
-
+    List<Integer> getClusterChain(int startCluster) throws IOException {
         int eocMarker = switch (fatType) {
             case 12 -> FAT12_EOC;
             case 16 -> FAT16_EOC;
             default -> FAT32_EOC;
         };
+        return walkClusterChain(fatTable, startCluster, eocMarker, "FAT");
+    }
+
+    /**
+     * Walks a FAT chain with cycle detection (seam for hostile-chain
+     * tests). A cyclic chain is corruption, not data.
+     */
+    static List<Integer> walkClusterChain(int[] fatTable, int startCluster, int eocMarker,
+                                          String label) throws IOException {
+        List<Integer> chain = new ArrayList<>();
+        int cluster = startCluster;
 
         int maxClusters = fatTable.length;
         int iterations = 0;
+        java.util.Set<Integer> seen = new java.util.HashSet<>();
 
         while (cluster >= 2 && cluster < maxClusters && iterations < maxClusters) {
+            if (!seen.add(cluster)) {
+                // Cyclic FAT chain: duplicated clusters are corruption, not
+                // data; fail checked so callers never see repeated entries.
+                throw new IOException("FAT cluster chain cycle at cluster " + cluster);
+            }
             chain.add(cluster);
             int nextCluster = fatTable[cluster];
 
@@ -426,7 +452,17 @@ public class Fat32FileSystemImpl implements FileSystem.Fat32FileSystem {
         }
 
         List<Integer> clusters = getClusterChain(startCluster);
-        int totalSize = clusters.size() * clusterSize;
+        long totalSizeLong = 0;
+        for (int cluster : clusters) {
+            // Cap INSIDE the loop: the chain walk is bounded by the FAT
+            // table cap, but the cap must fire before materializing.
+            totalSizeLong += clusterSize;
+            if (totalSizeLong > MAX_READABLE_SIZE) {
+                throw new ResourceLimitException("FAT directory chain too large",
+                        "allocation_size", MAX_READABLE_SIZE, totalSizeLong);
+            }
+        }
+        int totalSize = (int) totalSizeLong;
         byte[] data = new byte[totalSize];
 
         int offset = 0;
@@ -748,7 +784,21 @@ public class Fat32FileSystemImpl implements FileSystem.Fat32FileSystem {
 
         @Override
         public @NotNull InputStream openStream() throws IOException {
-            return new ByteArrayInputStream(readAllBytes());
+            // Lazy stream over the cluster chain: reads are bounded by
+            // ChunkedRegionStream (<= 1 MiB per region read).
+            List<ChunkedRegionStream.Segment> segments = new ArrayList<>();
+            long remaining = entry.fileSize();
+            long logical = 0;
+            for (int cluster : getClusterChain(entry.firstCluster())) {
+                if (remaining <= 0) {
+                    break;
+                }
+                long len = Math.min(clusterSize, remaining);
+                segments.add(new ChunkedRegionStream.Segment(logical, clusterToOffset(cluster), len));
+                logical += len;
+                remaining -= len;
+            }
+            return new ChunkedRegionStream(region, segments, entry.fileSize());
         }
     }
 

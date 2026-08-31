@@ -52,6 +52,10 @@ public record BtrfsExtentData(
 
         if (type == TYPE_INLINE) {
             // Inline data follows header
+            if (data.length < 21) {
+                throw new IllegalArgumentException(
+                        "Btrfs inline extent data too short: " + data.length);
+            }
             byte[] inlineData = new byte[data.length - 21];
             buf.get(inlineData);
             return new BtrfsExtentData(generation, ramBytes, compression, encryption,

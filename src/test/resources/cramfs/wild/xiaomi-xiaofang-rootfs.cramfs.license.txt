@@ -1,0 +1,3 @@
+Source: https://github.com/GrumpyMeow/XiaomiXiaofangFirmware/blob/master/xfcust/3.0.3.56/rootfs.cramfs
+License: none stated in repository; derived from Xiaomi Xiaofang camera firmware (third-party modified xfcust image). Redistributed here solely as a non-executed test fixture.
+Downloaded: 2026-08-25

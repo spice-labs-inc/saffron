@@ -267,20 +267,21 @@ public class ClusterReader {
             return new long[0];
         }
 
-        // Validate L1 table size
+        // Validate L1 table size (memory budget: no single read > 16 MiB)
         long tableBytes = SafeMath.safeMultiply(l1Size, 8L);
-        SecurityUtils.validateAllocationSize(tableBytes, 256 * 1024 * 1024, "L1 table");
+        SecurityUtils.validateAllocationSize(tableBytes, 16 * 1024 * 1024, "L1 table");
 
         long[] table = new long[l1Size];
         ByteBuffer buffer = ByteBuffer.allocate(l1Size * 8);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        channel.position(header.l1TableOffset());
-        int read = channel.read(buffer);
-        if (read < l1Size * 8) {
-            throw new CorruptedDiskException(
-                    "Truncated L1 table: expected " + (l1Size * 8) + " bytes, got " + read,
-                    header.l1TableOffset(), "L1 table", DiskFormat.QCOW2);
+        synchronized (channel) {
+            channel.position(header.l1TableOffset());
+            int read = channel.read(buffer);
+            if (read < l1Size * 8) {
+                throw new IOException("Truncated L1 table: expected " + (l1Size * 8)
+                        + " bytes, got " + read);
+            }
         }
 
         buffer.flip();
@@ -292,40 +293,42 @@ public class ClusterReader {
     }
 
     private long[] loadL2Table(long l1Index, long l2TableOffset) throws IOException {
-        // Check cache
-        if (l1Index == cachedL2Index && cachedL2Table != null) {
-            return cachedL2Table;
+        // Cache check, position+read, and cache update are all under the
+        // channel monitor so a read can never pair index N with table M's
+        // contents.
+        synchronized (channel) {
+            // Check cache
+            if (l1Index == cachedL2Index && cachedL2Table != null) {
+                return cachedL2Table;
+            }
+
+            // Validate offset
+            if (l2TableOffset < 0) {
+                throw new IOException("Invalid L2 table offset: " + l2TableOffset);
+            }
+
+            long[] table = new long[l2Size];
+            ByteBuffer buffer = ByteBuffer.allocate(l2Size * 8);
+            buffer.order(ByteOrder.BIG_ENDIAN);
+
+            channel.position(l2TableOffset);
+            int read = channel.read(buffer);
+            if (read < l2Size * 8) {
+                throw new IOException("Truncated L2 table: expected " + (l2Size * 8)
+                        + " bytes, got " + read);
+            }
+
+            buffer.flip();
+            for (int i = 0; i < l2Size; i++) {
+                table[i] = buffer.getLong();
+            }
+
+            // Update cache
+            cachedL2Index = l1Index;
+            cachedL2Table = table;
+
+            return table;
         }
-
-        // Validate offset
-        if (l2TableOffset < 0) {
-            throw new CorruptedDiskException(
-                    "Invalid L2 table offset: " + l2TableOffset,
-                    -1, "L2 table", DiskFormat.QCOW2);
-        }
-
-        long[] table = new long[l2Size];
-        ByteBuffer buffer = ByteBuffer.allocate(l2Size * 8);
-        buffer.order(ByteOrder.BIG_ENDIAN);
-
-        channel.position(l2TableOffset);
-        int read = channel.read(buffer);
-        if (read < l2Size * 8) {
-            throw new CorruptedDiskException(
-                    "Truncated L2 table: expected " + (l2Size * 8) + " bytes, got " + read,
-                    l2TableOffset, "L2 table", DiskFormat.QCOW2);
-        }
-
-        buffer.flip();
-        for (int i = 0; i < l2Size; i++) {
-            table[i] = buffer.getLong();
-        }
-
-        // Update cache
-        cachedL2Index = l1Index;
-        cachedL2Table = table;
-
-        return table;
     }
 
     private ClusterMapping parseL2Entry(long entry) {
@@ -358,16 +361,22 @@ public class ClusterReader {
 
     private void readFromChannel(long position, ByteBuffer dest, int length) throws IOException {
         ByteBuffer temp = ByteBuffer.allocate(length);
-        channel.position(position);
+        synchronized (channel) {
+            channel.position(position);
 
-        int totalRead = 0;
-        while (totalRead < length) {
-            int read = channel.read(temp);
-            if (read < 0) {
-                // EOF - fill remaining with zeros
-                break;
+            int totalRead = 0;
+            while (totalRead < length) {
+                int read = channel.read(temp);
+                if (read < 0) {
+                    throw new IOException("Truncated qcow2 file: expected " + length
+                            + " bytes at offset " + position + ", got " + totalRead);
+                }
+                if (read == 0) {
+                    throw new IOException("No progress reading qcow2 file at offset "
+                            + position);
+                }
+                totalRead += read;
             }
-            totalRead += read;
         }
 
         temp.flip();
@@ -432,14 +441,21 @@ public class ClusterReader {
 
         // Read the compressed data
         ByteBuffer compressedData = ByteBuffer.allocate(compressedSize);
-        channel.position(coffset);
         int read = 0;
-        while (read < compressedSize) {
-            int n = channel.read(compressedData);
-            if (n < 0) {
-                break;
+        synchronized (channel) {
+            channel.position(coffset);
+            while (read < compressedSize) {
+                int n = channel.read(compressedData);
+                if (n < 0) {
+                    throw new IOException("Truncated compressed cluster: expected "
+                            + compressedSize + " bytes at offset " + coffset + ", got " + read);
+                }
+                if (n == 0) {
+                    throw new IOException("No progress reading compressed cluster at offset "
+                            + coffset);
+                }
+                read += n;
             }
-            read += n;
         }
 
         // Decompress using raw DEFLATE (QCOW2 doesn't use zlib header)
@@ -456,14 +472,15 @@ public class ClusterReader {
                 if (decompressedThisCall == 0) {
                     // No progress - check if we need more input or if we're done
                     if (inflater.needsInput()) {
-                        // We've exhausted the input but haven't filled the cluster
-                        // This is OK for sparse data - remaining bytes are zeros
-                        break;
+                        // Input exhausted before the deflate stream finished:
+                        // corruption (QEMU rejects this as -EIO). The
+                        // remaining bytes are NOT legitimately zero.
+                        throw new IOException(
+                                "Compressed cluster truncated: deflate stream not finished");
                     }
                     if (inflater.needsDictionary()) {
-                        throw new CorruptedDiskException(
-                                "Decompression requires dictionary (unexpected)",
-                                coffset, "compressed cluster", DiskFormat.QCOW2);
+                        throw new IOException(
+                                "Decompression requires dictionary (unexpected)");
                     }
                 }
                 totalDecompressed += decompressedThisCall;

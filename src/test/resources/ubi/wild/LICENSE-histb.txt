@@ -1,0 +1,5 @@
+histb-data.ubifs:
+  Source: https://github.com/07bug/HiSTBLinuxV100R005C00SPC060/tree/master/configs/hi3716mv450/prebuilts
+  License: none stated in repository; HiSilicon vendor SDK prebuilt data volume.
+           Redistributed here solely as a non-executed test fixture.
+  Downloaded: 2026-08-25

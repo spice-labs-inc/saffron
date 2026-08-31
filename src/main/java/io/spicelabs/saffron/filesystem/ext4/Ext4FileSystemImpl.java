@@ -22,6 +22,7 @@ import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
+import io.spicelabs.saffron.filesystem.ChunkedRegionStream;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -41,6 +42,12 @@ import java.util.stream.StreamSupport;
  * within virtual disk images.
  */
 public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
+
+    /** Maximum default walk depth (hostile trees must not overflow the stack). */
+    private static final int MAX_WALK_DEPTH = 512;
+
+    /** Maximum extent-tree depth (real ext4 extent trees are at most 5). */
+    private static final int MAX_EXTENT_TREE_DEPTH = 64;
     private static final long ROOT_INODE = 2;
     private static final int MAX_SYMLINK_DEPTH = 40;
 
@@ -267,7 +274,7 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
             // If this is a symlink, resolve it
             if (current instanceof FileSystemEntry.SymbolicLink symlink) {
                 if (maxSymlinkHops <= 0) {
-                    System.err.println("  Symlink depth exceeded: " + path);
+                    // Symlink depth exceeded: skipped (documented behavior).
                     return Optional.empty(); // Too many symlink hops
                 }
 
@@ -332,7 +339,7 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
 
     @Override
     public @NotNull Stream<FileSystemEntry> walk() throws IOException {
-        return walkDirectory(root(), Integer.MAX_VALUE, new HashSet<>());
+        return walkDirectory(root(), MAX_WALK_DEPTH, new HashSet<>());
     }
 
     @Override
@@ -479,7 +486,7 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
     }
 
     /** Maximum file size that can be read into memory (256 MB) */
-    private static final long MAX_READABLE_SIZE = 256 * 1024 * 1024;
+    private static final long MAX_READABLE_SIZE = 16 * 1024 * 1024;
 
     /**
      * Reads all data from an inode.
@@ -487,14 +494,6 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
     byte[] readInodeData(Ext4Inode inode) throws IOException {
         if (inode.size() == 0) {
             return new byte[0];
-        }
-
-        // Check for files too large to read into memory
-        if (inode.size() > MAX_READABLE_SIZE) {
-            throw new ResourceLimitException(
-                    "File too large to read into memory: " + inode.size() +
-                    " bytes (limit: 256 MB). Use openStream() for large files.",
-                    "allocation_size", MAX_READABLE_SIZE, inode.size());
         }
 
         // For symlinks, check if data is inline
@@ -542,6 +541,33 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
      * Recursively collects all leaf extents.
      */
     private List<Ext4Extent.Leaf> collectAllExtents(byte[] extentData) throws IOException {
+        return walkExtentTree(extentData, 0, new HashSet<>(),
+                blockNumber -> {
+                    ByteBuffer childData = region.read(blockNumber * superblock.blockSize(),
+                            superblock.blockSize());
+                    byte[] childBytes = new byte[superblock.blockSize()];
+                    childData.get(childBytes);
+                    return childBytes;
+                });
+    }
+
+    /** Reader for extent-tree child blocks (seam for cycle tests). */
+    @FunctionalInterface
+    interface ExtentBlockReader {
+        byte[] read(long blockOffset) throws IOException;
+    }
+
+    /**
+     * Depth-capped, cycle-guarded extent-tree walk (shared by the instance
+     * path and the hostile-cycle tests).
+     */
+    static List<Ext4Extent.Leaf> walkExtentTree(byte[] extentData, int depth,
+                                                Set<Long> visitedBlocks,
+                                                ExtentBlockReader reader) throws IOException {
+
+        if (depth > MAX_EXTENT_TREE_DEPTH) {
+            throw new IOException("ext4 extent tree too deep");
+        }
         Ext4Extent.Header header = Ext4Extent.parseHeader(extentData);
         if (!header.isValid()) {
             return List.of();
@@ -555,11 +581,12 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
             List<Ext4Extent.Index> indices = Ext4Extent.parseIndexExtents(extentData);
 
             for (Ext4Extent.Index index : indices) {
-                long blockOffset = index.leafBlock() * superblock.blockSize();
-                ByteBuffer childData = region.read(blockOffset, superblock.blockSize());
-                byte[] childBytes = new byte[superblock.blockSize()];
-                childData.get(childBytes);
-                allLeaves.addAll(collectAllExtents(childBytes));
+                if (!visitedBlocks.add(index.leafBlock())) {
+                    throw new IOException("ext4 extent tree cycle at block "
+                            + index.leafBlock());
+                }
+                byte[] childBytes = reader.read(index.leafBlock());
+                allLeaves.addAll(walkExtentTree(childBytes, depth + 1, visitedBlocks, reader));
             }
 
             return allLeaves;
@@ -614,6 +641,62 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
         return result;
     }
 
+    /**
+     * Opens a lazy stream over an indirect-block (legacy ext2/3) file:
+     * the block list is metadata-only; data streams in bounded chunks.
+     */
+    InputStream openIndirectStream(Ext4Inode inode) throws IOException {
+        int blockSize = superblock.blockSize();
+        List<Long> blocks = new ArrayList<>();
+        ByteBuffer blockBuf = ByteBuffer.wrap(inode.blockData());
+        blockBuf.order(ByteOrder.LITTLE_ENDIAN);
+        for (int i = 0; i < 12; i++) {
+            long blockNum = blockBuf.getInt(i * 4) & 0xFFFFFFFFL;
+            if (blockNum != 0) {
+                blocks.add(blockNum);
+            }
+        }
+        collectIndirectBlocks(blockBuf.getInt(48) & 0xFFFFFFFFL, blocks, 1);
+        collectIndirectBlocks(blockBuf.getInt(52) & 0xFFFFFFFFL, blocks, 2);
+        collectIndirectBlocks(blockBuf.getInt(56) & 0xFFFFFFFFL, blocks, 3);
+
+        List<ChunkedRegionStream.Segment> segments = new ArrayList<>();
+        long remaining = inode.size();
+        long logical = 0;
+        for (long blockNum : blocks) {
+            if (remaining <= 0) {
+                break;
+            }
+            long len = Math.min(blockSize, remaining);
+            segments.add(new ChunkedRegionStream.Segment(logical, blockNum * blockSize, len));
+            logical += len;
+            remaining -= len;
+        }
+        return new ChunkedRegionStream(region, segments, inode.size());
+    }
+
+    private void collectIndirectBlocks(long blockNum, List<Long> blocks, int level)
+            throws IOException {
+        if (blockNum == 0 || level <= 0) {
+            return;
+        }
+        int blockSize = superblock.blockSize();
+        int ptrsPerBlock = blockSize / 4;
+        ByteBuffer indirectData = region.read(blockNum * blockSize, blockSize);
+        indirectData.order(ByteOrder.LITTLE_ENDIAN);
+        for (int i = 0; i < ptrsPerBlock; i++) {
+            long ptr = indirectData.getInt(i * 4) & 0xFFFFFFFFL;
+            if (ptr == 0) {
+                continue;
+            }
+            if (level == 1) {
+                blocks.add(ptr);
+            } else {
+                collectIndirectBlocks(ptr, blocks, level - 1);
+            }
+        }
+    }
+
     private int readIndirectBlocks(long blockNum, byte[] result, int bytesRead, int level) throws IOException {
         int blockSize = superblock.blockSize();
         int ptrsPerBlock = blockSize / 4;
@@ -642,6 +725,13 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
      * Reads directory entries from a directory inode.
      */
     List<Ext4DirectoryEntry> readDirectoryEntries(Ext4Inode dirInode) throws IOException {
+        // R5.2: directory reads get the same 16 MiB cap as files - a
+        // hostile directory inode size must not materialize unboundedly.
+        if (dirInode.size() > MAX_READABLE_SIZE) {
+            throw new ResourceLimitException("ext4 directory too large to read: "
+                    + dirInode.size() + " bytes (limit: 16 MB).",
+                    "allocation_size", MAX_READABLE_SIZE, dirInode.size());
+        }
         byte[] dirData = readInodeData(dirInode);
         return Ext4DirectoryEntry.parseBlock(dirData, hasFileType);
     }
@@ -821,12 +911,19 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
                 List<Ext4Extent.Leaf> extents = fs.collectAllExtents(inode.blockData());
                 return new Ext4ExtentInputStream(fs.region, extents, inode.size(), fs.superblock.blockSize());
             }
-            // Fall back to full read for indirect block files
-            return new ByteArrayInputStream(fs.readInodeData(inode));
+            // Indirect-block files: lazy stream over the block list
+            // (bounded reads; sparse gaps yield zeros).
+            return fs.openIndirectStream(inode);
         }
 
         @Override
         public byte[] readAllBytes() throws IOException {
+            if (inode.size() > MAX_READABLE_SIZE) {
+                throw new ResourceLimitException(
+                        "File too large to read into memory: " + inode.size()
+                                + " bytes (limit: 16 MB). Use openStream() for large files.",
+                        "allocation_size", MAX_READABLE_SIZE, inode.size());
+            }
             return fs.readInodeData(inode);
         }
     }

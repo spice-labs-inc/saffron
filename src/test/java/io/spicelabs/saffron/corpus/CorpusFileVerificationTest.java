@@ -14,6 +14,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.condition.EnabledIf;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,6 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
  * <p><b>Zero tolerance:</b> Every sample file must be found and must have
  * exactly matching size and SHA256 hash.
  */
+@Execution(ExecutionMode.CONCURRENT)
 class CorpusFileVerificationTest {
 
     private static final String CORPUS_BASE = Path.of("test-corpus").toAbsolutePath().toString();
@@ -155,7 +158,10 @@ class CorpusFileVerificationTest {
                     .isNotNull();
 
                 // Read file and compute SHA256
-                byte[] content = file.readAllBytes();
+                byte[] content;
+                            try (InputStream in = file.openStream()) {
+                                content = in.readAllBytes();
+                            }
                 String actualSha256 = sha256(content);
 
                 System.out.println(sampleFile.path + ": " + actualSha256.substring(0, 16) + "..." +

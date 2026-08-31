@@ -18,6 +18,7 @@
 package io.spicelabs.saffron.container.dtb;
 
 import io.spicelabs.saffron.container.ContainerEntry;
+import io.spicelabs.saffron.io.ChunkedDisk;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -29,14 +30,17 @@ import java.util.Map;
 /**
  * A named entry inside a {@link DtbContainer}.
  *
- * <p>The entry content is stored as a defensive copy of the source bytes. Each
- * call to {@link #openStream()} returns a fresh {@link ByteArrayInputStream} over
- * the stored content.</p>
+ * <p>The entry content is either a defensive copy of the source bytes or a
+ * lazy bounded stream over a {@link ChunkedDisk}. Each call to
+ * {@link #openStream()} returns a fresh, independent stream.</p>
  */
 final class DtbEntry implements ContainerEntry {
 
     private final String name;
     private final byte[] content;
+    private final ChunkedDisk disk;
+    private final long offset;
+    private final long length;
     private final Map<String, String> metadata;
 
     DtbEntry(@NotNull String name, byte @NotNull [] content, @NotNull Map<String, String> metadata) {
@@ -45,6 +49,22 @@ final class DtbEntry implements ContainerEntry {
         }
         this.name = name;
         this.content = content.clone();
+        this.disk = null;
+        this.offset = 0;
+        this.length = this.content.length;
+        this.metadata = Collections.unmodifiableMap(metadata);
+    }
+
+    DtbEntry(@NotNull String name, @NotNull ChunkedDisk disk, long offset, long length,
+             @NotNull Map<String, String> metadata) {
+        if (!name.startsWith("/")) {
+            throw new IllegalArgumentException("Entry path must be absolute: " + name);
+        }
+        this.name = name;
+        this.content = null;
+        this.disk = disk;
+        this.offset = offset;
+        this.length = length;
         this.metadata = Collections.unmodifiableMap(metadata);
     }
 
@@ -55,11 +75,14 @@ final class DtbEntry implements ContainerEntry {
 
     @Override
     public long size() {
-        return content.length;
+        return length;
     }
 
     @Override
     public @NotNull InputStream openStream() throws IOException {
+        if (disk != null) {
+            return disk.stream(offset, length);
+        }
         return new ByteArrayInputStream(content);
     }
 

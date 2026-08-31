@@ -310,6 +310,11 @@ public record Qcow2Header(
                                 "Truncated backing file name at offset " + backingFileOffset,
                                 backingFileOffset, "backing_file", DiskFormat.QCOW2);
                     }
+                    if (n == 0) {
+                        throw new CorruptedDiskException(
+                                "No progress reading backing file name at offset " + backingFileOffset,
+                                backingFileOffset, "backing_file", DiskFormat.QCOW2);
+                    }
                     read += n;
                 }
                 backingBuf.flip();

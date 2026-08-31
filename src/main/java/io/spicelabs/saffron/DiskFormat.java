@@ -259,7 +259,9 @@ public enum DiskFormat {
             return Optional.of(VDI);
         }
         if (lower.endsWith(".raw") || lower.endsWith(".img") || lower.endsWith(".dmg")
-                || lower.endsWith(".squashfs")) {
+                || lower.endsWith(".squashfs") || lower.endsWith(".jffs2")
+                || lower.endsWith(".cramfs") || lower.endsWith(".yaffs2")
+                || lower.endsWith(".ubifs") || lower.endsWith(".ubi")) {
             return Optional.of(RAW);
         }
         if (lower.endsWith(".tar.gz") || lower.endsWith(".tgz")) {

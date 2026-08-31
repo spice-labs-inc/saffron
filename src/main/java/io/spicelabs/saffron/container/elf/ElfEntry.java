@@ -18,6 +18,7 @@
 package io.spicelabs.saffron.container.elf;
 
 import io.spicelabs.saffron.container.ContainerEntry;
+import io.spicelabs.saffron.io.ChunkedDisk;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -29,7 +30,8 @@ import java.util.Map;
 /**
  * A named slice of an ELF file exposed as a binary container entry.
  *
- * <p>The entry holds a reference to the container's source byte array and an
+ * <p>The entry holds either a reference to the container's source byte array
+ * (in-memory path) or a {@link ChunkedDisk} (bounded streaming path) and an
  * {@code (offset, length)} slice. Each call to {@link #openStream()} returns a
  * fresh, independent stream over that slice.</p>
  */
@@ -37,8 +39,9 @@ final class ElfEntry implements ContainerEntry {
 
     private final String name;
     private final byte[] source;
-    private final int offset;
-    private final int length;
+    private final ChunkedDisk disk;
+    private final long offset;
+    private final long length;
     private final Map<String, String> metadata;
 
     ElfEntry(@NotNull String name, byte @NotNull [] source, int offset, int length,
@@ -48,6 +51,20 @@ final class ElfEntry implements ContainerEntry {
         }
         this.name = name;
         this.source = source;
+        this.disk = null;
+        this.offset = offset;
+        this.length = length;
+        this.metadata = Collections.unmodifiableMap(metadata);
+    }
+
+    ElfEntry(@NotNull String name, @NotNull ChunkedDisk disk, long offset, long length,
+             @NotNull Map<String, String> metadata) {
+        if (offset < 0 || length < 0 || offset + length > disk.size()) {
+            throw new IllegalArgumentException("Invalid ELF entry slice");
+        }
+        this.name = name;
+        this.source = null;
+        this.disk = disk;
         this.offset = offset;
         this.length = length;
         this.metadata = Collections.unmodifiableMap(metadata);
@@ -65,7 +82,10 @@ final class ElfEntry implements ContainerEntry {
 
     @Override
     public @NotNull InputStream openStream() throws IOException {
-        return new ByteArrayInputStream(source, offset, length);
+        if (disk != null) {
+            return disk.stream(offset, length);
+        }
+        return new ByteArrayInputStream(source, (int) offset, (int) length);
     }
 
     @Override

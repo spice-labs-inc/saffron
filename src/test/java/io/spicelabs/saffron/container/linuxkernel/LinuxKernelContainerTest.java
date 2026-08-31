@@ -38,7 +38,7 @@ class LinuxKernelContainerTest {
      */
     @Test
     void exposesPayload() throws IOException {
-        Path fixture = Path.of(FIXTURE_DIR, "iotgoat-x86-vmlinuz");
+        Path fixture = Path.of("src/test/resources/linux-kernel/iotgoat-x86-vmlinuz");
         long declaredPayloadSize = bzImagePayloadLength(fixture);
 
         try (VirtualDisk disk = DiskReader.open(fixture);
@@ -92,7 +92,7 @@ class LinuxKernelContainerTest {
      */
     @Test
     void noInitramfsForIotGoat() throws IOException {
-        Path fixture = Path.of(FIXTURE_DIR, "iotgoat-x86-vmlinuz");
+        Path fixture = Path.of("src/test/resources/linux-kernel/iotgoat-x86-vmlinuz");
 
         try (VirtualDisk disk = DiskReader.open(fixture);
              FileSystem fs = BinaryContainerMount.mount(disk)
@@ -107,7 +107,7 @@ class LinuxKernelContainerTest {
      */
     @Test
     void noCertificatesForIotGoat() throws IOException {
-        Path fixture = Path.of(FIXTURE_DIR, "iotgoat-x86-vmlinuz");
+        Path fixture = Path.of("src/test/resources/linux-kernel/iotgoat-x86-vmlinuz");
 
         try (VirtualDisk disk = DiskReader.open(fixture);
              FileSystem fs = BinaryContainerMount.mount(disk)
@@ -129,6 +129,42 @@ class LinuxKernelContainerTest {
                      .orElseThrow(() -> new AssertionError("Expected kernel container to mount"))) {
             assertThat(fs.resolve("/kernel-payload")).isPresent();
             assertThat(fs.walk().toList()).isNotEmpty();
+        }
+    }
+}
+
+/**
+ * Phase 7 (R7.1): the memoized entry list is stable and consistent.
+ *
+ * <h2>LLM section</h2>
+ * <p>entries() must return the identical list instance on every call
+ * (the expensive gzip/DTB/certificate scans run once); findEntry uses
+ * the memoized index; a fresh container over the same bytes produces
+ * the same entry names (immutability contract).</p>
+ */
+class KernelMemoizationTest {
+    @Test
+    void entriesAreMemoizedAndStable() throws IOException {
+        Path fixture = Path.of("src/test/resources/linux-kernel/iotgoat-x86-vmlinuz");
+        if (!Files.exists(fixture)) {
+            return;
+        }
+        byte[] data = Files.readAllBytes(fixture);
+        try (LinuxKernelContainer container =
+                     new LinuxKernelContainer(data)) {
+            java.util.List<io.spicelabs.saffron.container.ContainerEntry> first = container.entries();
+            java.util.List<io.spicelabs.saffron.container.ContainerEntry> second = container.entries();
+            assertThat(second).isSameAs(first);
+            assertThat(container.findEntry("/kernel-payload")).isPresent();
+            // Fresh container over the same bytes: identical entry names.
+            try (LinuxKernelContainer fresh = new LinuxKernelContainer(data)) {
+                assertThat(fresh.entries().stream()
+                        .map(io.spicelabs.saffron.container.ContainerEntry::name).toList())
+                        .containsExactlyElementsOf(
+                                first.stream()
+                                        .map(io.spicelabs.saffron.container.ContainerEntry::name)
+                                        .toList());
+            }
         }
     }
 }

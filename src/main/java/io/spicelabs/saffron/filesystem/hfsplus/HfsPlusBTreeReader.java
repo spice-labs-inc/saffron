@@ -241,7 +241,7 @@ public class HfsPlusBTreeReader {
         return null;
     }
 
-    private int findChildPointer(HfsPlusBTreeNode node, int parentId, String name) {
+    private int findChildPointer(HfsPlusBTreeNode node, int parentId, String name) throws IOException {
         int bestChild = 0;
         for (int i = 0; i < node.numRecords(); i++) {
             byte[] record = node.getRecordData(i);
@@ -278,7 +278,7 @@ public class HfsPlusBTreeReader {
         return bestChild;
     }
 
-    private int findChildPointerForThread(HfsPlusBTreeNode node, int cnid) {
+    private int findChildPointerForThread(HfsPlusBTreeNode node, int cnid) throws IOException {
         int bestChild = 0;
         for (int i = 0; i < node.numRecords(); i++) {
             byte[] record = node.getRecordData(i);
@@ -422,7 +422,7 @@ public class HfsPlusBTreeReader {
      * Finds the child pointer in an index node for the extents overflow B-tree.
      * Key comparison order: forkType, then cnid, then startBlock (all big-endian unsigned).
      */
-    private int findOverflowChildPointer(HfsPlusBTreeNode node, int cnid, int forkType, long startBlock) {
+    private int findOverflowChildPointer(HfsPlusBTreeNode node, int cnid, int forkType, long startBlock) throws IOException {
         int bestChild = 0;
         for (int i = 0; i < node.numRecords(); i++) {
             byte[] record = node.getRecordData(i);

@@ -156,6 +156,12 @@ public record ExFatBootSector(
         if (sectorsPerClusterShift > 25 - bytesPerSectorShift) {
             throw new IOException("Invalid sectors per cluster shift: " + sectorsPerClusterShift);
         }
+        // Memory budget: a single cluster read must stay within 16 MiB.
+        long clusterSize = (1L << bytesPerSectorShift) << sectorsPerClusterShift;
+        if (clusterSize > 16 * 1024 * 1024) {
+            throw new IOException("exFAT cluster size exceeds the 16 MB read budget: "
+                    + clusterSize);
+        }
 
         return new ExFatBootSector(
                 partOffset,

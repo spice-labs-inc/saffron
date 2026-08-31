@@ -47,21 +47,21 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
 
-        <!-- Dependency versions (aligned with Baharat where applicable) -->
-        <jetbrains-annotations.version>24.1.0</jetbrains-annotations.version>
+        <!-- Dependency versions -->
+        <jetbrains-annotations.version>26.1.0</jetbrains-annotations.version>
         <packageurl-java.version>1.5.0</packageurl-java.version>
-        <xz.version>1.9</xz.version>
-        <zstd-jni.version>1.5.5-6</zstd-jni.version>
-        <commons-compress.version>1.26.0</commons-compress.version>
-        <slf4j.version>2.0.9</slf4j.version>
+        <xz.version>1.12</xz.version>
+        <zstd-jni.version>1.5.7-15</zstd-jni.version>
+        <commons-compress.version>1.28.0</commons-compress.version>
+        <slf4j.version>2.0.18</slf4j.version>
 
         <!-- Test dependency versions -->
-        <gson.version>2.10.1</gson.version>
-        <junit.version>5.10.2</junit.version>
-        <assertj.version>3.25.3</assertj.version>
-        <awaitility.version>4.2.0</awaitility.version>
-        <jazzer.version>0.22.1</jazzer.version>
-        <archunit.version>1.2.1</archunit.version>
+        <gson.version>2.14.0</gson.version>
+        <junit.version>5.14.4</junit.version>
+        <assertj.version>3.27.7</assertj.version>
+        <awaitility.version>4.3.0</awaitility.version>
+        <jazzer.version>0.30.0</jazzer.version>
+        <archunit.version>1.5.0</archunit.version>
         <jmh.version>1.37</jmh.version>
 
         <!-- Corpus download -->
@@ -70,18 +70,18 @@
         <saffron.corpus.maxSizeGb>0</saffron.corpus.maxSizeGb>
 
         <!-- Plugin versions -->
-        <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
-        <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
-        <maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
-        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-        <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
-        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+        <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
+        <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.5.6</maven-failsafe-plugin.version>
+        <maven-jar-plugin.version>3.5.1</maven-jar-plugin.version>
+        <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
+        <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
         <jacoco.coverage.minimum>0.40</jacoco.coverage.minimum>
-        <spotbugs-maven-plugin.version>4.8.3.1</spotbugs-maven-plugin.version>
-        <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
-        <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
+        <spotbugs-maven-plugin.version>4.10.3.0</spotbugs-maven-plugin.version>
+        <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
+        <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
             <!-- Whether a Maven Central deployment publishes itself once validated.
              `true` is the normal path. The publish workflow overrides this to
              `false` when the release tag is not a natural successor to the
@@ -95,7 +95,7 @@
     <dependencies>
         <!-- Runtime Dependencies -->
 
-        <!-- Null safety annotations (aligned with Baharat) -->
+        <!-- Null safety annotations -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
@@ -130,14 +130,16 @@
             <version>${commons-compress.version}</version>
         </dependency>
 
-        <!-- Compression: LZ4 raw blocks -->
+        <!-- Compression: LZ4 raw blocks (org.lz4:lz4-java relocated to
+             at.yawk.lz4:lz4-java; 1.8.1 has known CVEs) -->
         <dependency>
-            <groupId>org.lz4</groupId>
+            <groupId>at.yawk.lz4</groupId>
             <artifactId>lz4-java</artifactId>
-            <version>1.8.0</version>
+            <version>1.11.2</version>
         </dependency>
 
-        <!-- Compression: LZO -->
+        <!-- Compression: LZO (1.0.6 is the latest; unmaintained, no CVE -
+             accept-risk decision recorded in docs/dependencies.md) -->
         <dependency>
             <groupId>org.anarres.lzo</groupId>
             <artifactId>lzo-core</artifactId>
@@ -292,6 +294,35 @@
                     <forkedProcessExitTimeoutInSeconds>300</forkedProcessExitTimeoutInSeconds>
                     <argLine>@{argLine} -Xmx2g</argLine>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <configuration>
+                            <excludes>
+                                <!-- Hang-prone hardening tests run in a
+                                     dedicated single-threaded fork (see
+                                     execution hardening) -->
+                                <exclude>**/diskhardening/*Test.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>hardening</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/diskhardening/*Test.java</include>
+                            </includes>
+                            <!-- A hang in these tests must not poison the
+                                 shared fork: single fork, no reuse, serial -->
+                            <parallel>none</parallel>
+                            <forkCount>1</forkCount>
+                            <reuseForks>false</reuseForks>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Integration tests -->

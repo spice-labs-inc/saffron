@@ -43,6 +43,16 @@ import java.util.stream.Stream;
 
 public final class SquashfsFileSystemImpl implements FileSystem.SquashfsFileSystem {
 
+    /** Maximum default walk depth (hostile trees must not overflow the stack). */
+    private static final int MAX_WALK_DEPTH = 512;
+
+    /** Memory budget: no single file read > 16 MiB. */
+    private static final long MAX_READABLE_SIZE = 16 * 1024 * 1024;
+
+    /** Plausibility caps for hostile metadata (real images are far below). */
+    private static final int MAX_FRAGMENT_ENTRIES = 4 * 1024 * 1024;
+    private static final int MAX_INODE_BLOCKS = 4 * 1024 * 1024;
+
     private static final int METADATA_BLOCK_SIZE = 8192;
     private static final int MAX_SYMLINK_DEPTH = 40;
 
@@ -153,10 +163,14 @@ public final class SquashfsFileSystemImpl implements FileSystem.SquashfsFileSyst
     private static List<SquashfsFragmentEntry> readFragmentTable(DiskRegion region, SquashfsCompressor compressor,
                                                                   SquashfsSuperblock sb) throws IOException {
         int fragmentCount = sb.fragmentEntryCount();
-        List<SquashfsFragmentEntry> entries = new ArrayList<>(fragmentCount);
         if (fragmentCount == 0) {
-            return entries;
+            return List.of();
         }
+        if (fragmentCount < 0 || fragmentCount > MAX_FRAGMENT_ENTRIES) {
+            throw new IOException("Squashfs fragment entry count implausible: "
+                    + fragmentCount);
+        }
+        List<SquashfsFragmentEntry> entries = new ArrayList<>(fragmentCount);
         int blockCount = (int) SafeMath.safeCeilDiv(fragmentCount, 512);
         long tableEnd = SafeMath.safeAdd(sb.fragmentTableStart(), SafeMath.safeMultiply((long) blockCount, 8L));
         if (tableEnd > region.size()) {
@@ -253,7 +267,15 @@ public final class SquashfsFileSystemImpl implements FileSystem.SquashfsFileSyst
         int fragmentBlockIndex = (int) reader.readUInt32();
         int fragmentOffset = (int) reader.readUInt32();
         long fileSize = reader.readUInt32();
+        // The inode buffer is small (~8 KB); the block list is bounded by
+        // the buffer itself, never by the raw on-disk u64 file size.
+        if (fileSize < 0 || fileSize > MAX_READABLE_SIZE) {
+            throw new IOException("Squashfs extended inode file size implausible: " + fileSize);
+        }
         int blockCount = blockCount(fileSize, fragmentBlockIndex, blockSize);
+        if (blockCount < 0 || blockCount > MAX_INODE_BLOCKS) {
+            throw new IOException("Squashfs extended inode block count implausible: " + blockCount);
+        }
         int[] blockSizes = new int[blockCount];
         for (int i = 0; i < blockCount; i++) {
             blockSizes[i] = reader.readInt32();
@@ -272,7 +294,15 @@ public final class SquashfsFileSystemImpl implements FileSystem.SquashfsFileSyst
         int fragmentBlockIndex = (int) reader.readUInt32();
         int fragmentOffset = (int) reader.readUInt32();
         long xattrIndex = reader.readInt32() & 0xffffffffL;
+        // The inode buffer is small (~8 KB); the block list is bounded by
+        // the buffer itself, never by the raw on-disk u64 file size.
+        if (fileSize < 0 || fileSize > MAX_READABLE_SIZE) {
+            throw new IOException("Squashfs extended inode file size implausible: " + fileSize);
+        }
         int blockCount = blockCount(fileSize, fragmentBlockIndex, blockSize);
+        if (blockCount < 0 || blockCount > MAX_INODE_BLOCKS) {
+            throw new IOException("Squashfs extended inode block count implausible: " + blockCount);
+        }
         int[] blockSizes = new int[blockCount];
         for (int i = 0; i < blockCount; i++) {
             blockSizes[i] = reader.readInt32();
@@ -505,7 +535,7 @@ public final class SquashfsFileSystemImpl implements FileSystem.SquashfsFileSyst
 
     @Override
     public @NotNull Stream<FileSystemEntry> walk() throws IOException {
-        return walkDirectory(root(), Integer.MAX_VALUE, new java.util.HashSet<>());
+        return walkDirectory(root(), MAX_WALK_DEPTH, new java.util.HashSet<>());
     }
 
     @Override

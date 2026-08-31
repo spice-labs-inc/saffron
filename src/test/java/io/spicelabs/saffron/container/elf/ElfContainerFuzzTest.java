@@ -42,11 +42,9 @@ class ElfContainerFuzzTest {
         int toCopy = Math.min(MUTATION_SIZE, mutated.length);
         System.arraycopy(mutated, 0, image, 0, toCopy);
 
-        try {
-            ContainerDetector.detect(ByteBuffer.wrap(image));
-        } catch (IllegalArgumentException | ArithmeticException | UnsupportedOperationException e) {
-            // Expected for malformed input
-        }
+        // No catch: an unchecked escape from detection fails the fuzz
+        // test (the never-throw invariant).
+        ContainerDetector.detect(ByteBuffer.wrap(image));
 
         try {
             Optional<FileSystem> fs = BinaryContainerMount.mount(new FuzzVirtualDisk(image));
@@ -56,8 +54,9 @@ class ElfContainerFuzzTest {
                 } catch (IOException ignored) {
                 }
             });
-        } catch (IllegalArgumentException | ArithmeticException | UnsupportedOperationException | IOException e) {
-            // Expected for malformed input
+        } catch (IOException e) {
+            // Checked failure only: an unchecked escape fails the test
+            // (the never-throw invariant).
         }
     }
 

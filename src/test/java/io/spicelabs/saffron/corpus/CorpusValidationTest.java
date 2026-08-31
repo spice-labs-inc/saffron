@@ -6,10 +6,14 @@ package io.spicelabs.saffron.corpus;
 
 import io.spicelabs.saffron.DiskFormat;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledIf;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -22,6 +26,7 @@ import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -153,26 +158,26 @@ class CorpusValidationTest {
                 .isEmpty();
     }
 
-    @Test
-    void corpus_allImageChecksumsMatch() throws Exception {
-        for (CorpusImage image : manifest.images()) {
-            Path imagePath = CORPUS_PATH.resolve(image.path());
-
-            if (!Files.exists(imagePath)) {
-                continue; // Covered by existence test
-            }
-
-            if (image.sha256() == null || image.sha256().isBlank()) {
-                continue; // Manifest entry has no checksum
-            }
-
-            // Stream the file through MessageDigest to avoid loading entire file into memory
-            String actualSha256 = computeSha256Streaming(imagePath);
-
-            assertThat(actualSha256)
-                    .as("SHA256 for %s", image.path())
-                    .isEqualToIgnoringCase(image.sha256());
-        }
+    /**
+     * Verifies the SHA-256 of every corpus image against the manifest.
+     *
+     * <p>Each image is its own DynamicTest so checksums are computed
+     * concurrently (see {@code junit-platform.properties} and ADR-0002).
+     * Files are streamed through {@link MessageDigest} to avoid loading them
+     * into memory.
+     */
+    @Execution(ExecutionMode.CONCURRENT)
+    @TestFactory
+    Stream<DynamicTest> corpus_allImageChecksumsMatch() {
+        return manifest.images().stream()
+                .filter(image -> image.sha256() != null && !image.sha256().isBlank())
+                .filter(image -> Files.exists(CORPUS_PATH.resolve(image.path())))
+                .map(image -> DynamicTest.dynamicTest(image.path(), () -> {
+                    String actualSha256 = computeSha256Streaming(CORPUS_PATH.resolve(image.path()));
+                    assertThat(actualSha256)
+                            .as("SHA256 for %s", image.path())
+                            .isEqualToIgnoringCase(image.sha256());
+                }));
     }
 
     /**

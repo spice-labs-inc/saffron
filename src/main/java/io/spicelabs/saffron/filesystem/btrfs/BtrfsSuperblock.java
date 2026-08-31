@@ -113,6 +113,20 @@ public record BtrfsSuperblock(
         int stripeSize = buf.getInt();
         int sysChunkArraySize = buf.getInt();
 
+        // Validate before any derived allocation (hostile metadata must
+        // fail checked, never with OOM/NegativeArraySizeException).
+        if (nodeSize < 4096 || nodeSize > 1024 * 1024
+                || (nodeSize & (nodeSize - 1)) != 0) {
+            throw new IOException("Invalid btrfs node size: " + nodeSize);
+        }
+        if (sectorSize < 512 || sectorSize > 65536
+                || (sectorSize & (sectorSize - 1)) != 0) {
+            throw new IOException("Invalid btrfs sector size: " + sectorSize);
+        }
+        if (sysChunkArraySize < 0 || sysChunkArraySize > 65536) {
+            throw new IOException("Invalid btrfs sys chunk array size: " + sysChunkArraySize);
+        }
+
         long chunkRootGeneration = buf.getLong();
         long compatFlags = buf.getLong();
         long compatRoFlags = buf.getLong();

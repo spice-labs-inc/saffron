@@ -22,6 +22,7 @@ import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
+import io.spicelabs.saffron.filesystem.ChunkedRegionStream;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -48,6 +49,12 @@ import java.util.stream.Stream;
  * </ul>
  */
 public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
+
+    /** Maximum default walk depth (hostile trees must not overflow the stack). */
+    private static final int MAX_WALK_DEPTH = 512;
+
+    /** Maximum extent-btree recursion depth (real XFS btrees are shallow). */
+    private static final int MAX_BTREE_DEPTH = 64;
 
     private final DiskRegion region;
     private final XfsSuperblock superblock;
@@ -222,7 +229,7 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
     @Override
     public @NotNull Stream<FileSystemEntry> walk() throws IOException {
         Set<Long> visited = new HashSet<>();
-        return walkDirectory(root(), Integer.MAX_VALUE, visited);
+        return walkDirectory(root(), MAX_WALK_DEPTH, visited);
     }
 
     @Override
@@ -384,7 +391,7 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
     }
 
     /** Maximum file size that can be read into memory (256 MB) */
-    private static final long MAX_READABLE_SIZE = 256 * 1024 * 1024;
+    private static final long MAX_READABLE_SIZE = 16 * 1024 * 1024;
 
     /**
      * Reads all data from an inode.
@@ -394,9 +401,6 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
             return new byte[0];
         }
 
-        if (inode.size() > MAX_READABLE_SIZE) {
-            throw new ResourceLimitException("File too large to read into memory: " + inode.size() + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, inode.size());
-        }
 
         // For symlinks with inline data
         if (inode.isSymbolicLink() && inode.hasInlineData()) {
@@ -417,6 +421,48 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
         }
 
         return new byte[0];
+    }
+
+    /**
+     * Opens a lazy stream over the inode's data: inline data is served
+     * from memory; extent/btree files stream in bounded chunks (see
+     * {@link ChunkedRegionStream}). Sparse gaps yield zeros without
+     * touching the region.
+     */
+    InputStream openInodeStream(XfsInode inode) throws IOException {
+        if (inode.size() == 0) {
+            return new ByteArrayInputStream(new byte[0]);
+        }
+        if (inode.hasInlineData() || (inode.isSymbolicLink() && inode.hasInlineData())) {
+            byte[] data = new byte[(int) inode.size()];
+            System.arraycopy(inode.dataFork(), 0, data, 0,
+                    (int) Math.min(inode.size(), inode.dataFork().length));
+            return new ByteArrayInputStream(data);
+        }
+
+        List<XfsExtent> extents;
+        if (inode.hasExtents()) {
+            extents = XfsExtent.parseExtents(inode.dataFork(), inode.extentCount());
+        } else if (inode.hasBtree()) {
+            extents = collectBtreeExtents(inode);
+        } else {
+            return new ByteArrayInputStream(new byte[0]);
+        }
+
+        List<ChunkedRegionStream.Segment> segments = new ArrayList<>();
+        for (XfsExtent extent : extents) {
+            if (extent.blockCount() == 0) {
+                continue;
+            }
+            long logical = (long) extent.logicalOffset() * blockSize;
+            if (logical >= inode.size()) {
+                break;
+            }
+            long len = Math.min((long) extent.blockCount() * blockSize, inode.size() - logical);
+            segments.add(new ChunkedRegionStream.Segment(logical,
+                    fsBlockToByteOffset(extent.physicalBlock()), len));
+        }
+        return new ChunkedRegionStream(region, segments, inode.size());
     }
 
     /**
@@ -484,12 +530,39 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
     }
 
     private void collectBtreeExtentsRecursive(List<Long> blockPtrs, int level, List<XfsExtent> extents) throws IOException {
+        walkExtentBtree(blockPtrs, level, extents, 0, new java.util.HashSet<>(),
+                blockNum -> {
+                    ByteBuffer block = readBlock(blockNum);
+                    byte[] blockBytes = new byte[blockSize];
+                    block.get(blockBytes);
+                    return blockBytes;
+                }, blockSize, isV5);
+    }
+
+    /** Reader for extent-btree blocks (seam for cycle tests). */
+    @FunctionalInterface
+    interface BtreeBlockReader {
+        byte[] read(long blockNumber) throws IOException;
+    }
+
+    /**
+     * Depth-capped, cycle-guarded extent btree walk (shared by the
+     * instance path and the hostile-cycle tests).
+     */
+    static void walkExtentBtree(List<Long> blockPtrs, int level, List<XfsExtent> extents,
+                                int depth, Set<Long> visited, BtreeBlockReader reader,
+                                int blockSize, boolean isV5) throws IOException {
+
+        if (depth > MAX_BTREE_DEPTH) {
+            throw new IOException("xfs extent btree too deep");
+        }
         for (long blockNum : blockPtrs) {
             if (blockNum == 0 || blockNum == -1L) continue;
+            if (!visited.add(blockNum)) {
+                throw new IOException("xfs extent btree cycle at block " + blockNum);
+            }
 
-            ByteBuffer block = readBlock(blockNum);
-            byte[] blockBytes = new byte[blockSize];
-            block.get(blockBytes);
+            byte[] blockBytes = reader.read(blockNum);
 
             XfsExtent.BtreeBlockHeader header = XfsExtent.BtreeBlockHeader.parse(
                     ByteBuffer.wrap(blockBytes), isV5);
@@ -526,7 +599,8 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
                     childPtrs.add(ptrBuf.getLong(ptrOffset + i * 8));
                 }
 
-                collectBtreeExtentsRecursive(childPtrs, header.level(), extents);
+                walkExtentBtree(childPtrs, header.level(), extents, depth + 1, visited,
+                        reader, blockSize, isV5);
             }
         }
     }
@@ -819,12 +893,16 @@ public class XfsFileSystemImpl implements FileSystem.XfsFileSystem {
 
         @Override
         public @NotNull InputStream openStream() throws IOException {
-            byte[] data = fs.readInodeData(inode);
-            return new ByteArrayInputStream(data);
+            return fs.openInodeStream(inode);
         }
 
         @Override
         public byte[] readAllBytes() throws IOException {
+            if (inode.size() > MAX_READABLE_SIZE) {
+                throw new ResourceLimitException("File too large to read into memory: " + inode.size()
+                        + " bytes (limit: 16 MB). Use openStream() for large files.",
+                        "allocation_size", MAX_READABLE_SIZE, inode.size());
+            }
             return fs.readInodeData(inode);
         }
     }

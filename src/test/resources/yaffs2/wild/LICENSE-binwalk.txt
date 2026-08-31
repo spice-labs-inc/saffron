@@ -1,0 +1,4 @@
+binwalk-yaffs2.bin:
+  Source: https://github.com/ReFirmLabs/binwalk/blob/master/tests/inputs/yaffs2.bin
+  License: MIT (ReFirmLabs/binwalk project license)
+  Downloaded: 2026-08-25

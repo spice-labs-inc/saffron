@@ -61,7 +61,30 @@ public interface DiskRegion {
         return new DiskRegion() {
             @Override
             public @NotNull ByteBuffer read(long offset, int length) throws IOException {
-                return disk.read(partitionOffset + offset, length);
+                long absoluteOffset;
+                long end;
+                try {
+                    absoluteOffset = Math.addExact(partitionOffset, offset);
+                    end = Math.addExact(absoluteOffset, length);
+                } catch (ArithmeticException e) {
+                    throw new IOException("Region read bounds overflow: partitionOffset="
+                            + partitionOffset + ", offset=" + offset + ", length=" + length, e);
+                }
+                if (offset < 0 || length < 0 || end > disk.virtualSize()) {
+                    throw new IOException("Region read out of bounds: offset=" + offset
+                            + ", length=" + length + ", diskSize=" + disk.virtualSize());
+                }
+                try {
+                    return disk.read(absoluteOffset, length);
+                } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
+                    throw new IOException("Region read out of disk bounds: offset=" + offset
+                            + ", length=" + length, e);
+                } catch (io.spicelabs.saffron.exception.SaffronException.InvalidDiskException e) {
+                    // CorruptedDiskException and friends are unchecked in
+                    // this library; the driver boundary must stay checked.
+                    throw new IOException("Region read failed (corrupt disk): offset="
+                            + offset + ", length=" + length, e);
+                }
             }
 
             @Override

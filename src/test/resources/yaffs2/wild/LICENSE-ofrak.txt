@@ -1,0 +1,4 @@
+ofrak-yaffs2-*.img:
+  Source: https://github.com/redballoonsecurity/ofrak/tree/master/ofrak_core/tests/components/assets
+  License: Apache-2.0 (redballoonsecurity/ofrak project license)
+  Downloaded: 2026-08-25

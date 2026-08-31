@@ -145,7 +145,10 @@ class CorpusFileCountVerificationTest {
                     }
 
                     if (entry.get() instanceof FileSystemEntry.RegularFile file) {
-                        byte[] content = file.readAllBytes();
+                        byte[] content;
+                            try (InputStream in = file.openStream()) {
+                                content = in.readAllBytes();
+                            }
                         totalBytesRead += content.length;
                         String actualSha256 = sha256(content);
 
@@ -259,7 +262,10 @@ class CorpusFileCountVerificationTest {
                     CorpusTestData.SampleFile sample = alpineSamples.get(i);
                     var entry = fs.resolve(sample.path);
                     if (entry.isPresent() && entry.get() instanceof FileSystemEntry.RegularFile file) {
-                        byte[] content = file.readAllBytes();
+                        byte[] content;
+                            try (InputStream in = file.openStream()) {
+                                content = in.readAllBytes();
+                            }
                         totalBytesRead += content.length;
                         String actualSha256 = sha256(content);
                         assertThat(actualSha256)

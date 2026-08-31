@@ -154,6 +154,9 @@ public record XfsSuperblock(
 
         // sb_dirblklog at offset 192: log2(filesystem blocks per directory block)
         int dirBlockLog = (sb.capacity() > 192) ? (sb.get(192) & 0xFF) : 0;
+        if (dirBlockLog > 7) {
+            throw new IOException("Invalid XFS dir block log: " + dirBlockLog);
+        }
 
         return new XfsSuperblock(
                 blockSize,
@@ -191,6 +194,7 @@ public record XfsSuperblock(
         }
 
         int blockSize = sb.getInt(4);
+        validateBlockSize(blockSize);
         long totalBlocks = sb.getLong(8);
         long realtimeBlocks = sb.getLong(16);
 
@@ -221,6 +225,9 @@ public record XfsSuperblock(
 
         // sb_dirblklog at offset 192: log2(filesystem blocks per directory block)
         int dirBlockLog = (sb.capacity() > 192) ? (sb.get(192) & 0xFF) : 0;
+        if (dirBlockLog > 7) {
+            throw new IOException("Invalid XFS dir block log: " + dirBlockLog);
+        }
 
         return new XfsSuperblock(
                 blockSize,
@@ -293,6 +300,13 @@ public record XfsSuperblock(
                 bytes[8] & 0xFF, bytes[9] & 0xFF,
                 bytes[10] & 0xFF, bytes[11] & 0xFF, bytes[12] & 0xFF, bytes[13] & 0xFF,
                 bytes[14] & 0xFF, bytes[15] & 0xFF);
+    }
+
+    private static void validateBlockSize(int blockSize) throws IOException {
+        if (blockSize < 512 || blockSize > 65536
+                || (blockSize & (blockSize - 1)) != 0) {
+            throw new IOException("Invalid XFS block size: " + blockSize);
+        }
     }
 
     private static String parseNullTerminated(byte[] bytes) {

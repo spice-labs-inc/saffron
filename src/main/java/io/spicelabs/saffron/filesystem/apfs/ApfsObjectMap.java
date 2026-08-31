@@ -31,7 +31,19 @@ public class ApfsObjectMap {
 
     private final ApfsBTreeReader btreeReader;
     private final long rootBlock;
-    private final Map<Long, Long> cache = new HashMap<>();
+    private final io.spicelabs.saffron.io.LruCache<Long, Long> cache =
+            new io.spicelabs.saffron.io.LruCache<>(MAX_CACHE_ENTRIES);
+
+    /** Test/observation seam for the bounded cache (package scope). */
+    int cacheSize() {
+        return cache.size();
+    }
+
+    /** Object-map resolution cache: bounded LRU (hostile walks). */
+    private static final int MAX_CACHE_ENTRIES = 4096;
+
+    /** Maximum omap descent depth (real omaps are shallow). */
+    private static final int MAX_OMAP_DEPTH = 64;
 
     private ApfsObjectMap(ApfsBTreeReader btreeReader, long rootBlock) {
         this.btreeReader = btreeReader;
@@ -85,10 +97,19 @@ public class ApfsObjectMap {
      */
     private long searchOmap(long oid, long maxXid) throws IOException {
         ApfsBTreeReader.BTreeNode node = btreeReader.readNode(rootBlock);
-        return searchOmapNode(node, oid, maxXid);
+        return searchOmapNode(node, oid, maxXid, 0, new java.util.HashSet<>());
     }
 
-    private long searchOmapNode(ApfsBTreeReader.BTreeNode node, long oid, long maxXid) throws IOException {
+    /**
+     * Depth-capped, cycle-guarded omap descent: a hostile omap index that
+     * references an ancestor must fail checked, never
+     * {@link StackOverflowError}.
+     */
+    private long searchOmapNode(ApfsBTreeReader.BTreeNode node, long oid, long maxXid,
+                                int depth, java.util.Set<Long> visited) throws IOException {
+        if (depth > MAX_OMAP_DEPTH) {
+            throw new IOException("apfs object map too deep");
+        }
         if (node.isLeaf()) {
             // Search for the entry with matching OID and highest XID <= maxXid
             long bestPaddr = -1;
@@ -127,8 +148,11 @@ public class ApfsObjectMap {
                 if (entryOid <= oid) {
                     // Descend into this child
                     long childBlock = readOidFromValue(entry.val());
+                    if (!visited.add(childBlock)) {
+                        throw new IOException("apfs object map cycle at block " + childBlock);
+                    }
                     ApfsBTreeReader.BTreeNode child = btreeReader.readNode(childBlock);
-                    long result = searchOmapNode(child, oid, maxXid);
+                    long result = searchOmapNode(child, oid, maxXid, depth + 1, visited);
                     if (result >= 0) return result;
                     break;
                 }

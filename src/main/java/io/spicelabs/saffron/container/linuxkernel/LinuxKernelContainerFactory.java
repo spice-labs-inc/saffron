@@ -19,6 +19,7 @@ package io.spicelabs.saffron.container.linuxkernel;
 
 import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.container.BinaryContainer;
+import io.spicelabs.saffron.io.ChunkedDisk;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -157,10 +158,7 @@ public final class LinuxKernelContainerFactory {
             return Optional.empty();
         }
 
-        byte[] full = new byte[(int) size];
-        ByteBuffer fullBuffer = disk.read(0, (int) size);
-        fullBuffer.get(full);
-
-        return Optional.of(new LinuxKernelContainer(full));
+        // Bounded backing: the kernel is never read into memory as a whole.
+        return Optional.of(new LinuxKernelContainer(new ChunkedDisk(disk)));
     }
 }

@@ -103,11 +103,32 @@ public record NtfsBootSector(
         long mftCluster = boot.getLong(48);
         long mftMirrCluster = boot.getLong(56);
 
+        // Validate BPB before any derived arithmetic (clusterSize() is
+        // used for division and multiplication throughout the driver).
+        if (bytesPerSector < 512 || bytesPerSector > 4096
+                || (bytesPerSector & (bytesPerSector - 1)) != 0) {
+            throw new IOException("Invalid NTFS bytes per sector: " + bytesPerSector);
+        }
+        if (sectorsPerCluster < 1 || sectorsPerCluster > 128
+                || (sectorsPerCluster & (sectorsPerCluster - 1)) != 0) {
+            throw new IOException("Invalid NTFS sectors per cluster: " + sectorsPerCluster);
+        }
+
         // Clusters per MFT record (signed byte - can be negative for byte size)
         int clustersPerMftRecord = boot.get(64);
 
         // Clusters per index record (signed byte)
         int clustersPerIndexRecord = boot.get(68);
+
+        // Validate the derived MFT record size before it is used for
+        // allocations (2^|n| for negative n can overflow int).
+        int mftRecordSize = clustersPerMftRecord > 0
+                ? clustersPerMftRecord * (bytesPerSector * sectorsPerCluster)
+                : 1 << (-clustersPerMftRecord);
+        if (mftRecordSize < 256 || mftRecordSize > 1024 * 1024) {
+            throw new IOException("Invalid NTFS MFT record size: " + mftRecordSize
+                    + " (clustersPerMftRecord=" + clustersPerMftRecord + ")");
+        }
 
         // Volume serial number
         long serialNumber = boot.getLong(72);

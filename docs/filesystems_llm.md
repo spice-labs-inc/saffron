@@ -10,7 +10,7 @@ supported formats through a single `FileSystem` interface.
 | Format | Detection | Notes | Key test |
 |--------|-----------|-------|----------|
 | squashfs | `hsqs` magic at offset 0 | Phase 1. Supports xz, gzip, lzo, lz4, zstd, uncompressed. | `SquashfsDetectionTest.detectsMagic` |
-| ext2/3/4 | `0xEF53` at superblock offset 1024 | Standard Linux filesystem. | existing corpus tests |
+| ext2/3/4 | `0xEF53` at superblock offset 1024 | Standard Linux filesystem; dir reads capped at 16 MiB. | `Ext4DirectoryCapTest` (synthetic) |
 | NTFS | `"NTFS    "` OEM ID | Windows filesystem. | existing corpus tests |
 | FAT32 / exFAT | FAT boot sector | Legacy/UEFI filesystems. | existing corpus tests |
 | XFS | `"XFSB"` | Linux journaling filesystem. | existing corpus tests |
@@ -180,3 +180,63 @@ supported formats through a single `FileSystem` interface.
 
 Binary containers (WIM, DMG) are planned for later phases. Linux kernel, FIT,
 ELF, DTB, Raspberry Pi firmware, and Android boot are complete.
+
+## Allocation caps (phase 3)
+
+- Memory budget (user directive): no single internal read > 16 MiB;
+  readAllBytes() refuses files > 16 MiB with ResourceLimitException in
+  EVERY driver (256 MB caps removed). Corpus verification tests now
+  stream via openStream().
+- Validate-before-allocate per driver: btrfs nodeSize/sectorSize/item
+  counts/extent caps; APFS blockSize at mount; XFS blockSize +
+  dirBlockLog; HFS+ blockSize + B-tree node records; squashfs fragment/
+  inode-block caps; NTFS BPB + mftRecordSize + attr-list/index caps +
+  4096 entry cap; UBI lnum bound; UBIFS inline cap; FAT/exFAT BPB +
+  geometry + dir-chain loop cap + exFAT cluster cap.
+- Tests: FilesystemAllocationCapsTest (8 methods, superblock-level
+  hostile fixtures + boundary acceptance); corpus suites as the
+  valid-image oracle.
+
+## Recursion safety (phase 4)
+
+- walk() default depth 512 (was Integer.MAX_VALUE) in all 13 drivers.
+- Tree recursions capped at 64 with visited-sets: ext4 extents, xfs
+  extent btree, APFS searchNode, btrfs search/findAll/scanForType.
+  Failures are checked IOException ("cycle" / "too deep").
+- FAT/exFAT chain walks: visited-set cycle detection + exFAT UNSIGNED
+  comparison fix (latent bug: signed EOC comparison stopped chains
+  after one cluster).
+- YAFFS2 hardlink resolution: visited-set, mutual recursion → IOException.
+- Tests: Ext4ExtentCycleTest, XfsExtentBtreeCycleTest,
+  FatClusterChainCycleTest, ExFatClusterChainCycleTest,
+  Yaffs2HardlinkCycleTest (10 methods; red spot-check recorded by
+  temporarily disabling the FAT cycle check).
+
+## Streaming openStream (phase 5)
+
+- ChunkedRegionStream: 256 KiB windows over (logicalStart, offset,
+  length) segments; sparse gaps = zeros with NO region reads; 1M
+  segment cap; atEnd() for composition.
+- All 8 materializing drivers converted to lazy streams; compressed
+  formats materialize per-unit (≤16 MiB).
+- btrfs: BtrfsFileInputStream walks extents lazily; regular extents
+  stream via BtrfsLogicalStream through chunkTree.readLogical (LOGICAL
+  address mapping — the first version bypassed the chunk tree and the
+  corpus SHA-256 oracle caught it).
+- ext4 extent stream per-read capped at 1 MiB; indirect files use a
+  block-list stream.
+- Tests: ChunkedRegionStreamTest (6), ntfs/exfat synthetic equivalence,
+  corpus SHA-256 suites as the real-image oracle.
+
+## Lazy/evicting mount structures (phase 6)
+
+- LruCache<K,V> (io/LruCache.java): synchronized LRU + optional byte
+  budget (Weigher).
+- NTFS mftCache: 4096 entries + 16 MiB budget + 4 MiB per-record skip.
+- APFS ApfsObjectMap.cache: 4096-entry LRU.
+- btrfs: chunk scan capped at 65536 items, loud at mount (ADR-0003).
+- squashfs: SquashfsMetadataTable lazy (header-only build, 32-block LRU,
+  final-block eager length discovery, cross-block chaining); golden
+  eager copy in src/test (SquashfsMetadataTableEager).
+- SecurityPolicy knobs deferred (mounts don't take policy).
+- Tests: LruCacheTest (5), SquashfsMetadataTableLazyTest (4).

@@ -18,6 +18,8 @@
 package io.spicelabs.saffron.container.elf;
 
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.io.ChunkedDisk;
+import io.spicelabs.saffron.raw.RawDiskImpl;
 import io.spicelabs.saffron.container.BinaryContainer;
 import io.spicelabs.saffron.container.ContainerEntry;
 import io.spicelabs.saffron.container.ContainerFormat;
@@ -56,6 +58,7 @@ public final class ElfContainer implements BinaryContainer {
 
     private final long sourceSize;
     private final byte[] source;
+    private final ChunkedDisk disk;
     private final ElfHeader header;
     private final List<ContainerEntry> entries;
     private final Map<String, ContainerEntry> entryByName;
@@ -64,6 +67,18 @@ public final class ElfContainer implements BinaryContainer {
                          @NotNull List<ContainerEntry> entries) {
         this.sourceSize = sourceSize;
         this.source = source;
+        this.disk = null;
+        this.header = header;
+        this.entries = Collections.unmodifiableList(new ArrayList<>(entries));
+        this.entryByName = this.entries.stream()
+                .collect(Collectors.toMap(ContainerEntry::name, e -> e, (a, b) -> a, LinkedHashMap::new));
+    }
+
+    private ElfContainer(long sourceSize, @NotNull ChunkedDisk disk, @NotNull ElfHeader header,
+                         @NotNull List<ContainerEntry> entries) {
+        this.sourceSize = sourceSize;
+        this.source = null;
+        this.disk = disk;
         this.header = header;
         this.entries = Collections.unmodifiableList(new ArrayList<>(entries));
         this.entryByName = this.entries.stream()
@@ -72,6 +87,11 @@ public final class ElfContainer implements BinaryContainer {
 
     /**
      * Attempts to open an ELF container from a file path.
+     *
+     * <p>Reads are bounded (see {@link ChunkedDisk}): the file is never
+     * loaded into memory as a whole; entries stream from the file on demand.
+     * The container owns the file handle and closes it on
+     * {@link #close()}.</p>
      *
      * @param path the path to examine
      * @return the container, or empty if the file is not an ELF
@@ -82,12 +102,28 @@ public final class ElfContainer implements BinaryContainer {
         if (size < 4 || size > Integer.MAX_VALUE) {
             return Optional.empty();
         }
-        byte[] data = Files.readAllBytes(path);
-        return open(ByteBuffer.wrap(data), size);
+        ChunkedDisk chunked = new ChunkedDisk(RawDiskImpl.open(path), true);
+        try {
+            Optional<ElfHeader> headerOpt = ElfHeader.parse(chunked, size);
+            if (headerOpt.isEmpty()) {
+                chunked.close();
+                return Optional.empty();
+            }
+            ElfHeader header = headerOpt.get();
+            List<ContainerEntry> entries = buildEntries(header, chunked);
+            return Optional.of(new ElfContainer(size, chunked, header, entries));
+        } catch (RuntimeException | Error e) {
+            // Defensive: malformed input must not escape as unchecked.
+            chunked.close();
+            return Optional.empty();
+        }
     }
 
     /**
      * Attempts to open an ELF container from a virtual disk.
+     *
+     * <p>Reads are bounded (see {@link ChunkedDisk}): the artifact is never
+     * loaded into memory as a whole; entries stream from the disk on demand.
      *
      * @param disk the virtual disk to examine
      * @return the container, or empty if the disk is not an ELF
@@ -98,8 +134,20 @@ public final class ElfContainer implements BinaryContainer {
         if (size < 4 || size > Integer.MAX_VALUE) {
             return Optional.empty();
         }
-        ByteBuffer data = disk.read(0, (int) size);
-        return open(data, size);
+        ChunkedDisk chunked = new ChunkedDisk(disk);
+        try {
+            Optional<ElfHeader> headerOpt = ElfHeader.parse(chunked, size);
+            if (headerOpt.isEmpty()) {
+                return Optional.empty();
+            }
+            ElfHeader header = headerOpt.get();
+            List<ContainerEntry> entries = buildEntries(header, chunked);
+            return Optional.of(new ElfContainer(size, chunked, header, entries));
+        } catch (RuntimeException | Error e) {
+            // Defensive: malformed input must not escape as unchecked
+            // (parity with open(Path)).
+            return Optional.empty();
+        }
     }
 
     /**
@@ -133,7 +181,7 @@ public final class ElfContainer implements BinaryContainer {
             byte[] sourceBytes = toByteArray(source);
             List<ContainerEntry> entries = buildEntries(header, sourceBytes);
             return Optional.of(new ElfContainer(sourceSize, sourceBytes, header, entries));
-        } catch (RuntimeException | Error e) {
+        } catch (IOException | RuntimeException | Error e) {
             // Defensive: malformed input must not escape as unchecked.
             return Optional.empty();
         }
@@ -151,15 +199,120 @@ public final class ElfContainer implements BinaryContainer {
         return bytes;
     }
 
-    private static @NotNull List<ContainerEntry> buildEntries(@NotNull ElfHeader header, byte @NotNull [] source) {
+    private static @NotNull List<ContainerEntry> buildEntries(@NotNull ElfHeader header, byte @NotNull [] source)
+            throws IOException {
         List<ContainerEntry> entries = new ArrayList<>();
         buildSectionEntries(header, source, entries);
         buildSegmentEntries(header, source, entries);
         return entries;
     }
 
+    private static @NotNull List<ContainerEntry> buildEntries(@NotNull ElfHeader header,
+                                                              @NotNull ChunkedDisk disk)
+            throws IOException {
+        List<ContainerEntry> entries = new ArrayList<>();
+        buildSectionEntries(header, disk, entries);
+        buildSegmentEntries(header, disk, entries);
+        return entries;
+    }
+
+    private static void buildSectionEntries(@NotNull ElfHeader header, @NotNull ChunkedDisk disk,
+                                            @NotNull List<ContainerEntry> entries)
+            throws IOException {
+        int shnum = header.eShnum();
+        if (shnum <= 0) {
+            return;
+        }
+        int shstrndx = header.eShstrndx();
+        long strtabOffset = header.shdrOffset(shstrndx);
+        long strtabSize = header.shdrSize(shstrndx);
+        long strtabType = header.shdrType(shstrndx);
+        if (strtabType != SHT_STRTAB) {
+            throw new IllegalArgumentException("Section string table is not SHT_STRTAB");
+        }
+        if (!withinBounds(strtabOffset, strtabSize, header.sourceSize())) {
+            throw new IllegalArgumentException("Section string table out of bounds");
+        }
+
+        Set<String> usedNames = new HashSet<>();
+        for (int i = 0; i < shnum; i++) {
+            long type = header.shdrType(i);
+            if (type == SHT_NULL) {
+                continue;
+            }
+
+            long nameOffset = header.shdrName(i);
+            long nameAbs = Math.addExact(strtabOffset, nameOffset);
+            if (nameAbs < strtabOffset || nameAbs >= strtabOffset + strtabSize) {
+                throw new IllegalArgumentException("Section name offset out of string table");
+            }
+            String name = readString(disk, nameAbs, strtabOffset + strtabSize);
+            if (!isValidSectionName(name)) {
+                continue;
+            }
+
+            long offset = type == SHT_NOBITS ? 0 : header.shdrOffset(i);
+            long size = type == SHT_NOBITS ? 0 : header.shdrSize(i);
+            if (type != SHT_NOBITS && !withinBounds(offset, size, header.sourceSize())) {
+                throw new IllegalArgumentException("Section data out of bounds");
+            }
+
+            Map<String, String> meta = new LinkedHashMap<>();
+            meta.put("type", sectionTypeName((int) type));
+            meta.put("flags", "0x" + Long.toHexString(header.shdrFlags(i)));
+            meta.put("flags_human", sectionFlagsHuman(header.shdrFlags(i)));
+            meta.put("addr", "0x" + Long.toHexString(header.shdrAddr(i)));
+            meta.put("addralign", Long.toUnsignedString(header.shdrAddralign(i)));
+            meta.put("entsize", Long.toUnsignedString(header.shdrEntsize(i)));
+
+            String path = uniqueName("/sections/" + name, usedNames);
+            entries.add(new ElfEntry(path, disk, offset, size, meta));
+        }
+    }
+
+    private static void buildSegmentEntries(@NotNull ElfHeader header, @NotNull ChunkedDisk disk,
+                                            @NotNull List<ContainerEntry> entries)
+            throws IOException {
+        int phnum = header.ePhnum();
+        for (int i = 0; i < phnum; i++) {
+            long offset = header.phdrOffset(i);
+            long filesz = header.phdrFileSize(i);
+            if (!withinBounds(offset, filesz, header.sourceSize())) {
+                throw new IllegalArgumentException("Segment data out of bounds");
+            }
+
+            Map<String, String> meta = new LinkedHashMap<>();
+            meta.put("type", segmentTypeName(header.phdrType(i)));
+            meta.put("flags", "0x" + Long.toHexString(header.phdrFlags(i)));
+            meta.put("flags_human", segmentFlagsHuman(header.phdrFlags(i)));
+            meta.put("vaddr", "0x" + Long.toHexString(header.phdrVaddr(i)));
+            meta.put("paddr", "0x" + Long.toHexString(header.phdrPaddr(i)));
+            meta.put("align", Long.toUnsignedString(header.phdrAlign(i)));
+
+            entries.add(new ElfEntry("/segments/" + i, disk, offset, filesz, meta));
+        }
+    }
+
+    private static @NotNull String readString(@NotNull ChunkedDisk disk, long start, long limit)
+            throws IOException {
+        if (start < 0 || start >= limit) {
+            throw new IllegalArgumentException("Section name out of bounds");
+        }
+        StringBuilder sb = new StringBuilder();
+        long pos = start;
+        while (pos < limit) {
+            int b = disk.get(pos++);
+            if (b == 0) {
+                return sb.toString();
+            }
+            sb.append((char) b);
+        }
+        throw new IllegalArgumentException("Section name missing null terminator");
+    }
+
     private static void buildSectionEntries(@NotNull ElfHeader header, byte @NotNull [] source,
-                                            @NotNull List<ContainerEntry> entries) {
+                                            @NotNull List<ContainerEntry> entries)
+            throws IOException {
         int shnum = header.eShnum();
         if (shnum <= 0) {
             return;
@@ -212,7 +365,8 @@ public final class ElfContainer implements BinaryContainer {
     }
 
     private static void buildSegmentEntries(@NotNull ElfHeader header, byte @NotNull [] source,
-                                            @NotNull List<ContainerEntry> entries) {
+                                            @NotNull List<ContainerEntry> entries)
+            throws IOException {
         int phnum = header.ePhnum();
         for (int i = 0; i < phnum; i++) {
             long offset = header.phdrOffset(i);
@@ -417,5 +571,17 @@ public final class ElfContainer implements BinaryContainer {
     @Override
     public long size() {
         return sourceSize;
+    }
+
+    /**
+     * Releases the backing source when this container opened it itself
+     * (path-based opens). Containers created over a caller-provided
+     * {@link VirtualDisk} leave the caller's disk untouched.
+     */
+    @Override
+    public void close() throws IOException {
+        if (disk != null) {
+            disk.close();
+        }
     }
 }

@@ -102,7 +102,10 @@ class KernelDecompressorTest {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
              BZip2CompressorOutputStream bz = new BZip2CompressorOutputStream(out)) {
             bz.write(data);
-            bz.finish();
+            // close() finishes the stream; an explicit finish() before
+            // close() double-finishes (commons-compress 1.28 nulls its
+            // state after finish and close() re-writes).
+            bz.close();
             return out.toByteArray();
         }
     }
@@ -111,7 +114,7 @@ class KernelDecompressorTest {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
              LZMACompressorOutputStream lz = new LZMACompressorOutputStream(out)) {
             lz.write(data);
-            lz.finish();
+            lz.close(); // close() finishes; explicit finish()+close() double-finishes
             return out.toByteArray();
         }
     }
@@ -120,7 +123,7 @@ class KernelDecompressorTest {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
              XZCompressorOutputStream xz = new XZCompressorOutputStream(out)) {
             xz.write(data);
-            xz.finish();
+            xz.close(); // close() finishes; explicit finish()+close() double-finishes
             return out.toByteArray();
         }
     }

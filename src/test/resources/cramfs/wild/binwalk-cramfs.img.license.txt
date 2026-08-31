@@ -1,0 +1,4 @@
+Source: https://github.com/ReFirmLabs/binwalk/blob/master/tests/inputs/cramfs.bin
+License: MIT (ReFirmLabs/binwalk project license)
+Downloaded: 2026-08-25
+Note: cramfs test fixture from the binwalk test suite.

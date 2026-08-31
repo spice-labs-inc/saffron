@@ -1,0 +1,4 @@
+Source: https://github.com/utsaslab/nofs/blob/master/e2fsprogs-1.41.12/lib/blkid/tests/cramfs.img.bz2
+License: GPL-2.0 (e2fsprogs project license)
+Downloaded: 2026-08-25
+Note: historic cramfs fixture from the e2fsprogs 1.41.12 libblkid test suite.

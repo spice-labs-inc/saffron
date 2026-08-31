@@ -1,0 +1,6 @@
+ba-yaffs2-*.img:
+  Source: https://github.com/armijnhemel/binaryanalysis-ng/tree/master/test/testdata/unpackers/yaffs2
+  License: Apache-2.0 (armijnhemel/binaryanalysis-ng project license)
+  Note: mkyaffsimage-generated corpus covering page/spare sizes, endians,
+        empty dirs/files, dirs-with-files, and hardlinks
+  Downloaded: 2026-08-25

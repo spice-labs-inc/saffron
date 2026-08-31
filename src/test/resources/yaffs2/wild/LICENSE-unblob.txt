@@ -1,0 +1,5 @@
+unblob-sample.*.yaffs2:
+  Source: https://github.com/onekey-sec/unblob/tree/main/tests/integration/filesystem/yaffs/__input__
+  License: MIT (onekey-sec/unblob project license)
+  Note: generated mkyaffs2image test inputs covering page/spare size variants
+  Downloaded: 2026-08-25

@@ -1,0 +1,5 @@
+gouchaoer-ubifs.img:
+  Source: https://github.com/gouchaoer/Linux-Driver-Dev-Code/blob/master/mtd/ubifs.img
+  License: none stated in repository; Linux driver tutorial image.
+           Redistributed here solely as a non-executed test fixture.
+  Downloaded: 2026-08-25

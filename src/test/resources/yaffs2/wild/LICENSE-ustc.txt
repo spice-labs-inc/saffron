@@ -1,0 +1,5 @@
+ustc-lab-rootfs.yaffs2:
+  Source: https://github.com/USTC-CS-Course-Resource/USTC-CS-Resources/blob/main/CS/Embedded-System-Design/labs/lab5/rootfs.yaffs2
+  License: none stated in repository; educational embedded-lab rootfs image.
+           Redistributed here solely as a non-executed test fixture.
+  Downloaded: 2026-08-25

@@ -18,6 +18,8 @@
 package io.spicelabs.saffron.container.devicetree;
 
 import io.spicelabs.saffron.VirtualDisk;
+import io.spicelabs.saffron.io.ChunkedDisk;
+import io.spicelabs.saffron.raw.RawDiskImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -118,6 +120,10 @@ public final class DeviceTreeBlob {
     /**
      * Parses a DTB from a virtual disk.
      *
+     * <p>Reads are bounded: the header and structure/strings blocks are
+     * traversed through a chunked reader (see {@link ChunkedDisk}), so no
+     * single disk read exceeds 256 KiB regardless of the artifact size.
+     *
      * @param disk the virtual disk to read
      * @return the parsed blob, or empty if the disk is not a valid DTB
      * @throws IOException if an I/O error occurs while reading
@@ -127,10 +133,48 @@ public final class DeviceTreeBlob {
         if (size < DTB_HEADER_SIZE || size > Integer.MAX_VALUE) {
             return Optional.empty();
         }
+        return parse(new ChunkedDisk(disk));
+    }
+
+    /**
+     * Parses a DTB through a chunked disk reader.
+     *
+     * @param disk the chunked disk to read (bounded reads)
+     * @return the parsed blob, or empty if the input is not a valid DTB
+     * @throws IOException if an I/O error occurs while reading
+     */
+    public static @NotNull Optional<DeviceTreeBlob> parse(@NotNull ChunkedDisk disk) throws IOException {
         try {
-            ByteBuffer data = disk.read(0, (int) size);
-            return parse(data);
-        } catch (IllegalArgumentException e) {
+            if (disk.size() < DTB_HEADER_SIZE) {
+                return Optional.empty();
+            }
+            if (disk.getUnsignedInt(0) != (DTB_MAGIC & 0xffffffffL)) {
+                return Optional.empty();
+            }
+            long totalsize = disk.getUnsignedInt(4);
+            long offDtStruct = disk.getUnsignedInt(8);
+            long offDtStrings = disk.getUnsignedInt(12);
+            long sizeDtStrings = disk.getUnsignedInt(32);
+            long sizeDtStruct = disk.getUnsignedInt(36);
+
+            if (totalsize < DTB_HEADER_SIZE || totalsize > disk.size()) {
+                return Optional.empty();
+            }
+            if (!withinBounds(offDtStruct, sizeDtStruct, disk.size())
+                    || !withinBounds(offDtStrings, sizeDtStrings, disk.size())) {
+                return Optional.empty();
+            }
+            if (offDtStruct + sizeDtStruct > offDtStrings && offDtStrings + sizeDtStrings > offDtStruct) {
+                return Optional.empty();
+            }
+
+            DeviceTreeNode root = parseStructure(disk, offDtStruct, sizeDtStruct,
+                    offDtStrings, sizeDtStrings);
+            if (root == null) {
+                return Optional.empty();
+            }
+            return Optional.of(new DeviceTreeBlob(ByteBuffer.allocate(0), (int) totalsize, root));
+        } catch (IndexOutOfBoundsException | IOException e) {
             return Optional.empty();
         }
     }
@@ -138,17 +182,22 @@ public final class DeviceTreeBlob {
     /**
      * Parses a DTB from a file path.
      *
+     * <p>Reads are bounded: the file is traversed through a chunked reader
+     * (see {@link ChunkedDisk}), so no single read exceeds 256 KiB and the
+     * file is never loaded as a whole.
+     *
      * @param path the path to read
      * @return the parsed blob, or empty if the file is not a valid DTB
-     * @throws IOException if an I/O error occurs while reading
+     * @throws IOException if an I/O error occurs
      */
     public static @NotNull Optional<DeviceTreeBlob> parse(@NotNull Path path) throws IOException {
         long size = Files.size(path);
         if (size < DTB_HEADER_SIZE || size > Integer.MAX_VALUE) {
             return Optional.empty();
         }
-        byte[] data = Files.readAllBytes(path);
-        return parse(data);
+        try (RawDiskImpl disk = RawDiskImpl.open(path)) {
+            return parse(new ChunkedDisk(disk));
+        }
     }
 
     /**
@@ -180,6 +229,131 @@ public final class DeviceTreeBlob {
             return false;
         }
         return end <= available;
+    }
+
+    /**
+     * Structure walk over a {@link ChunkedDisk}: sequential token reads with
+     * bounded underlying disk reads.
+     */
+    private static DeviceTreeNode parseStructure(ChunkedDisk disk, long offDtStruct,
+                                                  long sizeDtStruct, long offDtStrings,
+                                                  long sizeDtStrings) throws IOException {
+        long structStart = offDtStruct;
+        long structEnd = structStart + sizeDtStruct;
+        long stringsStart = offDtStrings;
+        long stringsEnd = stringsStart + sizeDtStrings;
+        long pos = structStart;
+
+        Deque<DeviceTreeNode> stack = new ArrayDeque<>();
+        DeviceTreeNode root = null;
+
+        while (pos < structEnd) {
+            if (structEnd - pos < 4) {
+                return null;
+            }
+            int token = (int) disk.getUnsignedInt(pos);
+            pos += 4;
+            switch (token) {
+                case FDT_BEGIN_NODE -> {
+                    String name = readNullTerminatedString(disk, pos, structEnd);
+                    if (name == null) {
+                        return null;
+                    }
+                    pos += name.length() + 1;
+                    pos += (4 - (pos % 4)) % 4;
+                    DeviceTreeNode node = new DeviceTreeNode(name);
+                    if (root == null) {
+                        root = node;
+                    } else {
+                        if (stack.isEmpty()) {
+                            return null;
+                        }
+                        stack.peek().addChild(node);
+                    }
+                    stack.push(node);
+                }
+                case FDT_END_NODE -> {
+                    if (stack.isEmpty()) {
+                        return null;
+                    }
+                    stack.pop();
+                }
+                case FDT_PROP -> {
+                    if (structEnd - pos < 8) {
+                        return null;
+                    }
+                    long len = disk.getUnsignedInt(pos);
+                    long nameoff = disk.getUnsignedInt(pos + 4);
+                    pos += 8;
+                    if (len < 0 || len > Integer.MAX_VALUE || len > structEnd - pos) {
+                        return null;
+                    }
+                    String name = readStringFromStrings(disk, stringsStart, stringsEnd, nameoff);
+                    if (name == null) {
+                        return null;
+                    }
+                    byte[] value = disk.copyRange(pos, (int) len);
+                    DeviceTreeProperty property =
+                            new DeviceTreeProperty(name, ByteBuffer.wrap(value), (int) len);
+                    if (stack.isEmpty()) {
+                        return null;
+                    }
+                    stack.peek().addProperty(property);
+                    pos += len;
+                    pos += (4 - (pos % 4)) % 4;
+                }
+                case FDT_NOP -> {
+                    // Skip
+                }
+                case FDT_END -> {
+                    if (stack.isEmpty()) {
+                        return root;
+                    }
+                    return null;
+                }
+                default -> {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static String readNullTerminatedString(ChunkedDisk disk, long pos, long end)
+            throws IOException {
+        StringBuilder sb = new StringBuilder();
+        while (pos < end) {
+            int b = disk.get(pos++);
+            if (b == 0) {
+                return sb.toString();
+            }
+            sb.append((char) b);
+        }
+        return null;
+    }
+
+    private static String readStringFromStrings(ChunkedDisk disk, long stringsStart,
+                                                long stringsEnd, long nameoff)
+            throws IOException {
+        long abs = stringsStart + nameoff;
+        if (abs < stringsStart || abs >= stringsEnd) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        long pos = abs;
+        boolean terminated = false;
+        while (pos < stringsEnd) {
+            int b = disk.get(pos++);
+            if (b == 0) {
+                terminated = true;
+                break;
+            }
+            sb.append((char) b);
+        }
+        if (!terminated) {
+            return null;
+        }
+        return sb.toString();
     }
 
     private static DeviceTreeNode parseStructure(ByteBuffer source, int offDtStruct, int sizeDtStruct,

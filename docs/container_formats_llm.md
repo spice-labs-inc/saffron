@@ -30,6 +30,49 @@ filesystems through `ContainerDetector` and `BinaryContainerMount`.
 7. WIM
 8. DMG
 
+## Bounded reads on container mount (OOM fix)
+
+- Requirement (user directive): no more than 1 MiB read into memory at a time
+  when mounting containers from a `VirtualDisk`. Previous behavior:
+  `ElfContainer.open`, `DtbContainer.open`/`DeviceTreeBlob.parse`, and
+  `LinuxKernelContainerFactory.open` all did `disk.read(0, size)` and OOM'd
+  Goat Rodeo on large OCI layers.
+- Fix: `io.spicelabs.saffron.io.ChunkedDisk` — 256 KiB chunks, 4 resident
+  chunks LRU, random access (`get`, `getInt`, `getLong`), `copyRange`, and
+  lazy `stream`. All four whole-artifact readers now parse headers through it
+  and expose entries as lazy disk streams.
+- Path-based APIs fixed too: `ElfContainer.open(Path)`, `DtbContainer.open(Path)`,
+  `FitContainer.open(Path)`, `DeviceTreeBlob.parse(Path)`,
+  `ContainerDetector.detect(Path)`, `BinaryContainerMount.mount(Path)`
+  previously used `Files.readAllBytes` (up to 2 GiB). They now open a
+  `RawDiskImpl` over the file and delegate to the same bounded chunked path;
+  path-opened containers own the file handle and close it on `close()`.
+- Multi-byte reads that straddle chunk boundaries are assembled from
+  individual chunk reads (correct, still bounded).
+- Guarantee: no single `VirtualDisk.read` exceeds 256 KiB on these paths;
+  entry content is streamed, not materialized (except container entry APIs
+  that inherently return `byte[]`, e.g. DTB property entries).
+
+## Bounded-read tests by claim
+
+| Claim | Test |
+|---|---|
+| ELF mount bounded (≤1 MiB reads, correct content) | `BoundedReadTest.elfContainerReadsStayBounded` |
+| DTB mount bounded, raw + property entries correct | `BoundedReadTest.dtbContainerReadsStayBounded` |
+| Kernel (uImage) mount bounded, payload correct | `BoundedReadTest.kernelContainerReadsStayBounded` |
+| ELF open by path, section content correct | `BoundedPathOpenTest.elfPathOpenStreamsCorrectContent` |
+| DTB open by path, raw + property content correct | `BoundedPathOpenTest.dtbPathOpenStreamsCorrectContent` |
+| FIT open by path, kernel data correct, detected as FIT | `BoundedPathOpenTest.fitPathOpenStreamsCorrectContent` |
+| Path detection classifies large DTB | `BoundedPathOpenTest.detectorClassifiesLargeDtbFromPath` |
+| Path mount of large ELF walks | `BoundedPathOpenTest.mountFromPathWalksLargeElf` |
+| Byte correctness across chunk boundaries | `ChunkedDiskTest.getIsCorrectAcrossChunkBoundaries` |
+| Multi-byte reads straddling chunk boundaries correct | `ChunkedDiskTest.multiByteReadAtChunkBoundaryIsCorrect` |
+| Endianness honored | `ChunkedDiskTest.getIntHonorsByteOrder` |
+| `copyRange` spans chunks, reads bounded | `ChunkedDiskTest.copyRangeSpansChunksAndReadsAreBounded` |
+| Streams exact and bounded | `ChunkedDiskTest.streamReturnsExactBytesWithBoundedReads` |
+| Resident chunks ≤ 4 (LRU) | `ChunkedDiskTest.residentChunkCountIsBounded` |
+| Out-of-bounds rejected | `ChunkedDiskTest.outOfBoundsAccessIsRejected` |
+
 ## WIM quick facts
 
 - Header is little-endian.
@@ -118,3 +161,14 @@ filesystems through `ContainerDetector` and `BinaryContainerMount`.
 | Multiple `/raw` streams are independent | `DmgContainerMountTest.rawEntryStreamsAreIndependent` |
 | Metadata keys present | `DmgContainerMountTest.metadataContainsExpectedKeys` |
 | Fuzzing does not crash | `DmgContainerFuzzTest.footerFuzz` |
+
+## Phase 7 code smells
+
+- Kernel entries memoized (lazy + synchronized), findEntry indexed.
+- ElfHeader: single parse path via SliceFetcher; phdr/shdr entries lazy
+  (detection keeps small-buffer contract); no duplicate accessor sets.
+- Elf/Dtb open(VirtualDisk) defensive (Optional.empty on malformed).
+- ChunkedDisk stream: per-stream 1-byte buffer reuse.
+- ext4 stray println removed.
+- ContainerDetector: single DTB parse (Path/disk).
+- Tests: KernelMemoizationTest, ElfOpenParityTest, ELF suite as oracle.

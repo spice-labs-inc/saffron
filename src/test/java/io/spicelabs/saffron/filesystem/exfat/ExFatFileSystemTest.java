@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
@@ -387,5 +388,34 @@ class ExFatFileSystemTest {
         System.arraycopy(content, 0, qcow2, dataOffset, content.length);
 
         Files.write(path, qcow2);
+    }
+
+    /**
+     * Phase 5: every regular file's openStream() bytes equal readAllBytes()
+     * (the lazy stream must match the materialized reference exactly).
+     */
+    @Test
+    void exFatFileSystem_streamsEqualMaterializedContent(@TempDir Path tempDir) throws Exception {
+        byte[] diskData = createExFatVolumeWithFiles();
+        Path diskPath = tempDir.resolve("disk.qcow2");
+        createQcow2(diskPath, diskData);
+
+        try (VirtualDisk disk = DiskReader.open(diskPath);
+             FileSystem fs = ExFatFileSystemImpl.mount(disk, 0)) {
+            int checked = 0;
+            try (var walk = fs.walk()) {
+                for (FileSystemEntry entry : (Iterable<FileSystemEntry>) walk::iterator) {
+                    if (entry.type() != FileSystemEntry.EntryType.REGULAR_FILE) {
+                        continue;
+                    }
+                    FileSystemEntry.RegularFile file = (FileSystemEntry.RegularFile) entry;
+                    try (InputStream in = file.openStream()) {
+                        assertThat(in.readAllBytes()).isEqualTo(file.readAllBytes());
+                    }
+                    checked++;
+                }
+            }
+            assertThat(checked).isPositive();
+        }
     }
 }

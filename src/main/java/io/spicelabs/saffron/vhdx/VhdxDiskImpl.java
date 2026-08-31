@@ -126,6 +126,15 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
             // Read metadata
             VhdxMetadata metadata = VhdxMetadata.read(channel, metadataOffset, metadataLength);
 
+            // Differencing disks read zeros for unallocated blocks because
+            // the parent is never resolved; reject loudly.
+            if (metadata.hasParent()) {
+                throw new IOException("Differencing VHDX images are not supported: "
+                        + path.getFileName());
+            }
+
+            validateMetadata(metadata, channel.size());
+
             // Read BAT
             long[] bat = readBat(channel, batOffset, metadata.virtualDiskSize(), metadata.blockSize());
 
@@ -136,6 +145,29 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
         } catch (Exception e) {
             channel.close();
             throw e;
+        }
+    }
+
+    /** Maximum VHDX virtual disk size per the format (64 TiB). */
+    private static final long MAX_VHDX_SIZE = 64L * 1024 * 1024 * 1024 * 1024;
+
+    /** VHDX spec: block size must be a power of two, 1 MiB..256 MiB. */
+    private static final int MIN_VHDX_BLOCK_SIZE = 1024 * 1024;
+    private static final int MAX_VHDX_BLOCK_SIZE = 256 * 1024 * 1024;
+
+    /** Memory budget: a single BAT read must not exceed 16 MiB. */
+    private static final long MAX_BAT_BYTES = 16L * 1024 * 1024;
+
+    private static void validateMetadata(VhdxMetadata metadata, long fileSize)
+            throws IOException {
+        int blockSize = metadata.blockSize();
+        if (blockSize < MIN_VHDX_BLOCK_SIZE || blockSize > MAX_VHDX_BLOCK_SIZE
+                || (blockSize & (blockSize - 1)) != 0) {
+            throw new IOException("Invalid VHDX block size: " + blockSize);
+        }
+        long virtualSize = metadata.virtualDiskSize();
+        if (virtualSize <= 0 || virtualSize > MAX_VHDX_SIZE) {
+            throw new IOException("Invalid VHDX virtual disk size: " + virtualSize);
         }
     }
 
@@ -165,17 +197,18 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
             return result;
         }
 
-        throw new CorruptedDiskException(
-                "Both VHDX region tables are invalid",
-                REGION_TABLE1_OFFSET, "region table", DiskFormat.VHDX);
+        throw new IOException("Both VHDX region tables are invalid");
     }
 
     private static long @Nullable [] tryReadRegionTable(SeekableByteChannel channel, long offset)
             throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(16);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        channel.position(offset);
-        int read = channel.read(buffer);
+        int read;
+        synchronized (channel) {
+            channel.position(offset);
+            read = channel.read(buffer);
+        }
         if (read < 16) {
             return null;
         }
@@ -191,17 +224,36 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
         // Skip checksum
         buffer.getInt();
 
-        // Entry count
+        // Entry count (VHDX spec: 1..2047)
         int entryCount = buffer.getInt();
+        if (entryCount < 1 || entryCount > 2047) {
+            return null;
+        }
 
         // Skip reserved
         buffer.getInt();
 
         // Read entries (each 32 bytes)
-        ByteBuffer entriesBuffer = ByteBuffer.allocate(entryCount * 32);
+        int entriesBytes = Math.multiplyExact(entryCount, 32);
+        if (offset + 16 + entriesBytes > channel.size()) {
+            return null;
+        }
+        ByteBuffer entriesBuffer = ByteBuffer.allocate(entriesBytes);
         entriesBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        channel.position(offset + 16);
-        read = channel.read(entriesBuffer);
+        int totalRead = 0;
+        synchronized (channel) {
+            channel.position(offset + 16);
+            while (totalRead < entriesBytes) {
+                int n = channel.read(entriesBuffer);
+                if (n < 0) {
+                    return null;
+                }
+                if (n == 0) {
+                    return null;
+                }
+                totalRead += n;
+            }
+        }
         entriesBuffer.flip();
 
         long metadataOffset = 0;
@@ -235,16 +287,54 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
             throw new IOException("Invalid block size: " + blockSize);
         }
 
-        int totalBlocks = (int) ((virtualSize + blockSize - 1) / blockSize);
+        long totalBlocksLong;
+        try {
+            totalBlocksLong = Math.addExact(virtualSize, (long) blockSize - 1) / blockSize;
+        } catch (ArithmeticException e) {
+            throw new IOException("VHDX virtual size overflows block count: " + virtualSize);
+        }
+        if (totalBlocksLong <= 0 || totalBlocksLong > Integer.MAX_VALUE) {
+            throw new IOException("Invalid VHDX block count: " + totalBlocksLong);
+        }
+        long batBytes = Math.multiplyExact(totalBlocksLong, 8L);
+        if (batBytes > MAX_BAT_BYTES) {
+            throw new IOException("VHDX BAT too large for the 16 MiB read budget: "
+                    + batBytes + " bytes (unsupported geometry)");
+        }
+        final long batEnd;
+        try {
+            batEnd = Math.addExact(batOffset, batBytes);
+        } catch (ArithmeticException e) {
+            throw new IOException("VHDX BAT bounds overflow: batOffset="
+                    + batOffset + ", bytes=" + batBytes, e);
+        }
+        if (batEnd > channel.size()) {
+            throw new IOException("VHDX BAT out of bounds: batOffset=" + batOffset
+                    + ", bytes=" + batBytes + ", fileSize=" + channel.size());
+        }
+        int totalBlocks = (int) totalBlocksLong;
         long[] bat = new long[totalBlocks];
 
         ByteBuffer buffer = ByteBuffer.allocate(totalBlocks * 8);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        channel.position(batOffset);
-        int read = channel.read(buffer);
+        int totalRead = 0;
+        synchronized (channel) {
+            channel.position(batOffset);
+            while (totalRead < totalBlocks * 8) {
+                int n = channel.read(buffer);
+                if (n < 0) {
+                    throw new IOException("Truncated VHDX BAT: expected " + (totalBlocks * 8)
+                            + " bytes, got " + totalRead);
+                }
+                if (n == 0) {
+                    throw new IOException("No progress reading VHDX BAT");
+                }
+                totalRead += n;
+            }
+        }
         buffer.flip();
 
-        for (int i = 0; i < totalBlocks && buffer.remaining() >= 8; i++) {
+        for (int i = 0; i < totalBlocks; i++) {
             bat[i] = buffer.getLong();
         }
 
@@ -337,15 +427,21 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
 
     private void readFromChannel(long position, ByteBuffer dest, int length) throws IOException {
         ByteBuffer temp = ByteBuffer.allocate(length);
-        channel.position(position);
+        synchronized (channel) {
+            channel.position(position);
 
-        int totalRead = 0;
-        while (totalRead < length) {
-            int read = channel.read(temp);
-            if (read < 0) {
-                break;
+            int totalRead = 0;
+            while (totalRead < length) {
+                int read = channel.read(temp);
+                if (read < 0) {
+                    throw new IOException("Truncated VHDX file: expected " + length
+                            + " bytes at offset " + position + ", got " + totalRead);
+                }
+                if (read == 0) {
+                    throw new IOException("No progress reading VHDX file at offset " + position);
+                }
+                totalRead += read;
             }
-            totalRead += read;
         }
 
         temp.flip();
@@ -497,6 +593,9 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
 
         @Override
         public int read(byte[] b, int off, int len) throws IOException {
+            if (len == 0) {
+                return 0;
+            }
             if (position >= size) {
                 return -1;
             }

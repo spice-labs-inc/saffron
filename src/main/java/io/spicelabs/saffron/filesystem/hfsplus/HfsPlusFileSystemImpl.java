@@ -9,6 +9,7 @@ import io.spicelabs.saffron.exception.ResourceLimitException;
 import io.spicelabs.saffron.fs.FileSystem;
 import io.spicelabs.saffron.fs.FileSystemEntry;
 import io.spicelabs.saffron.lvm.DiskRegion;
+import io.spicelabs.saffron.filesystem.ChunkedRegionStream;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -28,8 +29,11 @@ import java.util.stream.StreamSupport;
  */
 public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
 
+    /** Maximum default walk depth (hostile trees must not overflow the stack). */
+    private static final int MAX_WALK_DEPTH = 512;
+
     /** Maximum file size that can be read into memory (256 MB) */
-    private static final long MAX_READABLE_SIZE = 256 * 1024 * 1024;
+    private static final long MAX_READABLE_SIZE = 16 * 1024 * 1024;
 
     /** Maximum symlink resolution depth to prevent infinite loops */
     private static final int MAX_SYMLINK_DEPTH = 40;
@@ -163,7 +167,7 @@ public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
 
     @Override
     public @NotNull Stream<FileSystemEntry> walk() throws IOException {
-        return walk("/", Integer.MAX_VALUE);
+        return walk("/", MAX_WALK_DEPTH);
     }
 
     @Override
@@ -255,9 +259,6 @@ public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
      */
     private byte[] readFileData(HfsPlusCatalogRecord.FileRecord file) throws IOException {
         long size = file.dataLogicalSize();
-        if (size > MAX_READABLE_SIZE) {
-            throw new ResourceLimitException("File too large to read into memory: " + size + " bytes (limit: 256 MB). Use openStream() for large files.", "allocation_size", MAX_READABLE_SIZE, size);
-        }
         if (size == 0 || file.dataExtents().isEmpty()) {
             return new byte[0];
         }
@@ -459,12 +460,37 @@ public class HfsPlusFileSystemImpl implements FileSystem.HfsPlusFileSystem {
 
         @Override
         public byte[] readAllBytes() throws IOException {
+            if (record.dataLogicalSize() > MAX_READABLE_SIZE) {
+                throw new ResourceLimitException("File too large to read into memory: "
+                        + record.dataLogicalSize() + " bytes (limit: 16 MB). Use openStream() for large files.",
+                        "allocation_size", MAX_READABLE_SIZE, record.dataLogicalSize());
+            }
             return readFileData(record);
         }
 
         @Override
         public @NotNull InputStream openStream() throws IOException {
-            return new ByteArrayInputStream(readAllBytes());
+            // Lazy stream over the fork extents (bounded reads).
+            long size = record.dataLogicalSize();
+            if (size == 0 || record.dataExtents().isEmpty()) {
+                return new ByteArrayInputStream(new byte[0]);
+            }
+            int bs = volumeHeader.blockSize();
+            List<ChunkedRegionStream.Segment> segments = new ArrayList<>();
+            long logical = 0;
+            for (HfsPlusExtent extent : record.dataExtents()) {
+                if (extent.blockCount() == 0) {
+                    continue;
+                }
+                long len = Math.min((long) extent.blockCount() * bs, size - logical);
+                segments.add(new ChunkedRegionStream.Segment(logical,
+                        (long) extent.startBlock() * bs, len));
+                logical += len;
+                if (logical >= size) {
+                    break;
+                }
+            }
+            return new ChunkedRegionStream(region, segments, size);
         }
     }
 
