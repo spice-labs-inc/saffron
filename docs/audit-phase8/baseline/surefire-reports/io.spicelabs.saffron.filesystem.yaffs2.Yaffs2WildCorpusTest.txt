@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: io.spicelabs.saffron.filesystem.yaffs2.Yaffs2WildCorpusTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.516 s -- in io.spicelabs.saffron.filesystem.yaffs2.Yaffs2WildCorpusTest

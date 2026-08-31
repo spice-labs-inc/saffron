@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: io.spicelabs.saffron.container.elf.ElfContainerSyntheticTest
--------------------------------------------------------------------------------
-Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.013 s -- in io.spicelabs.saffron.container.elf.ElfContainerSyntheticTest

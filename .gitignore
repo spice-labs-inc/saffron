@@ -36,3 +36,7 @@ test-output/
 # Test corpus (large binary disk images fetched separately)
 test-corpus/
 test-corpus-data/
+
+**/surefire-reports/
+**/jacoco.csv
+**/spotbugsXml.xml

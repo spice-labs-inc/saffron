@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: io.spicelabs.saffron.filesystem.ext4.Ext4SuperblockTest
--------------------------------------------------------------------------------
-Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.077 s -- in io.spicelabs.saffron.filesystem.ext4.Ext4SuperblockTest

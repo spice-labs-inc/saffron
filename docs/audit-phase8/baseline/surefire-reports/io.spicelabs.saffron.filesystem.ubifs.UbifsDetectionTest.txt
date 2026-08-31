@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: io.spicelabs.saffron.filesystem.ubifs.UbifsDetectionTest
--------------------------------------------------------------------------------
-Tests run: 19, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.118 s -- in io.spicelabs.saffron.filesystem.ubifs.UbifsDetectionTest

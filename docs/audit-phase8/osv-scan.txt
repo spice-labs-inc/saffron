@@ -1,7 +1,0 @@
-Scanning dir pom.xml
-Starting filesystem walk for root: /
-Scanned /data/pom.xml file and found 17 packages
-End status: 0 dirs visited, 1 inodes visited, 1 Extract calls, 2.116459ms elapsed, 2.116523ms wall time
-Warning: enricher transitivedependency/pomxml may be risky when run on untrusted artifacts. Please ensure you trust the source code and artifacts.
-
-No issues found
