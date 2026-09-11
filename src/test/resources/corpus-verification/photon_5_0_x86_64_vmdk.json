@@ -1,4 +1,5 @@
 {
+  "id": "photon-5.0-x86_64.vmdk",
   "imagePath": "/corpus/vmdk/native/photon/photon-5.0-x86_64.vmdk",
   "imageBasename": "photon-5.0-x86_64.vmdk",
   "filesystemCount": 2,

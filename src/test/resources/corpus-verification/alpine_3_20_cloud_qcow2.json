@@ -1,4 +1,5 @@
 {
+  "id": "alpine-3.20-cloud.qcow2",
   "imagePath": "/corpus/qcow2/modern/alpine-3.20-cloud.qcow2",
   "imageBasename": "alpine-3.20-cloud.qcow2",
   "filesystemCount": 1,

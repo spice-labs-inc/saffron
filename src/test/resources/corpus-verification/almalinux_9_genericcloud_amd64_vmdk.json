@@ -1,4 +1,5 @@
 {
+  "id": "almalinux-9-genericcloud-amd64.vmdk",
   "imagePath": "/corpus/vmdk/converted/almalinux-9-genericcloud-amd64.vmdk",
   "imageBasename": "almalinux-9-genericcloud-amd64.vmdk",
   "filesystemCount": 3,

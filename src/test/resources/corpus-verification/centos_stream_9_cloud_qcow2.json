@@ -1,4 +1,5 @@
 {
+  "id": "centos-stream-9-cloud.qcow2",
   "imagePath": "/corpus/qcow2/modern/centos-stream-9-cloud.qcow2",
   "imageBasename": "centos-stream-9-cloud.qcow2",
   "filesystemCount": 1,

@@ -1,4 +1,5 @@
 {
+  "id": "debian-12-vbox.vdi",
   "imagePath": "/corpus/vdi/modern/debian-12-vbox.vdi",
   "imageBasename": "debian-12-vbox.vdi",
   "filesystemCount": 6,

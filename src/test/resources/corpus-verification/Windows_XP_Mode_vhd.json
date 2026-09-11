@@ -1,4 +1,5 @@
 {
+  "id": "Windows XP Mode.vhd",
   "imagePath": "/corpus/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/Windows XP Mode.vhd",
   "imageBasename": "Windows XP Mode.vhd",
   "filesystemCount": 1,

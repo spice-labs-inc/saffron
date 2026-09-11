@@ -1,4 +1,5 @@
 {
+  "id": "MicrosoftOs-21.30HardDisk.vhd",
   "imagePath": "/corpus/vhd/legacy/xp-mode/Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/MicrosoftOs-21.30HardDisk.vhd",
   "imageBasename": "MicrosoftOs-21.30HardDisk.vhd",
   "filesystemCount": 1,

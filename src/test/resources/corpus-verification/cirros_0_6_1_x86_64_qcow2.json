@@ -1,4 +1,5 @@
 {
+  "id": "cirros-0.6.1-x86_64.qcow2",
   "imagePath": "/corpus/qcow2/modern/cirros-0.6.1-x86_64.qcow2",
   "imageBasename": "cirros-0.6.1-x86_64.qcow2",
   "filesystemCount": 2,

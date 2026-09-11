@@ -1,4 +1,5 @@
 {
+  "id": "lubuntu-23.04-vbox.vdi",
   "imagePath": "/corpus/vdi/modern/lubuntu-23.04-vbox.vdi",
   "imageBasename": "lubuntu-23.04-vbox.vdi",
   "filesystemCount": 1,

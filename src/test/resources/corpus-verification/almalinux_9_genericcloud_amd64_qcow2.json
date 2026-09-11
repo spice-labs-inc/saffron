@@ -1,4 +1,5 @@
 {
+  "id": "almalinux-9-genericcloud-amd64.qcow2",
   "imagePath": "/corpus/qcow2/cloud/almalinux/almalinux-9-genericcloud-amd64.qcow2",
   "imageBasename": "almalinux-9-genericcloud-amd64.qcow2",
   "filesystemCount": 3,

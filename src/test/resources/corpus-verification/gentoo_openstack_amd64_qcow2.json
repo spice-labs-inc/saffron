@@ -1,4 +1,5 @@
 {
+  "id": "gentoo-openstack-amd64.qcow2",
   "imagePath": "/corpus/qcow2/modern/gentoo-openstack-amd64.qcow2",
   "imageBasename": "gentoo-openstack-amd64.qcow2",
   "filesystemCount": 2,

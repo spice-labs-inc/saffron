@@ -238,6 +238,40 @@
 
     <build>
         <plugins>
+            <!-- Record the git commit this jar was built from, under a file name unique to
+                 this artifact so it survives being shaded into a larger jar (Surveyor reads
+                 it to pair the binary with the test data of the same commit). -->
+            <plugin>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
+                <version>9.0.2</version>
+                <executions>
+                    <execution>
+                        <id>git-provenance</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/META-INF/git/${project.artifactId}.properties</generateGitPropertiesFilename>
+                    <commitIdGenerationMode>full</commitIdGenerationMode>
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                    <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
+                    <includeOnlyProperties>
+                        <includeOnlyProperty>git.commit.id.full</includeOnlyProperty>
+                        <includeOnlyProperty>git.commit.id.describe</includeOnlyProperty>
+                        <includeOnlyProperty>git.commit.time</includeOnlyProperty>
+                        <includeOnlyProperty>git.branch</includeOnlyProperty>
+                        <includeOnlyProperty>git.tags</includeOnlyProperty>
+                        <includeOnlyProperty>git.dirty</includeOnlyProperty>
+                        <includeOnlyProperty>git.build.time</includeOnlyProperty>
+                        <includeOnlyProperty>git.build.version</includeOnlyProperty>
+                    </includeOnlyProperties>
+                </configuration>
+            </plugin>
             <!-- Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

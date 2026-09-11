@@ -1,4 +1,5 @@
 {
+  "id": "ubuntu-21.04-vmware.vmdk",
   "imagePath": "/corpus/vmdk/modern/ubuntu-21.04-vmware.vmdk",
   "imageBasename": "ubuntu-21.04-vmware.vmdk",
   "filesystemCount": 3,

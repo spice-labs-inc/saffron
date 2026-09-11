@@ -1,4 +1,5 @@
 {
+  "id": "opensuse-tumbleweed-cloud.qcow2",
   "imagePath": "/corpus/qcow2/modern/opensuse-tumbleweed-cloud.qcow2",
   "imageBasename": "opensuse-tumbleweed-cloud.qcow2",
   "filesystemCount": 2,

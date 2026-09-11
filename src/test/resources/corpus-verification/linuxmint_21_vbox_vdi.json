@@ -1,4 +1,5 @@
 {
+  "id": "linuxmint-21-vbox.vdi",
   "imagePath": "/corpus/vdi/modern/linuxmint-21-vbox.vdi",
   "imageBasename": "linuxmint-21-vbox.vdi",
   "filesystemCount": 3,

@@ -1,4 +1,5 @@
 {
+  "id": "debian-10-generic-amd64.qcow2",
   "imagePath": "/corpus/qcow2/modern/debian-10-generic-amd64.qcow2",
   "imageBasename": "debian-10-generic-amd64.qcow2",
   "filesystemCount": 2,
