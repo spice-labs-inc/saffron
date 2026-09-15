@@ -1,4 +1,5 @@
 {
+  "id": "ubuntu-21.04-vbox.vdi",
   "imagePath": "/corpus/vdi/modern/ubuntu-21.04-vbox.vdi",
   "imageBasename": "ubuntu-21.04-vbox.vdi",
   "filesystemCount": 3,

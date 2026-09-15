@@ -1,4 +1,5 @@
 {
+  "id": "ubuntu-24.04-azure-amd64.vhd",
   "imagePath": "/corpus/vhd/native/ubuntu/ubuntu-24.04-azure-amd64.vhd",
   "imageBasename": "ubuntu-24.04-azure-amd64.vhd",
   "filesystemCount": 3,

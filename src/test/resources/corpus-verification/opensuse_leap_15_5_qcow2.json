@@ -1,4 +1,5 @@
 {
+  "id": "opensuse-leap-15.5.qcow2",
   "imagePath": "/corpus/qcow2/modern/opensuse-leap-15.5.qcow2",
   "imageBasename": "opensuse-leap-15.5.qcow2",
   "filesystemCount": 2,

@@ -1,4 +1,5 @@
 {
+  "id": "windows-me.vmdk",
   "imagePath": "/corpus/vmdk/legacy/windows-me.vmdk",
   "imageBasename": "windows-me.vmdk",
   "filesystemCount": 1,

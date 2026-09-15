@@ -1,4 +1,5 @@
 {
+  "id": "rocky-8-cloud-amd64.qcow2",
   "imagePath": "/corpus/qcow2/modern/rocky-8-cloud-amd64.qcow2",
   "imageBasename": "rocky-8-cloud-amd64.qcow2",
   "filesystemCount": 3,

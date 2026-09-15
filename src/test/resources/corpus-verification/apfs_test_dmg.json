@@ -1,4 +1,5 @@
 {
+  "id": "apfs-test.dmg",
   "imagePath": "/corpus/dmg/apfs-test.dmg",
   "imageBasename": "apfs-test.dmg",
   "filesystemCount": 0,

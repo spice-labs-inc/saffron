@@ -1,4 +1,5 @@
 {
+  "id": "debian-11-nocloud.qcow2",
   "imagePath": "/corpus/qcow2/modern/debian-11-nocloud.qcow2",
   "imageBasename": "debian-11-nocloud.qcow2",
   "filesystemCount": 2,

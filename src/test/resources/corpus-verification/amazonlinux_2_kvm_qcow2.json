@@ -1,4 +1,5 @@
 {
+  "id": "amazonlinux-2-kvm.qcow2",
   "imagePath": "/corpus/qcow2/modern/amazonlinux-2-kvm.qcow2",
   "imageBasename": "amazonlinux-2-kvm.qcow2",
   "filesystemCount": 1,

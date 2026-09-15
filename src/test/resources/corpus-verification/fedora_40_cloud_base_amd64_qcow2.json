@@ -1,4 +1,5 @@
 {
+  "id": "fedora-40-cloud-base-amd64.qcow2",
   "imagePath": "/corpus/qcow2/cloud/fedora/fedora-40-cloud-base-amd64.qcow2",
   "imageBasename": "fedora-40-cloud-base-amd64.qcow2",
   "filesystemCount": 6,

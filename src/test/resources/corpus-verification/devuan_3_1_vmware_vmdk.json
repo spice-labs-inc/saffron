@@ -1,4 +1,5 @@
 {
+  "id": "devuan-3.1-vmware.vmdk",
   "imagePath": "/corpus/vmdk/modern/devuan-3.1-vmware.vmdk",
   "imageBasename": "devuan-3.1-vmware.vmdk",
   "filesystemCount": 6,

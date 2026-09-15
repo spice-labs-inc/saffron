@@ -1,4 +1,5 @@
 {
+  "id": "oracle-linux-9-amd64.qcow2",
   "imagePath": "/corpus/qcow2/modern/oracle-linux-9-amd64.qcow2",
   "imageBasename": "oracle-linux-9-amd64.qcow2",
   "filesystemCount": 3,

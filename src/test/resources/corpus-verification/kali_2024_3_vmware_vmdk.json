@@ -1,4 +1,5 @@
 {
+  "id": "kali-2024.3-vmware.vmdk",
   "imagePath": "/corpus/vmdk/modern/kali-2024.3-vmware.vmdk",
   "imageBasename": "kali-2024.3-vmware.vmdk",
   "filesystemCount": 6,

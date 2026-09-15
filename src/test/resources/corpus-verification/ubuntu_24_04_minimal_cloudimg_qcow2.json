@@ -1,4 +1,5 @@
 {
+  "id": "ubuntu-24.04-minimal-cloudimg.qcow2",
   "imagePath": "/corpus/qcow2/modern/ubuntu-24.04-minimal-cloudimg.qcow2",
   "imageBasename": "ubuntu-24.04-minimal-cloudimg.qcow2",
   "filesystemCount": 3,

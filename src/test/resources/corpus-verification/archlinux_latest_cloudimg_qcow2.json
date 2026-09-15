@@ -1,4 +1,5 @@
 {
+  "id": "archlinux-latest-cloudimg.qcow2",
   "imagePath": "/corpus/qcow2/modern/archlinux-latest-cloudimg.qcow2",
   "imageBasename": "archlinux-latest-cloudimg.qcow2",
   "filesystemCount": 5,

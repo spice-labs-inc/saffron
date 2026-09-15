@@ -1,4 +1,5 @@
 {
+  "id": "debian-12-genericcloud-amd64.raw",
   "imagePath": "/corpus/raw/cloud/debian/debian-12-genericcloud-amd64.raw",
   "imageBasename": "debian-12-genericcloud-amd64.raw",
   "filesystemCount": 2,

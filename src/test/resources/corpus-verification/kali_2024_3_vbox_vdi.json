@@ -1,4 +1,5 @@
 {
+  "id": "kali-2024.3-vbox.vdi",
   "imagePath": "/corpus/vdi/modern/kali-2024.3-vbox.vdi",
   "imageBasename": "kali-2024.3-vbox.vdi",
   "filesystemCount": 6,
