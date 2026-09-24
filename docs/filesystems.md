@@ -311,8 +311,10 @@ with the caps enabled.
 
 ## Future work
 
-Binary container formats (WIM, DMG) are planned for later phases. Linux kernel,
-FIT, ELF, DTB, Raspberry Pi firmware, and Android boot are complete.
+WIM and DMG are detected and exposed as a single `/raw` entry only; reading
+their contents is tracked in the format support matrix
+(`format_support.md`), which also lists every unsupported filesystem and
+volume manager with its tracking issue.
 
 ## Post-audit remediation (2026-08-27)
 

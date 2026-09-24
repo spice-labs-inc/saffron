@@ -6,6 +6,8 @@ This document describes the architecture of Saffron, a pure Java library for rea
 
 Saffron uses a layered architecture where each layer handles one concern: disk format decoding, partition detection, LVM volume assembly, filesystem mounting, and file entry access.
 
+The current support matrix, including formats that are detected but not readable and those that are not supported at all, is in [docs/format_support.md](docs/format_support.md).
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                        User Application                         │
@@ -437,8 +439,8 @@ For concurrent access, open separate `VirtualDisk` instances per thread.
 | JetBrains Annotations | `@NotNull` / `@Nullable` null safety |
 | packageurl-java | Package URL (PURL) generation |
 | XZ for Java | XZ and LZMA decompression |
-| zstd-jni | Zstandard decompression (Btrfs, VMDK) |
-| Commons Compress | bzip2 decompression, additional formats |
+| zstd-jni | Zstandard decompression (Btrfs, Linux kernel payloads) |
+| Commons Compress | bzip2, tar, zip and 7z readers |
 | SLF4J API | Logging facade |
 
 ### Test
