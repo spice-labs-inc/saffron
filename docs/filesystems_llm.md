@@ -178,8 +178,8 @@ supported formats through a single `FileSystem` interface.
 
 ## Future work
 
-Binary containers (WIM, DMG) are planned for later phases. Linux kernel, FIT,
-ELF, DTB, Raspberry Pi firmware, and Android boot are complete.
+WIM and DMG are detection-only (`/raw`); their contents and every other
+unsupported format are tracked in `format_support_llm.md`.
 
 ## Allocation caps (phase 3)
 

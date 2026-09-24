@@ -5,7 +5,7 @@
 [![GitHub Package](https://img.shields.io/badge/GitHub-Packages-blue?logo=github)](https://github.com/spice-labs-inc/saffron/packages/)
 [![Build Status](https://github.com/spice-labs-inc/saffron/actions/workflows/buildAndTest.yml/badge.svg)](https://github.com/spice-labs-inc/saffron/actions)
 
-**Saffron** is a pure Java library for reading virtual machine disk images and their contained filesystems — no native dependencies required. It supports 8 disk image formats and 8 filesystem types through a unified, type-safe API built on Java 21 sealed interfaces and pattern matching.
+**Saffron** is a Java library for reading virtual machine disk images and their contained filesystems. It supports 8 disk image formats and 13 filesystem types through a unified, type-safe API built on Java 21 sealed interfaces and pattern matching. Everything is pure Java except the bundled zstd-jni decompressor. See [docs/format_support.md](docs/format_support.md) for the full support matrix, including what is not supported and why.
 
 ## Quick Start
 
@@ -47,7 +47,7 @@ implementation 'io.spicelabs:saffron:0.1.0-SNAPSHOT'
 | **VDI** | `.vdi` | VirtualBox |
 | **Raw** | `.img`, `.raw` | All platforms |
 | **GCP** | `.tar.gz` | Google Cloud |
-| **AMI** | `.ami` | Amazon Web Services |
+| **AMI** | `*.manifest.xml` + `image.part.*` | Amazon Web Services |
 
 ### Filesystem Formats
 
@@ -61,6 +61,11 @@ implementation 'io.spicelabs:saffron:0.1.0-SNAPSHOT'
 | **exFAT** | Cross-platform | Flash storage |
 | **HFS+** | macOS | Mac OS Extended |
 | **APFS** | macOS | Apple File System |
+| **SquashFS** | Linux, embedded | Read-only compressed |
+| **cramfs** | Embedded | Read-only compressed |
+| **JFFS2** | Embedded | NOR flash |
+| **YAFFS2** | Embedded | NAND flash |
+| **UBI / UBIFS** | Embedded | NAND flash volumes |
 
 ### Binary Container Formats
 
@@ -76,6 +81,8 @@ named entries such as `/payload`, `/kernel`, `/dtb`, or `/ramdisk`.
 | **Raspberry Pi firmware** | `start.elf`, `fixup.dat`, `bootcode.bin` | Firmware files |
 | **Android boot** | `ANDROID!` | `boot.img` with kernel, ramdisk, second, dtb |
 | **Compressed single payload** | gzip / xz / bzip2 magic | `.gz`, `.xz`, `.bz2` exposed as `/payload` |
+| **WIM** | `MSWIM` magic | Detection only; whole file exposed as `/raw` |
+| **DMG** | `koly` footer | Detection only; data fork exposed as `/raw` |
 
 ---
 
@@ -90,7 +97,7 @@ named entries such as `/payload`, `/kernel`, `/dtb`, or `/ramdisk`.
 - **LVM2 support**: Detect and mount logical volumes within disk images
 - **Sealed interfaces + pattern matching**: Type-safe API using Java 21 features
 - **Null-safe API**: Uses `Optional<T>` and `@NotNull` annotations throughout
-- **Zero native dependencies**: Pure Java — runs anywhere Java 21 runs
+- **Pure Java**: no native code apart from the zstd-jni decompressor bundled for Btrfs and kernel payloads
 
 ---
 
