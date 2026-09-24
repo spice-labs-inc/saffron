@@ -79,7 +79,8 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
     private final int clusterSize;
     private final io.spicelabs.saffron.io.LruCache<Long, MftRecord> mftCache;
     private final Optional<String> volumeLabel;
-    private final List<NtfsAttribute.DataRun> mftDataRuns;
+    /** Data runs of $MFT's unnamed $DATA (all pieces); empty = contiguous MFT at mftOffsetBytes(). */
+    private List<NtfsAttribute.DataRun> mftDataRuns;
     private long cachedUsedClusters = -1;
 
     private NtfsFileSystemImpl(DiskRegion region, NtfsBootSector bootSector,
@@ -123,18 +124,23 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
         // Read volume label from $Volume MFT record
         Optional<String> volumeLabel = readVolumeLabel(region, bootSector);
 
-        // Read MFT data runs from $MFT record (record 0)
-        // This is needed to handle fragmented MFTs
-        List<NtfsAttribute.DataRun> mftDataRuns = readMftDataRuns(region, bootSector);
+        // Read MFT data runs from $MFT record (record 0) in two steps: the
+        // base record's own $DATA piece first (it always covers the reserved
+        // records 0..15, where $MFT's extension records live), then the full
+        // run list once the $ATTRIBUTE_LIST can be resolved through it.
+        // This is needed to handle fragmented MFTs.
+        List<NtfsAttribute.DataRun> baseRuns = readMftBaseDataRuns(region, bootSector);
 
-        return new NtfsFileSystemImpl(region, bootSector, volumeLabel, mftDataRuns);
+        NtfsFileSystemImpl fs = new NtfsFileSystemImpl(region, bootSector, volumeLabel, baseRuns);
+        fs.mftDataRuns = fs.resolveFullMftDataRuns(baseRuns);
+        return fs;
     }
 
     /**
-     * Reads the MFT data runs from the $MFT record (record 0).
-     * The MFT can be fragmented across multiple data runs.
+     * Reads the data runs of the first (VCN 0) unnamed $DATA piece from the
+     * raw $MFT record (record 0), without resolving $ATTRIBUTE_LIST.
      */
-    private static List<NtfsAttribute.DataRun> readMftDataRuns(DiskRegion region, NtfsBootSector bootSector)
+    private static List<NtfsAttribute.DataRun> readMftBaseDataRuns(DiskRegion region, NtfsBootSector bootSector)
             throws IOException {
         long mftOffset = bootSector.mftOffsetBytes();
         int recordSize = bootSector.mftRecordSize();
@@ -148,14 +154,37 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
             return List.of();
         }
 
-        // Get $DATA attribute
-        Optional<NtfsAttribute> dataAttr = record.get().findAttribute(NtfsAttribute.TYPE_DATA);
+        // Get the unnamed $DATA piece starting at VCN 0 (a named stream or a
+        // later piece could otherwise be picked up first)
+        Optional<NtfsAttribute> dataAttr = record.get().unnamedDataStream();
         if (dataAttr.isEmpty() || dataAttr.get().isResident()) {
             // If no data runs, fall back to simple linear MFT
             return List.of();
         }
 
         return dataAttr.get().dataRuns();
+    }
+
+    /**
+     * Re-reads $MFT (record 0) with its $ATTRIBUTE_LIST resolved, using the
+     * base piece's runs to reach the extension records, and returns the
+     * concatenated runs of every unnamed $DATA piece. Falls back to the base
+     * piece if the extension records cannot be read.
+     */
+    private List<NtfsAttribute.DataRun> resolveFullMftDataRuns(List<NtfsAttribute.DataRun> baseRuns) {
+        if (baseRuns.isEmpty()) {
+            return baseRuns;
+        }
+        try {
+            MftRecord mft = readMftRecord(MftRecord.MFT_RECORD_MFT);
+            Optional<NtfsAttribute> data = mft.unnamedDataStream();
+            if (data.isPresent() && !data.get().isResident() && !data.get().dataRuns().isEmpty()) {
+                return data.get().dataRuns();
+            }
+        } catch (IOException | RuntimeException e) {
+            // Keep the base piece: records inside it remain readable.
+        }
+        return baseRuns;
     }
 
     /**
@@ -337,19 +366,29 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
      * Reads file data from an MFT record.
      */
     byte[] readFileData(MftRecord record) throws IOException {
-        Optional<NtfsAttribute> dataAttr = record.findAttribute(NtfsAttribute.TYPE_DATA);
+        Optional<NtfsAttribute> dataAttr = record.unnamedDataStream();
         if (dataAttr.isEmpty()) {
             return new byte[0];
         }
+        return readStream(dataAttr.get());
+    }
 
-        NtfsAttribute attr = dataAttr.get();
-
+    /**
+     * Materializes a (possibly merged) $DATA stream: resident data is
+     * returned as is; non-resident data is read from the run list, with
+     * LZNT1 decompression for compressed streams.
+     */
+    private byte[] readStream(NtfsAttribute attr) throws IOException {
         if (attr.isResident()) {
             return attr.residentData();
         }
 
         // Non-resident data - read from data runs
         long dataSize = attr.dataSize();
+        if (dataSize > MAX_READABLE_SIZE) {
+            throw new ResourceLimitException("NTFS stream too large to read into memory: " + dataSize
+                    + " bytes (limit: 16 MB).", "allocation_size", MAX_READABLE_SIZE, dataSize);
+        }
         if (attr.isCompressed()) {
             return readCompressedDataRuns(attr.dataRuns(), (int) dataSize, attr.compressionUnitSize());
         }
@@ -365,19 +404,15 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
      * the compression units; capped at 16 MiB).
      */
     private InputStream openFileStream(MftRecord record) throws IOException {
-        Optional<NtfsAttribute> dataAttr = record.findAttribute(NtfsAttribute.TYPE_DATA);
+        Optional<NtfsAttribute> dataAttr = record.unnamedDataStream();
         if (dataAttr.isEmpty()) {
             return new ByteArrayInputStream(new byte[0]);
         }
         NtfsAttribute attr = dataAttr.get();
-        if (attr.isResident()) {
-            return new ByteArrayInputStream(attr.residentData());
+        if (attr.isResident() || attr.isCompressed()) {
+            return new ByteArrayInputStream(readStream(attr));
         }
         long dataSize = attr.dataSize();
-        if (attr.isCompressed()) {
-            return new ByteArrayInputStream(readCompressedDataRuns(
-                    attr.dataRuns(), (int) dataSize, attr.compressionUnitSize()));
-        }
         List<ChunkedRegionStream.Segment> segments = new ArrayList<>();
         long logical = 0;
         for (NtfsAttribute.DataRun run : attr.dataRuns()) {
@@ -526,7 +561,7 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
             if (mftRef != 0 && mftRef != dirRecord.recordNumber() && !entriesByRecord.containsKey(mftRef)) {
                 try {
                     MftRecord childRecord = readMftRecord(mftRef);
-                    if (childRecord.isInUse()) {
+                    if (childRecord.isInUse() && sequenceMatches(entry.sequenceNumber(), childRecord)) {
                         entriesByRecord.put(mftRef, childRecord);
                     }
                 } catch (Exception e) {
@@ -556,6 +591,17 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
         }
 
         return new ArrayList<>(entriesByRecord.values());
+    }
+
+    /**
+     * An index entry's MFT reference carries the record's sequence number in
+     * its top 16 bits; a stale entry (left in an index block after a delete)
+     * whose record has since been reused by another file has a different
+     * sequence number and must be ignored. A zero sequence is accepted for
+     * tolerance of old formatters.
+     */
+    private static boolean sequenceMatches(int entrySequence, MftRecord record) {
+        return entrySequence == 0 || entrySequence == record.sequenceNumber();
     }
 
     /**
@@ -601,7 +647,9 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
             // Parse index entries
             int entryOffset = blockOffset + entriesOffset;
             while (entryOffset + 16 < blockOffset + indexBlockSize) {
-                long mftRef = buf.getLong(entryOffset) & 0x0000FFFFFFFFFFFFL;
+                long rawRef = buf.getLong(entryOffset);
+                long mftRef = rawRef & 0x0000FFFFFFFFFFFFL;
+                int entrySequence = (int) (rawRef >>> 48);
                 int entryLength = buf.getShort(entryOffset + 8) & 0xFFFF;
                 int flags = buf.getShort(entryOffset + 12) & 0xFFFF;
 
@@ -621,7 +669,7 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
                 if ((flags & NtfsAttribute.IndexEntry.FLAG_LAST) == 0 && mftRef != 0) {
                     try {
                         MftRecord childRecord = readMftRecord(mftRef);
-                        if (childRecord.isInUse()) {
+                        if (childRecord.isInUse() && sequenceMatches(entrySequence, childRecord)) {
                             entries.add(childRecord);
                         }
                     } catch (Exception e) {
@@ -821,30 +869,13 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
             throw new IllegalArgumentException("Stream name must not be null or empty");
         }
 
-        List<NtfsAttribute> dataAttrs = ntfsFile.record.findAttributes(NtfsAttribute.TYPE_DATA);
-        for (NtfsAttribute attr : dataAttrs) {
-            if (attr.name().isPresent() && attr.name().get().equals(streamName)) {
-                if (attr.isResident()) {
-                    return attr.residentData();
-                }
-
-                long dataSize = attr.dataSize();
-                if (dataSize > MAX_READABLE_SIZE) {
-                    throw new ResourceLimitException(
-                            "Alternate data stream too large to read into memory: " + dataSize +
-                            " bytes (limit: 256 MB).",
-                            "allocation_size", MAX_READABLE_SIZE, dataSize);
-                }
-
-                if (attr.isCompressed()) {
-                    return readCompressedDataRuns(attr.dataRuns(), (int) dataSize, attr.compressionUnitSize());
-                }
-
-                return readDataRuns(attr.dataRuns(), (int) dataSize);
-            }
+        // All pieces of the named stream are concatenated (a split stream
+        // after an $ATTRIBUTE_LIST merge has several attributes of one name).
+        Optional<NtfsAttribute> stream = ntfsFile.record.namedDataStream(streamName);
+        if (stream.isEmpty()) {
+            throw new IOException("Alternate data stream not found: " + streamName);
         }
-
-        throw new IOException("Alternate data stream not found: " + streamName);
+        return readStream(stream.get());
     }
 
     @Override
@@ -1068,12 +1099,13 @@ public class NtfsFileSystemImpl implements FileSystem.NtfsFileSystem {
         public @NotNull Map<String, Object> attributes() {
             Map<String, Object> attrs = new LinkedHashMap<>(buildNtfsAttributes(record));
 
-            // Expose Alternate Data Streams (named $DATA attributes)
-            List<NtfsAttribute> dataAttrs = record.findAttributes(NtfsAttribute.TYPE_DATA);
+            // Expose Alternate Data Streams (named $DATA attributes), one
+            // entry per stream name even when the stream is split into pieces
             int adsCount = 0;
-            for (NtfsAttribute dataAttr : dataAttrs) {
-                if (dataAttr.name().isPresent()) {
-                    String streamName = dataAttr.name().get();
+            for (String streamName : record.alternateStreamNames()) {
+                Optional<NtfsAttribute> stream = record.namedDataStream(streamName);
+                if (stream.isPresent()) {
+                    NtfsAttribute dataAttr = stream.get();
                     long streamSize = dataAttr.isResident()
                             ? dataAttr.residentData().length
                             : dataAttr.dataSize();

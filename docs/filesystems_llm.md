@@ -11,7 +11,7 @@ supported formats through a single `FileSystem` interface.
 |--------|-----------|-------|----------|
 | squashfs | `hsqs` magic at offset 0 | Phase 1. Supports xz, gzip, lzo, lz4, zstd, uncompressed. | `SquashfsDetectionTest.detectsMagic` |
 | ext2/3/4 | `0xEF53` at superblock offset 1024 | Standard Linux filesystem; dir reads capped at 16 MiB. | `Ext4DirectoryCapTest` (synthetic) |
-| NTFS | `"NTFS    "` OEM ID | Windows filesystem. | existing corpus tests |
+| NTFS | `"NTFS    "` OEM ID | Windows filesystem; clusters 512 B..2 MiB (signed sectors-per-cluster byte), 4K sectors, LZNT1, sparse, ADS, reparse symlinks, `$ATTRIBUTE_LIST` (split `$DATA`, fragmented `$MFT`). | `NtfsFixtureTest` (8 mkntfs/ntfs-3g images, `src/test/resources/ntfs`) + corpus tests |
 | FAT32 / exFAT | FAT boot sector | Legacy/UEFI filesystems. | existing corpus tests |
 | XFS | `"XFSB"` | Linux journaling filesystem. | existing corpus tests |
 | Btrfs | `"_BHRfS_M"` | Linux copy-on-write filesystem. | existing corpus tests |
@@ -190,9 +190,24 @@ unsupported format are tracked in `format_support_llm.md`.
 - Validate-before-allocate per driver: btrfs nodeSize/sectorSize/item
   counts/extent caps; APFS blockSize at mount; XFS blockSize +
   dirBlockLog; HFS+ blockSize + B-tree node records; squashfs fragment/
-  inode-block caps; NTFS BPB + mftRecordSize + attr-list/index caps +
-  4096 entry cap; UBI lnum bound; UBIFS inline cap; FAT/exFAT BPB +
-  geometry + dir-chain loop cap + exFAT cluster cap.
+  inode-block caps; NTFS BPB (sectors-per-cluster byte: literal ≤ 0x80,
+  else 2^(256-byte); derived cluster size pow2 512 B..2 MiB) +
+  mftRecordSize/indexRecordSize 256 B..1 MiB + compression-unit exponent
+  ≤ 8 + attr-list/index caps + 4096 entry cap; UBI lnum bound; UBIFS
+  inline cap; FAT/exFAT BPB + geometry + dir-chain loop cap + exFAT
+  cluster cap.
+- NTFS `$DATA` pieces: `MftRecord.unnamedDataStream()`/`namedDataStream()`
+  merge same-name pieces by startVcn (sizes/flags from the VCN-0 piece);
+  used by readFileData/openFileStream/getFileSize/readAlternateStream and
+  the `$MFT` bootstrap (base piece → resolve `$ATTRIBUTE_LIST` → full
+  runs). Claim/Test: `NtfsFixtureTest` over fragmented.json,
+  cluster-256k.json, sector-4k.json, compressed.json, sparse-and-ads.json.
+- NTFS index entries: sequence number (top 16 bits of the MFT reference)
+  must match the record (stale entries after delete + record reuse).
+  LZNT1: displacement bits widen when position > 16/32/…, not >=.
+  Known TODOs in NtfsFixtureTest: hard-link per-directory names, stored
+  compression unit coalesced with next unit's run, directory reparse
+  points returned as directories, symlink resolve() with '..'/drive letter.
 - Tests: FilesystemAllocationCapsTest (8 methods, superblock-level
   hostile fixtures + boundary acceptance); corpus suites as the
   valid-image oracle.

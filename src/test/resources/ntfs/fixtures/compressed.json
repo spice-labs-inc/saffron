@@ -1,0 +1,25 @@
+{
+  "id": "ntfs/fixtures/compressed",
+  "image": "compressed.img",
+  "mkntfsOptions": "-F -Q -T -L compressed ",
+  "mountOptions": "compression",
+  "label": "compressed",
+  "fileCount": 10,
+  "directoryCount": 2,
+  "symlinkCount": 0,
+  "$comment": "directoryCount excludes the root directory; NTFS system files ($MFT etc.) are excluded from every count. fileCount counts names, so a hard-linked file counts once per name. sizes/sha256 come from the source tree.",
+  "entries": [
+    {"path": "/comp", "type": "dir", "compressed": true},
+    {"path": "/comp/mixed.bin", "type": "file", "size": 294912, "sha256": "96d19f18006f3adbf7bb77c9768e7f447e7e1ae59a81a4be4252b9fd8a1ad2e9", "compressed": true},
+    {"path": "/comp/random-200k.bin", "type": "file", "size": 204800, "sha256": "90f649555e81b918ad0003babb965d8c8093fa354274f975c8341dd16853493c", "compressed": true},
+    {"path": "/comp/small-10k.txt", "type": "file", "size": 10240, "sha256": "13395738cf3b3c397c32bc7e737e359ef4c1c3abb13a1960eb3c7bfadb3eeff7", "compressed": true},
+    {"path": "/comp/text-300k.txt", "type": "file", "size": 307200, "sha256": "22becd133b33b667d71c969de00d72c9ac143403214fa6023f5b6ffe2469546a", "compressed": true},
+    {"path": "/comp/text-64k.txt", "type": "file", "size": 65536, "sha256": "7710d5e6a04c5ab77e0f6dc1bab3b18cb7ffd08c42eb49ae3f9bc8af87a52e6c", "compressed": true},
+    {"path": "/comp/text-65537.txt", "type": "file", "size": 65537, "sha256": "7ff577ef2c298ab4565f0a2bb04bcc465ca54308b1925a405082b8baca6e5972", "compressed": true},
+    {"path": "/comp/tiny.txt", "type": "file", "size": 49, "sha256": "f4e97d4e67b3bb70a6db883fe747ebf2f93b9bae236b6300cf196a712fcc6cc1", "compressed": true},
+    {"path": "/comp/zeros-128k.bin", "type": "file", "size": 131072, "sha256": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471", "compressed": true},
+    {"path": "/comp/zeros-then-text.bin", "type": "file", "size": 86016, "sha256": "d287815b46399d4f01cb4fbcdf1e858f68aa8fe5f8ca2fd0c286aa0d8d87e7f9", "compressed": true},
+    {"path": "/plain", "type": "dir"},
+    {"path": "/plain/notcompressed.txt", "type": "file", "size": 71680, "sha256": "f7bb6ec2b8844c74c347dbfcdda488412c1b5b1e3b2cdb0702e04558c51e9067"}
+  ]
+}

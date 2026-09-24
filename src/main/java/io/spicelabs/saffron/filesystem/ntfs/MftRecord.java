@@ -236,6 +236,115 @@ public record MftRecord(
     }
 
     /**
+     * Returns every unnamed {@code $DATA} attribute, sorted by starting VCN.
+     * After an {@code $ATTRIBUTE_LIST} merge a heavily fragmented file has
+     * several pieces (each covering a VCN range) and a named alternate
+     * stream may precede the unnamed one, so {@link #findAttribute(int)} is
+     * not a safe way to reach the main stream.
+     */
+    public @NotNull List<NtfsAttribute> unnamedDataAttributes() {
+        return dataPieces(Optional.empty());
+    }
+
+    /**
+     * Returns the pieces of the {@code $DATA} stream with the given name
+     * (empty for the main stream), sorted by starting VCN.
+     */
+    public @NotNull List<NtfsAttribute> dataPieces(@NotNull Optional<String> name) {
+        return attributes.stream()
+                .filter(a -> a.type() == NtfsAttribute.TYPE_DATA && a.name().equals(name))
+                .sorted(java.util.Comparator.comparingLong(NtfsAttribute::startVcn))
+                .toList();
+    }
+
+    /**
+     * Returns the main (unnamed) {@code $DATA} stream with all of its pieces
+     * concatenated into one run list, or empty if the record has none.
+     *
+     * @see #mergeDataPieces(List)
+     */
+    public @NotNull Optional<NtfsAttribute> unnamedDataStream() {
+        return mergeDataPieces(unnamedDataAttributes());
+    }
+
+    /**
+     * Returns the named {@code $DATA} stream (alternate data stream) with
+     * all of its pieces concatenated, or empty if there is none.
+     */
+    public @NotNull Optional<NtfsAttribute> namedDataStream(@NotNull String name) {
+        return mergeDataPieces(dataPieces(Optional.of(name)));
+    }
+
+    /**
+     * Returns the distinct alternate data stream names in this record, in
+     * first-seen order (each name once even when the stream is split).
+     */
+    public @NotNull List<String> alternateStreamNames() {
+        List<String> names = new ArrayList<>();
+        for (NtfsAttribute a : attributes) {
+            if (a.type() == NtfsAttribute.TYPE_DATA && a.name().isPresent()
+                    && !names.contains(a.name().get())) {
+                names.add(a.name().get());
+            }
+        }
+        return names;
+    }
+
+    /**
+     * Concatenates the data runs of the given pieces (already sorted by
+     * starting VCN) into a single attribute. Sizes and the compression
+     * flags come from the piece that starts at VCN 0 (the one that also
+     * carries the resident data when the stream is resident); a VCN gap
+     * between pieces is filled with a sparse run so logical offsets stay
+     * correct.
+     *
+     * @param pieces the pieces, sorted by {@link NtfsAttribute#startVcn()}
+     * @return the merged attribute, or empty if there are no pieces
+     */
+    public static @NotNull Optional<NtfsAttribute> mergeDataPieces(@NotNull List<NtfsAttribute> pieces) {
+        if (pieces.isEmpty()) {
+            return Optional.empty();
+        }
+        if (pieces.size() == 1) {
+            return Optional.of(pieces.get(0));
+        }
+        NtfsAttribute base = pieces.get(0);
+        for (NtfsAttribute p : pieces) {
+            if (p.startVcn() == 0) {
+                base = p;
+                break;
+            }
+        }
+        if (base.isResident()) {
+            return Optional.of(base);
+        }
+        List<NtfsAttribute.DataRun> runs = new ArrayList<>();
+        long nextVcn = 0;
+        long lastEndVcn = base.endVcn();
+        for (NtfsAttribute p : pieces) {
+            if (p.isResident()) {
+                continue;
+            }
+            if (p.startVcn() > nextVcn) {
+                runs.add(new NtfsAttribute.DataRun(0, p.startVcn() - nextVcn, true));
+                nextVcn = p.startVcn();
+            }
+            long pieceClusters = 0;
+            for (NtfsAttribute.DataRun r : p.dataRuns()) {
+                runs.add(r);
+                pieceClusters += r.length();
+            }
+            nextVcn += pieceClusters;
+            lastEndVcn = Math.max(lastEndVcn, p.endVcn());
+        }
+        return Optional.of(new NtfsAttribute(
+                base.type(), base.totalLength(), false, base.name(), base.flags(),
+                new byte[0], 0, lastEndVcn, List.copyOf(runs),
+                base.allocatedSize(), base.dataSize(), base.initializedSize(),
+                base.compressionUnitSize()));
+    }
+
+    /**
      * Gets the filename from $FILE_NAME attribute.
      */
     public @NotNull Optional<String> getFileName() {
@@ -279,7 +388,7 @@ public record MftRecord(
      * Gets the file size from $DATA attribute.
      */
     public long getFileSize() {
-        return findAttribute(NtfsAttribute.TYPE_DATA)
+        return unnamedDataStream()
                 .map(attr -> attr.isResident() ? attr.residentData().length : attr.dataSize())
                 .orElse(0L);
     }

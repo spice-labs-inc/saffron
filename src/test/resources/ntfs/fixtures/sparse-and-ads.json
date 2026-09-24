@@ -1,0 +1,23 @@
+{
+  "id": "ntfs/fixtures/sparse-and-ads",
+  "image": "sparse-and-ads.img",
+  "mkntfsOptions": "-F -Q -T -L sparse-and-ads ",
+  "mountOptions": "streams_interface=xattr",
+  "label": "sparse-and-ads",
+  "fileCount": 7,
+  "directoryCount": 3,
+  "symlinkCount": 0,
+  "$comment": "directoryCount excludes the root directory; NTFS system files ($MFT etc.) are excluded from every count. fileCount counts names, so a hard-linked file counts once per name. sizes/sha256 come from the source tree.",
+  "entries": [
+    {"path": "/ads", "type": "dir"},
+    {"path": "/ads/dir-with-stream", "type": "dir", "streams": {"dirstream": {"size": 25, "sha256": "c6cb197662eb6dad118658b49d67b7c490862f3bb4e5d4014f2675cc645ac61b"}}},
+    {"path": "/ads/dir-with-stream/inside.txt", "type": "file", "size": 34, "sha256": "c9f8c63baccced03d65cb672b79cf53442e0bd6006b61ce18ab92fc1d034c8c5"},
+    {"path": "/ads/only-ads.txt", "type": "file", "size": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "streams": {"hidden": {"size": 60000, "sha256": "ded9a563ec50ea89afd9cb81c8d284bc2a78aa0739ced961760d1db259862f88"}}},
+    {"path": "/ads/plain.txt", "type": "file", "size": 16, "sha256": "f0083c052778dfc21ba77f229c7c2c69e0c7d1bc03ef74fc2bb7c12dd003ad6b"},
+    {"path": "/ads/two-streams.txt", "type": "file", "size": 31, "sha256": "d866234596177a66f69cf4e420188c3e04468801d71c1083f19031b5b3bf3b29", "streams": {"first": {"size": 19, "sha256": "29f32c48e751da3ce2c181b645bfadd9629db7ba6af0fef371b93daf0576cd71"}, "second": {"size": 5000, "sha256": "7e0bb1565350ce5451d89b7ffd06203c848c56a3e9be7434bdec5eddcfc756a0"}}},
+    {"path": "/sparse", "type": "dir"},
+    {"path": "/sparse/holes-8m.bin", "type": "file", "size": 8388608, "sha256": "6a7ae05b9fa8f24b3694bb48fecb0cf604dab2932cd96ab8d1d2cbd170b69d48", "sparse": true},
+    {"path": "/sparse/holes-small.bin", "type": "file", "size": 65536, "sha256": "a37e49c2f311388eff9ea5e4bb0214b51e0676c7a81ecc66501c4c4f96157552", "sparse": true},
+    {"path": "/sparse/leading-data.bin", "type": "file", "size": 1048576, "sha256": "f4e8b38e64ca1d6b597ed7462e7d2dd98d8af0a87e21dddfc2a85459e790cf3c", "sparse": true}
+  ]
+}

@@ -116,7 +116,10 @@ final class NtfsLznt1Decompressor {
         // 0-63: 4, 64-127: 5, 128-255: 6, 256-511: 7, ...
         int bits = 4;
         int threshold = 0x10; // 16
-        while (position >= threshold && bits < 12) {
+        // A displacement is stored as (d - 1); with `position` bytes already
+        // output, 4 bits cover d <= 16, so the field only grows once position
+        // *exceeds* 16 (MS-XCA / ntfs-3g: (position - 1) >= 0x10), not at 16.
+        while (position > threshold && bits < 12) {
             bits++;
             threshold <<= 1;
         }

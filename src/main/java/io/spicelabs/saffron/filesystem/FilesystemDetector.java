@@ -294,9 +294,12 @@ public final class FilesystemDetector {
             return Optional.empty();
         }
 
-        // Parse BPB (BIOS Parameter Block)
+        // Parse BPB (BIOS Parameter Block). Byte 13 is a literal count up to
+        // 0x80 and a negative power-of-two exponent above that (large
+        // clusters); see NtfsBootSector.decodeSectorsPerCluster.
         int bytesPerSector = boot.getShort(11) & 0xFFFF;
-        int sectorsPerCluster = boot.get(13) & 0xFF;
+        int sectorsPerCluster = io.spicelabs.saffron.filesystem.ntfs.NtfsBootSector
+                .decodeSectorsPerCluster(boot.get(13) & 0xFF);
         long totalSectors = boot.getLong(40);
         long mftCluster = boot.getLong(48);
 
@@ -304,7 +307,8 @@ public final class FilesystemDetector {
         long serialNumber = boot.getLong(72);
         String uuid = String.format("%016X", serialNumber);
 
-        int clusterSize = bytesPerSector * sectorsPerCluster;
+        long clusterBytes = (long) bytesPerSector * sectorsPerCluster;
+        int clusterSize = clusterBytes > Integer.MAX_VALUE ? 0 : (int) clusterBytes;
         long totalSize = totalSectors * bytesPerSector;
 
         // NTFS version is in $Volume file, default to 3.1
