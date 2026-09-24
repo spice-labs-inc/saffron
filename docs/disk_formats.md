@@ -37,7 +37,8 @@ On-disk size fields are validated before any allocation; violations throw
 | VHDX | virtualDiskSize | > 0, ≤ 64 TiB |
 | VHDX | blockSize | power of 2, 1 MiB..256 MiB |
 | VHDX | region entryCount | 1..2047 |
-| VHDX | BAT | ≤ 16 MiB read, within file |
+| VHDX | logicalSectorSize | 512 or 4096 |
+| VHDX | BAT | ≤ 16 MiB read, within file and within the BAT region |
 | VMDK | capacity | > 0, ≤ 2 TiB, no overflow |
 | VMDK | grainSize | power of 2, 1..4096 sectors |
 | VMDK | grain directory | ≤ 1M entries (rejected, not truncated) |
@@ -76,6 +77,27 @@ Tests: `DiskValidationTest.*` (e.g. `vhdBlockSizeZeroRejected`,
 Claim: `AmiDiskHardeningTest.*`, `AmiReadFullyTest.*`,
 `DiskValidationTest.vmdkCapacityOverflowRejected` (and the VMDK paths in
 `DiskTruncationTest`).
+
+## VHDX BAT chunk ratio
+
+The VHDX BAT is not one entry per payload block. The spec (section 2.5)
+interleaves one sector-bitmap entry after every
+`chunkRatio = 2^23 * logicalSectorSize / blockSize` payload entries, so
+payload block `b` lives at BAT index `b + b / chunkRatio`. With 512-byte
+logical sectors that is one extra entry every 4 GiB of virtual disk
+(32 GiB with 4 KiB sectors) regardless of block size. The reader computes
+the chunk ratio from the metadata, reads
+`blocks + ceil(blocks / chunkRatio)` entries, rejects a BAT region that is
+too small for them, and keeps only the payload entries. The sector-bitmap
+entries are irrelevant for fixed and dynamic images (they matter only for
+differencing images, which are rejected). `metadata()` reports
+`vhdx.chunkRatio`.
+
+Claim: blocks past the first chunk boundary read correctly for dynamic
+512-byte-sector, dynamic 4 KiB-sector and fixed images, and for a
+qemu-img-generated 5 GiB image (`src/test/resources/vhdx/fixtures`).
+Tests: `VhdxChunkRatioTest.*` (all but `smallImage_underOneChunk_unchanged`
+were red pre-fix).
 
 ## Differencing images rejected
 
