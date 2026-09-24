@@ -9,8 +9,10 @@ Single page answering "can Saffron read X?". Full table in
   single sparse/stream-optimised VMDK, raw dd, File History drives, images
   inside OVA/tar/zip/7z (one member extracted, bounded, nesting rejected).
 - Works with gaps: modern NTFS. Covered by mkntfs/ntfs-3g fixtures
-  (compression, sparse, ADS, links, fragmented $MFT, large clusters).
-  Missing: EFS (ciphertext), WOF/CompactOS (stubs), $LogFile replay.
+  (compression, sparse, ADS, fragmented $MFT, large clusters, 4K sectors).
+  Gaps tracked in #35: hard-link names, coalesced compression units,
+  directory reparse points/junctions, symlink resolution, EFS (ciphertext),
+  WOF/CompactOS (stubs), initializedSize, $LogFile replay.
 - Not supported, tracked: differencing VHD/VHDX and AVHDX (#25), descriptor
   / flat / split VMDK (#26), VSS shadow copies (#27), WIM/ESD contents
   (#28, header-only today), BitLocker (#29, not even detected), NTBackup

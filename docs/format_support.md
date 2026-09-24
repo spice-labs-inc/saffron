@@ -25,7 +25,7 @@ mostly undocumented formats and are best converted with the vendor's tool.
 | Raw `dd` images, including `.img.gz` and `.raw.gz` | Works today | Whole-disk or single-volume. |
 | File History drives | Works today | A dated directory tree on NTFS or exFAT; no special format. |
 | Images inside OVA, `.tar`, zip or 7z wrappers | Works today | One disk member is extracted (bounded by `SecurityPolicy`) and opened; nested archives and encrypted entries are rejected. See `archive_wrappers.md`. |
-| NTFS from Windows 10, 11 and Server 2016+ | Works, with gaps | Synthetic fixtures built with mkntfs/ntfs-3g cover compression, sparse files, ADS, hard links, symlinks, fragmented `$MFT` and large clusters (`filesystems.md`). Windows-only features remain: EFS files return ciphertext, WOF/CompactOS files read as stubs, dirty volumes are not replayed. |
+| NTFS from Windows 10, 11 and Server 2016+ | Works, with gaps | Fixtures built with mkntfs/ntfs-3g cover compression, sparse files, ADS, fragmented `$MFT`, large clusters and 4K sectors (`filesystems.md`). Remaining gaps, all tracked in #35: hard-link names, compression units coalesced across runs, directory reparse points and junctions, symlink resolution, EFS (returns ciphertext), WOF/CompactOS (reads stubs), `initializedSize`, `$LogFile` replay. |
 | Hyper-V checkpoints (AVHDX), differencing VHD/VHDX chains | Not supported | Rejected at open. Parent locator, chain resolution and sector bitmaps needed; a few days (#25). |
 | Descriptor-first, flat and split-extent VMDK | Not supported | Descriptor parser exists; reader insists on sparse magic at offset zero. A few days (#26). |
 | VSS shadow copies inside NTFS (earlier backup versions) | Not supported | libvshadow is the reference. One to two weeks (#27). |
@@ -68,7 +68,7 @@ VHD, VHDX, VMDK or raw.
 | Format | Status | Notes |
 |---|---|---|
 | ext2/3/4, XFS, Btrfs (subvolumes, zstd/zlib/lzo) | Works today | |
-| NTFS | Works today | See the NTFS row above for remaining gaps. |
+| NTFS | Works today | NTFS 1.2 through 3.1; see the NTFS row above for remaining gaps (#35). |
 | FAT12/16/32, exFAT | Works today | Reported as `FAT32` regardless of variant. |
 | HFS+/HFSX, APFS | Works today | Encrypted APFS volumes are not readable. |
 | SquashFS, cramfs, JFFS2, YAFFS2, UBI/UBIFS | Works today | Encrypted or authenticated UBIFS rejected. |
