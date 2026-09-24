@@ -5,7 +5,7 @@
 [![GitHub Package](https://img.shields.io/badge/GitHub-Packages-blue?logo=github)](https://github.com/spice-labs-inc/saffron/packages/)
 [![Build Status](https://github.com/spice-labs-inc/saffron/actions/workflows/buildAndTest.yml/badge.svg)](https://github.com/spice-labs-inc/saffron/actions)
 
-**Saffron** is a Java library for reading virtual machine disk images and their contained filesystems. It supports 11 disk image and archive formats and 13 filesystem types through a unified, type-safe API built on Java 21 sealed interfaces and pattern matching. Everything is pure Java except the bundled zstd-jni decompressor. See [docs/format_support.md](docs/format_support.md) for the full support matrix, including what is not supported and why.
+**Saffron** is a Java library for reading virtual machine disk images and their contained filesystems. It supports 8 disk image formats and 13 filesystem types through a unified, type-safe API built on Java 21 sealed interfaces and pattern matching. Everything is pure Java except the bundled zstd-jni decompressor. See [docs/format_support.md](docs/format_support.md) for the full support matrix, including what is not supported and why.
 
 ## Quick Start
 

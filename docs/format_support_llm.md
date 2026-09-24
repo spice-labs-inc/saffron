@@ -6,8 +6,9 @@ Single page answering "can Saffron read X?". Full table in
 ## Windows backups
 - Works: Windows Server Backup / Backup and Restore system images (dynamic
   VHDX or VHD per volume, NTFS at offset 0), Disk2vhd, Hyper-V exports,
-  single sparse/stream-optimised VMDK, raw dd, File History drives, images
-  inside OVA/tar/zip/7z (one member extracted, bounded, nesting rejected).
+  single sparse/stream-optimised VMDK, raw dd, File History drives.
+- Out of scope by design: OVA/tar/zip/7z wrappers (Goat Rodeo unpacks
+  archives before calling Saffron; only GCP `.tar.gz` is opened directly).
 - Works with gaps: modern NTFS. Covered by mkntfs/ntfs-3g fixtures
   (compression, sparse, ADS, fragmented $MFT, large clusters, 4K sectors).
   Gaps tracked in #35: hard-link names, coalesced compression units,
@@ -27,8 +28,8 @@ Single page answering "can Saffron read X?". Full table in
 QCOW2 v2/v3 (backing chains, deflate; encryption/external data rejected;
 zstd + extended L2 unhandled), VMDK sparse/stream-optimised, VHD fixed +
 dynamic, VHDX fixed + dynamic (512/4K sectors, no log replay), VDI, raw,
-gzip raw, GCP tar.gz, AMI (plain parts), OVA/tar/zip/7z wrappers. Not:
-ISO/UDF, EWF, AFF, split raw.
+gzip raw, GCP tar.gz, AMI (plain parts). Not: ISO/UDF, EWF, AFF, split
+raw; OVA/tar/zip/7z wrappers are out of scope (unpacked upstream).
 
 ## Filesystems / volumes
 ext2/3/4, XFS, Btrfs, NTFS, FAT12/16/32, exFAT, HFS+, APFS (unencrypted),

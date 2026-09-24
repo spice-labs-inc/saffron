@@ -24,7 +24,7 @@ mostly undocumented formats and are best converted with the vendor's tool.
 | Single monolithic-sparse or stream-optimised VMDK | Works today | Descriptor-plus-flat and split-extent VMDKs fail to open (#26). |
 | Raw `dd` images, including `.img.gz` and `.raw.gz` | Works today | Whole-disk or single-volume. |
 | File History drives | Works today | A dated directory tree on NTFS or exFAT; no special format. |
-| Images inside OVA, `.tar`, zip or 7z wrappers | Works today | One disk member is extracted (bounded by `SecurityPolicy`) and opened; nested archives and encrypted entries are rejected. See `archive_wrappers.md`. |
+| Images inside OVA, `.tar`, zip or 7z wrappers | Out of scope | Goat Rodeo unpacks archives before handing their members to Saffron, so Saffron deliberately does not unwrap them itself. Only the GCP `.tar.gz` (`disk.raw`) special case is opened directly. |
 | NTFS from Windows 10, 11 and Server 2016+ | Works, with gaps | Fixtures built with mkntfs/ntfs-3g cover compression, sparse files, ADS, fragmented `$MFT`, large clusters and 4K sectors (`filesystems.md`). Remaining gaps, all tracked in #35: hard-link names, compression units coalesced across runs, directory reparse points and junctions, symlink resolution, EFS (returns ciphertext), WOF/CompactOS (reads stubs), `initializedSize`, `$LogFile` replay. |
 | Hyper-V checkpoints (AVHDX), differencing VHD/VHDX chains | Not supported | Rejected at open. Parent locator, chain resolution and sector bitmaps needed; a few days (#25). |
 | Descriptor-first, flat and split-extent VMDK | Not supported | Descriptor parser exists; reader insists on sparse magic at offset zero. A few days (#26). |
@@ -60,7 +60,7 @@ VHD, VHDX, VMDK or raw.
 | Raw, gzip-wrapped raw (`.img.gz`, `.raw.gz`) | Works today | |
 | GCP `.tar.gz` (`disk.raw` member) | Works today | |
 | AMI bundle (`*.manifest.xml` + parts) | Works today | Unencrypted, uncompressed parts only. |
-| OVA, `.tar`, zip, 7z | Works today | One disk member; see `archive_wrappers.md`. |
+| OVA, `.tar`, zip, 7z | Out of scope | Unpacked upstream by Goat Rodeo; not duplicated in Saffron. |
 | ISO 9660 / UDF, EWF (E01), AFF, split raw (`.001`) | Not supported | No tracking issue yet. |
 
 ## Filesystems and volume managers

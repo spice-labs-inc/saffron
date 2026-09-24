@@ -440,7 +440,7 @@ For concurrent access, open separate `VirtualDisk` instances per thread.
 | packageurl-java | Package URL (PURL) generation |
 | XZ for Java | XZ and LZMA decompression |
 | zstd-jni | Zstandard decompression (Btrfs, Linux kernel payloads) |
-| Commons Compress | bzip2, tar, zip and 7z readers |
+| Commons Compress | bzip2 decompression, tar (GCP images), cpio (initramfs) |
 | SLF4J API | Logging facade |
 
 ### Test
