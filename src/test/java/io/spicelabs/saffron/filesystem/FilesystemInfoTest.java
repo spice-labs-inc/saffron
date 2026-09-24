@@ -249,4 +249,28 @@ class FilesystemInfoTest {
                 0
         );
     }
+    @Test
+    void formattedSizes_useDotDecimalSeparator_regardlessOfDefaultLocale() {
+        java.util.Locale previous = java.util.Locale.getDefault();
+        java.util.Locale.setDefault(java.util.Locale.GERMANY);
+        try {
+            FilesystemInfo info = new FilesystemInfo(
+                    FileSystemType.EXT4,
+                    "ext4",
+                    Optional.empty(),
+                    Optional.empty(),
+                    10L * 1024 * 1024 * 1024,
+                    5L * 1024 * 1024,
+                    1536,
+                    4096,
+                    0
+            );
+
+            assertThat(info.formattedTotalSize()).isEqualTo("10.0 GB");
+            assertThat(info.formattedUsedSize()).isEqualTo("5.0 MB");
+            assertThat(info.formattedFreeSize()).isEqualTo("1.5 KB");
+        } finally {
+            java.util.Locale.setDefault(previous);
+        }
+    }
 }
