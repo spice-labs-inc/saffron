@@ -178,10 +178,34 @@ public final class DiskFixtures {
 
     /** Physical offset of block data in {@link #vhdx}. */
     public static long vhdxDataStart(long virtualSize, int blockSize, boolean allocated) {
-        int totalBlocks = (int) ((virtualSize + blockSize - 1) / blockSize);
-        long batLength = totalBlocks * 8L;
+        long batLength = vhdxBatEntries(virtualSize, blockSize, 512) * 8L;
         long oneMb = 1024 * 1024;
         return ((512 * 1024L + batLength + oneMb - 1) / oneMb) * oneMb;
+    }
+
+    /** VHDX chunk ratio: payload blocks per sector-bitmap block (spec 2.5). */
+    public static int vhdxChunkRatio(int logicalSectorSize, int blockSize) {
+        return (int) (((1L << 23) * logicalSectorSize) / blockSize);
+    }
+
+    /** Payload blocks in a VHDX of the given geometry. */
+    public static long vhdxPayloadBlocks(long virtualSize, int blockSize) {
+        return (virtualSize + blockSize - 1) / blockSize;
+    }
+
+    /**
+     * Total BAT entries including the one sector-bitmap entry per chunk that
+     * the spec interleaves after every {@code chunkRatio} payload entries.
+     */
+    public static long vhdxBatEntries(long virtualSize, int blockSize, int logicalSectorSize) {
+        long blocks = vhdxPayloadBlocks(virtualSize, blockSize);
+        int chunkRatio = vhdxChunkRatio(logicalSectorSize, blockSize);
+        return blocks + (blocks + chunkRatio - 1) / chunkRatio;
+    }
+
+    /** BAT index of payload block {@code block}. */
+    public static long vhdxBatIndex(long block, int chunkRatio) {
+        return block + block / chunkRatio;
     }
 
     /** Physical offset of block data in {@link #vdi}. */
@@ -393,8 +417,10 @@ public final class DiskFixtures {
         long metadataOffset = 320 * 1024;
         int metadataLength = 1024;
         long batOffset = 512 * 1024;
-        int totalBlocks = (int) ((virtualSize + blockSize - 1) / blockSize);
-        long batLength = totalBlocks * 8L;
+        int totalBlocks = (int) vhdxPayloadBlocks(virtualSize, blockSize);
+        int chunkRatio = vhdxChunkRatio(512, blockSize);
+        long batEntries = vhdxBatEntries(virtualSize, blockSize, 512);
+        long batLength = batEntries * 8L;
         long oneMb = 1024 * 1024;
         long dataStart = ((batOffset + batLength + oneMb - 1) / oneMb) * oneMb;
         int totalSize = (int) (dataStart + (allocateFirstBlock ? blockSize : 0));
@@ -470,20 +496,164 @@ public final class DiskFixtures {
         buf.putLong(0x12345678_9abcdef0L);
         buf.putLong(0x0fedcba9_87654321L);
 
-        // BAT region: first block allocated
+        // BAT region: first block allocated. Payload entries are interleaved
+        // with one sector-bitmap entry per chunk (spec 2.5); bitmap entries
+        // stay zero (SB_BLOCK_NOT_PRESENT).
         buf.position((int) batOffset);
-        for (int i = 0; i < totalBlocks; i++) {
-            if (i == 0 && allocateFirstBlock) {
-                buf.putLong(dataStart | 6L); // state FULLY_PRESENT, offset in MB units
-            } else {
-                buf.putLong(0);
-            }
+        if (allocateFirstBlock) {
+            buf.putLong((int) batOffset + (int) vhdxBatIndex(0, chunkRatio) * 8,
+                    dataStart | 6L); // state FULLY_PRESENT, offset in MB units
         }
 
         if (allocateFirstBlock) {
             fill(data, (int) dataStart, blockSize);
         }
         return data;
+    }
+
+    /**
+     * Writes a VHDX whose virtual size may exceed what fits in memory: the
+     * file is written sparsely through a channel, so a 5 GiB dynamic image
+     * with two allocated 1 MiB blocks is a few MiB on disk.
+     *
+     * <p>The BAT follows the spec layout: {@code chunkRatio} payload entries
+     * then one sector-bitmap entry, repeated. Allocated payload blocks are
+     * placed sequentially after the BAT in ascending block order and filled
+     * with {@link #pattern(long)} offset by the block's seed.
+     *
+     * @param out destination path (overwritten)
+     * @param virtualSize virtual disk size in bytes
+     * @param blockSize payload block size (power of two, 1 MiB..256 MiB)
+     * @param logicalSectorSize 512 or 4096
+     * @param fixed {@code true} for a fixed image (all blocks present, file
+     *        length {@code dataStart + blocks * blockSize}), {@code false}
+     *        for dynamic
+     * @param allocated payload block index to pattern seed; for fixed images
+     *        unlisted blocks are present but zero
+     * @return the file offset at which payload data starts
+     */
+    public static long vhdxToFile(Path out, long virtualSize, int blockSize, int logicalSectorSize,
+                                  boolean fixed, java.util.SortedMap<Long, Integer> allocated)
+            throws java.io.IOException {
+        long header1 = 64 * 1024;
+        long regionTable = 192 * 1024;
+        long metadataOffset = 320 * 1024;
+        int metadataLength = 1024;
+        long batOffset = 512 * 1024;
+        long blocks = vhdxPayloadBlocks(virtualSize, blockSize);
+        int chunkRatio = vhdxChunkRatio(logicalSectorSize, blockSize);
+        long batLength = vhdxBatEntries(virtualSize, blockSize, logicalSectorSize) * 8L;
+        long oneMb = 1024 * 1024;
+        long dataStart = ((batOffset + batLength + oneMb - 1) / oneMb) * oneMb;
+
+        ByteBuffer head = ByteBuffer.allocate((int) batOffset).order(ByteOrder.LITTLE_ENDIAN);
+        head.put("vhdxfile".getBytes());
+        head.putLong(0x7869_6365_6C69_7665L);
+        head.putLong(0);
+        head.position((int) header1);
+        head.put("head".getBytes());
+        head.putInt(0);
+        head.putLong(1);
+        head.putLong(0); head.putLong(0);   // fileWriteGuid
+        head.putLong(0); head.putLong(0);   // dataWriteGuid
+        head.putLong(0); head.putLong(0);   // logGuid
+        head.putShort((short) 0);
+        head.putShort((short) 1);
+        head.putInt(1024 * 1024);
+        head.putLong(0);
+        head.position((int) regionTable);
+        head.put("regi".getBytes());
+        head.putInt(0);
+        head.putInt(2);
+        head.putInt(0);
+        writeGuid(head, METADATA_REGION_GUID);
+        head.putLong(metadataOffset);
+        head.putInt(metadataLength);
+        head.putInt(1);
+        writeGuid(head, BAT_REGION_GUID);
+        head.putLong(batOffset);
+        head.putInt((int) batLength);
+        head.putInt(1);
+        head.position((int) metadataOffset);
+        head.put("metadata".getBytes());
+        head.putShort((short) 0);
+        head.putShort((short) 5);   // fileParams, size, id, logical sector, physical sector
+        head.put(new byte[20]);
+        int items = 32 + 5 * 32;
+        writeGuid(head, FILE_PARAMETERS_GUID);
+        head.putInt(items); head.putInt(8); head.putInt(0x04); head.putInt(0);
+        writeGuid(head, VIRTUAL_DISK_SIZE_GUID);
+        head.putInt(items + 8); head.putInt(8); head.putInt(0x04); head.putInt(0);
+        writeGuid(head, UUID.fromString("beca12ab-b2e6-4523-93ef-c309e000c746"));
+        head.putInt(items + 16); head.putInt(16); head.putInt(0x04); head.putInt(0);
+        writeGuid(head, UUID.fromString("8141bf1d-a96f-4709-ba47-f233a8faab5f"));
+        head.putInt(items + 32); head.putInt(4); head.putInt(0x04); head.putInt(0);
+        writeGuid(head, UUID.fromString("cda348c7-445d-4471-9cc9-e9885251c556"));
+        head.putInt(items + 36); head.putInt(4); head.putInt(0x04); head.putInt(0);
+        head.position((int) metadataOffset + items);
+        head.putInt(blockSize);
+        head.putInt(fixed ? 0x01 : 0x00);
+        head.putLong(virtualSize);
+        head.putLong(0x12345678_9abcdef0L);
+        head.putLong(0x0fedcba9_87654321L);
+        head.putInt(logicalSectorSize);
+        head.putInt(4096);
+
+        try (var ch = java.nio.file.Files.newByteChannel(out,
+                StandardOpenOption.CREATE, StandardOpenOption.WRITE,
+                StandardOpenOption.TRUNCATE_EXISTING)) {
+            head.flip();
+            ch.position(0);
+            while (head.hasRemaining()) {
+                ch.write(head);
+            }
+
+            // BAT: zero except the payload entries we allocate.
+            ByteBuffer entry = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN);
+            long next = dataStart;
+            java.util.Map<Long, Long> fileOffsets = new java.util.TreeMap<>();
+            if (fixed) {
+                for (long b = 0; b < blocks; b++) {
+                    fileOffsets.put(b, dataStart + b * blockSize);
+                }
+            } else {
+                for (long b : allocated.keySet()) {
+                    fileOffsets.put(b, next);
+                    next += blockSize;
+                }
+            }
+            for (var e : fileOffsets.entrySet()) {
+                entry.clear();
+                entry.putLong(e.getValue() | 6L).flip();
+                ch.position(batOffset + vhdxBatIndex(e.getKey(), chunkRatio) * 8);
+                while (entry.hasRemaining()) {
+                    ch.write(entry);
+                }
+            }
+
+            // Payload
+            byte[] block = new byte[blockSize];
+            for (var e : allocated.entrySet()) {
+                long fileOffset = fileOffsets.get(e.getKey());
+                int seed = e.getValue();
+                for (int i = 0; i < blockSize; i++) {
+                    block[i] = pattern((long) seed * blockSize + i);
+                }
+                ch.position(fileOffset);
+                ByteBuffer bb = ByteBuffer.wrap(block);
+                while (bb.hasRemaining()) {
+                    ch.write(bb);
+                }
+            }
+
+            // File length
+            long end = fixed ? dataStart + blocks * blockSize : next;
+            if (ch.size() < end) {
+                ch.position(end - 1);
+                ch.write(ByteBuffer.wrap(new byte[1]));
+            }
+        }
+        return dataStart;
     }
 
     private static void writeGuid(ByteBuffer buf, UUID uuid) {

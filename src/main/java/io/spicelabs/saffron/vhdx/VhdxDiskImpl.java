@@ -122,6 +122,7 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
             long metadataOffset = regionInfo[0];
             int metadataLength = (int) regionInfo[1];
             long batOffset = regionInfo[2];
+            long batRegionLength = regionInfo[3];
 
             // Read metadata
             VhdxMetadata metadata = VhdxMetadata.read(channel, metadataOffset, metadataLength);
@@ -136,7 +137,8 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
             validateMetadata(metadata, channel.size());
 
             // Read BAT
-            long[] bat = readBat(channel, batOffset, metadata.virtualDiskSize(), metadata.blockSize());
+            long[] bat = readBat(channel, batOffset, batRegionLength, metadata.virtualDiskSize(),
+                    metadata.blockSize(), metadata.logicalSectorSize());
 
             long allocatedSize = Files.size(path);
 
@@ -168,6 +170,10 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
         long virtualSize = metadata.virtualDiskSize();
         if (virtualSize <= 0 || virtualSize > MAX_VHDX_SIZE) {
             throw new IOException("Invalid VHDX virtual disk size: " + virtualSize);
+        }
+        int logicalSectorSize = metadata.logicalSectorSize();
+        if (logicalSectorSize != 512 && logicalSectorSize != 4096) {
+            throw new IOException("Invalid VHDX logical sector size: " + logicalSectorSize);
         }
     }
 
@@ -259,6 +265,7 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
         long metadataOffset = 0;
         int metadataLength = 0;
         long batOffset = 0;
+        long batLength = 0;
 
         for (int i = 0; i < entryCount && entriesBuffer.remaining() >= 32; i++) {
             UUID guid = readGuid(entriesBuffer);
@@ -271,6 +278,7 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
                 metadataLength = regionLength;
             } else if (guid.equals(BAT_REGION_GUID)) {
                 batOffset = regionOffset;
+                batLength = regionLength & 0xFFFFFFFFL;
             }
         }
 
@@ -278,11 +286,31 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
             return null;
         }
 
-        return new long[]{metadataOffset, metadataLength, batOffset};
+        return new long[]{metadataOffset, metadataLength, batOffset, batLength};
     }
 
-    private static long[] readBat(SeekableByteChannel channel, long batOffset,
-                                   long virtualSize, int blockSize) throws IOException {
+    /**
+     * Computes the VHDX chunk ratio: the number of payload blocks that share
+     * one sector-bitmap block. The BAT interleaves one sector-bitmap entry
+     * after every {@code chunkRatio} payload entries (VHDX spec section 2.5),
+     * so payload block {@code b} lives at BAT index {@code b + b / chunkRatio}.
+     *
+     * @param logicalSectorSize logical sector size in bytes (512 or 4096)
+     * @param blockSize payload block size in bytes (1 MiB..256 MiB)
+     * @return the chunk ratio, always at least 1 for valid geometries
+     */
+    static int chunkRatio(int logicalSectorSize, int blockSize) {
+        return (int) (((1L << 23) * logicalSectorSize) / blockSize);
+    }
+
+    /**
+     * Reads the BAT and returns the payload-block entries only, indexed by
+     * payload block number. Sector-bitmap entries (one per chunk) are skipped;
+     * they carry no data for non-differencing images.
+     */
+    private static long[] readBat(SeekableByteChannel channel, long batOffset, long batRegionLength,
+                                   long virtualSize, int blockSize, int logicalSectorSize)
+            throws IOException {
         if (blockSize <= 0) {
             throw new IOException("Invalid block size: " + blockSize);
         }
@@ -296,10 +324,22 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
         if (totalBlocksLong <= 0 || totalBlocksLong > Integer.MAX_VALUE) {
             throw new IOException("Invalid VHDX block count: " + totalBlocksLong);
         }
-        long batBytes = Math.multiplyExact(totalBlocksLong, 8L);
+        int chunkRatio = chunkRatio(logicalSectorSize, blockSize);
+        if (chunkRatio < 1) {
+            throw new IOException("Invalid VHDX chunk ratio for logicalSectorSize="
+                    + logicalSectorSize + ", blockSize=" + blockSize);
+        }
+        long bitmapEntries = (totalBlocksLong + chunkRatio - 1) / chunkRatio;
+        long totalEntries = totalBlocksLong + bitmapEntries;
+        long batBytes = Math.multiplyExact(totalEntries, 8L);
         if (batBytes > MAX_BAT_BYTES) {
             throw new IOException("VHDX BAT too large for the 16 MiB read budget: "
                     + batBytes + " bytes (unsupported geometry)");
+        }
+        if (batBytes > batRegionLength) {
+            throw new IOException("VHDX BAT region too small: need " + batBytes
+                    + " bytes for " + totalBlocksLong + " blocks + " + bitmapEntries
+                    + " sector bitmap entries, region length=" + batRegionLength);
         }
         final long batEnd;
         try {
@@ -313,17 +353,18 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
                     + ", bytes=" + batBytes + ", fileSize=" + channel.size());
         }
         int totalBlocks = (int) totalBlocksLong;
+        int entriesToRead = (int) totalEntries;
         long[] bat = new long[totalBlocks];
 
-        ByteBuffer buffer = ByteBuffer.allocate(totalBlocks * 8);
+        ByteBuffer buffer = ByteBuffer.allocate(entriesToRead * 8);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         int totalRead = 0;
         synchronized (channel) {
             channel.position(batOffset);
-            while (totalRead < totalBlocks * 8) {
+            while (totalRead < entriesToRead * 8) {
                 int n = channel.read(buffer);
                 if (n < 0) {
-                    throw new IOException("Truncated VHDX BAT: expected " + (totalBlocks * 8)
+                    throw new IOException("Truncated VHDX BAT: expected " + (entriesToRead * 8)
                             + " bytes, got " + totalRead);
                 }
                 if (n == 0) {
@@ -334,8 +375,15 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
         }
         buffer.flip();
 
-        for (int i = 0; i < totalBlocks; i++) {
-            bat[i] = buffer.getLong();
+        // Every (chunkRatio + 1)th entry is the chunk's sector bitmap entry.
+        int stride = chunkRatio + 1;
+        int block = 0;
+        for (int entry = 0; entry < entriesToRead && block < totalBlocks; entry++) {
+            long value = buffer.getLong();
+            if (entry % stride == chunkRatio) {
+                continue;
+            }
+            bat[block++] = value;
         }
 
         return bat;
@@ -463,6 +511,8 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
         meta.put("vhdx.physicalSectorSize", String.valueOf(metadata.physicalSectorSize()));
         meta.put("vhdx.virtualSize", String.valueOf(metadata.virtualDiskSize()));
         meta.put("vhdx.hasParent", String.valueOf(metadata.hasParent()));
+        meta.put("vhdx.chunkRatio",
+                String.valueOf(chunkRatio(metadata.logicalSectorSize(), metadata.blockSize())));
 
         if (fileIdentifier.creator() != null) {
             meta.put("vhdx.creator", fileIdentifier.creator());

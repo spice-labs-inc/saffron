@@ -16,6 +16,13 @@
   ≤1M; GPT entrySize ≤4096, entries within disk.
 - Differencing VHD/VDI/VHDX/VMDK rejected at open with IOException
   (previously silent zeros for unallocated blocks); detection unchanged.
+- VHDX BAT honours the spec's chunk ratio (`2^23 * logicalSectorSize /
+  blockSize` payload entries, then one sector-bitmap entry, repeated):
+  payload block `b` is BAT index `b + b / chunkRatio`. Pre-fix, every
+  block past 4 GiB (512 B sectors) / 32 GiB (4 KiB sectors) was mis-mapped.
+  logicalSectorSize must be 512 or 4096; the BAT must fit its region.
+  Tests: `VhdxChunkRatioTest.*`; fixture `vhdx/fixtures/chunk-ratio-512.vhdx`
+  (qemu-img, 5 GiB virtual, 10 MiB file).
 - `DiskRegion.read` converts unchecked bounds errors to `IOException`
   (checked boundary for filesystem drivers).
 - AMI: missing parts reject at open; skipFully/readFully semantics; part
