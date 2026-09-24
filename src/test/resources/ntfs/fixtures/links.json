@@ -1,0 +1,30 @@
+{
+  "id": "ntfs/fixtures/links",
+  "image": "links.img",
+  "mkntfsOptions": "-F -Q -T -L links ",
+  "mountOptions": "",
+  "label": "links",
+  "fileCount": 9,
+  "directoryCount": 4,
+  "symlinkCount": 4,
+  "$comment": "directoryCount excludes the root directory; NTFS system files ($MFT etc.) are excluded from every count. fileCount counts names, so a hard-linked file counts once per name. sizes/sha256 come from the source tree.",
+  "entries": [
+    {"path": "/hard", "type": "dir"},
+    {"path": "/hard/a.txt", "type": "file", "size": 17, "sha256": "7da81eb2ea8f1e9cb5560fa13a16d54dbc62b287dae9a0ed71743b605828d73a", "hardlinkGroup": "hl1"},
+    {"path": "/hard/b.txt", "type": "file", "size": 17, "sha256": "7da81eb2ea8f1e9cb5560fa13a16d54dbc62b287dae9a0ed71743b605828d73a", "hardlinkGroup": "hl1"},
+    {"path": "/hard/one.txt", "type": "file", "size": 9000, "sha256": "678bdfd51496553883cd8c5591b3a5611fd2ca8baf209136e80b6537058ee885", "hardlinkGroup": "hl2"},
+    {"path": "/hard/single.txt", "type": "file", "size": 14, "sha256": "09c411aa687a473aa3cc4e7cc04081981598a77c8825a217f547f7a53971216f"},
+    {"path": "/hard/sub", "type": "dir"},
+    {"path": "/hard/sub/two.txt", "type": "file", "size": 9000, "sha256": "678bdfd51496553883cd8c5591b3a5611fd2ca8baf209136e80b6537058ee885", "hardlinkGroup": "hl2"},
+    {"path": "/links", "type": "dir"},
+    {"path": "/links/abs-file.txt", "type": "symlink", "target": "C:/other/o.txt", "resolvesTo": "/other/o.txt", "isDirectoryLink": false},
+    {"path": "/links/rel-dir", "type": "symlink", "target": "../other", "resolvesTo": "/other", "isDirectoryLink": true},
+    {"path": "/links/rel-file.txt", "type": "symlink", "target": "target.txt", "resolvesTo": "/links/target.txt", "isDirectoryLink": false},
+    {"path": "/links/rel-updir.txt", "type": "symlink", "target": "../other/o.txt", "resolvesTo": "/other/o.txt", "isDirectoryLink": false},
+    {"path": "/links/target.txt", "type": "file", "size": 22, "sha256": "86aed9a0d1a18a95d158e7c39cbfc78d6da00ef8e58e8be7a8c6e1534bb2c423"},
+    {"path": "/other", "type": "dir"},
+    {"path": "/other/inside.txt", "type": "file", "size": 23, "sha256": "33e37c42e49f016a8e6743b30e2c7112e625d0bc1cbaf2ed1ba874c337c0e8b7"},
+    {"path": "/other/o.txt", "type": "file", "size": 22, "sha256": "3fca5dd1c745b99d195ed59c86e2a3e5e388b42488310aa19dff33a3b39611b4"},
+    {"path": "/other/three.txt", "type": "file", "size": 9000, "sha256": "678bdfd51496553883cd8c5591b3a5611fd2ca8baf209136e80b6537058ee885", "hardlinkGroup": "hl2"}
+  ]
+}

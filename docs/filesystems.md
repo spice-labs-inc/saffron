@@ -9,7 +9,7 @@ supported format through a single `FileSystem` interface.
 |--------|-------------------|-----------|------------|----------|
 | squashfs | `hsqs` at offset 0 | `FilesystemDetector` | `FileSystemMount.mount` | `SquashfsDetectionTest.detectsMagic` |
 | ext2/ext3/ext4 | `0xEF53` at superblock offset 1024 | `FilesystemDetector` | `FileSystemMount.mount` | existing corpus tests |
-| NTFS | NTFS OEM ID at offset 3 | `FilesystemDetector` | `FileSystemMount.mount` | existing corpus tests |
+| NTFS | NTFS OEM ID at offset 3 | `FilesystemDetector` | `FileSystemMount.mount` | `NtfsFixtureTest` (mkntfs/ntfs-3g images) + corpus tests |
 | FAT32 / exFAT | FAT boot sector signatures | `FilesystemDetector` | `FileSystemMount.mount` | existing corpus tests |
 | XFS | XFSB at offset 0 | `FilesystemDetector` | `FileSystemMount.mount` | existing corpus tests |
 | Btrfs | BHRfS_M at offset 64 | `FilesystemDetector` | `FileSystemMount.mount` | existing corpus tests |
@@ -240,10 +240,25 @@ allocation; violations throw `IOException` (checked). Per-driver:
   counts/offsets/lengths bounds-checked.
 - squashfs: fragment-entry count and extended-inode block counts capped
   before allocation; extended-inode fileSize capped at 16 MiB.
-- NTFS: BPB validated (bytesPerSector pow2 512..4096, sectorsPerCluster
-  pow2 1..128); MFT record size 256 B..1 MiB; `$ATTRIBUTE_LIST` and
-  `$INDEX_ALLOCATION` reads capped at 16 MiB; attribute-list entries
-  capped at 4096.
+- NTFS: BPB validated (bytesPerSector pow2 512..4096; the
+  sectors-per-cluster byte is decoded as a literal count up to 0x80 and as
+  a negative power-of-two exponent above that — 0xF8 = 256 sectors, 0xF4 =
+  4096 sectors — and the *derived cluster size* must be a power of two in
+  512 B..2 MiB); MFT and index record sizes 256 B..1 MiB (positive =
+  clusters, negative = 2^|n| bytes, computed in long; an unset index-record
+  byte of 0 is tolerated and means the standard 4 KiB); compression-unit
+  exponent capped at 8; `$ATTRIBUTE_LIST` and `$INDEX_ALLOCATION` reads
+  capped at 16 MiB; attribute-list entries capped at 4096.
+- NTFS `$DATA` after an `$ATTRIBUTE_LIST` merge: a stream can be split into
+  several attributes of the same name (different starting VCNs) and a named
+  ADS can precede the unnamed stream, so the driver never takes "the first
+  `$DATA`"; `MftRecord.unnamedDataStream()` / `namedDataStream(name)`
+  concatenate the pieces in VCN order (sizes and compression flags from the
+  VCN-0 piece, gaps filled with sparse runs). `$MFT` itself is bootstrapped
+  from its VCN-0 piece (which holds the reserved records 0..15 and thus its
+  own extension records) and then re-read with the list resolved, so a
+  fragmented MFT no longer fails with "MFT record N is outside MFT data
+  runs".
 - UBI: lnum arrays bounded by the image PEB count.
 - UBIFS: inline data capped at 16 MiB.
 - FAT/exFAT: BPB validated (bytesPerSector pow2 512..4096,
@@ -268,6 +283,34 @@ verification suites (`CorpusFileVerificationTest`,
 `CorpusFileCountVerificationTest`, `CorpusFullVerificationTest`,
 `PerFilesystemVerificationTest`) and the wild-image suites — all green
 with the caps enabled.
+
+Claim: NTFS volumes with 64 KiB and 256 KiB clusters (sectors-per-cluster
+byte 0x80 and 0xF7) and with 4096-byte sectors mount and read correctly.
+Test: `NtfsFixtureTest.mountsAtOffsetZeroWithExpectedGeometry` and
+`filesAndDirectoriesMatch` over `cluster-64k.json`, `cluster-256k.json`,
+`sector-4k.json` (images built by `mkntfs -c` / `-s`;
+`src/test/resources/ntfs/README.md`).
+
+Claim: a fragmented `$MFT` with an `$ATTRIBUTE_LIST`, a file whose unnamed
+`$DATA` is split into several pieces, and an ADS stored beside those pieces
+are all read completely and in order. Test: `NtfsFixtureTest` over
+`fragmented.json` (2200 records past the MFT's first piece; a 2 MiB file in
+hundreds of runs), `sparse-and-ads.json`, `compressed.json`.
+
+Claim: stale directory-index entries (left in an index block after a
+delete, pointing at an MFT record that another file has since reused) are
+not listed: the entry's 16-bit sequence number must match the record's.
+Test: `NtfsFixtureTest.walkCountsMatch` over `fragmented.json` (950 fillers
+deleted, their records reused by `tiny/`).
+
+Claim: LZNT1 chunks decode correctly across the 16/32/64/… byte boundaries
+where the displacement field widens (the field grows when the position
+*exceeds* the threshold, not at it). Test:
+`NtfsFixtureTest.filesAndDirectoriesMatch` over `compressed.json`
+(`small-10k.txt`, `text-64k.txt`, `text-65537.txt`, `text-300k.txt`,
+`zeros-then-text.bin`). Known gap (TODO in the test): a stored unit that
+ntfs-3g coalesced into one run with the next unit's compressed clusters
+(`mixed.bin`, `random-200k.bin`) is still copied raw.
 
 ## Security model
 - **Pure Java:** no shell execution, no native code.

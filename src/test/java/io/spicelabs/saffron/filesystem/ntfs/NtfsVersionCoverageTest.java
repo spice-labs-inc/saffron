@@ -24,9 +24,13 @@ class NtfsVersionCoverageTest {
     private static final String VHD_BASE = "test-corpus/vhd/legacy/xp-mode/" +
         "Windows Virtual PC, XP Mode, And Other VHD Collections/VHD Disks/";
 
-    // Windows 10 VMDK would go here if stream-optimized format was supported
-    // private static final String WIN10_VMDK = "test-corpus/vmdk/legacy/windows-10/" +
-    //     "MSEdge-Win10-VMware/MSEdge-Win10-VMware-disk1.vmdk";
+    // Stream-optimized VMDK is supported; a Windows 10 VMDK (e.g.
+    // MSEdge-Win10-VMware-disk1.vmdk) is simply not part of the corpus yet.
+    // Modern-NTFS coverage (ntfs-3g 2022, NTFS 3.1 with large clusters,
+    // 4K sectors, compression, sparse files, ADS, reparse points and
+    // $ATTRIBUTE_LIST) comes from the synthetic fixtures under
+    // src/test/resources/ntfs/fixtures (NtfsFixtureTest).
+    private static final Path SYNTHETIC_FIXTURES = Path.of("src/test/resources/ntfs/fixtures");
 
     @Test
     void listAllWindowsImageFilesystems() throws Exception {
@@ -145,9 +149,23 @@ class NtfsVersionCoverageTest {
         System.out.println("| NTFS 3.1     | Windows XP           | " +
             (hasXp ? "1.2 GB VHD    " : "-             ") + "| " + (hasXp ? "✓      " : "MISSING") + "|");
         System.out.println("| NTFS 3.1     | Windows Vista+       | -             | MISSING|");
+
+        int synthetic = 0;
+        if (Files.isDirectory(SYNTHETIC_FIXTURES)) {
+            try (var files = Files.list(SYNTHETIC_FIXTURES)) {
+                synthetic = (int) files.filter(p -> p.toString().endsWith(".img")).count();
+            } catch (java.io.IOException e) {
+                synthetic = 0;
+            }
+        }
+        System.out.println("| NTFS 3.1     | ntfs-3g 2022 (synth) | " +
+            (synthetic > 0 ? String.format("%-13s", synthetic + " images") : "-             ") + " | " +
+            (synthetic > 0 ? "✓      " : "MISSING") + "|");
         System.out.println();
-        int coverage = (hasNt4 ? 1 : 0) + (hasXp ? 1 : 0);
-        System.out.println("Coverage: " + coverage + "/3 major versions (NT4=1.2, 2000=3.0, XP+=3.1)");
+        int coverage = (hasNt4 ? 1 : 0) + (hasXp || synthetic > 0 ? 1 : 0);
+        System.out.println("Coverage: " + coverage + "/3 major versions (NT4=1.2, 2000=3.0, XP+/ntfs-3g=3.1)");
+        System.out.println("Synthetic fixtures (NtfsFixtureTest): " + synthetic
+            + " images under " + SYNTHETIC_FIXTURES);
         System.out.println("=".repeat(60));
     }
 }

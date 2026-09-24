@@ -20,11 +20,24 @@
         "strip_prefix": "/corpus/",
         "prefix": "test-corpus/"
       }
+    },
+    {
+      "glob": "src/test/resources/ntfs/fixtures/*.json",
+      "format": "saffron-ntfs-fixture",
+      "idField": "id",
+      "fixture": {
+        "field": "image",
+        "prefix": "src/test/resources/ntfs/fixtures/"
+      }
     }
   ],
   "fixtures": [
     {
       "path": "src/test/resources/corpus-verification",
+      "tier": 0
+    },
+    {
+      "path": "src/test/resources/ntfs",
       "tier": 0
     },
     {

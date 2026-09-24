@@ -164,11 +164,17 @@ public record NtfsAttribute(
             // Parse data runs
             List<DataRun> dataRuns = parseDataRuns(data, dataRunsOffset);
 
+            // Compression unit = 2^log clusters; real volumes use 4 (16
+            // clusters). Cap the exponent so a hostile value cannot make
+            // unit sizes overflow int (16 << 8 = 4096 clusters, 8 GiB at 2 MiB).
+            int compressionUnitClusters = compressionUnitLog > 0 && compressionUnitLog <= 8
+                    ? (1 << compressionUnitLog) : 0;
+
             return Optional.of(new NtfsAttribute(
                     type, totalLength, false, name, flags,
                     new byte[0],
                     startVcn, endVcn, dataRuns, allocatedSize, dataSize, initializedSize,
-                    compressionUnitLog > 0 ? (1 << compressionUnitLog) : 0
+                    compressionUnitClusters
             ));
         }
     }
@@ -392,7 +398,8 @@ public record NtfsAttribute(
     public record IndexEntry(
             long mftReference,
             int indexFlags,
-            @NotNull Optional<FileName> fileName
+            @NotNull Optional<FileName> fileName,
+            int sequenceNumber
     ) {
         public static final int FLAG_SUBNODE = 0x01;
         public static final int FLAG_LAST = 0x02;
@@ -415,7 +422,9 @@ public record NtfsAttribute(
         buf.order(ByteOrder.LITTLE_ENDIAN);
 
         while (offset + 16 < data.length && offset < maxSize + 16) {
-            long mftRef = buf.getLong(offset) & 0x0000FFFFFFFFFFFFL;
+            long rawRef = buf.getLong(offset);
+            long mftRef = rawRef & 0x0000FFFFFFFFFFFFL;
+            int sequence = (int) (rawRef >>> 48);
             int entryLength = buf.getShort(offset + 8) & 0xFFFF;
             int streamLength = buf.getShort(offset + 10) & 0xFFFF;
             int flags = buf.getInt(offset + 12);
@@ -431,7 +440,7 @@ public record NtfsAttribute(
                 fileName = Optional.of(FileName.parse(fnData));
             }
 
-            entries.add(new IndexEntry(mftRef, flags, fileName));
+            entries.add(new IndexEntry(mftRef, flags, fileName, sequence));
 
             if ((flags & IndexEntry.FLAG_LAST) != 0) {
                 break;
