@@ -4,7 +4,7 @@ Eight small NTFS images built with the reference `mkntfs` and populated
 through `ntfs-3g` (FUSE), each paired with an expectations file computed
 from the source tree the image was populated from. Read by
 `NtfsFixtureTest` (`src/test/java/io/spicelabs/saffron/filesystem/ntfs/`)
-and exported to Surveyor through `test-fixtures.json` (format
+and exported through `test-fixtures.json` (format
 `saffron-ntfs-fixture`, tier 0).
 
 ## Provenance

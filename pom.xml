@@ -239,8 +239,8 @@
     <build>
         <plugins>
             <!-- Record the git commit this jar was built from, under a file name unique to
-                 this artifact so it survives being shaded into a larger jar (Surveyor reads
-                 it to pair the binary with the test data of the same commit). -->
+                 this artifact so it survives being shaded into a larger jar (the integration
+                 test suite reads it to pair the binary with the test data of the same commit). -->
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
                 <artifactId>git-commit-id-maven-plugin</artifactId>

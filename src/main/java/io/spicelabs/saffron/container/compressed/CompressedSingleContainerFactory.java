@@ -21,6 +21,7 @@ import io.spicelabs.saffron.SecurityPolicy;
 import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.container.BinaryContainer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -111,6 +112,28 @@ public final class CompressedSingleContainerFactory {
      */
     public static @NotNull Optional<BinaryContainer> open(@NotNull Path path,
                                                          @NotNull SecurityPolicy policy) throws IOException {
+        return open(path, policy, null);
+    }
+
+    /**
+     * Opens a compressed single container from a file path, writing the decompressed
+     * payload to the given directory.
+     *
+     * <p>Package-private: the directory override exists so tests can scope the temp
+     * payload file to a private directory instead of the JVM-wide temp directory,
+     * which other test classes (run in parallel) legitimately share. External
+     * callers use the public overload, which writes to the default temp directory.
+     *
+     * @param path the path to examine
+     * @param policy the security policy governing decompression limits
+     * @param tempDir the directory for the decompressed payload file, or null for the default temp directory
+     * @return the container, or empty if the file is not a compressed single payload
+     * @throws IOException if an I/O error occurs
+     * @throws DecompressionBombException if the decompressed size exceeds the configured limit
+     */
+    static @NotNull Optional<BinaryContainer> open(@NotNull Path path,
+                                                   @NotNull SecurityPolicy policy,
+                                                   @Nullable Path tempDir) throws IOException {
         long sourceSize = Files.size(path);
         if (sourceSize < 2) {
             return Optional.empty();
@@ -129,7 +152,7 @@ public final class CompressedSingleContainerFactory {
         if (format.isEmpty()) {
             return Optional.empty();
         }
-        Path payloadPath = decompressToTemp(path, format.get(), sourceSize, policy);
+        Path payloadPath = decompressToTemp(path, format.get(), sourceSize, policy, tempDir);
         return Optional.of(new CompressedSingleContainer(sourceSize, format.get(), Files.size(payloadPath), payloadPath));
     }
 
@@ -198,7 +221,31 @@ public final class CompressedSingleContainerFactory {
                                           @NotNull CompressedSingleFormat format,
                                           long sourceSize,
                                           @NotNull SecurityPolicy policy) throws IOException {
-        Path tempPath = createTempPayloadPath();
+        return decompressToTemp(path, format, sourceSize, policy, null);
+    }
+
+    /**
+     * Decompresses the source path to a temporary file, in the given directory
+     * when one is supplied.
+     *
+     * <p>Package-private: the directory override exists so tests can scope the
+     * temp payload file to a private directory; the public entry points pass
+     * null and use the default temp directory.
+     *
+     * @param path the compressed source path
+     * @param format the detected compression format
+     * @param sourceSize the compressed source size
+     * @param policy the security policy
+     * @param tempDir the directory for the temporary file, or null for the default temp directory
+     * @return the path to the temporary decompressed file
+     * @throws IOException if decompression fails or limits are exceeded
+     */
+    static @NotNull Path decompressToTemp(@NotNull Path path,
+                                          @NotNull CompressedSingleFormat format,
+                                          long sourceSize,
+                                          @NotNull SecurityPolicy policy,
+                                          @Nullable Path tempDir) throws IOException {
+        Path tempPath = createTempPayloadPath(tempDir);
         try (InputStream in = Files.newInputStream(path);
              InputStream decompressed = format.openDecompressor(in, xzMemoryLimitInKb(policy));
              OutputStream out = Files.newOutputStream(tempPath)) {
@@ -281,16 +328,26 @@ public final class CompressedSingleContainerFactory {
     }
 
     /**
-     * Creates a temporary file for the decompressed payload, with restrictive permissions when possible.
+     * Creates a temporary file for the decompressed payload, with restrictive
+     * permissions when possible. Writes into {@code dir} when one is supplied,
+     * otherwise into the default temp directory.
      */
     static @NotNull Path createTempPayloadPath() throws IOException {
+        return createTempPayloadPath(null);
+    }
+
+    static @NotNull Path createTempPayloadPath(@Nullable Path dir) throws IOException {
         try {
             Set<PosixFilePermission> ownerOnly = PosixFilePermissions.fromString("rw-------");
             FileAttribute<Set<PosixFilePermission>> attrs = PosixFilePermissions.asFileAttribute(ownerOnly);
-            return Files.createTempFile("saffron-compressed-single-", ".payload", attrs);
+            return dir == null
+                    ? Files.createTempFile("saffron-compressed-single-", ".payload", attrs)
+                    : Files.createTempFile(dir, "saffron-compressed-single-", ".payload", attrs);
         } catch (UnsupportedOperationException e) {
             // Non-POSIX filesystem: use default permissions.
-            return Files.createTempFile("saffron-compressed-single-", ".payload");
+            return dir == null
+                    ? Files.createTempFile("saffron-compressed-single-", ".payload")
+                    : Files.createTempFile(dir, "saffron-compressed-single-", ".payload");
         }
     }
 
