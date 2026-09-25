@@ -19,7 +19,7 @@ public final class CorpusTestData {
     private CorpusTestData() {}
 
     public static class CorpusImageData {
-        /** Test ID shared with Surveyor's integration tests: the image's base name. */
+        /** Test ID shared with the integration tests: the image's base name. */
         public String id;
         public String imagePath;
         public String imageBasename;

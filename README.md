@@ -288,7 +288,7 @@ Maintained by [Spice Labs](https://github.com/spice-labs-inc).
 
 - [`saffron`](https://github.com/spice-labs-inc/saffron) — this library
 - [`baharat`](https://github.com/spice-labs-inc/baharat) — Java library for reading Linux and BSD package files
-- [`spice-labs-cli`](https://github.com/spice-labs-inc/spice-labs-cli) — Spice Labs Surveyor CLI
+- [`spice-labs-cli`](https://github.com/spice-labs-inc/spice-labs-cli) — Spice Labs CLI
 
 ---
 

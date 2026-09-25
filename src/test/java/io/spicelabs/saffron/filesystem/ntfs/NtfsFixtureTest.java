@@ -39,7 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * expectations file computed from the source tree the image was populated
  * from; this class only reads the files, it never runs external tools.
  *
- * <p>The expectations are also consumed by Surveyor's integration tests
+ * <p>The expectations are also consumed by downstream integration tests
  * ({@code test-fixtures.json}, format {@code saffron-ntfs-fixture}); the
  * {@code id} of every file is its path under {@code src/test/resources}
  * without the {@code .json} suffix, and ids must be unique.

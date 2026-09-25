@@ -154,15 +154,27 @@ class CompressedSingleContainerTest {
     void cleanupOnFailure() throws IOException {
         // A large payload with a tiny decompression limit fails during streaming.
         // The factory must delete the partial temp file.
+        //
+        // The leak check scans only a private temp directory that this test
+        // controls. The JVM-wide temp directory is shared with other test classes
+        // (surefire runs them in parallel), which legitimately hold
+        // `saffron-compressed-single-*` payload files while their containers are
+        // mounted; counting there would be timing dependent. The package-private
+        // open overload writes the payload file where this test tells it to, and
+        // no other test writes into this directory.
         byte[] payload = new byte[1024 * 1024]; // 1 MB zeros
         Path compressed = createCompressedFile(payload, "gz");
         SecurityPolicy tight = SecurityPolicy.builder().maxDecompressedSize(1024).build();
+        Path privateTempDir = Files.createDirectories(tempDir.resolve("cleanup-on-failure-tmp"));
 
-        assertThatThrownBy(() -> CompressedSingleContainerFactory.open(compressed, tight))
+        assertThatThrownBy(() -> CompressedSingleContainerFactory.open(compressed, tight, privateTempDir))
                 .isInstanceOf(ResourceLimitException.class);
 
-        // No leaked payload files should remain in the temp directory.
-        try (var stream = Files.list(Path.of(System.getProperty("java.io.tmpdir")))) {
+        // A failed open in privateTempDir must not leave its partial payload
+        // file behind. The ResourceLimitException above is only thrown from
+        // copyBounded, which runs after the temp file is created, so a pass
+        // here means the file was created and then deleted.
+        try (var stream = Files.list(privateTempDir)) {
             long leaked = stream
                     .filter(p -> p.getFileName().toString().startsWith("saffron-compressed-single-"))
                     .count();

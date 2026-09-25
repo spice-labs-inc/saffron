@@ -15,8 +15,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 /**
- * The committed corpus-verification files are also read by Surveyor's black-box integration
- * tests (surveyor: tests/README.md), which pair their cases with these unit tests by the
+ * The committed corpus-verification files are also read by the black-box integration
+ * tests of the downstream CLI, which pair their cases with these unit tests by the
  * {@code id} field. Every file must carry {@code id} equal to its {@code imageBasename}, and
  * ids must be unique. Always runs; needs no corpus image.
  */
