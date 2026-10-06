@@ -47,7 +47,7 @@
  * try (VirtualDisk disk = DiskReader.open(Path.of("image.qcow2"))) {
  *     System.out.println("Format: " + disk.format());
  *     System.out.println("Size: " + disk.virtualSize());
- *     System.out.println("pURL: " + disk.packageUrl());
+ *     System.out.println("pURL: " + disk.packageUrl().toCanonical());
  * }
  * }</pre>
  *

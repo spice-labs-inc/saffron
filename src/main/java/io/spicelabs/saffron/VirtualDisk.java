@@ -17,7 +17,7 @@
  */
 package io.spicelabs.saffron;
 
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,14 +122,14 @@ public sealed interface VirtualDisk extends Closeable
     /**
      * Returns a Package URL (pURL) identifying this disk image.
      *
-     * <p>The pURL follows the format:
-     * {@code pkg:vmdisk/<format>/<name>@<version>?<qualifiers>}
+     * <p>Most formats emit {@code pkg:generic/vmdisk/<name>@<version>?<qualifiers>}; VMDK and
+     * VDI emit {@code pkg:vmdisk/<name>@<id>?<qualifiers>}. Render with {@link Purl#toCanonical()}.
      *
      * <p>This aligns with Baharat's {@code packageUrl()} method naming.
      *
      * @return a Package URL for this disk image
      */
-    @NotNull PackageURL packageUrl();
+    @NotNull Purl packageUrl();
 
     /**
      * Returns the path to a backing file, if this disk has one.

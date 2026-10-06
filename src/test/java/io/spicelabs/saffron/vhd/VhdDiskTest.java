@@ -76,7 +76,7 @@ class VhdDiskTest {
         Files.write(vhd, vhdData);
 
         try (VirtualDisk disk = DiskReader.open(vhd)) {
-            String purl = disk.packageUrl().toString();
+            String purl = disk.packageUrl().toCanonical();
 
             assertThat(purl).startsWith("pkg:");
             assertThat(purl).contains("disk_type=");

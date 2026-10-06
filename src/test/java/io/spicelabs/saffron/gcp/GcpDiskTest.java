@@ -62,9 +62,9 @@ class GcpDiskTest {
     void gcpDiskPackageUrl() throws Exception {
         try (VirtualDisk disk = DiskReader.open(TEST_GCP)) {
             var purl = disk.packageUrl();
-            assertThat(purl.getType()).isEqualTo("generic");
-            assertThat(purl.getNamespace()).isEqualTo("vmdisk");
-            assertThat(purl.getQualifiers()).containsEntry("format", "gcp");
+            assertThat(purl.type).isEqualTo("generic");
+            assertThat(purl.namespace).isEqualTo("vmdisk");
+            assertThat(purl.qualifiers).containsEntry("format", "gcp");
         }
     }
 

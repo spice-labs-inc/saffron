@@ -69,7 +69,7 @@ class VdiDiskTest {
         Files.write(vdi, vdiData);
 
         try (VirtualDisk disk = DiskReader.open(vdi)) {
-            String purl = disk.packageUrl().toString();
+            String purl = disk.packageUrl().toCanonical();
 
             assertThat(purl).startsWith("pkg:");
             assertThat(purl).contains("image_type=");

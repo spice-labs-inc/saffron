@@ -4,7 +4,7 @@
  */
 package io.spicelabs.saffron.container.linuxkernel;
 
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 import io.spicelabs.saffron.DiskFormat;
 import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.container.BinaryContainer;
@@ -128,12 +128,8 @@ class LinuxKernelContainerFactoryTest {
         }
 
         @Override
-        public PackageURL packageUrl() {
-            try {
-                return new PackageURL("pkg:vmdisk/raw/huge@1.0");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        public Purl packageUrl() {
+            return Purl.parse("pkg:vmdisk/raw/huge@1.0");
         }
 
         @Override

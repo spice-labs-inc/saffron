@@ -6,7 +6,7 @@ package io.spicelabs.saffron.fuzz;
 
 import com.code_intelligence.jazzer.api.FuzzedDataProvider;
 import com.code_intelligence.jazzer.junit.FuzzTest;
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 import io.spicelabs.saffron.DiskFormat;
 import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.partition.PartitionTable;
@@ -96,12 +96,8 @@ class GptPartitionTableFuzzTest {
         }
 
         @Override
-        public PackageURL packageUrl() {
-            try {
-                return new PackageURL("pkg:vmdisk/raw/fuzz@1.0");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        public Purl packageUrl() {
+            return Purl.parse("pkg:vmdisk/raw/fuzz@1.0");
         }
 
         @Override

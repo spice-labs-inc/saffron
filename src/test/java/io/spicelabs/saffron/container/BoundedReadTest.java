@@ -17,7 +17,7 @@
  */
 package io.spicelabs.saffron.container;
 
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 import io.spicelabs.saffron.DiskFormat;
 import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.container.dtb.DtbContainer;
@@ -150,12 +150,8 @@ class BoundedReadTest {
         }
 
         @Override
-        public PackageURL packageUrl() {
-            try {
-                return new PackageURL("pkg:vmdisk/raw/test@1.0");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        public Purl packageUrl() {
+            return Purl.parse("pkg:vmdisk/raw/test@1.0");
         }
 
         @Override

@@ -63,11 +63,11 @@ class AmiDiskTest {
     void amiDiskPackageUrl() throws Exception {
         try (VirtualDisk disk = DiskReader.open(TEST_AMI_MANIFEST)) {
             var purl = disk.packageUrl();
-            assertThat(purl.getType()).isEqualTo("generic");
-            assertThat(purl.getNamespace()).isEqualTo("vmdisk");
-            assertThat(purl.getName()).isEqualTo("test-image");
-            assertThat(purl.getQualifiers()).containsEntry("format", "ami");
-            assertThat(purl.getQualifiers()).containsEntry("arch", "x86_64");
+            assertThat(purl.type).isEqualTo("generic");
+            assertThat(purl.namespace).isEqualTo("vmdisk");
+            assertThat(purl.name).isEqualTo("test-image");
+            assertThat(purl.qualifiers).containsEntry("format", "ami");
+            assertThat(purl.qualifiers).containsEntry("arch", "x86_64");
         }
     }
 

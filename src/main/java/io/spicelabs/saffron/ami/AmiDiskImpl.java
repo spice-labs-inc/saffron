@@ -17,8 +17,7 @@
  */
 package io.spicelabs.saffron.ami;
 
-import com.github.packageurl.MalformedPackageURLException;
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 import io.spicelabs.saffron.DiskFormat;
 import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.exception.SaffronException;
@@ -396,24 +395,20 @@ public final class AmiDiskImpl implements VirtualDisk.AmiDisk {
     }
 
     @Override
-    public @NotNull PackageURL packageUrl() {
-        try {
-            TreeMap<String, String> qualifiers = new TreeMap<>();
-            qualifiers.put("arch", architecture);
-            qualifiers.put("format", "ami");
-            qualifiers.put("size", String.valueOf(virtualSize));
+    public @NotNull Purl packageUrl() {
+        TreeMap<String, String> qualifiers = new TreeMap<>();
+        qualifiers.put("arch", architecture);
+        qualifiers.put("format", "ami");
+        qualifiers.put("size", String.valueOf(virtualSize));
 
-            return new PackageURL(
-                    PackageURL.StandardTypes.GENERIC,
-                    "vmdisk",
-                    imageName,
-                    "1.0",
-                    qualifiers,
-                    null
-            );
-        } catch (MalformedPackageURLException e) {
-            throw new IllegalStateException("Failed to create package URL", e);
-        }
+        return Purl.normalize(new Purl(
+                "generic",
+                "vmdisk",
+                imageName,
+                "1.0",
+                qualifiers,
+                null
+        ));
     }
 
     @Override

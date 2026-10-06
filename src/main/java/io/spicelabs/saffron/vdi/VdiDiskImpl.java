@@ -17,8 +17,7 @@
  */
 package io.spicelabs.saffron.vdi;
 
-import com.github.packageurl.MalformedPackageURLException;
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 import io.spicelabs.saffron.DiskFormat;
 import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.vdi.header.VdiHeader;
@@ -260,30 +259,26 @@ public final class VdiDiskImpl implements VirtualDisk.VdiDisk {
     }
 
     @Override
-    public @NotNull PackageURL packageUrl() {
-        try {
-            String name = path.getFileName().toString();
-            // Remove extension
-            int dot = name.lastIndexOf('.');
-            if (dot > 0) {
-                name = name.substring(0, dot);
-            }
-
-            TreeMap<String, String> qualifiers = new TreeMap<>();
-            qualifiers.put("image_type", header.imageType().typeName());
-            qualifiers.put("version", header.versionString());
-
-            return new PackageURL(
-                    "vmdisk",
-                    null,
-                    name,
-                    header.imageUuid().toString(),
-                    qualifiers,
-                    null
-            );
-        } catch (MalformedPackageURLException e) {
-            throw new IllegalStateException("Failed to create PackageURL", e);
+    public @NotNull Purl packageUrl() {
+        String name = path.getFileName().toString();
+        // Remove extension
+        int dot = name.lastIndexOf('.');
+        if (dot > 0) {
+            name = name.substring(0, dot);
         }
+
+        TreeMap<String, String> qualifiers = new TreeMap<>();
+        qualifiers.put("image_type", header.imageType().typeName());
+        qualifiers.put("version", header.versionString());
+
+        return Purl.normalize(new Purl(
+                "vmdisk",
+                null,
+                name,
+                header.imageUuid().toString(),
+                qualifiers,
+                null
+        ));
     }
 
     @Override

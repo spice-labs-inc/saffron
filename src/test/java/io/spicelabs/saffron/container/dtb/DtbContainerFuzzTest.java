@@ -105,12 +105,8 @@ class DtbContainerFuzzTest {
         }
 
         @Override
-        public com.github.packageurl.PackageURL packageUrl() {
-            try {
-                return new com.github.packageurl.PackageURL("pkg:vmdisk/raw/fuzz@1.0");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        public io.spicelabs.coordinates.Purl packageUrl() {
+            return io.spicelabs.coordinates.Purl.parse("pkg:vmdisk/raw/fuzz@1.0");
         }
 
         @Override

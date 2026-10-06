@@ -79,7 +79,7 @@ class Qcow2DiskTest {
     @EnabledIf("corpusImageExists")
     void packageUrl_generatesValidPurl() throws IOException {
         try (VirtualDisk disk = DiskReader.open(CIRROS_IMAGE)) {
-            String purl = disk.packageUrl().toString();
+            String purl = disk.packageUrl().toCanonical();
 
             assertThat(purl).startsWith("pkg:");
             assertThat(purl).contains("qcow_version=");
