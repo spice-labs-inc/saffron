@@ -17,8 +17,7 @@
  */
 package io.spicelabs.saffron.vmdk;
 
-import com.github.packageurl.MalformedPackageURLException;
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 import io.spicelabs.saffron.DiskFormat;
 import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.vmdk.descriptor.VmdkDescriptor;
@@ -494,29 +493,25 @@ public final class VmdkDiskImpl implements VirtualDisk.VmdkDisk {
     }
 
     @Override
-    public @NotNull PackageURL packageUrl() {
-        try {
-            String name = path.getFileName().toString();
-            int dot = name.lastIndexOf('.');
-            if (dot > 0) {
-                name = name.substring(0, dot);
-            }
-
-            TreeMap<String, String> qualifiers = new TreeMap<>();
-            qualifiers.put("create_type", descriptor != null ? descriptor.createType() : "sparse");
-            qualifiers.put("version", String.valueOf(header.version()));
-
-            return new PackageURL(
-                    "vmdisk",
-                    null,
-                    name,
-                    descriptor != null ? descriptor.cid() : "unknown",
-                    qualifiers,
-                    null
-            );
-        } catch (MalformedPackageURLException e) {
-            throw new IllegalStateException("Failed to create PackageURL", e);
+    public @NotNull Purl packageUrl() {
+        String name = path.getFileName().toString();
+        int dot = name.lastIndexOf('.');
+        if (dot > 0) {
+            name = name.substring(0, dot);
         }
+
+        TreeMap<String, String> qualifiers = new TreeMap<>();
+        qualifiers.put("create_type", descriptor != null ? descriptor.createType() : "sparse");
+        qualifiers.put("version", String.valueOf(header.version()));
+
+        return Purl.normalize(new Purl(
+                "vmdisk",
+                null,
+                name,
+                descriptor != null ? descriptor.cid() : "unknown",
+                qualifiers,
+                null
+        ));
     }
 
     @Override

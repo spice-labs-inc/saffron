@@ -17,8 +17,7 @@
  */
 package io.spicelabs.saffron.gcp;
 
-import com.github.packageurl.MalformedPackageURLException;
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 import io.spicelabs.saffron.DiskFormat;
 import io.spicelabs.saffron.SecurityPolicy;
 import io.spicelabs.saffron.VirtualDisk;
@@ -179,29 +178,25 @@ public final class GcpDiskImpl implements VirtualDisk.GcpDisk {
     }
 
     @Override
-    public @NotNull PackageURL packageUrl() {
-        try {
-            String name = sourcePath.getFileName().toString();
-            // Remove .tar.gz extension
-            if (name.endsWith(".tar.gz")) {
-                name = name.substring(0, name.length() - 7);
-            }
-
-            TreeMap<String, String> qualifiers = new TreeMap<>();
-            qualifiers.put("size", String.valueOf(virtualSize()));
-            qualifiers.put("format", "gcp");
-
-            return new PackageURL(
-                    PackageURL.StandardTypes.GENERIC,
-                    "vmdisk",
-                    name,
-                    "1.0",
-                    qualifiers,
-                    null
-            );
-        } catch (MalformedPackageURLException e) {
-            throw new IllegalStateException("Failed to create package URL", e);
+    public @NotNull Purl packageUrl() {
+        String name = sourcePath.getFileName().toString();
+        // Remove .tar.gz extension
+        if (name.endsWith(".tar.gz")) {
+            name = name.substring(0, name.length() - 7);
         }
+
+        TreeMap<String, String> qualifiers = new TreeMap<>();
+        qualifiers.put("size", String.valueOf(virtualSize()));
+        qualifiers.put("format", "gcp");
+
+        return Purl.normalize(new Purl(
+                "generic",
+                "vmdisk",
+                name,
+                "1.0",
+                qualifiers,
+                null
+        ));
     }
 
     @Override

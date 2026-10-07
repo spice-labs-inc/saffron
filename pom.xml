@@ -49,7 +49,7 @@
 
         <!-- Dependency versions -->
         <jetbrains-annotations.version>26.1.0</jetbrains-annotations.version>
-        <packageurl-java.version>1.5.0</packageurl-java.version>
+        <coordinates.version>1.3.1</coordinates.version>
         <xz.version>1.12</xz.version>
         <zstd-jni.version>1.5.7-15</zstd-jni.version>
         <commons-compress.version>1.28.0</commons-compress.version>
@@ -102,11 +102,11 @@
             <version>${jetbrains-annotations.version}</version>
         </dependency>
 
-        <!-- Package URL generation -->
+        <!-- Package URL generation (Spice Labs coordinates) -->
         <dependency>
-            <groupId>com.github.package-url</groupId>
-            <artifactId>packageurl-java</artifactId>
-            <version>${packageurl-java.version}</version>
+            <groupId>io.spicelabs</groupId>
+            <artifactId>coordinates</artifactId>
+            <version>${coordinates.version}</version>
         </dependency>
 
         <!-- Compression: XZ/LZMA -->

@@ -17,8 +17,7 @@
  */
 package io.spicelabs.saffron.gzip;
 
-import com.github.packageurl.MalformedPackageURLException;
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 import io.spicelabs.saffron.DiskFormat;
 import io.spicelabs.saffron.SecurityPolicy;
 import io.spicelabs.saffron.VirtualDisk;
@@ -162,24 +161,20 @@ public final class GzipRawDiskImpl implements VirtualDisk.RawDisk {
     }
 
     @Override
-    public @NotNull PackageURL packageUrl() {
-        try {
-            String name = sourcePath.getFileName().toString();
-            TreeMap<String, String> qualifiers = new TreeMap<>();
-            qualifiers.put("size", String.valueOf(virtualSize()));
-            qualifiers.put("format", "raw-gzip");
+    public @NotNull Purl packageUrl() {
+        String name = sourcePath.getFileName().toString();
+        TreeMap<String, String> qualifiers = new TreeMap<>();
+        qualifiers.put("size", String.valueOf(virtualSize()));
+        qualifiers.put("format", "raw-gzip");
 
-            return new PackageURL(
-                    PackageURL.StandardTypes.GENERIC,
-                    "vmdisk",
-                    name,
-                    "1.0",
-                    qualifiers,
-                    null
-            );
-        } catch (MalformedPackageURLException e) {
-            throw new IllegalStateException("Failed to create package URL", e);
-        }
+        return Purl.normalize(new Purl(
+                "generic",
+                "vmdisk",
+                name,
+                "1.0",
+                qualifiers,
+                null
+        ));
     }
 
     @Override

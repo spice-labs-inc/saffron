@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -126,12 +126,8 @@ class ChunkedDiskTest {
         }
 
         @Override
-        public PackageURL packageUrl() {
-            try {
-                return new PackageURL("pkg:vmdisk/raw/test@1.0");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        public Purl packageUrl() {
+            return Purl.parse("pkg:vmdisk/raw/test@1.0");
         }
 
         @Override

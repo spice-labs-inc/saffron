@@ -17,8 +17,7 @@
  */
 package io.spicelabs.saffron.qcow2;
 
-import com.github.packageurl.MalformedPackageURLException;
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 import io.spicelabs.saffron.DiskFormat;
 import io.spicelabs.saffron.DiskReader;
 import io.spicelabs.saffron.VirtualDisk;
@@ -261,32 +260,27 @@ public final class Qcow2DiskImpl implements VirtualDisk.Qcow2Disk {
     }
 
     @Override
-    public @NotNull PackageURL packageUrl() {
-        try {
-            TreeMap<String, String> qualifiers = new TreeMap<>();
-            qualifiers.put("qcow_version", String.valueOf(header.version()));
-            qualifiers.put("cluster_size", String.valueOf(header.clusterSize()));
+    public @NotNull Purl packageUrl() {
+        TreeMap<String, String> qualifiers = new TreeMap<>();
+        qualifiers.put("qcow_version", String.valueOf(header.version()));
+        qualifiers.put("cluster_size", String.valueOf(header.clusterSize()));
 
-            String name = path.getFileName().toString();
-            // Remove extension for cleaner pURL
-            if (name.endsWith(".qcow2")) {
-                name = name.substring(0, name.length() - 6);
-            } else if (name.endsWith(".qcow")) {
-                name = name.substring(0, name.length() - 5);
-            }
-
-            return new PackageURL(
-                    PackageURL.StandardTypes.GENERIC,
-                    "vmdisk",
-                    name,
-                    String.valueOf(header.version()),
-                    qualifiers,
-                    null
-            );
-        } catch (MalformedPackageURLException e) {
-            // Should never happen with our controlled inputs
-            throw new RuntimeException("Failed to create PackageURL", e);
+        String name = path.getFileName().toString();
+        // Remove extension for cleaner pURL
+        if (name.endsWith(".qcow2")) {
+            name = name.substring(0, name.length() - 6);
+        } else if (name.endsWith(".qcow")) {
+            name = name.substring(0, name.length() - 5);
         }
+
+        return Purl.normalize(new Purl(
+                "generic",
+                "vmdisk",
+                name,
+                String.valueOf(header.version()),
+                qualifiers,
+                null
+        ));
     }
 
     @Override

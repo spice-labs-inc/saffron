@@ -17,8 +17,7 @@
  */
 package io.spicelabs.saffron.vhdx;
 
-import com.github.packageurl.MalformedPackageURLException;
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 import io.spicelabs.saffron.DiskFormat;
 import io.spicelabs.saffron.VirtualDisk;
 import io.spicelabs.saffron.common.SecurityUtils;
@@ -526,28 +525,24 @@ public final class VhdxDiskImpl implements VirtualDisk.VhdxDisk {
     }
 
     @Override
-    public @NotNull PackageURL packageUrl() {
-        try {
-            TreeMap<String, String> qualifiers = new TreeMap<>();
-            qualifiers.put("version", String.valueOf(header.version()));
-            qualifiers.put("block_size", String.valueOf(metadata.blockSize()));
+    public @NotNull Purl packageUrl() {
+        TreeMap<String, String> qualifiers = new TreeMap<>();
+        qualifiers.put("version", String.valueOf(header.version()));
+        qualifiers.put("block_size", String.valueOf(metadata.blockSize()));
 
-            String name = path.getFileName().toString();
-            if (name.endsWith(".vhdx")) {
-                name = name.substring(0, name.length() - 5);
-            }
-
-            return new PackageURL(
-                    PackageURL.StandardTypes.GENERIC,
-                    "vmdisk",
-                    name,
-                    String.valueOf(header.version()),
-                    qualifiers,
-                    null
-            );
-        } catch (MalformedPackageURLException e) {
-            throw new RuntimeException("Failed to create PackageURL", e);
+        String name = path.getFileName().toString();
+        if (name.endsWith(".vhdx")) {
+            name = name.substring(0, name.length() - 5);
         }
+
+        return Purl.normalize(new Purl(
+                "generic",
+                "vmdisk",
+                name,
+                String.valueOf(header.version()),
+                qualifiers,
+                null
+        ));
     }
 
     @Override

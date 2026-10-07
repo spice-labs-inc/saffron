@@ -69,9 +69,9 @@ class RawDiskTest {
     void rawDiskPackageUrl() throws Exception {
         try (VirtualDisk disk = DiskReader.open(TEST_RAW)) {
             var purl = disk.packageUrl();
-            assertThat(purl.getType()).isEqualTo("generic");
-            assertThat(purl.getNamespace()).isEqualTo("vmdisk");
-            assertThat(purl.getName()).isEqualTo("minimal");
+            assertThat(purl.type).isEqualTo("generic");
+            assertThat(purl.namespace).isEqualTo("vmdisk");
+            assertThat(purl.name).isEqualTo("minimal");
         }
     }
 

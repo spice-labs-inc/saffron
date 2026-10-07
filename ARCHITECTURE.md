@@ -183,7 +183,7 @@ public sealed interface VirtualDisk extends Closeable
     ByteBuffer read(long offset, int length) throws IOException;
     InputStream openStream() throws IOException;
     Map<String, String> metadata();
-    PackageURL packageUrl();
+    Purl packageUrl();
     Optional<String> backingFile();
     boolean isEncrypted();
     boolean isCompressed();
@@ -437,7 +437,7 @@ For concurrent access, open separate `VirtualDisk` instances per thread.
 | Dependency | Purpose |
 |------------|---------|
 | JetBrains Annotations | `@NotNull` / `@Nullable` null safety |
-| packageurl-java | Package URL (PURL) generation |
+| coordinates | Package URL (PURL) generation (Spice Labs `io.spicelabs.coordinates.Purl`) |
 | XZ for Java | XZ and LZMA decompression |
 | zstd-jni | Zstandard decompression (Btrfs, Linux kernel payloads) |
 | Commons Compress | bzip2 decompression, tar (GCP images), cpio (initramfs) |

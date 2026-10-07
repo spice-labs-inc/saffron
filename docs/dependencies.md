@@ -27,7 +27,7 @@ metadata `<release>`/`<latest>` fields, which lie — e.g. slf4j points at
 | Artifact | Before | After | Notes |
 |---|---|---|---|
 | org.jetbrains:annotations | 24.1.0 | 26.1.0 | |
-| com.github.package-url:packageurl-java | 1.5.0 | 1.5.0 | already latest |
+| io.spicelabs:coordinates | 1.3.1 | 1.3.1 | replaces packageurl-java; shared Spice Labs pURL library |
 | org.tukaani:xz | 1.9 | 1.12 | pure-Java; unaffected by CVE-2024-3094 (C-side build injection) — rationale documented |
 | com.github.luben:zstd-jni | 1.5.5-6 | 1.5.7-15 | native prebuilts from the publisher (trust model documented) |
 | org.apache.commons:commons-compress | 1.26.0 | 1.28.0 | CVE remediation (CVE-2024-25710/CVE-2024-26308 fixed in 1.26.1; 2025 zstd-bomb family in 1.28.x) |

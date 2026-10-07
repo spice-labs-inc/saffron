@@ -92,7 +92,7 @@ class VhdxDiskTest {
             @Override public @org.jetbrains.annotations.NotNull ByteBuffer read(long offset, int length) { return ByteBuffer.allocate(0); }
             @Override public @org.jetbrains.annotations.NotNull java.io.InputStream openStream() { return java.io.InputStream.nullInputStream(); }
             @Override public @org.jetbrains.annotations.NotNull Map<String, String> metadata() { return Map.of(); }
-            @Override public @org.jetbrains.annotations.NotNull com.github.packageurl.PackageURL packageUrl() { throw new UnsupportedOperationException(); }
+            @Override public @org.jetbrains.annotations.NotNull io.spicelabs.coordinates.Purl packageUrl() { throw new UnsupportedOperationException(); }
             @Override public @org.jetbrains.annotations.NotNull java.util.Optional<String> backingFile() { return java.util.Optional.empty(); }
             @Override public boolean isEncrypted() { return false; }
             @Override public boolean isCompressed() { return false; }

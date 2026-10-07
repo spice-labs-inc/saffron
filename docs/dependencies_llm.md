@@ -25,7 +25,7 @@ archunit 1.2.1→1.5.0; compiler 3.12.1→3.15.0; surefire/failsafe
 jacoco 0.8.11→0.8.15; spotbugs 4.8.3.1→4.10.3.0; exec 3.1.0→3.6.3; gpg
 3.2.7→3.2.8; central-publishing 0.8.0→0.11.0.
 
-No update: packageurl-java 1.5.0, lzo-core 1.0.6 (accept-risk), jmh 1.37.
+No update: coordinates 1.3.1 (replaced packageurl-java), lzo-core 1.0.6 (accept-risk), jmh 1.37.
 
 ## Verification results
 

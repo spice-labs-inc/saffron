@@ -66,7 +66,7 @@ class VmdkDiskTest {
         Files.write(vmdk, vmdkData);
 
         try (VirtualDisk disk = DiskReader.open(vmdk)) {
-            String purl = disk.packageUrl().toString();
+            String purl = disk.packageUrl().toCanonical();
 
             assertThat(purl).startsWith("pkg:");
             assertThat(purl).contains("create_type=");

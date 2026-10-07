@@ -17,8 +17,7 @@
  */
 package io.spicelabs.saffron.raw;
 
-import com.github.packageurl.MalformedPackageURLException;
-import com.github.packageurl.PackageURL;
+import io.spicelabs.coordinates.Purl;
 import io.spicelabs.saffron.DiskFormat;
 import io.spicelabs.saffron.VirtualDisk;
 import org.jetbrains.annotations.NotNull;
@@ -167,29 +166,25 @@ public final class RawDiskImpl implements VirtualDisk.RawDisk {
     }
 
     @Override
-    public @NotNull PackageURL packageUrl() {
-        try {
-            String name = path.getFileName().toString();
-            // Remove extension
-            int dot = name.lastIndexOf('.');
-            if (dot > 0) {
-                name = name.substring(0, dot);
-            }
-
-            TreeMap<String, String> qualifiers = new TreeMap<>();
-            qualifiers.put("size", String.valueOf(size));
-
-            return new PackageURL(
-                    PackageURL.StandardTypes.GENERIC,
-                    "vmdisk",
-                    name,
-                    "1.0",
-                    qualifiers,
-                    null
-            );
-        } catch (MalformedPackageURLException e) {
-            throw new IllegalStateException("Failed to create package URL", e);
+    public @NotNull Purl packageUrl() {
+        String name = path.getFileName().toString();
+        // Remove extension
+        int dot = name.lastIndexOf('.');
+        if (dot > 0) {
+            name = name.substring(0, dot);
         }
+
+        TreeMap<String, String> qualifiers = new TreeMap<>();
+        qualifiers.put("size", String.valueOf(size));
+
+        return Purl.normalize(new Purl(
+                "generic",
+                "vmdisk",
+                name,
+                "1.0",
+                qualifiers,
+                null
+        ));
     }
 
     @Override
