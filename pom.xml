@@ -135,7 +135,7 @@
         <dependency>
             <groupId>at.yawk.lz4</groupId>
             <artifactId>lz4-java</artifactId>
-            <version>1.11.2</version>
+            <version>1.11.4</version>
         </dependency>
 
         <!-- Compression: LZO (1.0.6 is the latest; unmaintained, no CVE -
