@@ -225,31 +225,31 @@ cd saffron
 Build with Maven:
 
 ```bash
-mvn clean install
+./mvnw clean install
 ```
 
 Run tests only:
 
 ```bash
-mvn test
+./mvnw test
 ```
 
 Run tests without coverage checks (faster):
 
 ```bash
-mvn test -Pquick
+./mvnw test -Pquick
 ```
 
 Generate Javadoc:
 
 ```bash
-mvn javadoc:javadoc
+./mvnw javadoc:javadoc
 ```
 
 Check test coverage (report in `target/site/jacoco/`):
 
 ```bash
-mvn test jacoco:report
+./mvnw test jacoco:report
 ```
 
 ### Corpus Verification Tests
