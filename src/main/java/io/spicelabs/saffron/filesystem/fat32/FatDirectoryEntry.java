@@ -25,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -36,7 +37,7 @@ import java.util.Optional;
  * 0       8     Short filename (8 characters, space-padded)
  * 8       3     Extension (3 characters, space-padded)
  * 11      1     Attributes
- * 12      1     Reserved (NT)
+ * 12      1     NT case flags (0x08 lower-case base, 0x10 lower-case ext)
  * 13      1     Creation time (tenths of second)
  * 14      2     Creation time
  * 16      2     Creation date
@@ -80,6 +81,12 @@ public record FatDirectoryEntry(
 
     /** Long filename entry marker (all 4 attribute bits set) */
     public static final byte ATTR_LONG_NAME = 0x0F;
+
+    /** NT case flag: 8.3 base name is stored upper case but should be shown lower case */
+    public static final byte NT_LOWERCASE_BASE = 0x08;
+
+    /** NT case flag: 8.3 extension is stored upper case but should be shown lower case */
+    public static final byte NT_LOWERCASE_EXT = 0x10;
 
     /** First byte indicating entry is free */
     public static final byte ENTRY_FREE = (byte) 0xE5;
@@ -145,6 +152,15 @@ public record FatDirectoryEntry(
 
         String shortName = new String(nameBytes, StandardCharsets.US_ASCII).trim();
         String extension = new String(extBytes, StandardCharsets.US_ASCII).trim();
+
+        // Apply NT case flags (only meaningful for names without an LFN entry)
+        byte ntFlags = buffer.get(startPos + 12);
+        if ((ntFlags & NT_LOWERCASE_BASE) != 0) {
+            shortName = shortName.toLowerCase(Locale.ROOT);
+        }
+        if ((ntFlags & NT_LOWERCASE_EXT) != 0) {
+            extension = extension.toLowerCase(Locale.ROOT);
+        }
 
         // Build the full name
         String name;
