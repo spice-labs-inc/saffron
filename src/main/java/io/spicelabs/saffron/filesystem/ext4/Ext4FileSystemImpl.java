@@ -594,7 +594,8 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
     }
 
     /**
-     * Reads data using indirect blocks (legacy ext2/3 style).
+     * Reads data using indirect blocks (legacy ext2/3 style). A zero pointer
+     * is a sparse hole: it reads as zeros and still advances the position.
      */
     private byte[] readIndirectBlockData(Ext4Inode inode) throws IOException {
         byte[] result = new byte[(int) inode.size()];
@@ -606,36 +607,30 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
         // Direct blocks (0-11)
         for (int i = 0; i < 12 && bytesRead < result.length; i++) {
             long blockNum = blockBuf.getInt(i * 4) & 0xFFFFFFFFL;
-            if (blockNum == 0) continue;
-
             int toRead = Math.min(blockSize, result.length - bytesRead);
-            ByteBuffer data = region.read(blockNum * blockSize, toRead);
-            data.get(result, bytesRead, toRead);
+            if (blockNum != 0) {
+                ByteBuffer data = region.read(blockNum * blockSize, toRead);
+                data.get(result, bytesRead, toRead);
+            }
             bytesRead += toRead;
         }
 
         // Indirect block (12)
         if (bytesRead < result.length) {
             long indirectBlock = blockBuf.getInt(48) & 0xFFFFFFFFL;
-            if (indirectBlock != 0) {
-                bytesRead = readIndirectBlocks(indirectBlock, result, bytesRead, 1);
-            }
+            bytesRead = readIndirectBlocks(indirectBlock, result, bytesRead, 1);
         }
 
         // Double indirect block (13)
         if (bytesRead < result.length) {
             long doubleIndirectBlock = blockBuf.getInt(52) & 0xFFFFFFFFL;
-            if (doubleIndirectBlock != 0) {
-                bytesRead = readIndirectBlocks(doubleIndirectBlock, result, bytesRead, 2);
-            }
+            bytesRead = readIndirectBlocks(doubleIndirectBlock, result, bytesRead, 2);
         }
 
         // Triple indirect block (14)
         if (bytesRead < result.length) {
             long tripleIndirectBlock = blockBuf.getInt(56) & 0xFFFFFFFFL;
-            if (tripleIndirectBlock != 0) {
-                bytesRead = readIndirectBlocks(tripleIndirectBlock, result, bytesRead, 3);
-            }
+            bytesRead = readIndirectBlocks(tripleIndirectBlock, result, bytesRead, 3);
         }
 
         return result;
@@ -644,74 +639,85 @@ public class Ext4FileSystemImpl implements FileSystem.Ext4FileSystem {
     /**
      * Opens a lazy stream over an indirect-block (legacy ext2/3) file:
      * the block list is metadata-only; data streams in bounded chunks.
+     * Each allocated block becomes a segment at its logical position; a
+     * zero pointer is a sparse hole, left as a gap the stream serves as zeros.
      */
     InputStream openIndirectStream(Ext4Inode inode) throws IOException {
         int blockSize = superblock.blockSize();
-        List<Long> blocks = new ArrayList<>();
+        List<ChunkedRegionStream.Segment> segments = new ArrayList<>();
         ByteBuffer blockBuf = ByteBuffer.wrap(inode.blockData());
         blockBuf.order(ByteOrder.LITTLE_ENDIAN);
+        long logical = 0;
         for (int i = 0; i < 12; i++) {
             long blockNum = blockBuf.getInt(i * 4) & 0xFFFFFFFFL;
-            if (blockNum != 0) {
-                blocks.add(blockNum);
-            }
+            logical = collectIndirectBlocks(blockNum, logical, inode.size(), segments, 0);
         }
-        collectIndirectBlocks(blockBuf.getInt(48) & 0xFFFFFFFFL, blocks, 1);
-        collectIndirectBlocks(blockBuf.getInt(52) & 0xFFFFFFFFL, blocks, 2);
-        collectIndirectBlocks(blockBuf.getInt(56) & 0xFFFFFFFFL, blocks, 3);
-
-        List<ChunkedRegionStream.Segment> segments = new ArrayList<>();
-        long remaining = inode.size();
-        long logical = 0;
-        for (long blockNum : blocks) {
-            if (remaining <= 0) {
-                break;
-            }
-            long len = Math.min(blockSize, remaining);
-            segments.add(new ChunkedRegionStream.Segment(logical, blockNum * blockSize, len));
-            logical += len;
-            remaining -= len;
-        }
+        logical = collectIndirectBlocks(blockBuf.getInt(48) & 0xFFFFFFFFL, logical, inode.size(), segments, 1);
+        logical = collectIndirectBlocks(blockBuf.getInt(52) & 0xFFFFFFFFL, logical, inode.size(), segments, 2);
+        collectIndirectBlocks(blockBuf.getInt(56) & 0xFFFFFFFFL, logical, inode.size(), segments, 3);
         return new ChunkedRegionStream(region, segments, inode.size());
     }
 
-    private void collectIndirectBlocks(long blockNum, List<Long> blocks, int level)
+    /**
+     * Adds a segment for each allocated data block under {@code blockNum}
+     * (a data block at level 0, an indirect block above), starting at file
+     * block {@code logical}; returns the file block after the ones it covers.
+     */
+    private long collectIndirectBlocks(long blockNum, long logical, long size,
+                                       List<ChunkedRegionStream.Segment> segments, int level)
             throws IOException {
-        if (blockNum == 0 || level <= 0) {
-            return;
-        }
         int blockSize = superblock.blockSize();
         int ptrsPerBlock = blockSize / 4;
+        long start = logical * blockSize;
+        if (start >= size) {
+            return logical;
+        }
+        if (blockNum == 0) {
+            return logical + blocksSpanned(ptrsPerBlock, level);
+        }
+        if (level == 0) {
+            segments.add(new ChunkedRegionStream.Segment(start, blockNum * blockSize,
+                    Math.min(blockSize, size - start)));
+            return logical + 1;
+        }
         ByteBuffer indirectData = region.read(blockNum * blockSize, blockSize);
         indirectData.order(ByteOrder.LITTLE_ENDIAN);
         for (int i = 0; i < ptrsPerBlock; i++) {
             long ptr = indirectData.getInt(i * 4) & 0xFFFFFFFFL;
-            if (ptr == 0) {
-                continue;
-            }
-            if (level == 1) {
-                blocks.add(ptr);
-            } else {
-                collectIndirectBlocks(ptr, blocks, level - 1);
-            }
+            logical = collectIndirectBlocks(ptr, logical, size, segments, level - 1);
         }
+        return logical;
+    }
+
+    /** How many file blocks one pointer covers at {@code level} (0 is a data block). */
+    private static long blocksSpanned(int ptrsPerBlock, int level) {
+        long span = 1;
+        for (int i = 0; i < level; i++) {
+            span *= ptrsPerBlock;
+        }
+        return span;
     }
 
     private int readIndirectBlocks(long blockNum, byte[] result, int bytesRead, int level) throws IOException {
         int blockSize = superblock.blockSize();
         int ptrsPerBlock = blockSize / 4;
+        if (blockNum == 0) {
+            return (int) Math.min(result.length,
+                    bytesRead + blocksSpanned(ptrsPerBlock, level) * blockSize);
+        }
 
         ByteBuffer indirectData = region.read(blockNum * blockSize, blockSize);
         indirectData.order(ByteOrder.LITTLE_ENDIAN);
 
         for (int i = 0; i < ptrsPerBlock && bytesRead < result.length; i++) {
             long ptr = indirectData.getInt(i * 4) & 0xFFFFFFFFL;
-            if (ptr == 0) continue;
 
             if (level == 1) {
                 int toRead = Math.min(blockSize, result.length - bytesRead);
-                ByteBuffer data = region.read(ptr * blockSize, toRead);
-                data.get(result, bytesRead, toRead);
+                if (ptr != 0) {
+                    ByteBuffer data = region.read(ptr * blockSize, toRead);
+                    data.get(result, bytesRead, toRead);
+                }
                 bytesRead += toRead;
             } else {
                 bytesRead = readIndirectBlocks(ptr, result, bytesRead, level - 1);
