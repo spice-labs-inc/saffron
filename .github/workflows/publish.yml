@@ -20,6 +20,7 @@ jobs:
 
     steps:
       - name: Notify release
+        if: vars.SPICE_LABS_UPLOADS == 'on'
         id: release-notification
         uses: spice-labs-inc/action-release-notification@v3.3
         with:
@@ -179,6 +180,7 @@ jobs:
           fi
 
       - name: Notify deployment result
+        if: vars.SPICE_LABS_UPLOADS == 'on'
         uses: spice-labs-inc/action-release-notification@v3.3
         with:
           type: ${{ steps.deployment-status.outputs.overall_status == 'success' && 'deployment-success' || 'deployment-failure' }}
